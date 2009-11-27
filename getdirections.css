@@ -1,0 +1,33 @@
+/* $Id$ */
+/* $Name$ */
+#getdirections_directions {
+  width: 250px;
+  padding: 2px;
+
+}
+
+#getdirections_map_canvas {
+
+}
+
+.getdirections {
+  margin-top: 8px;
+
+
+}
+.getdirections-list {
+  background: #FFFFFF;
+
+}
+
+.getdirections-map {
+  padding: 2px;
+  border: 1px solid #C0C0C0;
+  text-align: center;
+  background: #FFFFFF;
+}
+
+tbody, thead {
+border-top: 0;
+border-bottom: 0;
+}

@@ -1,0 +1,10 @@
+// $Id$
+// $Name$
+
+Get Directions for D6 in HEAD, 2009-11-27
+------------------------------------
+by hutch, added location functionality
+
+Get Directions for D6 in HEAD, 2009-11-22
+------------------------------------
+by hutch, initial import to cvs

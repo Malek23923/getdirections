@@ -1,0 +1,359 @@
+<?php
+// $Id$
+// $Name$
+
+/**
+ * @file
+ * Fetches google map directions.
+ */
+
+/**
+ * Implementation of hook_help().
+ */
+function getdirections_help($path, $arg) {
+  switch ($path) {
+    case 'admin/help#getdirections':
+      $output = '<p>'. t('Fetches google map directions.') .'</p>';
+      return $output;
+  }
+}
+
+/**
+ * Implementation of hook_perm().
+ */
+function getdirections_perm() {
+  return array('access gmap getdirections');
+}
+
+/**
+ * Implementation of hook_menu().
+ */
+function getdirections_menu() {
+  $items = array();
+  $items['admin/settings/getdirections'] = array(
+    'title' => 'Get directions',
+    'description' => 'Configure Get directions',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('getdirections_settings_form'),
+    'access arguments' => array('administer site configuration'),
+    'type' => MENU_NORMAL_ITEM,
+    'file' => 'getdirections.admin.inc',
+  );
+
+  $items['getdirections'] = array(
+    'title' => 'Get directions',
+    'access arguments' => array('access gmap getdirections'),
+    'page callback' => 'getdirections_direction',
+    'type' => MENU_SUGGESTED_ITEM,
+  );
+
+  if (module_exists('location')) {
+    $items['getdirections/location/%getdirections_fromto/%getdirections_id'] = array(
+      'title' => 'Get directions',
+      'access arguments' => array('access gmap getdirections'),
+      'page callback' => 'getdirections_setlocation',
+      'page arguments' => array(2, 3),
+      'type' => MENU_CALLBACK,
+    );
+  }
+
+  return $items;
+}
+
+/**
+ * menu placeholder functions
+ */
+function getdirections_fromto_load($arg) {
+  $allowed = array('from', 'to');
+  return ( in_array($arg, $allowed) ? $arg : FALSE);
+  return $arg;
+}
+function getdirections_id_load($arg) {
+  return (is_numeric($arg) ? $arg : FALSE);
+}
+
+
+
+/**
+ * Function to setup the map and form
+ *
+ * @param $direction
+ *   Optional. The direction the supplied input applies to
+ * @param $location
+ *   Optional. The string to search with
+ * @param $country
+ *   Optional. The country
+ * @param $latlon
+ *   Optional. Comma delimted string containg latitude and longitude
+ * @return
+ *   Returns the themed map and form
+ */
+function getdirections_direction($direction='', $location='', $country='', $latlon='') {
+  global $language;
+  $getdirections_defaults = getdirections_defaults();
+  if (module_exists('gmap')) {
+    $query = array(
+      'file' => 'api',
+      'v' => (variable_get('getdirections_api_version', '') ? variable_get('getdirections_api_version', '') : variable_get('gmap_api_version', GMAP_API_VERSION)),
+      'key' => gmap_get_key(),
+      'hl' => $language->language,
+    );
+  }
+  else {
+    $query = array(
+      'file' => 'api',
+      'v' => variable_get('getdirections_api_version', '2'),
+      'key' => variable_get('getdirections_api_key', ''),
+      'hl' => $language->language,
+    );
+  }
+
+  drupal_set_html_head('<script src="'. url('http://maps.google.com/maps', array('query' => $query)) .'" type="text/javascript"></script>');
+  drupal_add_css(drupal_get_path('module', 'getdirections') .'/getdirections.css');
+  drupal_add_js(drupal_get_path('module', 'getdirections') .'/getdirections.js');
+  $lla = split(',', $getdirections_defaults['latlong']);
+  $getdirections_settings = array(
+      'lat' => $lla[0],
+      'lng' => $lla[1],
+      'zoom' => $getdirections_defaults['zoom'],
+      'maptype' => $getdirections_defaults['maptype'],
+      'controltype' => $getdirections_defaults['controltype'],
+      'mtc' => $getdirections_defaults['mtc'],
+      'baselayers' => $getdirections_defaults['baselayers'],
+      'scale' => $getdirections_defaults['behavior']['scale'],
+      'overview' => $getdirections_defaults['behavior']['overview'],
+    );
+  drupal_add_js(array('getdirections' => $getdirections_settings), 'setting');
+
+  drupal_set_title(t("Get Directions"));
+  $width = $getdirections_defaults['width'];
+  $height = $getdirections_defaults['height'];
+
+  $form = drupal_get_form('getdirections_direction_form', $direction, $location, $country, $latlon);
+  return theme('getdirections_show', $form, $width, $height, $map);
+
+}
+
+/**
+ * Function to setup the form
+ *
+ * @param $direction
+ *   Optional. The direction the supplied input applies to
+ * @param $location
+ *   Optional. The string to search with
+ * @param $country
+ *   Optional. The country
+ * @param $latlon
+ *   Optional. Comma delimted string containg latitude and longitude
+ * @return
+ *   Returns the form
+ */
+function getdirections_direction_form($form_state, $fromto='', $loc='', $country='', $latlon='') {
+  global $language;
+  $location = module_exists('location');
+  if (!$location) {
+    $setdirections = "setDirectionsfromto(this.from.value, this.to.value, this.locale.value); return false;";
+  }
+  else {
+    if ($fromto == 'to') {
+      $setdirections = "setDirectionsto(this.country_from.value, this.from.value, this.to.value, this.locale.value); return false;";
+    }
+    elseif ($fromto == 'from') {
+      $setdirections = "setDirectionsfrom(this.from.value, this.country_to.value, this.to.value, this.locale.value); return false;";
+    }
+    else {
+      $setdirections = "setDirectionsfromto2(this.country_from.value, this.from.value, this.country_to.value, this.to.value, this.locale.value); return false;";
+    }
+  }
+  $form = array(
+    '#action' => '#',
+    '#attributes' => array(
+      'class' => 'getdirections_form',
+      'onsubmit' => $setdirections,
+    ),
+  );
+
+  if ($fromto == 'from') {
+    $form['from'] = array(
+      '#type' => 'hidden',
+      '#value' => $latlon,
+    );
+    $form['mfrom'] = array(
+      '#type' => 'item',
+      '#title' => t('From'),
+      '#value' => $loc .', '. drupal_strtoupper($country) ,
+    );
+  }
+  else {
+    if ($location) {
+      $form['country_from'] = array(
+        '#type' => 'select',
+        '#title' => t('Country'),
+        '#options' => _location_supported_countries(),
+        '#default_value' => 'uk',
+      );
+    }
+
+    $form['from'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Starting from'),
+      '#size' => 20,
+      '#required' => TRUE,
+      '#description' => t('Enter the address, postcode and/or city from where you want to start your journey.'),
+    );
+  }
+  if ($fromto == 'to') {
+    $form['to'] = array(
+      '#type' => 'hidden',
+      '#value' => $latlon,
+    );
+    $form['mto'] = array(
+      '#type' => 'item',
+      '#title' => t('To'),
+      '#value' => $loc .', '. drupal_strtoupper($country),
+    );
+  }
+  else {
+    if ($location) {
+      $form['country_to'] = array(
+        '#type' => 'select',
+        '#title' => t('Country'),
+        '#options' => _location_supported_countries(),
+        '#default_value' => 'uk',
+      );
+    }
+    $form['to'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Destination'),
+      '#size' => 20,
+      '#required' => TRUE,
+      '#description' => t('Enter the address, postcode and/or city of your journey destination.'),
+    );
+  }
+
+  $form['locale'] = array(
+    '#type' => 'hidden',
+    '#value' => $language->language,
+  );
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Get Directions'),
+  );
+  return $form;
+}
+
+
+/**
+ * Some defaults.
+ */
+function getdirections_defaults() {
+  if ( module_exists('gmap')) {
+    $defaults = gmap_defaults();
+  }
+  else {
+    $defaults = array(
+      'width' => '300px',
+      'height' => '200px',
+      'zoom' => 3,
+      'controltype' => 'Small',
+      'latlong' => '40,0',
+      'maptype' => 'Map',
+      'mtc' => 'standard',
+      'baselayers' => array(
+        'Map' => 1,
+        'Satellite' => 1,
+        'Hybrid' => 1,
+        'Physical' => 0,
+      ),
+      'behavior' => array(
+        'scale' => 0,
+        'overview' => 0,
+      ),
+    );
+  }
+  $getdirections_defaults = variable_get('getdirections_default', array());
+  $defaults = array_merge($defaults, $getdirections_defaults);
+  return $defaults;
+}
+
+/**
+ * Function to setup the map and form
+ *
+ * @param $direction
+ *   Required. The direction the supplied input applies to
+ * @param $vid
+ *   Required. The vid of the location node
+ * @return
+ *   Returns the themed map and form
+ */
+function getdirections_setlocation($direction, $vid) {
+  if (module_exists('location') && $vid) {
+    $location = location_load_locations($vid);
+    $country = $location[0]['country'];
+    $latlon = $location[0]['latitude'] .','. $location[0]['longitude'];
+
+    // $locs only used for display now
+    if ($location[0]['name']) {
+      $loc[] = $location[0]['name'];
+    }
+    if ($location[0]['street']) {
+      $loc[] = $location[0]['street'];
+    }
+    if ($location[0]['additional']) {
+      $loc[] = $location[0]['additional'];
+    }
+    if ($location[0]['city']) {
+      $loc[] = $location[0]['city'];
+    }
+    if ($location[0]['province_name']) {
+      $loc[] = $location[0]['province_name'];
+    }
+    if ($location[0]['postal_code']) {
+      $loc[] = $location[0]['postal_code'];
+    }
+    $locs = implode(', ', $loc);
+
+    $content = getdirections_direction($direction, $locs, $country, $latlon);
+    return $content;
+  }
+}
+
+/**
+ * Implementation of hook_theme().
+ *
+ * This lets us tell Drupal about our theme functions and their arguments.
+ */
+function getdirections_theme() {
+  return array(
+    'getdirections_show' => array(
+      'arguments' => array(
+        'form' => array(),
+        'width' => '',
+        'height' => '',
+        'map' => '',
+      ),
+    ),
+  );
+}
+
+function theme_getdirections_show($form, $width, $height, $map) {
+  $output = $form;
+  $header = array();
+
+  $rows[] = array(
+    array(
+      'data' => '<div id="getdirections_map_canvas" style="width: '. $width .'; height: '. $height .'" >'. $map .'</div>',
+      'valign' => 'top',
+      'align' => 'center',
+      'class' => 'getdirections-map',
+    ),
+    array(
+      'data' => '<div id="getdirections_directions"></div><div id="getdirections_test"></div>',
+      'valign' => 'top' ,
+      'align' => 'left',
+      'class' => 'getdirections-list',
+    ),
+  );
+  $output .= '<div class="getdirections">'. theme('table', $header, $rows) .'</div>';
+  return $output;
+}

@@ -1,0 +1,189 @@
+# $Id$
+#
+# LANGUAGE translation of Drupal (general)
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+# Generated from files:
+#  getdirections.module,v 1.2 2009-11-22 14:43:01 hutch
+#  getdirections.info,v 1.2 2009-11-22 14:43:01 hutch
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2009-11-27 16:03+0000\n"
+"PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: getdirections.admin.inc:22
+msgid "Your Google Maps API key"
+msgstr ""
+
+#: getdirections.admin.inc:28
+msgid "Your Google Maps API version"
+msgstr ""
+
+#: getdirections.admin.inc:30
+msgid "The Google Maps API version to use. Cen be a specific version number or '2' for Current, '2.x' for Latest or '2.s' for Stable."
+msgstr ""
+
+#: getdirections.admin.inc:36
+msgid "Get directions map settings"
+msgstr ""
+
+#: getdirections.admin.inc:43
+msgid "Default width"
+msgstr ""
+
+#: getdirections.admin.inc:47
+msgid "The default width of a Google map, as a CSS length or percentage. Examples: <em>50px</em>, <em>5em</em>, <em>2.5in</em>, <em>95%</em>"
+msgstr ""
+
+#: getdirections.admin.inc:51
+msgid "Default height"
+msgstr ""
+
+#: getdirections.admin.inc:55
+msgid "The default height of a Google map, as a CSS length or percentage. Examples: <em>50px</em>, <em>5em</em>, <em>2.5in</em>, <em>95%</em>"
+msgstr ""
+
+#: getdirections.admin.inc:59
+msgid "Map center"
+msgstr ""
+
+#: getdirections.admin.inc:63
+msgid "The default center coordinates of Google map, expressed as a decimal latitude and longitude, separated by a comma."
+msgstr ""
+
+#: getdirections.admin.inc:67
+msgid "Zoom"
+msgstr ""
+
+#: getdirections.admin.inc:70
+msgid "The default zoom level of a Google map."
+msgstr ""
+
+#: getdirections.admin.inc:75;85;101
+msgid "None"
+msgstr ""
+
+#: getdirections.admin.inc:76;86
+msgid "Micro"
+msgstr ""
+
+#: getdirections.admin.inc:77
+msgid "Micro 3D"
+msgstr ""
+
+#: getdirections.admin.inc:78;87
+msgid "Small"
+msgstr ""
+
+#: getdirections.admin.inc:79;88
+msgid "Large"
+msgstr ""
+
+#: getdirections.admin.inc:80
+msgid "Large 3D"
+msgstr ""
+
+#: getdirections.admin.inc:93
+msgid "Control type"
+msgstr ""
+
+#: getdirections.admin.inc:99
+msgid "Map Type selection"
+msgstr ""
+
+#: getdirections.admin.inc:102
+msgid "Standard (GMapTypeControl)"
+msgstr ""
+
+#: getdirections.admin.inc:103
+msgid "Hierarchical (GHierarchicalMapTypeControl)"
+msgstr ""
+
+#: getdirections.admin.inc:104
+msgid "Dropdown (GMenuMapTypeControl)"
+msgstr ""
+
+#: getdirections.admin.inc:127
+msgid "Default map type"
+msgstr ""
+
+#: getdirections.admin.inc:146
+msgid "Scale"
+msgstr ""
+
+#: getdirections.admin.inc:147
+msgid "Show scale"
+msgstr ""
+
+#: getdirections.admin.inc:153
+msgid "Overview map"
+msgstr ""
+
+#: getdirections.admin.inc:154
+msgid "Show overview map"
+msgstr ""
+
+#: getdirections.module:16
+msgid "Fetches google map directions."
+msgstr ""
+
+#: getdirections.module:128;240 getdirections.info:0
+msgid "Get Directions"
+msgstr ""
+
+#: getdirections.module:183
+msgid "From"
+msgstr ""
+
+#: getdirections.module:191;220
+msgid "Country"
+msgstr ""
+
+#: getdirections.module:199
+msgid "Starting from"
+msgstr ""
+
+#: getdirections.module:202
+msgid "Enter the address, postcode and/or city from where you want to start your journey."
+msgstr ""
+
+#: getdirections.module:212
+msgid "To"
+msgstr ""
+
+#: getdirections.module:227
+msgid "Destination"
+msgstr ""
+
+#: getdirections.module:230
+msgid "Enter the address, postcode and/or city of your journey destination."
+msgstr ""
+
+#: getdirections.module:25
+msgid "access gmap getdirections"
+msgstr ""
+
+#: getdirections.module:34;44;52
+msgid "Get directions"
+msgstr ""
+
+#: getdirections.module:35
+msgid "Configure Get directions"
+msgstr ""
+
+#: getdirections.info:0
+msgid "Fetch Google map directions"
+msgstr ""
+
+#: getdirections.info:0
+msgid "Location"
+msgstr ""
+
