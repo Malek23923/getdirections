@@ -28,11 +28,34 @@ containing location information.
 For instance, if you want to "preload" the getdirections form with information
 about the destination use a URL in this format:
 
-/getdirections/location/to/99
+getdirections/location/to/99
 
 Where '99' is the vid of the location.
 The user will only have to fill in the starting point.
 
 To do it the other way around use
-/getdirections/location/from/99
+getdirections/location/from/99
+
+If you have both the starting point and destination vids then you can use
+
+getdirections/locations/1/99
+Where '1' is the starting point vid and 99 is the destination vid
+
+There are functions available to generate these paths:
+
+getdirections_location_path($direction, $vid)
+Where $direction is either 'to' or 'from' and $vid is the vid concerned.
+
+getdirections_locations_path($fromvid, $tovid)
+Where $fromvid is the starting point and $tovid is the destination
+
+If you have the latitude and longitude of the start and end points you can use
+
+getdirections_locations_bylatlon($fromlocs, $fromlatlon, $tolocs, $tolatlon)
+
+Where $fromlocs is a description of the starting point,
+$fromlatlon is the latitude,longitude of the starting point
+and $tolocs and $tolatlon are the same thing for the endpoint
+
+See getdirections.api.inc for more detail.
 
