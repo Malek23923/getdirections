@@ -27,6 +27,10 @@
   background: #FFFFFF;
 }
 
+.getdirections_display {
+  margin-bottom: 8px;
+}
+
 tbody, thead {
 border-top: 0;
 border-bottom: 0;

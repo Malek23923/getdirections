@@ -1,6 +1,10 @@
 // $Id$
 // $Name$
 
+Get Directions for D6 in HEAD, 2009-11-29
+------------------------------------
+by hutch, improved location functionality
+
 Get Directions for D6 in HEAD, 2009-11-27
 ------------------------------------
 by hutch, added location functionality

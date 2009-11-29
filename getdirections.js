@@ -28,6 +28,10 @@ if (Drupal.jsEnabled) {
       var maptype = (Drupal.settings.getdirections.maptype ? Drupal.settings.getdirections.maptype : '');
       var baselayers = (Drupal.settings.getdirections.baselayers ? Drupal.settings.getdirections.baselayers : '');
 
+      var fromlatlon = (Drupal.settings.getdirections.fromlatlon ? Drupal.settings.getdirections.fromlatlon : '');
+      var tolatlon = (Drupal.settings.getdirections.tolatlon ? Drupal.settings.getdirections.tolatlon : '');
+      var mylocale = (Drupal.settings.getdirections.mylocale ? Drupal.settings.getdirections.mylocale : 'en');
+
       // menu type
       if (mtc == 'standard') {
         Drupal.settings.getdirections.map.addControl(new GMapTypeControl());
@@ -93,6 +97,12 @@ if (Drupal.jsEnabled) {
       gdir = new GDirections(Drupal.settings.getdirections.map, document.getElementById("getdirections_directions"));
       GEvent.addListener(gdir, "load", onGDirectionsLoad);
       GEvent.addListener(gdir, "error", handleErrors);
+
+      if (fromlatlon && tolatlon) {
+//        var froms = fromlat + ',' + fromlng;
+//        var tos = tolat + ',' + tolng;
+        setDirectionsfromto(fromlatlon, tolatlon, mylocale);
+      }
     }
   }
 

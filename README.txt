@@ -11,7 +11,7 @@ sites/all/<domain>/modules/ for multisite setups.
 
 Login to Drupal site as a user with administrative rights and go to
 Administer > Site building > Modules. Scroll down to Other modules section, you
-should now see Getdirections module listed there. Tick it and save configuration. 
+should now see Getdirections module listed there. Tick it and save configuration.
 
 After installation go to Administer > Site configuration > Get directions and
 select your preferences and Save Configuration.
@@ -22,10 +22,10 @@ use its configuration as a starting point.
 Also remember to go to Administer > User management > Permissions and
 set up permissions according to your needs.
 
-If you have the locations module installed you can make use of any nodes
+If you have the location module installed you can make use of any nodes
 containing location information.
 
-For instance, if you want to "preload" the getdirections form with information 
+For instance, if you want to "preload" the getdirections form with information
 about the destination use a URL in this format:
 
 /getdirections/location/to/99

@@ -19,6 +19,14 @@ function getdirections_help($path, $arg) {
 }
 
 /**
+ * Implementation of hook_init().
+ */
+function getdirections_init() {
+  module_load_include('inc', 'getdirections', 'getdirections.api');
+  module_load_include('inc', 'getdirections', 'getdirections.theme');
+}
+
+/**
  * Implementation of hook_perm().
  */
 function getdirections_perm() {
@@ -55,6 +63,15 @@ function getdirections_menu() {
       'page arguments' => array(2, 3),
       'type' => MENU_CALLBACK,
     );
+
+    $items['getdirections/locations/%getdirections_id/%getdirections_id'] = array(
+      'title' => 'Get directions',
+      'access arguments' => array('access gmap getdirections'),
+      'page callback' => 'getdirections_setlocations',
+      'page arguments' => array(2, 3),
+      'type' => MENU_CALLBACK,
+    );
+
   }
 
   return $items;
@@ -89,49 +106,66 @@ function getdirections_id_load($arg) {
  *   Returns the themed map and form
  */
 function getdirections_direction($direction='', $location='', $country='', $latlon='') {
-  global $language;
+  getdirections_setup_map();
   $getdirections_defaults = getdirections_defaults();
-  if (module_exists('gmap')) {
-    $query = array(
-      'file' => 'api',
-      'v' => (variable_get('getdirections_api_version', '') ? variable_get('getdirections_api_version', '') : variable_get('gmap_api_version', GMAP_API_VERSION)),
-      'key' => gmap_get_key(),
-      'hl' => $language->language,
-    );
-  }
-  else {
-    $query = array(
-      'file' => 'api',
-      'v' => variable_get('getdirections_api_version', '2'),
-      'key' => variable_get('getdirections_api_key', ''),
-      'hl' => $language->language,
-    );
-  }
-
-  drupal_set_html_head('<script src="'. url('http://maps.google.com/maps', array('query' => $query)) .'" type="text/javascript"></script>');
-  drupal_add_css(drupal_get_path('module', 'getdirections') .'/getdirections.css');
-  drupal_add_js(drupal_get_path('module', 'getdirections') .'/getdirections.js');
   $lla = split(',', $getdirections_defaults['latlong']);
   $getdirections_settings = array(
-      'lat' => $lla[0],
-      'lng' => $lla[1],
-      'zoom' => $getdirections_defaults['zoom'],
-      'maptype' => $getdirections_defaults['maptype'],
-      'controltype' => $getdirections_defaults['controltype'],
-      'mtc' => $getdirections_defaults['mtc'],
-      'baselayers' => $getdirections_defaults['baselayers'],
-      'scale' => $getdirections_defaults['behavior']['scale'],
-      'overview' => $getdirections_defaults['behavior']['overview'],
-    );
+    'lat' => $lla[0],
+    'lng' => $lla[1],
+    'zoom' => $getdirections_defaults['zoom'],
+    'maptype' => $getdirections_defaults['maptype'],
+    'controltype' => $getdirections_defaults['controltype'],
+    'mtc' => $getdirections_defaults['mtc'],
+    'baselayers' => $getdirections_defaults['baselayers'],
+    'scale' => $getdirections_defaults['behavior']['scale'],
+    'overview' => $getdirections_defaults['behavior']['overview'],
+  );
   drupal_add_js(array('getdirections' => $getdirections_settings), 'setting');
-
   drupal_set_title(t("Get Directions"));
   $width = $getdirections_defaults['width'];
   $height = $getdirections_defaults['height'];
-
   $form = drupal_get_form('getdirections_direction_form', $direction, $location, $country, $latlon);
-  return theme('getdirections_show', $form, $width, $height, $map);
+  return theme('getdirections_show', $form, $width, $height);
+}
 
+/**
+ * Function to setup the map and form
+ *
+ * @param $fromlocs
+ *   Required. The string to display for From.
+ * @param $fromlatlon
+ *   Required. The location point for From. In decimal latitude,longitude
+ * @param $tolocs
+ *   Required. The string to display for To.
+ * @param $tolatlon
+ *   Required. The location point for To. In decimal latitude,longitude
+ * @return
+ *   Returns the themed map.
+ */
+function getdirections_locations($fromlocs, $fromlatlon, $tolocs, $tolatlon) {
+  global $language;
+  getdirections_setup_map();
+  $getdirections_defaults = getdirections_defaults();
+  $lla = split(',', $getdirections_defaults['latlong']);
+  $getdirections_settings = array(
+    'lat' => $lla[0],
+    'lng' => $lla[1],
+    'zoom' => $getdirections_defaults['zoom'],
+    'maptype' => $getdirections_defaults['maptype'],
+    'controltype' => $getdirections_defaults['controltype'],
+    'mtc' => $getdirections_defaults['mtc'],
+    'baselayers' => $getdirections_defaults['baselayers'],
+    'scale' => $getdirections_defaults['behavior']['scale'],
+    'overview' => $getdirections_defaults['behavior']['overview'],
+    'fromlatlon' => $fromlatlon,
+    'tolatlon' => $tolatlon,
+    'mylocale' => $language->language,
+  );
+  drupal_add_js(array('getdirections' => $getdirections_settings), 'setting');
+  drupal_set_title(t("Get Directions"));
+  $width = $getdirections_defaults['width'];
+  $height = $getdirections_defaults['height'];
+  return theme('getdirections_show_locations', $width, $height, $fromlocs, $tolocs);
 }
 
 /**
@@ -181,10 +215,21 @@ function getdirections_direction_form($form_state, $fromto='', $loc='', $country
     $form['mfrom'] = array(
       '#type' => 'item',
       '#title' => t('From'),
-      '#value' => $loc .', '. drupal_strtoupper($country) ,
+      '#value' => $loc .', '. drupal_strtoupper($country),
+      '#prefix' => '<div class="container-inline getdirections_display">',
+      '#suffix' => '</div>',
     );
   }
   else {
+
+    $form['from'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Starting from'),
+      '#size' => 20,
+      '#required' => TRUE,
+      '#description' => t('Enter the address, postcode and/or city from where you want to start your journey.'),
+    );
+
     if ($location) {
       $form['country_from'] = array(
         '#type' => 'select',
@@ -194,13 +239,6 @@ function getdirections_direction_form($form_state, $fromto='', $loc='', $country
       );
     }
 
-    $form['from'] = array(
-      '#type' => 'textfield',
-      '#title' => t('Starting from'),
-      '#size' => 20,
-      '#required' => TRUE,
-      '#description' => t('Enter the address, postcode and/or city from where you want to start your journey.'),
-    );
   }
   if ($fromto == 'to') {
     $form['to'] = array(
@@ -211,9 +249,18 @@ function getdirections_direction_form($form_state, $fromto='', $loc='', $country
       '#type' => 'item',
       '#title' => t('To'),
       '#value' => $loc .', '. drupal_strtoupper($country),
+      '#prefix' => '<div class="container-inline getdirections_display">',
+      '#suffix' => '</div>',
     );
   }
   else {
+    $form['to'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Destination'),
+      '#size' => 20,
+      '#required' => TRUE,
+      '#description' => t('Enter the address, postcode and/or city of your journey destination.'),
+    );
     if ($location) {
       $form['country_to'] = array(
         '#type' => 'select',
@@ -222,13 +269,6 @@ function getdirections_direction_form($form_state, $fromto='', $loc='', $country
         '#default_value' => 'uk',
       );
     }
-    $form['to'] = array(
-      '#type' => 'textfield',
-      '#title' => t('Destination'),
-      '#size' => 20,
-      '#required' => TRUE,
-      '#description' => t('Enter the address, postcode and/or city of your journey destination.'),
-    );
   }
 
   $form['locale'] = array(
@@ -241,7 +281,6 @@ function getdirections_direction_form($form_state, $fromto='', $loc='', $country
   );
   return $form;
 }
-
 
 /**
  * Some defaults.
@@ -319,41 +358,100 @@ function getdirections_setlocation($direction, $vid) {
 }
 
 /**
- * Implementation of hook_theme().
+ * Function to setup the map and form
  *
- * This lets us tell Drupal about our theme functions and their arguments.
+ * @param $direction
+ *   Required. The direction the supplied input applies to
+ * @param $vid
+ *   Required. The vid of the location node
+ * @return
+ *   Returns the themed map and form
  */
-function getdirections_theme() {
-  return array(
-    'getdirections_show' => array(
-      'arguments' => array(
-        'form' => array(),
-        'width' => '',
-        'height' => '',
-        'map' => '',
-      ),
-    ),
-  );
+function getdirections_setlocations($fromvid, $tovid) {
+  if (module_exists('location') && is_numeric($fromvid) && is_numeric($tovid)) {
+    // From
+    $fromlocation = location_load_locations($fromvid);
+    $fromlatlon = $fromlocation[0]['latitude'] .','. $fromlocation[0]['longitude'];
+    if ($fromlocation[0]['name']) {
+      $fromloc[] = $fromlocation[0]['name'];
+    }
+    if ($fromlocation[0]['street']) {
+      $fromloc[] = $fromlocation[0]['street'];
+    }
+    if ($fromlocation[0]['additional']) {
+      $fromloc[] = $fromlocation[0]['additional'];
+    }
+    if ($fromlocation[0]['city']) {
+      $fromloc[] = $fromlocation[0]['city'];
+    }
+    if ($fromlocation[0]['province_name']) {
+      $fromloc[] = $fromlocation[0]['province_name'];
+    }
+    if ($fromlocation[0]['postal_code']) {
+      $fromloc[] = $fromlocation[0]['postal_code'];
+    }
+    if ($fromlocation[0]['country']) {
+      $fromloc[] = drupal_strtoupper($fromlocation[0]['country']);
+    }
+    $fromlocs = implode(', ', $fromloc);
+    // To
+    $tolocation = location_load_locations($tovid);
+    $tolatlon = $tolocation[0]['latitude'] .','. $tolocation[0]['longitude'];
+    if ($tolocation[0]['name']) {
+      $toloc[] = $tolocation[0]['name'];
+    }
+    if ($tolocation[0]['street']) {
+      $toloc[] = $tolocation[0]['street'];
+    }
+    if ($tolocation[0]['additional']) {
+      $toloc[] = $tolocation[0]['additional'];
+    }
+    if ($tolocation[0]['city']) {
+      $toloc[] = $tolocation[0]['city'];
+    }
+    if ($tolocation[0]['province_name']) {
+      $toloc[] = $tolocation[0]['province_name'];
+    }
+    if ($tolocation[0]['postal_code']) {
+      $toloc[] = $tolocation[0]['postal_code'];
+    }
+    if ($tolocation[0]['country']) {
+      $toloc[] = drupal_strtoupper($tolocation[0]['country']);
+    }
+    $tolocs = implode(', ', $toloc);
+
+    $content = getdirections_locations($fromlocs, $fromlatlon, $tolocs, $tolatlon);
+    return $content;
+  }
 }
 
-function theme_getdirections_show($form, $width, $height, $map) {
-  $output = $form;
-  $header = array();
+/**
+ * Function to setup the map scripts
+ *
+ * @return
+ *   Returns settings.
+ */
+function getdirections_setup_map() {
+  global $language;
+  if (module_exists('gmap')) {
+    $query = array(
+      'file' => 'api',
+      'v' => (variable_get('getdirections_api_version', '') ? variable_get('getdirections_api_version', '') : variable_get('gmap_api_version', GMAP_API_VERSION)),
+      'key' => gmap_get_key(),
+      'hl' => $language->language,
+    );
+  }
+  else {
+    $query = array(
+      'file' => 'api',
+      'v' => variable_get('getdirections_api_version', '2'),
+      'key' => variable_get('getdirections_api_key', ''),
+      'hl' => $language->language,
+    );
+  }
 
-  $rows[] = array(
-    array(
-      'data' => '<div id="getdirections_map_canvas" style="width: '. $width .'; height: '. $height .'" >'. $map .'</div>',
-      'valign' => 'top',
-      'align' => 'center',
-      'class' => 'getdirections-map',
-    ),
-    array(
-      'data' => '<div id="getdirections_directions"></div><div id="getdirections_test"></div>',
-      'valign' => 'top' ,
-      'align' => 'left',
-      'class' => 'getdirections-list',
-    ),
-  );
-  $output .= '<div class="getdirections">'. theme('table', $header, $rows) .'</div>';
-  return $output;
+  drupal_set_html_head('<script src="'. url('http://maps.google.com/maps', array('query' => $query)) .'" type="text/javascript"></script>');
+  drupal_add_css(drupal_get_path('module', 'getdirections') .'/getdirections.css');
+  drupal_add_js(drupal_get_path('module', 'getdirections') .'/getdirections.js');
 }
+
