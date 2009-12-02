@@ -28,21 +28,19 @@ function getdirections_settings_form() {
     '#disabled' => ($gmap_key ? TRUE : FALSE),
     '#default_value' => (variable_get('getdirections_api_key', '') ? variable_get('getdirections_api_key', '') : $gmap_key),
   );
-  $form['getdirections_api_version'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Your Google Maps API version'),
-    '#size' => 15,
-    '#description' => t("The Google Maps API version to use. Cen be a specific version number or '2' for Current, '2.x' for Latest or '2.s' for Stable."),
-    '#default_value' => (variable_get('getdirections_api_version', '') ? variable_get('getdirections_api_version', '') : (variable_get('gmap_api_version', '') ? variable_get('gmap_api_version', GMAP_API_VERSION) : '')),
-  );
-
   $form['getdirections_default'] = array(
     '#type' => 'fieldset',
     '#title' => t('Get directions map settings'),
     // This will store all the defaults in one variable.
     '#tree' => TRUE,
   );
-
+  $form['getdirections_default']['api_version'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Your Google Maps API version'),
+    '#size' => 15,
+    '#description' => t("The Google Maps API version to use. Cen be a specific version number or '2' for Current, '2.x' for Latest or '2.s' for Stable."),
+    '#default_value' => ($getdirections_defaults['api_version'] ? $getdirections_defaults['api_version'] : (defined('GMAP_API_VERSION') ? GMAP_API_VERSION : 2)),
+  );
   $form['getdirections_default']['width'] = array(
     '#type' => 'textfield',
     '#title' => t('Default width'),
@@ -74,7 +72,7 @@ function getdirections_settings_form() {
     '#options' => drupal_map_assoc(range(0, 17)),
     '#description' => t('The default zoom level of a Google map.'),
   );
-  $version = variable_get('getdirections_api_version', '2');
+  $version = $getdirections_defaults['api_version'];
   if ($version == '2' || $version == '2.x' || $version == '2.s') {
     $opts = array(
       'None' => t('None'),

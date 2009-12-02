@@ -106,8 +106,8 @@ function getdirections_id_load($arg) {
  *   Returns the themed map and form
  */
 function getdirections_direction($direction='', $location='', $country='', $latlon='') {
-  getdirections_setup_map();
   $getdirections_defaults = getdirections_defaults();
+  getdirections_setup_map($getdirections_defaults);
   $lla = split(',', $getdirections_defaults['latlong']);
   $getdirections_settings = array(
     'lat' => $lla[0],
@@ -144,8 +144,8 @@ function getdirections_direction($direction='', $location='', $country='', $latl
  */
 function getdirections_locations($fromlocs, $fromlatlon, $tolocs, $tolatlon) {
   global $language;
-  getdirections_setup_map();
   $getdirections_defaults = getdirections_defaults();
+  getdirections_setup_map($getdirections_defaults);
   $lla = split(',', $getdirections_defaults['latlong']);
   $getdirections_settings = array(
     'lat' => $lla[0],
@@ -291,6 +291,7 @@ function getdirections_defaults() {
   }
   else {
     $defaults = array(
+      'api_version' => 2,
       'width' => '300px',
       'height' => '200px',
       'zoom' => 3,
@@ -431,12 +432,12 @@ function getdirections_setlocations($fromvid, $tovid) {
  * @return
  *   Returns settings.
  */
-function getdirections_setup_map() {
+function getdirections_setup_map($defaults) {
   global $language;
   if (module_exists('gmap')) {
     $query = array(
       'file' => 'api',
-      'v' => (variable_get('getdirections_api_version', '') ? variable_get('getdirections_api_version', '') : variable_get('gmap_api_version', GMAP_API_VERSION)),
+      'v' => ($defaults['api_version'] ? $defaults['api_version'] : GMAP_API_VERSION),
       'key' => gmap_get_key(),
       'hl' => $language->language,
     );
@@ -444,7 +445,7 @@ function getdirections_setup_map() {
   else {
     $query = array(
       'file' => 'api',
-      'v' => variable_get('getdirections_api_version', '2'),
+      'v' => ($defaults['api_version'] ? $defaults['api_version'] : '2'),
       'key' => variable_get('getdirections_api_key', ''),
       'hl' => $language->language,
     );
