@@ -99,8 +99,6 @@ if (Drupal.jsEnabled) {
       GEvent.addListener(gdir, "error", handleErrors);
 
       if (fromlatlon && tolatlon) {
-//        var froms = fromlat + ',' + fromlng;
-//        var tos = tolat + ',' + tolng;
         setDirectionsfromto(fromlatlon, tolatlon, mylocale);
       }
     }
@@ -151,7 +149,7 @@ if (Drupal.jsEnabled) {
   function onGDirectionsLoad(){
     // Use this function to access information about the latest load() results.
     // e.g.
-    //document.getElementById("getdirections_test").innerHTML = gdir.getStatus().code;
+    //document.getElementById("getdirections_info").innerHTML = gdir.getStatus().code;
     // and yada yada yada...
   }
 

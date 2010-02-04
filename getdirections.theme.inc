@@ -49,7 +49,7 @@ function theme_getdirections_show($form, $width, $height) {
       'class' => 'getdirections-map',
     ),
     array(
-      'data' => '<div id="getdirections_directions"></div><div id="getdirections_test"></div>',
+      'data' => '<div id="getdirections_directions"></div><div id="getdirections_info"></div>',
       'valign' => 'top' ,
       'align' => 'left',
       'class' => 'getdirections-list',
@@ -78,7 +78,7 @@ function theme_getdirections_show_locations($width, $height, $fromlocs, $tolocs)
       'class' => 'getdirections-map',
     ),
     array(
-      'data' => '<div id="getdirections_directions"></div><div id="getdirections_test"></div>',
+      'data' => '<div id="getdirections_directions"></div><div id="getdirections_info"></div>',
       'valign' => 'top' ,
       'align' => 'left',
       'class' => 'getdirections-list',

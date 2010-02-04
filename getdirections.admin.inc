@@ -145,19 +145,19 @@ function getdirections_settings_form() {
   }
 
   $form['getdirections_default']['behavior']['scale'] = array(
-        '#type' => 'checkbox',
-        '#title' => t('Scale'),
-        '#description' => t('Show scale'),
-        '#default_value' =>  $getdirections_defaults['behavior']['scale'],
-        '#return_value' => 1,
-      );
+    '#type' => 'checkbox',
+    '#title' => t('Scale'),
+    '#description' => t('Show scale'),
+    '#default_value' =>  $getdirections_defaults['behavior']['scale'],
+    '#return_value' => 1,
+  );
   $form['getdirections_default']['behavior']['overview'] = array(
-        '#type' => 'checkbox',
-        '#title' => t('Overview map'),
-        '#description' => t('Show overview map'),
-        '#default_value' =>  $getdirections_defaults['behavior']['overview'],
-        '#return_value' => 1,
-      );
+    '#type' => 'checkbox',
+    '#title' => t('Overview map'),
+    '#description' => t('Show overview map'),
+    '#default_value' =>  $getdirections_defaults['behavior']['overview'],
+    '#return_value' => 1,
+  );
 
   return system_settings_form($form);
 

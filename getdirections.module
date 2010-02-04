@@ -47,14 +47,12 @@ function getdirections_menu() {
     'type' => MENU_NORMAL_ITEM,
     'file' => 'getdirections.admin.inc',
   );
-
   $items['getdirections'] = array(
     'title' => 'Get directions',
     'access arguments' => array('access gmap getdirections'),
     'page callback' => 'getdirections_direction',
     'type' => MENU_SUGGESTED_ITEM,
   );
-
   if (module_exists('location')) {
     $items['getdirections/location/%getdirections_fromto/%getdirections_id'] = array(
       'title' => 'Get directions',
@@ -63,7 +61,6 @@ function getdirections_menu() {
       'page arguments' => array(2, 3),
       'type' => MENU_CALLBACK,
     );
-
     $items['getdirections/locations/%getdirections_id/%getdirections_id'] = array(
       'title' => 'Get directions',
       'access arguments' => array('access gmap getdirections'),
@@ -71,9 +68,7 @@ function getdirections_menu() {
       'page arguments' => array(2, 3),
       'type' => MENU_CALLBACK,
     );
-
   }
-
   return $items;
 }
 
@@ -85,11 +80,10 @@ function getdirections_fromto_load($arg) {
   return ( in_array($arg, $allowed) ? $arg : FALSE);
   return $arg;
 }
+
 function getdirections_id_load($arg) {
   return (is_numeric($arg) ? $arg : FALSE);
 }
-
-
 
 /**
  * Function to setup the map and form
@@ -206,7 +200,6 @@ function getdirections_direction_form($form_state, $fromto='', $loc='', $country
       'onsubmit' => $setdirections,
     ),
   );
-
   if ($fromto == 'from') {
     $form['from'] = array(
       '#type' => 'hidden',
@@ -221,7 +214,6 @@ function getdirections_direction_form($form_state, $fromto='', $loc='', $country
     );
   }
   else {
-
     $form['from'] = array(
       '#type' => 'textfield',
       '#title' => t('Starting from'),
@@ -229,7 +221,6 @@ function getdirections_direction_form($form_state, $fromto='', $loc='', $country
       '#required' => TRUE,
       '#description' => t('Enter the address, postcode and/or city from where you want to start your journey.'),
     );
-
     if ($location) {
       $form['country_from'] = array(
         '#type' => 'select',
@@ -238,7 +229,6 @@ function getdirections_direction_form($form_state, $fromto='', $loc='', $country
         '#default_value' => 'uk',
       );
     }
-
   }
   if ($fromto == 'to') {
     $form['to'] = array(
@@ -270,7 +260,6 @@ function getdirections_direction_form($form_state, $fromto='', $loc='', $country
       );
     }
   }
-
   $form['locale'] = array(
     '#type' => 'hidden',
     '#value' => $language->language,

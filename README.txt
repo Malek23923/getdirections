@@ -7,7 +7,7 @@ This module provides a form to make a google directions map.
 
 Installation
 Upload the whole getdirections directory into sites/all/modules/ or
-sites/all/<domain>/modules/ for multisite setups.
+sites/<domain>/modules/ for multisite setups.
 
 Login to Drupal site as a user with administrative rights and go to
 Administer > Site building > Modules. Scroll down to Other modules section, you
@@ -40,6 +40,7 @@ If you have both the starting point and destination vids then you can use
 
 getdirections/locations/1/99
 Where '1' is the starting point vid and 99 is the destination vid
+(note the 's' in locations)
 
 There are functions available to generate these paths:
 

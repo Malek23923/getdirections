@@ -1,4 +1,5 @@
 ; $Id$
+; $Name$
 name = Get Directions
 description = Fetch Google map directions
 package = Other
