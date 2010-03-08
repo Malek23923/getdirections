@@ -1,6 +1,10 @@
 // $Id$
 // $Name$
 
+Get Directions for D6 in HEAD, 2010-03-08
+------------------------------------
+by hutch, fixed bug reported in issue #736148
+
 Get Directions for D6 in HEAD, 2010-2-4
 ------------------------------------
 by hutch, general cleanup in preparation for stable release

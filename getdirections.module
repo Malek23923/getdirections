@@ -226,7 +226,7 @@ function getdirections_direction_form($form_state, $fromto='', $loc='', $country
         '#type' => 'select',
         '#title' => t('Country'),
         '#options' => _location_supported_countries(),
-        '#default_value' => 'uk',
+        '#default_value' => variable_get('location_default_country', 'uk'),
       );
     }
   }
@@ -256,7 +256,7 @@ function getdirections_direction_form($form_state, $fromto='', $loc='', $country
         '#type' => 'select',
         '#title' => t('Country'),
         '#options' => _location_supported_countries(),
-        '#default_value' => 'uk',
+        '#default_value' => variable_get('location_default_country', 'uk'),
       );
     }
   }
