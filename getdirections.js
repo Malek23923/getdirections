@@ -31,6 +31,8 @@ if (Drupal.jsEnabled) {
       var fromlatlon = (Drupal.settings.getdirections.fromlatlon ? Drupal.settings.getdirections.fromlatlon : '');
       var tolatlon = (Drupal.settings.getdirections.tolatlon ? Drupal.settings.getdirections.tolatlon : '');
       var mylocale = (Drupal.settings.getdirections.mylocale ? Drupal.settings.getdirections.mylocale : 'en');
+      // pipe delim
+      var latlons = (Drupal.settings.getdirections.latlons ? Drupal.settings.getdirections.latlons : '');
 
       // menu type
       if (mtc == 'standard') {
@@ -101,6 +103,9 @@ if (Drupal.jsEnabled) {
       if (fromlatlon && tolatlon) {
         setDirectionsfromto(fromlatlon, tolatlon, mylocale);
       }
+      if (latlons) {
+        setDirectionsvia(latlons, mylocale);
+      }
     }
   }
 
@@ -121,6 +126,11 @@ if (Drupal.jsEnabled) {
   function setDirectionsto(fromCountry, fromAddress, toAddress, locale) {
     var s = "from: " + fromAddress + ", " + fromCountry + " to: " + toAddress;
     gdir.load(s, { "locale": locale });
+  }
+  function setDirectionsvia(lls, locale) {
+    arr = new Array();
+    arr = lls.split('|');
+    gdir.loadFromWaypoints(arr, { "locale": locale });
   }
 
   function handleErrors(){

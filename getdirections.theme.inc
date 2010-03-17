@@ -30,6 +30,13 @@ function getdirections_theme() {
         'tolocs' => '',
       ),
     ),
+    'getdirections_show_locations_via' => array(
+      'arguments' => array(
+        'width' => '',
+        'height' => '',
+        'locs' => NULL,
+      ),
+    ),
   );
 }
 
@@ -49,7 +56,7 @@ function theme_getdirections_show($form, $width, $height) {
       'class' => 'getdirections-map',
     ),
     array(
-      'data' => '<div id="getdirections_directions"></div><div id="getdirections_info"></div>',
+      'data' => '<div id="getdirections_directions"></div><div id="getdirections_test"></div>',
       'valign' => 'top' ,
       'align' => 'left',
       'class' => 'getdirections-list',
@@ -78,7 +85,47 @@ function theme_getdirections_show_locations($width, $height, $fromlocs, $tolocs)
       'class' => 'getdirections-map',
     ),
     array(
-      'data' => '<div id="getdirections_directions"></div><div id="getdirections_info"></div>',
+      'data' => '<div id="getdirections_directions"></div><div id="getdirections_test"></div>',
+      'valign' => 'top' ,
+      'align' => 'left',
+      'class' => 'getdirections-list',
+    ),
+  );
+  $output .= '<div class="getdirections">'. theme('table', $header, $rows) .'</div>';
+  return $output;
+}
+
+/**
+ * Theme to use for when both locations are supplied with waypoints.
+ *
+ */
+function theme_getdirections_show_locations_via($width, $height, $locs) {
+  $output = "";
+  foreach ($locs AS $key => $loc) {
+    if ($key == 0) {
+      $label = t('From');
+    }
+    elseif ($key == count($locs)-1) {
+      $label = t('To');
+    }
+    else {
+      $label = t('Via');
+    }
+#    $output .= "<div class='getdirections_display'><b>". $label .":</b> ". $loc ." ($key) (".count($locs).")</div>";
+    $output .= "<div class='getdirections_display'><b>". $label .":</b> ". $loc ."</div>";
+  }
+
+  $header = array();
+
+  $rows[] = array(
+    array(
+      'data' => '<div id="getdirections_map_canvas" style="width: '. $width .'; height: '. $height .'" ></div>',
+      'valign' => 'top',
+      'align' => 'center',
+      'class' => 'getdirections-map',
+    ),
+    array(
+      'data' => '<div id="getdirections_directions"></div><div id="getdirections_test"></div>',
       'valign' => 'top' ,
       'align' => 'left',
       'class' => 'getdirections-list',

@@ -68,6 +68,13 @@ function getdirections_menu() {
       'page arguments' => array(2, 3),
       'type' => MENU_CALLBACK,
     );
+    $items['getdirections/locations_via/%getdirections_via'] = array(
+      'title' => 'Get directions',
+      'access arguments' => array('access gmap getdirections'),
+      'page callback' => 'getdirections_setlocations_via',
+      'page arguments' => array(2),
+      'type' => MENU_CALLBACK,
+    );
   }
   return $items;
 }
@@ -83,6 +90,19 @@ function getdirections_fromto_load($arg) {
 
 function getdirections_id_load($arg) {
   return (is_numeric($arg) ? $arg : FALSE);
+}
+
+function getdirections_via_load($arg) {
+  if (stristr($arg, ',')) {
+    $x = explode(',', $arg);
+    foreach ($x as $v) {
+      if (! is_numeric($v)) {
+        return FALSE;
+      }
+    }
+    return $arg;
+  }
+  return FALSE;
 }
 
 /**
@@ -123,7 +143,7 @@ function getdirections_direction($direction='', $location='', $country='', $latl
 }
 
 /**
- * Function to setup the map and form
+ * Function to setup the map
  *
  * @param $fromlocs
  *   Required. The string to display for From.
@@ -160,6 +180,41 @@ function getdirections_locations($fromlocs, $fromlatlon, $tolocs, $tolatlon) {
   $width = $getdirections_defaults['width'];
   $height = $getdirections_defaults['height'];
   return theme('getdirections_show_locations', $width, $height, $fromlocs, $tolocs);
+}
+
+/**
+ * Function to setup the map
+ *
+ * @param $locs
+ *   Required. An array of location descriptions.
+ * @param $latlons
+ *   Required. An array of decimal latitude,longitude
+ * @return
+ *   Returns the themed map.
+ */
+function getdirections_locations_via($locs, $latlons) {
+  global $language;
+  $getdirections_defaults = getdirections_defaults();
+  getdirections_setup_map($getdirections_defaults);
+  $lla = split(',', $getdirections_defaults['latlong']);
+  $getdirections_settings = array(
+    'lat' => $lla[0],
+    'lng' => $lla[1],
+    'zoom' => $getdirections_defaults['zoom'],
+    'maptype' => $getdirections_defaults['maptype'],
+    'controltype' => $getdirections_defaults['controltype'],
+    'mtc' => $getdirections_defaults['mtc'],
+    'baselayers' => $getdirections_defaults['baselayers'],
+    'scale' => $getdirections_defaults['behavior']['scale'],
+    'overview' => $getdirections_defaults['behavior']['overview'],
+    'latlons' => implode('|', $latlons),
+    'mylocale' => $language->language,
+  );
+  drupal_add_js(array('getdirections' => $getdirections_settings), 'setting');
+  drupal_set_title(t("Get Directions"));
+  $width = $getdirections_defaults['width'];
+  $height = $getdirections_defaults['height'];
+  return theme('getdirections_show_locations_via', $width, $height, $locs);
 }
 
 /**
@@ -411,6 +466,54 @@ function getdirections_setlocations($fromvid, $tovid) {
     $tolocs = implode(', ', $toloc);
 
     $content = getdirections_locations($fromlocs, $fromlatlon, $tolocs, $tolatlon);
+    return $content;
+  }
+}
+
+
+/**
+ * Function to setup the map to display waypoints
+ *
+ * @param $vids
+ *   Required. A comma delimited list of vids
+ * @return
+ *   Returns the themed map and form
+ */
+function getdirections_setlocations_via($vids) {
+  if (module_exists('location')) {
+    $arrvids = explode(',', $vids);
+    foreach ($arrvids AS $key => $vid) {
+      // no more than 25 allowed
+      if ($key > 23 && $key < count($arrvids)) {
+        continue;
+      }
+      $location = location_load_locations($vid);
+      $loc = array();
+      if ($location[0]['name']) {
+        $loc[] = $location[0]['name'];
+      }
+      if ($location[0]['street']) {
+        $loc[] = $location[0]['street'];
+      }
+      if ($location[0]['additional']) {
+        $loc[] = $location[0]['additional'];
+      }
+      if ($location[0]['city']) {
+        $loc[] = $location[0]['city'];
+      }
+      if ($location[0]['province_name']) {
+        $loc[] = $location[0]['province_name'];
+      }
+      if ($location[0]['postal_code']) {
+        $loc[] = $location[0]['postal_code'];
+      }
+      if ($location[0]['country']) {
+        $loc[] = drupal_strtoupper($location[0]['country']);
+      }
+      $locs[] = implode(', ', $loc);
+      $latlons[] = $location[0]['latitude'] .','. $location[0]['longitude'];
+    }
+    $content = getdirections_locations_via($locs, $latlons);
     return $content;
   }
 }

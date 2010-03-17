@@ -36,12 +36,16 @@ The user will only have to fill in the starting point.
 To do it the other way around use
 getdirections/location/from/99
 
-If you have both the starting point and destination vids then you can use
+You can also get a map with waypoints
+getdirections/locations_via/1,2,3,99
 
+If you have both the starting point and destination vids then you can use
 getdirections/locations/1/99
+
 Where '1' is the starting point vid and 99 is the destination vid
 (note the 's' in locations)
 
+Get Directions API
 There are functions available to generate these paths:
 
 getdirections_location_path($direction, $vid)
@@ -50,10 +54,13 @@ Where $direction is either 'to' or 'from' and $vid is the vid concerned.
 getdirections_locations_path($fromvid, $tovid)
 Where $fromvid is the starting point and $tovid is the destination
 
+getdirections_locations_via_path($vids)
+Where $vids is a comma delimited list, eg "1,2,3,99"
+Google imposes a limit of 25 points
+
 If you have the latitude and longitude of the start and end points you can use
 
 getdirections_locations_bylatlon($fromlocs, $fromlatlon, $tolocs, $tolatlon)
-
 Where $fromlocs is a description of the starting point,
 $fromlatlon is the latitude,longitude of the starting point
 and $tolocs and $tolatlon are the same thing for the endpoint

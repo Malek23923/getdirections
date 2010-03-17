@@ -48,6 +48,28 @@ function getdirections_locations_path($fromvid, $tovid) {
 }
 
 /**
+ * API Function to generate a url path for use by other modules/themes.
+ *
+ * Example Usage:
+ * $vids = "1,2,3,4";
+ * where '1' is the nid/vid of the starting point
+ * '4' is the nid/vid of the end point
+ * and the numbers in between are the nid/vid of the waypoints
+ * $path = getdirections_locations_via_path($vids);
+ * $url = l(t('Get directions'), $path);
+ *
+ * @param $vids
+ *   Required. String. A comma delimited list of nid/vid numbers
+ * @return
+ *   Returns a path relative to the drupal root.
+ */
+function getdirections_locations_via_path($vids) {
+  if (module_exists('location')) {
+    return "getdirections/locations_via/$vids";
+  }
+}
+
+/**
  * API Function to setup a map with two points
  *
  * @param $fromlocs
