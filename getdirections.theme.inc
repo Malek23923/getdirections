@@ -111,7 +111,6 @@ function theme_getdirections_show_locations_via($width, $height, $locs) {
     else {
       $label = t('Via');
     }
-#    $output .= "<div class='getdirections_display'><b>". $label .":</b> ". $loc ." ($key) (".count($locs).")</div>";
     $output .= "<div class='getdirections_display'><b>". $label .":</b> ". $loc ."</div>";
   }
 
