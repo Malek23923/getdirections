@@ -67,3 +67,6 @@ and $tolocs and $tolatlon are the same thing for the endpoint
 
 See getdirections.api.inc for more detail.
 
+The contrib folder currently contains a Views import, if you are using Views, 
+Location and Location CCK it will provide a 'Get driving directions' block 
+when you are viewing a location node, very nice.

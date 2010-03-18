@@ -39,7 +39,7 @@ $handler->override_option('fields', array(
     'label' => '',
     'alter' => array(
       'alter_text' => 1,
-      'text' => '<a href="/getdirections/location/to/[nid]">Get Directions to [title]</a> ',
+      'text' => '<a href="/getdirections/location/to/[nid]">Get directions to [title]</a> ',
       'make_link' => 0,
       'path' => '',
       'link_class' => '',
@@ -130,6 +130,26 @@ $handler->override_option('arguments', array(
     'validate_argument_signup_status' => 'any',
     'validate_argument_signup_node_access' => 0,
     'validate_argument_php' => '',
+  ),
+));
+$handler->override_option('filters', array(
+  'lid' => array(
+    'operator' => 'not empty',
+    'value' => array(
+      'value' => '',
+      'min' => '',
+      'max' => '',
+    ),
+    'group' => '0',
+    'exposed' => FALSE,
+    'expose' => array(
+      'operator' => FALSE,
+      'label' => '',
+    ),
+    'id' => 'lid',
+    'table' => 'location',
+    'field' => 'lid',
+    'relationship' => 'none',
   ),
 ));
 $handler->override_option('access', array(

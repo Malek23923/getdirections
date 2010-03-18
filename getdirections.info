@@ -1,7 +1,7 @@
 ; $Id$
 ; $Name$
 name = Get Directions
-description = Fetch Google map directions
+description = "Fetches Google map directions."
 package = Other
 core = 6.x
 php = 5
