@@ -159,6 +159,21 @@ function getdirections_settings_form() {
     '#return_value' => 1,
   );
 
+  $form['getdirections_default']['getdirections_from_width'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Width of From box'),
+    '#default_value' => ($getdirections_defaults['getdirections_from_width'] ? $getdirections_defaults['getdirections_from_width'] : 20),
+    '#size' => 5,
+    '#description' => t("The width of the Get directions 'From' box."),
+  );
+  $form['getdirections_default']['getdirections_to_width'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Width of To box'),
+    '#default_value' => ($getdirections_defaults['getdirections_to_width'] ? $getdirections_defaults['getdirections_to_width'] : 20),
+    '#size' => 5,
+    '#description' => t("The width of the Get directions 'To' box."),
+  );
+
   return system_settings_form($form);
 
 }

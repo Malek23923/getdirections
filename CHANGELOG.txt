@@ -1,6 +1,10 @@
 // $Id$
 // $Name$
 
+Get Directions for D6 in D-6--1, 2010-03-19
+------------------------------------
+by hutch, added config for To and From box width
+
 Get Directions for D6 in D-6--1, 2010-03-17
 ------------------------------------
 by hutch, added support for loadFromWaypoints, added contribs folder with views example

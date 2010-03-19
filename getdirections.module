@@ -260,6 +260,8 @@ function getdirections_direction_form($form_state, $fromto='', $loc='', $country
       '#type' => 'hidden',
       '#value' => $latlon,
     );
+
+
     $form['mfrom'] = array(
       '#type' => 'item',
       '#title' => t('From'),
@@ -272,7 +274,7 @@ function getdirections_direction_form($form_state, $fromto='', $loc='', $country
     $form['from'] = array(
       '#type' => 'textfield',
       '#title' => t('Starting from'),
-      '#size' => 20,
+      '#size' => ($getdirections_defaults['getdirections_from_width'] ? $getdirections_defaults['getdirections_from_width'] : 20),
       '#required' => TRUE,
       '#description' => t('Enter the address, postcode and/or city from where you want to start your journey.'),
     );
@@ -302,7 +304,7 @@ function getdirections_direction_form($form_state, $fromto='', $loc='', $country
     $form['to'] = array(
       '#type' => 'textfield',
       '#title' => t('Destination'),
-      '#size' => 20,
+      '#size' => ($getdirections_defaults['getdirections_to_width'] ? $getdirections_defaults['getdirections_to_width'] : 20),
       '#required' => TRUE,
       '#description' => t('Enter the address, postcode and/or city of your journey destination.'),
     );
