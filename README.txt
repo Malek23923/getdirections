@@ -70,3 +70,5 @@ See getdirections.api.inc for more detail.
 The contrib folder currently contains a Views import, if you are using Views, 
 Location and Location CCK it will provide a 'Get driving directions' block 
 when you are viewing a location node, very nice.
+
+Getdirections now supports the Googlemaps API version 3, this has many new features.

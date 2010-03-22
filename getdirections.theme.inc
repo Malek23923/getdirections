@@ -37,6 +37,9 @@ function getdirections_theme() {
         'locs' => NULL,
       ),
     ),
+    'getdirections_direction_form' => array(
+      'arguments' => array('form' => NULL),
+    ),
   );
 }
 
@@ -56,7 +59,7 @@ function theme_getdirections_show($form, $width, $height) {
       'class' => 'getdirections-map',
     ),
     array(
-      'data' => '<div id="getdirections_directions"></div><div id="getdirections_test"></div>',
+      'data' => '<div id="getdirections_directions"></div>',
       'valign' => 'top' ,
       'align' => 'left',
       'class' => 'getdirections-list',
@@ -72,8 +75,8 @@ function theme_getdirections_show($form, $width, $height) {
  */
 function theme_getdirections_show_locations($width, $height, $fromlocs, $tolocs) {
   $output = "";
-  $output .= "<div class='getdirections_display'><b>". t('From') .":</b> ". $fromlocs ."</div>";
-  $output .= "<div class='getdirections_display'><b>". t('To') .":</b> ". $tolocs ."</div>";
+  $output .= "<div class='getdirections_display'><label>". t('From') .":</label> ". $fromlocs ."</div>";
+  $output .= "<div class='getdirections_display'><label>". t('To') .":</label> ". $tolocs ."</div>";
 
   $header = array();
 
@@ -85,7 +88,7 @@ function theme_getdirections_show_locations($width, $height, $fromlocs, $tolocs)
       'class' => 'getdirections-map',
     ),
     array(
-      'data' => '<div id="getdirections_directions"></div><div id="getdirections_test"></div>',
+      'data' => '<div id="getdirections_directions"></div>',
       'valign' => 'top' ,
       'align' => 'left',
       'class' => 'getdirections-list',
@@ -111,7 +114,7 @@ function theme_getdirections_show_locations_via($width, $height, $locs) {
     else {
       $label = t('Via');
     }
-    $output .= "<div class='getdirections_display'><b>". $label .":</b> ". $loc ."</div>";
+    $output .= "<div class='getdirections_display'><label>". $label .":</label> ". $loc ."</div>";
   }
 
   $header = array();
@@ -124,7 +127,7 @@ function theme_getdirections_show_locations_via($width, $height, $locs) {
       'class' => 'getdirections-map',
     ),
     array(
-      'data' => '<div id="getdirections_directions"></div><div id="getdirections_test"></div>',
+      'data' => '<div id="getdirections_directions"></div>',
       'valign' => 'top' ,
       'align' => 'left',
       'class' => 'getdirections-list',
@@ -134,3 +137,10 @@ function theme_getdirections_show_locations_via($width, $height, $locs) {
   return $output;
 }
 
+
+function theme_getdirections_direction_form($form) {
+  // if you want to do fancy things with the form, do it here ;-)
+  $output = '';
+  $output .= drupal_render($form);
+  return $output;
+}

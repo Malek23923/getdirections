@@ -24,6 +24,7 @@ function getdirections_help($path, $arg) {
 function getdirections_init() {
   module_load_include('inc', 'getdirections', 'getdirections.api');
   module_load_include('inc', 'getdirections', 'getdirections.theme');
+  drupal_add_js(drupal_get_path('module', 'getdirections') .'/getdirections.js');
 }
 
 /**
@@ -133,6 +134,9 @@ function getdirections_direction($direction='', $location='', $country='', $latl
     'baselayers' => $getdirections_defaults['baselayers'],
     'scale' => $getdirections_defaults['behavior']['scale'],
     'overview' => $getdirections_defaults['behavior']['overview'],
+    'scrollwheel' => $getdirections_defaults['behavior']['scrollwheel'],
+    'draggable' => $getdirections_defaults['behavior']['draggable'],
+    'unitsystem' => $getdirections_defaults['unitsystem'],
   );
   drupal_add_js(array('getdirections' => $getdirections_settings), 'setting');
   drupal_set_title(t("Get Directions"));
@@ -171,6 +175,9 @@ function getdirections_locations($fromlocs, $fromlatlon, $tolocs, $tolatlon) {
     'baselayers' => $getdirections_defaults['baselayers'],
     'scale' => $getdirections_defaults['behavior']['scale'],
     'overview' => $getdirections_defaults['behavior']['overview'],
+    'scrollwheel' => $getdirections_defaults['behavior']['scrollwheel'],
+    'draggable' => $getdirections_defaults['behavior']['draggable'],
+    'unitsystem' => $getdirections_defaults['unitsystem'],
     'fromlatlon' => $fromlatlon,
     'tolatlon' => $tolatlon,
     'mylocale' => $language->language,
@@ -207,6 +214,9 @@ function getdirections_locations_via($locs, $latlons) {
     'baselayers' => $getdirections_defaults['baselayers'],
     'scale' => $getdirections_defaults['behavior']['scale'],
     'overview' => $getdirections_defaults['behavior']['overview'],
+    'scrollwheel' => $getdirections_defaults['behavior']['scrollwheel'],
+    'draggable' => $getdirections_defaults['behavior']['draggable'],
+    'unitsystem' => $getdirections_defaults['unitsystem'],
     'latlons' => implode('|', $latlons),
     'mylocale' => $language->language,
   );
@@ -233,19 +243,20 @@ function getdirections_locations_via($locs, $latlons) {
  */
 function getdirections_direction_form($form_state, $fromto='', $loc='', $country='', $latlon='') {
   global $language;
+  $getdirections_defaults = getdirections_defaults();
   $location = module_exists('location');
   if (!$location) {
     $setdirections = "setDirectionsfromto(this.from.value, this.to.value, this.locale.value); return false;";
   }
   else {
     if ($fromto == 'to') {
-      $setdirections = "setDirectionsto(this.country_from.value, this.from.value, this.to.value, this.locale.value); return false;";
+      $setdirections = "setDirectionsto(this.from.value, this.country_from.value, this.to.value, this.locale.value); return false;";
     }
     elseif ($fromto == 'from') {
-      $setdirections = "setDirectionsfrom(this.from.value, this.country_to.value, this.to.value, this.locale.value); return false;";
+      $setdirections = "setDirectionsfrom(this.from.value, this.to.value, this.country_to.value, this.locale.value); return false;";
     }
     else {
-      $setdirections = "setDirectionsfromto2(this.country_from.value, this.from.value, this.country_to.value, this.to.value, this.locale.value); return false;";
+      $setdirections = "setDirectionsfromto2(this.from.value, this.country_from.value, this.to.value, this.country_to.value, this.locale.value); return false;";
     }
   }
   $form = array(
@@ -261,7 +272,6 @@ function getdirections_direction_form($form_state, $fromto='', $loc='', $country
       '#value' => $latlon,
     );
 
-
     $form['mfrom'] = array(
       '#type' => 'item',
       '#title' => t('From'),
@@ -274,7 +284,7 @@ function getdirections_direction_form($form_state, $fromto='', $loc='', $country
     $form['from'] = array(
       '#type' => 'textfield',
       '#title' => t('Starting from'),
-      '#size' => ($getdirections_defaults['getdirections_from_width'] ? $getdirections_defaults['getdirections_from_width'] : 20),
+      '#size' => $getdirections_defaults['from_width'],
       '#required' => TRUE,
       '#description' => t('Enter the address, postcode and/or city from where you want to start your journey.'),
     );
@@ -284,6 +294,8 @@ function getdirections_direction_form($form_state, $fromto='', $loc='', $country
         '#title' => t('Country'),
         '#options' => _location_supported_countries(),
         '#default_value' => variable_get('location_default_country', 'uk'),
+        '#prefix' => '<div class="container-inline getdirections_display">',
+        '#suffix' => '</div>',
       );
     }
   }
@@ -304,7 +316,7 @@ function getdirections_direction_form($form_state, $fromto='', $loc='', $country
     $form['to'] = array(
       '#type' => 'textfield',
       '#title' => t('Destination'),
-      '#size' => ($getdirections_defaults['getdirections_to_width'] ? $getdirections_defaults['getdirections_to_width'] : 20),
+      '#size' => $getdirections_defaults['to_width'],
       '#required' => TRUE,
       '#description' => t('Enter the address, postcode and/or city of your journey destination.'),
     );
@@ -314,9 +326,45 @@ function getdirections_direction_form($form_state, $fromto='', $loc='', $country
         '#title' => t('Country'),
         '#options' => _location_supported_countries(),
         '#default_value' => variable_get('location_default_country', 'uk'),
+        '#prefix' => '<div class="container-inline getdirections_display">',
+        '#suffix' => '</div>',
       );
     }
   }
+
+#DirectionsRequest object Properties: avoidHighways avoidTolls provideRouteAlternatives region
+#DirectionsTravelMode constants: DRIVING WALKING BICYCLING
+#
+  if (variable_get('use_v3', 0)) {
+    if ($getdirections_defaults['travelmode_show']) {
+      $form['travelmode'] = array(
+        '#type' => 'select',
+        '#title' => t('Travel mode'),
+        '#options' => array(
+          'driving' => 'Driving',
+          'walking' => 'Walking',
+          'bicycling' => 'Bicycling',
+        ),
+        '#default_value' => 'driving',
+        '#prefix' => '<div class="container-inline getdirections_display">',
+        '#suffix' => '</div>',
+      );
+    }
+    if ($getdirections_defaults['travelextras_show']) {
+      $form['travelextras'] = array(
+        '#type' => 'checkboxes',
+        '#title' => t('Travel options'),
+        '#options' => array(
+          'avoidhighways' => 'Avoid Highways',
+          'avoidtolls' => 'Avoid Tolls',
+          'altroute' => 'Alternative routes',
+        ),
+        '#prefix' => '<div class="container-inline getdirections_display">',
+        '#suffix' => '</div>',
+      );
+    }
+  }
+
   $form['locale'] = array(
     '#type' => 'hidden',
     '#value' => $language->language,
@@ -332,16 +380,14 @@ function getdirections_direction_form($form_state, $fromto='', $loc='', $country
  * Some defaults.
  */
 function getdirections_defaults() {
-  if ( module_exists('gmap')) {
-    $defaults = gmap_defaults();
-  }
-  else {
+  // no gmap for v3 googlemap API
+  if (variable_get('use_v3', 0)) {
     $defaults = array(
-      'api_version' => 2,
+      'api_version' => 3,
       'width' => '300px',
       'height' => '200px',
       'zoom' => 3,
-      'controltype' => 'Small',
+      'controltype' => 'default',
       'latlong' => '40,0',
       'maptype' => 'Map',
       'mtc' => 'standard',
@@ -349,17 +395,75 @@ function getdirections_defaults() {
         'Map' => 1,
         'Satellite' => 1,
         'Hybrid' => 1,
-        'Physical' => 0,
+        'Physical' => 1,
       ),
       'behavior' => array(
         'scale' => 0,
-        'overview' => 0,
+        'scrollwheel' => 0,
+        'draggable' => 1,
       ),
+      'unitsystem' => 'auto',
+      'from_width' => 20,
+      'to_width' => 20,
+      'travelmode_show' => 0,
+      'travelextras_show' => 0,
     );
   }
+  else {
+    if ( module_exists('gmap')) {
+      $defaults = gmap_defaults();
+    }
+    else {
+      $defaults = array(
+        'api_version' => 2,
+        'width' => '300px',
+        'height' => '200px',
+        'zoom' => 3,
+        'controltype' => 'Small',
+        'latlong' => '40,0',
+        'maptype' => 'Map',
+        'mtc' => 'standard',
+        'baselayers' => array(
+          'Map' => 1,
+          'Satellite' => 1,
+          'Hybrid' => 1,
+          'Physical' => 0,
+        ),
+        'behavior' => array(
+          'scale' => 0,
+          'overview' => 0,
+        ),
+        'from_width' => 20,
+        'to_width' => 20,
+      );
+    }
+  }
   $getdirections_defaults = variable_get('getdirections_default', array());
-  $defaults = array_merge($defaults, $getdirections_defaults);
-  return $defaults;
+  // array_merge deletes things in $defaults that are not in $getdirections_defaults ;-/
+  // roll my own
+  $newdefaults = array();
+  foreach ($defaults AS $k => $v) {
+    if (is_array($v)) {
+      foreach ($defaults[$k] AS $k1 => $v1) {
+        if (isset($getdirections_defaults[$k][$k1])) {
+          $newdefaults[$k][$k1] = $getdirections_defaults[$k][$k1];
+        }
+        else {
+          $newdefaults[$k][$k1] = $v1;
+        }
+      }
+    }
+    else {
+      if (isset($getdirections_defaults[$k])) {
+        $newdefaults[$k] = $getdirections_defaults[$k];
+      }
+      else {
+        $newdefaults[$k] = $v;
+      }
+    }
+  }
+
+  return $newdefaults;
 }
 
 /**
@@ -528,25 +632,35 @@ function getdirections_setlocations_via($vids) {
  */
 function getdirections_setup_map($defaults) {
   global $language;
-  if (module_exists('gmap')) {
+  if (variable_get('use_v3', 0)) {
     $query = array(
-      'file' => 'api',
-      'v' => ($defaults['api_version'] ? $defaults['api_version'] : GMAP_API_VERSION),
-      'key' => gmap_get_key(),
-      'hl' => $language->language,
+      'sensor' => 'false',
+      'language' => $language->language,
     );
+    $head = '<script src="'. url('http://maps.google.com/maps/api/js', array('query' => $query)) .'" type="text/javascript"></script>';
+    $js = drupal_get_path('module', 'getdirections') .'/getdirections_v3.js';
   }
   else {
-    $query = array(
-      'file' => 'api',
-      'v' => ($defaults['api_version'] ? $defaults['api_version'] : '2'),
-      'key' => variable_get('getdirections_api_key', ''),
-      'hl' => $language->language,
-    );
+    if (module_exists('gmap')) {
+      $query = array(
+        'file' => 'api',
+        'v' => ($defaults['api_version'] ? $defaults['api_version'] : GMAP_API_VERSION),
+        'key' => gmap_get_key(),
+        'hl' => $language->language,
+      );
+    }
+    else {
+      $query = array(
+        'file' => 'api',
+        'v' => ($defaults['api_version'] ? $defaults['api_version'] : '2'),
+        'key' => variable_get('getdirections_api_key', ''),
+        'hl' => $language->language,
+      );
+    }
+    $head = '<script src="'. url('http://maps.google.com/maps', array('query' => $query)) .'" type="text/javascript"></script>';
+    $js = drupal_get_path('module', 'getdirections') .'/getdirections_v2.js';
   }
-
-  drupal_set_html_head('<script src="'. url('http://maps.google.com/maps', array('query' => $query)) .'" type="text/javascript"></script>');
+  drupal_set_html_head($head);
   drupal_add_css(drupal_get_path('module', 'getdirections') .'/getdirections.css');
-  drupal_add_js(drupal_get_path('module', 'getdirections') .'/getdirections.js');
+  drupal_add_js($js);
 }
-
