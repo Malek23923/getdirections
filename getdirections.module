@@ -76,6 +76,13 @@ function getdirections_menu() {
       'page arguments' => array(2),
       'type' => MENU_CALLBACK,
     );
+    $items['getdirections/location_user/%getdirections_fromto/%getdirections_uid'] = array(
+      'title' => 'Get directions',
+      'access arguments' => array('access gmap getdirections'),
+      'page callback' => 'getdirections_user_setlocation',
+      'page arguments' => array(2, 3),
+      'type' => MENU_CALLBACK,
+    );
   }
   return $items;
 }
@@ -90,7 +97,11 @@ function getdirections_fromto_load($arg) {
 }
 
 function getdirections_id_load($arg) {
-  return (is_numeric($arg) ? $arg : FALSE);
+  return (is_numeric($arg) && $arg > 0 ? $arg : FALSE);
+}
+
+function getdirections_uid_load($arg) {
+  return ((is_numeric($arg) && $arg > 0 && getdirections_user_check($arg)) ? $arg : FALSE);
 }
 
 function getdirections_via_load($arg) {
@@ -332,9 +343,6 @@ function getdirections_direction_form($form_state, $fromto='', $loc='', $country
     }
   }
 
-#DirectionsRequest object Properties: avoidHighways avoidTolls provideRouteAlternatives region
-#DirectionsTravelMode constants: DRIVING WALKING BICYCLING
-#
   if (variable_get('use_v3', 0)) {
     if ($getdirections_defaults['travelmode_show']) {
       $form['travelmode'] = array(
@@ -479,32 +487,40 @@ function getdirections_defaults() {
 function getdirections_setlocation($direction, $vid) {
   if (module_exists('location') && $vid) {
     $location = location_load_locations($vid);
-    $country = $location[0]['country'];
-    $latlon = $location[0]['latitude'] .','. $location[0]['longitude'];
+    if (count($location)) {
+      $country = $location[0]['country'];
+      $latlon = $location[0]['latitude'] .','. $location[0]['longitude'];
+      $loc = _getdirections_loadaddress($location[0]);
+      // $locs only used for display now
+      $locs = implode(', ', $loc);
+      $content = getdirections_direction($direction, $locs, $country, $latlon);
+      return $content;
+    }
+  }
+}
 
-    // $locs only used for display now
-    if ($location[0]['name']) {
-      $loc[] = $location[0]['name'];
+/**
+ * Function to setup the map and form
+ *
+ * @param $direction
+ *   Required. The direction the supplied input applies to
+ * @param $uid
+ *   Required. The uid of the location owner
+ * @return
+ *   Returns the themed map and form
+ */
+function getdirections_user_setlocation($direction, $uid) {
+  if (module_exists('location') && $uid) {
+    $location = location_load_locations($uid, 'uid');
+    if (count($location)) {
+      $country = $location[0]['country'];
+      $latlon = $location[0]['latitude'] .','. $location[0]['longitude'];
+      $loc = _getdirections_loadaddress($location[0]);
+      // $locs only used for display now
+      $locs = implode(', ', $loc);
+      $content = getdirections_direction($direction, $locs, $country, $latlon);
+      return $content;
     }
-    if ($location[0]['street']) {
-      $loc[] = $location[0]['street'];
-    }
-    if ($location[0]['additional']) {
-      $loc[] = $location[0]['additional'];
-    }
-    if ($location[0]['city']) {
-      $loc[] = $location[0]['city'];
-    }
-    if ($location[0]['province_name']) {
-      $loc[] = $location[0]['province_name'];
-    }
-    if ($location[0]['postal_code']) {
-      $loc[] = $location[0]['postal_code'];
-    }
-    $locs = implode(', ', $loc);
-
-    $content = getdirections_direction($direction, $locs, $country, $latlon);
-    return $content;
   }
 }
 
@@ -522,60 +538,28 @@ function getdirections_setlocations($fromvid, $tovid) {
   if (module_exists('location') && is_numeric($fromvid) && is_numeric($tovid)) {
     // From
     $fromlocation = location_load_locations($fromvid);
-    $fromlatlon = $fromlocation[0]['latitude'] .','. $fromlocation[0]['longitude'];
-    if ($fromlocation[0]['name']) {
-      $fromloc[] = $fromlocation[0]['name'];
+    if (count($fromlocation)) {
+      $fromlatlon = $fromlocation[0]['latitude'] .','. $fromlocation[0]['longitude'];
+      $fromloc = _getdirections_loadaddress($fromlocation[0]);
+      if ($fromlocation[0]['country']) {
+        $fromloc[] = drupal_strtoupper($fromlocation[0]['country']);
+      }
+      $fromlocs = implode(', ', $fromloc);
+      // To
+      $tolocation = location_load_locations($tovid);
+      if (count($tolocation)) {
+        $tolatlon = $tolocation[0]['latitude'] .','. $tolocation[0]['longitude'];
+        $toloc = _getdirections_loadaddress($tolocation[0]);
+        if ($tolocation[0]['country']) {
+          $toloc[] = drupal_strtoupper($tolocation[0]['country']);
+        }
+        $tolocs = implode(', ', $toloc);
+        $content = getdirections_locations($fromlocs, $fromlatlon, $tolocs, $tolatlon);
+        return $content;
+      }
     }
-    if ($fromlocation[0]['street']) {
-      $fromloc[] = $fromlocation[0]['street'];
-    }
-    if ($fromlocation[0]['additional']) {
-      $fromloc[] = $fromlocation[0]['additional'];
-    }
-    if ($fromlocation[0]['city']) {
-      $fromloc[] = $fromlocation[0]['city'];
-    }
-    if ($fromlocation[0]['province_name']) {
-      $fromloc[] = $fromlocation[0]['province_name'];
-    }
-    if ($fromlocation[0]['postal_code']) {
-      $fromloc[] = $fromlocation[0]['postal_code'];
-    }
-    if ($fromlocation[0]['country']) {
-      $fromloc[] = drupal_strtoupper($fromlocation[0]['country']);
-    }
-    $fromlocs = implode(', ', $fromloc);
-    // To
-    $tolocation = location_load_locations($tovid);
-    $tolatlon = $tolocation[0]['latitude'] .','. $tolocation[0]['longitude'];
-    if ($tolocation[0]['name']) {
-      $toloc[] = $tolocation[0]['name'];
-    }
-    if ($tolocation[0]['street']) {
-      $toloc[] = $tolocation[0]['street'];
-    }
-    if ($tolocation[0]['additional']) {
-      $toloc[] = $tolocation[0]['additional'];
-    }
-    if ($tolocation[0]['city']) {
-      $toloc[] = $tolocation[0]['city'];
-    }
-    if ($tolocation[0]['province_name']) {
-      $toloc[] = $tolocation[0]['province_name'];
-    }
-    if ($tolocation[0]['postal_code']) {
-      $toloc[] = $tolocation[0]['postal_code'];
-    }
-    if ($tolocation[0]['country']) {
-      $toloc[] = drupal_strtoupper($tolocation[0]['country']);
-    }
-    $tolocs = implode(', ', $toloc);
-
-    $content = getdirections_locations($fromlocs, $fromlatlon, $tolocs, $tolatlon);
-    return $content;
   }
 }
-
 
 /**
  * Function to setup the map to display waypoints
@@ -594,25 +578,10 @@ function getdirections_setlocations_via($vids) {
         continue;
       }
       $location = location_load_locations($vid);
-      $loc = array();
-      if ($location[0]['name']) {
-        $loc[] = $location[0]['name'];
+      if (! count($location)) {
+        continue;
       }
-      if ($location[0]['street']) {
-        $loc[] = $location[0]['street'];
-      }
-      if ($location[0]['additional']) {
-        $loc[] = $location[0]['additional'];
-      }
-      if ($location[0]['city']) {
-        $loc[] = $location[0]['city'];
-      }
-      if ($location[0]['province_name']) {
-        $loc[] = $location[0]['province_name'];
-      }
-      if ($location[0]['postal_code']) {
-        $loc[] = $location[0]['postal_code'];
-      }
+      $loc = _getdirections_loadaddress($location[0]);
       if ($location[0]['country']) {
         $loc[] = drupal_strtoupper($location[0]['country']);
       }
@@ -672,3 +641,46 @@ function getdirections_views_api() {
   return array('api' => 2);
 }
 
+/**
+ * Function to collect an address
+ *
+ * @param $location
+ *
+ * @return
+ *   Returns array.
+ */
+function _getdirections_loadaddress($location) {
+    if (isset($location['name']) && $location['name']) {
+      $loc[] = $location['name'];
+    }
+    if (isset($location['street']) && $location['street']) {
+      $loc[] = $location['street'];
+    }
+    if (isset($location['additional']) && $location['additional']) {
+      $loc[] = $location['additional'];
+    }
+    if (isset($location['city']) && $location['city']) {
+      $loc[] = $location['city'];
+    }
+    if (isset($location['province_name']) && $location['province_name']) {
+      $loc[] = $location['province_name'];
+    }
+    if (isset($location['postal_code']) && $location['postal_code']) {
+      $loc[] = $location['postal_code'];
+    }
+    return $loc;
+}
+
+/**
+ * Function to check the user
+ *
+ * @param $uid
+ *
+ * @return
+ *   Returns status.
+ */
+function getdirections_user_check($uid) {
+  $result = db_query('SELECT status FROM {users} WHERE uid=%d', array($uid));
+  $row = db_fetch_array($result);
+  return (isset($row['status']) && $row['status'] ? TRUE : FALSE);
+}

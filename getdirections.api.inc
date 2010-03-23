@@ -31,6 +31,26 @@ function getdirections_location_path($direction, $vid) {
  * API Function to generate a url path for use by other modules/themes.
  *
  * Example Usage:
+ * $path = getdirections_location_user_path('to', $vid);
+ * $url = l(t('Get directions'), $path);
+ *
+ * @param $direction
+ *   Required. The direction the supplied input applies to. Must be either 'to' or 'from'
+ * @param $uid
+ *   Required. The uid of the location owner
+ * @return
+ *   Returns a path relative to the drupal root.
+ */
+function getdirections_location_user_path($direction, $uid) {
+  if (module_exists('location') && is_numeric($uid) && ($direction == 'to' || $direction == 'from')) {
+    return "getdirections/location_user/$direction/$uid";
+  }
+}
+
+/**
+ * API Function to generate a url path for use by other modules/themes.
+ *
+ * Example Usage:
  * $path = getdirections_locations_path($fromvid, $tovid);
  * $url = l(t('Get directions'), $path);
  *

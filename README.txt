@@ -45,6 +45,10 @@ getdirections/locations/1/99
 Where '1' is the starting point vid and 99 is the destination vid
 (note the 's' in locations)
 
+If you are using the location_user module you can make a link to a user's location:
+getdirections/location_user/to/66
+
+
 Get Directions API
 There are functions available to generate these paths:
 
@@ -67,8 +71,7 @@ and $tolocs and $tolatlon are the same thing for the endpoint
 
 See getdirections.api.inc for more detail.
 
-The contrib folder currently contains a Views import, if you are using Views, 
-Location and Location CCK it will provide a 'Get driving directions' block 
-when you are viewing a location node, very nice.
+If you are using Views, Location CCK it will provide a 'Get driving directions' block 
+when you are viewing a location node or a user with a location.
 
 Getdirections now supports the Googlemaps API version 3, this has many new features.
