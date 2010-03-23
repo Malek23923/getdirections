@@ -664,3 +664,11 @@ function getdirections_setup_map($defaults) {
   drupal_add_css(drupal_get_path('module', 'getdirections') .'/getdirections.css');
   drupal_add_js($js);
 }
+
+/**
+ * Implementation of hook_views_api().
+ */
+function getdirections_views_api() {
+  return array('api' => 2);
+}
+

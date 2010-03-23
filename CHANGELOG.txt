@@ -1,6 +1,10 @@
 // $Id$
 // $Name$
 
+Get Directions for D6 in D-6--1, 2010-03-23
+------------------------------------
+by hutch, integrated getdirections_views_block into Views
+
 Get Directions for D6 in D-6--1, 2010-03-22
 ------------------------------------
 by hutch, added support for Googlemaps API version 3
