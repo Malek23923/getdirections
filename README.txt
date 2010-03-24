@@ -48,7 +48,21 @@ Where '1' is the starting point vid and 99 is the destination vid
 If you are using the location_user module you can make a link to a user's location:
 getdirections/location_user/to/66
 
+Same goes for from
 
+You can also get a map with waypoints of user locations
+getdirections/locations_user_via/1,2,3,99
+
+You can mix nodes and users with
+getdirections/location_u2n/66/99
+Where 66 is is user id, 99 is node id
+
+and vice-versa
+getdirections/location_n2u/99/66
+Where 66 is is user id, 99 is node id
+
+
+------------------
 Get Directions API
 There are functions available to generate these paths:
 
@@ -71,7 +85,7 @@ and $tolocs and $tolatlon are the same thing for the endpoint
 
 See getdirections.api.inc for more detail.
 
-If you are using Views, Location CCK it will provide a 'Get driving directions' block 
+If you are using Views and Location it will provide a 'Get driving directions' block 
 when you are viewing a location node or a user with a location.
 
 Getdirections now supports the Googlemaps API version 3, this has many new features.

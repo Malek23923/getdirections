@@ -83,6 +83,35 @@ function getdirections_menu() {
       'page arguments' => array(2, 3),
       'type' => MENU_CALLBACK,
     );
+    $items['getdirections/locations_user/%getdirections_uid/%getdirections_uid'] = array(
+      'title' => 'Get directions',
+      'access arguments' => array('access gmap getdirections'),
+      'page callback' => 'getdirections_user_setlocations',
+      'page arguments' => array(2, 3),
+      'type' => MENU_CALLBACK,
+    );
+    $items['getdirections/location_n2u/%getdirections_id/%getdirections_uid'] = array(
+      'title' => 'Get directions',
+      'access arguments' => array('access gmap getdirections'),
+      'page callback' => 'getdirections_n2u_setlocation',
+      'page arguments' => array(2, 3),
+      'type' => MENU_CALLBACK,
+    );
+    $items['getdirections/location_u2n/%getdirections_uid/%getdirections_id'] = array(
+      'title' => 'Get directions',
+      'access arguments' => array('access gmap getdirections'),
+      'page callback' => 'getdirections_u2n_setlocation',
+      'page arguments' => array(2, 3),
+      'type' => MENU_CALLBACK,
+    );
+    $items['getdirections/locations_user_via/%getdirections_via'] = array(
+      'title' => 'Get directions',
+      'access arguments' => array('access gmap getdirections'),
+      'page callback' => 'getdirections_user_setlocations_via',
+      'page arguments' => array(2),
+      'type' => MENU_CALLBACK,
+    );
+
   }
   return $items;
 }
@@ -525,14 +554,14 @@ function getdirections_user_setlocation($direction, $uid) {
 }
 
 /**
- * Function to setup the map and form
+ * Function to setup the map
  *
- * @param $direction
- *   Required. The direction the supplied input applies to
- * @param $vid
- *   Required. The vid of the location node
+ * @param $fromvid
+ *   Required. The nid/vid of the starting point
+ * @param $tovid
+ *   Required. The nid/vid of the destination
  * @return
- *   Returns the themed map and form
+ *   Returns the themed map
  */
 function getdirections_setlocations($fromvid, $tovid) {
   if (module_exists('location') && is_numeric($fromvid) && is_numeric($tovid)) {
@@ -562,12 +591,49 @@ function getdirections_setlocations($fromvid, $tovid) {
 }
 
 /**
+ * Function to setup the map
+ *
+ * @param $fromuid
+ *   Required. The uid of the starting point
+ * @param $touid
+ *   Required. The uid of the destination
+ * @return
+ *   Returns the themed map
+ */
+function getdirections_user_setlocations($fromuid, $touid) {
+  if (module_exists('location') && is_numeric($fromuid) && is_numeric($touid)) {
+    // From
+    $fromlocation = location_load_locations($fromuid, 'uid');
+    if (count($fromlocation)) {
+      $fromlatlon = $fromlocation[0]['latitude'] .','. $fromlocation[0]['longitude'];
+      $fromloc = _getdirections_loadaddress($fromlocation[0]);
+      if ($fromlocation[0]['country']) {
+        $fromloc[] = drupal_strtoupper($fromlocation[0]['country']);
+      }
+      $fromlocs = implode(', ', $fromloc);
+      // To
+      $tolocation = location_load_locations($touid, 'uid');
+      if (count($tolocation)) {
+        $tolatlon = $tolocation[0]['latitude'] .','. $tolocation[0]['longitude'];
+        $toloc = _getdirections_loadaddress($tolocation[0]);
+        if ($tolocation[0]['country']) {
+          $toloc[] = drupal_strtoupper($tolocation[0]['country']);
+        }
+        $tolocs = implode(', ', $toloc);
+        $content = getdirections_locations($fromlocs, $fromlatlon, $tolocs, $tolatlon);
+        return $content;
+      }
+    }
+  }
+}
+
+/**
  * Function to setup the map to display waypoints
  *
  * @param $vids
  *   Required. A comma delimited list of vids
  * @return
- *   Returns the themed map and form
+ *   Returns the themed map
  */
 function getdirections_setlocations_via($vids) {
   if (module_exists('location')) {
@@ -594,14 +660,122 @@ function getdirections_setlocations_via($vids) {
 }
 
 /**
+ * Function to setup the map
+ *
+ * @param $vid
+ *   Required. The nid/vid of the starting point
+ * @param $uid
+ *   Required. The uid of the destination
+ * @return
+ *   Returns the themed map
+ */
+function getdirections_n2u_setlocation($vid, $uid) {
+  if (module_exists('location') && is_numeric($vid) && is_numeric($uid)) {
+    // From
+    $fromlocation = location_load_locations($vid);
+    if (count($fromlocation)) {
+      $fromlatlon = $fromlocation[0]['latitude'] .','. $fromlocation[0]['longitude'];
+      $fromloc = _getdirections_loadaddress($fromlocation[0]);
+      if ($fromlocation[0]['country']) {
+        $fromloc[] = drupal_strtoupper($fromlocation[0]['country']);
+      }
+      $fromlocs = implode(', ', $fromloc);
+      // To
+      $tolocation = location_load_locations($uid, 'uid');
+      if (count($tolocation)) {
+        $tolatlon = $tolocation[0]['latitude'] .','. $tolocation[0]['longitude'];
+        $toloc = _getdirections_loadaddress($tolocation[0]);
+        if ($tolocation[0]['country']) {
+          $toloc[] = drupal_strtoupper($tolocation[0]['country']);
+        }
+        $tolocs = implode(', ', $toloc);
+        $content = getdirections_locations($fromlocs, $fromlatlon, $tolocs, $tolatlon);
+        return $content;
+      }
+    }
+  }
+}
+
+/**
+ * Function to setup the map and form
+ *
+ * @param $uid
+ *   Required. The uid of the starting point
+ * @param $vid
+ *   Required. The nid/vid of the destination
+ * @return
+ *   Returns the themed map
+ */
+function getdirections_u2n_setlocation($uid, $vid) {
+  if (module_exists('location') && is_numeric($vid) && is_numeric($uid)) {
+    // From
+    $fromlocation = location_load_locations($uid, 'uid');
+    if (count($fromlocation)) {
+      $fromlatlon = $fromlocation[0]['latitude'] .','. $fromlocation[0]['longitude'];
+      $fromloc = _getdirections_loadaddress($fromlocation[0]);
+      if ($fromlocation[0]['country']) {
+        $fromloc[] = drupal_strtoupper($fromlocation[0]['country']);
+      }
+      $fromlocs = implode(', ', $fromloc);
+      // To
+      $tolocation = location_load_locations($vid);
+      if (count($tolocation)) {
+        $tolatlon = $tolocation[0]['latitude'] .','. $tolocation[0]['longitude'];
+        $toloc = _getdirections_loadaddress($tolocation[0]);
+        if ($tolocation[0]['country']) {
+          $toloc[] = drupal_strtoupper($tolocation[0]['country']);
+        }
+        $tolocs = implode(', ', $toloc);
+        $content = getdirections_locations($fromlocs, $fromlatlon, $tolocs, $tolatlon);
+        return $content;
+      }
+    }
+  }
+}
+
+/**
+ * Function to setup the map to display waypoints
+ *
+ * @param $uids
+ *   Required. A comma delimited list of uids
+ * @return
+ *   Returns the themed map
+ */
+function getdirections_user_setlocations_via($uids) {
+  if (module_exists('location')) {
+    $arruids = explode(',', $uids);
+    foreach ($arruids AS $key => $uid) {
+      // no more than 25 allowed
+      if ($key > 23 && $key < count($arruids)) {
+        continue;
+      }
+      $location = location_load_locations($uid, 'uid');
+      if (! count($location)) {
+        continue;
+      }
+      $loc = _getdirections_loadaddress($location[0]);
+      if ($location[0]['country']) {
+        $loc[] = drupal_strtoupper($location[0]['country']);
+      }
+      $locs[] = implode(', ', $loc);
+      $latlons[] = $location[0]['latitude'] .','. $location[0]['longitude'];
+    }
+    $content = getdirections_locations_via($locs, $latlons);
+    return $content;
+  }
+}
+
+/**
  * Function to setup the map scripts
  *
- * @return
- *   Returns settings.
+ * @param $defaults
+ *   Required. the current settings.
+ * Sets up the call to googlemaps, css and the relevant getdirections js in html head
  */
 function getdirections_setup_map($defaults) {
   global $language;
   if (variable_get('use_v3', 0)) {
+   // v3
     $query = array(
       'sensor' => 'false',
       'language' => $language->language,
@@ -610,6 +784,7 @@ function getdirections_setup_map($defaults) {
     $js = drupal_get_path('module', 'getdirections') .'/getdirections_v3.js';
   }
   else {
+    // v2
     if (module_exists('gmap')) {
       $query = array(
         'file' => 'api',
@@ -672,7 +847,7 @@ function _getdirections_loadaddress($location) {
 }
 
 /**
- * Function to check the user
+ * Function to check the user status and existence
  *
  * @param $uid
  *
