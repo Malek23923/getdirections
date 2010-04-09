@@ -1,6 +1,10 @@
 // $Id$
 // $Name$
 
+Get Directions for D6 in D-6--1, 2010-04-09
+------------------------------------
+by hutch, fixed bug with api_version in defaults
+
 Get Directions for D6 in D-6--1, 2010-03-24
 ------------------------------------
 by hutch, added more combinations of user and node locations

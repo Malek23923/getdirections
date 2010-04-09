@@ -449,6 +449,7 @@ function getdirections_defaults() {
   else {
     if ( module_exists('gmap')) {
       $defaults = gmap_defaults();
+      $defaults['api_version'] =  GMAP_API_VERSION;
     }
     else {
       $defaults = array(
