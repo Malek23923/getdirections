@@ -298,6 +298,7 @@ function getdirections_direction_form($form_state, $fromto='', $loc='', $country
     else {
       $setdirections = "setDirectionsfromto2(this.from.value, this.country_from.value, this.to.value, this.country_to.value, this.locale.value); return false;";
     }
+    $countries = array_merge(array('' => t('Please select')), _location_supported_countries());
   }
   $form = array(
     '#action' => '#',
@@ -332,7 +333,7 @@ function getdirections_direction_form($form_state, $fromto='', $loc='', $country
       $form['country_from'] = array(
         '#type' => 'select',
         '#title' => t('Country'),
-        '#options' => _location_supported_countries(),
+        '#options' => $countries,
         '#default_value' => variable_get('location_default_country', 'uk'),
         '#prefix' => '<div class="container-inline getdirections_display">',
         '#suffix' => '</div>',
@@ -364,7 +365,7 @@ function getdirections_direction_form($form_state, $fromto='', $loc='', $country
       $form['country_to'] = array(
         '#type' => 'select',
         '#title' => t('Country'),
-        '#options' => _location_supported_countries(),
+        '#options' => $countries,
         '#default_value' => variable_get('location_default_country', 'uk'),
         '#prefix' => '<div class="container-inline getdirections_display">',
         '#suffix' => '</div>',
