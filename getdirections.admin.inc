@@ -17,14 +17,14 @@
 function getdirections_settings_form() {
   $getdirections_defaults = getdirections_defaults();
   $form = array();
-  $form['use_v3'] = array(
+  $form['getdirections_use_v3'] = array(
     '#type' => 'checkbox',
     '#title' => t('Use Googlemaps version 3'),
     '#description' => t('Use version 3 of the Googlemaps API instead of version 2.'),
-    '#default_value' => variable_get('use_v3', 0),
+    '#default_value' => variable_get('getdirections_use_v3', 0),
     '#return_value' => 1,
   );
-  if (! variable_get('use_v3', 0)) {
+  if (! variable_get('getdirections_use_v3', 0)) {
     if ( module_exists('gmap')) {
       $gmap_key = gmap_get_key();
     }
@@ -46,7 +46,7 @@ function getdirections_settings_form() {
     // This will store all the defaults in one variable.
     '#tree' => TRUE,
   );
-  if (! variable_get('use_v3', 0)) {
+  if (! variable_get('getdirections_use_v3', 0)) {
     $form['getdirections_default']['api_version'] = array(
       '#type' => 'textfield',
       '#title' => t('Your Google Maps API version'),
@@ -87,7 +87,7 @@ function getdirections_settings_form() {
     '#options' => drupal_map_assoc(range(0, 17)),
     '#description' => t('The default zoom level of a Google map.'),
   );
-  if (! variable_get('use_v3', 0)) {
+  if (! variable_get('getdirections_use_v3', 0)) {
     $version = $getdirections_defaults['api_version'];
     if ($version == '2' || $version == '2.x' || $version == '2.s') {
       $opts = array(
@@ -142,7 +142,7 @@ function getdirections_settings_form() {
     '#options' => $opts2,
     '#default_value' => $getdirections_defaults['mtc'],
   );
-  if (! variable_get('use_v3', 0)) {
+  if (! variable_get('getdirections_use_v3', 0)) {
     if (module_exists('gmap')) {
       // layers
       $baselayers = array();
@@ -241,7 +241,7 @@ function getdirections_settings_form() {
     '#return_value' => 1,
   );
 
-  if (! variable_get('use_v3', 0)) {
+  if (! variable_get('getdirections_use_v3', 0)) {
     $form['getdirections_default']['behavior']['overview'] = array(
       '#type' => 'checkbox',
       '#title' => t('Overview map'),

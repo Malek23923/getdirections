@@ -1,6 +1,10 @@
 // $Id$
 // $Name$
 
+Get Directions for D6 in D-6--2, 2010-06-15
+------------------------------------
+by hutch, fixed revisions bug
+
 Get Directions for D6 in D-6--1, 2010-04-22
 ------------------------------------
 by hutch, improved countries dropdown

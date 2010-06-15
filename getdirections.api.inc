@@ -11,19 +11,19 @@
  * API Function to generate a url path for use by other modules/themes.
  *
  * Example Usage:
- * $path = getdirections_location_path('to', $vid);
+ * $path = getdirections_location_path('to', $nid);
  * $url = l(t('Get directions'), $path);
  *
- * @param $direction
+ * @param string $direction
  *   Required. The direction the supplied input applies to. Must be either 'to' or 'from'
- * @param $vid
- *   Required. The vid of the location node
+ * @param int $nid
+ *   Required. The nid of the location node
  * @return
  *   Returns a path relative to the drupal root.
  */
-function getdirections_location_path($direction, $vid) {
-  if (module_exists('location') && is_numeric($vid) && ($direction == 'to' || $direction == 'from')) {
-    return "getdirections/location/$direction/$vid";
+function getdirections_location_path($direction, $nid) {
+  if (module_exists('location') && is_numeric($nid) && ($direction == 'to' || $direction == 'from')) {
+    return "getdirections/location/$direction/$nid";
   }
 }
 
@@ -31,12 +31,12 @@ function getdirections_location_path($direction, $vid) {
  * API Function to generate a url path for use by other modules/themes.
  *
  * Example Usage:
- * $path = getdirections_location_user_path('to', $vid);
+ * $path = getdirections_location_user_path('to', $uid);
  * $url = l(t('Get directions'), $path);
  *
- * @param $direction
+ * @param string $direction
  *   Required. The direction the supplied input applies to. Must be either 'to' or 'from'
- * @param $uid
+ * @param int $uid
  *   Required. The uid of the location owner
  * @return
  *   Returns a path relative to the drupal root.
@@ -51,21 +51,19 @@ function getdirections_location_user_path($direction, $uid) {
  * API Function to generate a url path for use by other modules/themes.
  *
  * Example Usage:
- * $path = getdirections_locations_path($fromvid, $tovid);
+ * $path = getdirections_locations_path($fromnid, $tonid);
  * $url = l(t('Get directions'), $path);
  *
- *
- *
- * @param $fromvid
- *   Required. The vid  of the location node of the starting point
- * @param $tovid
- *   Required. The vid of the location node of the destination
+ * @param int $fromnid
+ *   Required. The nid  of the location node of the starting point
+ * @param int $tonid
+ *   Required. The nid of the location node of the destination
  * @return
  *   Returns a path relative to the drupal root.
  */
-function getdirections_locations_path($fromvid, $tovid) {
-  if (module_exists('location') && is_numeric($fromvid) && is_numeric($tovid)) {
-    return "getdirections/locations/$fromvid/$tovid";
+function getdirections_locations_path($fromnid, $tonid) {
+  if (module_exists('location') && is_numeric($fromnid) && is_numeric($tonid)) {
+    return "getdirections/locations/$fromnid/$tonid";
   }
 }
 
@@ -76,11 +74,9 @@ function getdirections_locations_path($fromvid, $tovid) {
  * $path = getdirections_locations_user_path($fromuid, $touid);
  * $url = l(t('Get directions'), $path);
  *
- *
- *
- * @param $fromuid
+ * @param int $fromuid
  *   Required. The uid  of the location user of the starting point
- * @param $touid
+ * @param int $touid
  *   Required. The uid of the location user of the destination
  * @return
  *   Returns a path relative to the drupal root.
@@ -102,8 +98,8 @@ function getdirections_locations_user_path($fromuid, $touid) {
  * $path = getdirections_locations_user_via_path($uids);
  * $url = l(t('Get directions'), $path);
  *
- * @param $uids
- *   Required. String. A comma delimited list of uid numbers
+ * @param string $uids
+ *   Required. A comma delimited list of uid numbers
  * @return
  *   Returns a path relative to the drupal root.
  */
@@ -117,21 +113,21 @@ function getdirections_locations_user_via_path($uids) {
  * API Function to generate a url path for use by other modules/themes.
  *
  * Example Usage:
- * $vids = "1,2,3,4";
- * where '1' is the vid of the starting point
- * '4' is the vid of the end point
- * and the numbers in between are the vids of the waypoints
- * $path = getdirections_locations_via_path($vids);
+ * $nids = "1,2,3,4";
+ * where '1' is the nid of the starting point
+ * '4' is the nid of the end point
+ * and the numbers in between are the nids of the waypoints
+ * $path = getdirections_locations_via_path($nids);
  * $url = l(t('Get directions'), $path);
  *
- * @param $vids
- *   Required. String. A comma delimited list of uid numbers
+ * @param string $nids
+ *   Required. A comma delimited list of nid numbers
  * @return
  *   Returns a path relative to the drupal root.
  */
-function getdirections_locations_via_path($vids) {
+function getdirections_locations_via_path($nids) {
   if (module_exists('location')) {
-    return "getdirections/locations_via/$vids";
+    return "getdirections/locations_via/$nids";
   }
 }
 
@@ -140,21 +136,21 @@ function getdirections_locations_via_path($vids) {
  * API Function to generate a url path for use by other modules/themes.
  *
  * Example Usage:
- * $path = getdirections_location_u2n_path($fromuid, $tovid);
+ * $path = getdirections_location_u2n_path($fromuid, $tonid);
  * $url = l(t('Get directions'), $path);
  *
  *
  *
- * @param $fromuid
+ * @param int $fromuid
  *   Required. The uid  of the location user of the starting point
- * @param $tovid
- *   Required. The vid of the location node of the destination
+ * @param int $tonid
+ *   Required. The nid of the location node of the destination
  * @return
  *   Returns a path relative to the drupal root.
  */
-function getdirections_location_u2n_path($fromuid, $tovid) {
-  if (module_exists('location') && is_numeric($fromuid) && is_numeric($tovid)) {
-    return "getdirections/location_u2n/$fromuid/$tovid";
+function getdirections_location_u2n_path($fromuid, $tonid) {
+  if (module_exists('location') && is_numeric($fromuid) && is_numeric($tonid)) {
+    return "getdirections/location_u2n/$fromuid/$tonid";
   }
 }
 
@@ -162,34 +158,34 @@ function getdirections_location_u2n_path($fromuid, $tovid) {
  * API Function to generate a url path for use by other modules/themes.
  *
  * Example Usage:
- * $path = getdirections_location_n2u_path($fromvid, $touid);
+ * $path = getdirections_location_n2u_path($fromnid, $touid);
  * $url = l(t('Get directions'), $path);
  *
  *
  *
- * @param $fromvid
+ * @param int $fromnid
  *   Required. The vid  of the location node of the starting point
- * @param $touid
+ * @param int $touid
  *   Required. The uid of the location user of the destination
  * @return
  *   Returns a path relative to the drupal root.
  */
-function getdirections_location_n2u_path($fromvid, $touid) {
-  if (module_exists('location') && is_numeric($fromvid) && is_numeric($touid)) {
-    return "getdirections/location_u2n/$fromvid/$touid";
+function getdirections_location_n2u_path($fromnid, $touid) {
+  if (module_exists('location') && is_numeric($fromnid) && is_numeric($touid)) {
+    return "getdirections/location_u2n/$fromnid/$touid";
   }
 }
 
 /**
  * API Function to setup a map with two points
  *
- * @param $fromlocs
+ * @param string $fromlocs
  *   Required. The string to display for From.
- * @param $fromlatlon
+ * @param string $fromlatlon
  *   Required. The location point for From. In decimal latitude,longitude
- * @param $tolocs
+ * @param string $tolocs
  *   Required. The string to display for To.
- * @param $tolatlon
+ * @param string $tolatlon
  *   Required. The location point for To. In decimal latitude,longitude
  * @return
  *   Returns the themed map.
