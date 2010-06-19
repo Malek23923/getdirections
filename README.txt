@@ -1,9 +1,9 @@
 getdirections module for Drupal 6.x
 
 If you have any questions or suggestions please contact me at
-http://drupal.org/user/52366
+http://drupal.org/user/52366 or use the Getdirections issue queue.
 
-This module provides a form to make a google directions map.
+This module provides a form to make a Google directions map.
 
 Installation
 Upload the whole getdirections directory into sites/all/modules/ or
@@ -30,7 +30,7 @@ about the destination use a URL in this format:
 
 getdirections/location/to/99
 
-Where '99' is the vid of the location.
+Where '99' is the node id (nid) of the location.
 The user will only have to fill in the starting point.
 
 To do it the other way around use
@@ -39,18 +39,19 @@ getdirections/location/from/99
 You can also get a map with waypoints
 getdirections/locations_via/1,2,3,99
 
-If you have both the starting point and destination vids then you can use
+If you have both the starting point and destination node ids then you can use
 getdirections/locations/1/99
 
-Where '1' is the starting point vid and 99 is the destination vid
+Where '1' is the starting point node id and 99 is the destination node id
 (note the 's' in locations)
 
-If you are using the location_user module you can make a link to a user's location:
+If you are using the location_user module you can make
+a link to a user's location with the user id:
 getdirections/location_user/to/66
 
 Same goes for from
 
-You can also get a map with waypoints of user locations
+You can also get a map with waypoints of user locations with the user ids:
 getdirections/locations_user_via/1,2,3,99
 
 You can mix nodes and users with
@@ -64,16 +65,17 @@ Where 66 is is user id, 99 is node id
 
 ------------------
 Get Directions API
+These functions are for use in other modules.
 There are functions available to generate these paths:
 
-getdirections_location_path($direction, $vid)
-Where $direction is either 'to' or 'from' and $vid is the vid concerned.
+getdirections_location_path($direction, $nid)
+Where $direction is either 'to' or 'from' and $nid is the node id concerned.
 
-getdirections_locations_path($fromvid, $tovid)
-Where $fromvid is the starting point and $tovid is the destination
+getdirections_locations_path($fromnid, $tonid)
+Where $fromnid is the starting point and $tonid is the destination
 
-getdirections_locations_via_path($vids)
-Where $vids is a comma delimited list, eg "1,2,3,99"
+getdirections_locations_via_path($nids)
+Where $nids is a comma delimited list, eg "1,2,3,99" of node ids
 Google imposes a limit of 25 points
 
 If you have the latitude and longitude of the start and end points you can use
@@ -85,7 +87,7 @@ and $tolocs and $tolatlon are the same thing for the endpoint
 
 See getdirections.api.inc for more detail.
 
-If you are using Views and Location it will provide a 'Get driving directions' block 
+If you are using Views and Location it will provide a 'Get driving directions' block
 when you are viewing a location node or a user with a location.
 
 Getdirections now supports the Googlemaps API version 3, this has many new features.
