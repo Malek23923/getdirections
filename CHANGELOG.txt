@@ -1,6 +1,10 @@
 // $Id$
 // $Name$
 
+Get Directions for D6 in D-6--2, 2010-06-19
+------------------------------------
+by hutch, added menu access callback
+
 Get Directions for D6 in D-6--2, 2010-06-15
 ------------------------------------
 by hutch, fixed revisions bug

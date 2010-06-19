@@ -54,65 +54,64 @@ function getdirections_menu() {
     'page callback' => 'getdirections_direction',
     'type' => MENU_SUGGESTED_ITEM,
   );
-  if (module_exists('location')) {
-    $items['getdirections/location/%getdirections_fromto/%getdirections_id'] = array(
-      'title' => 'Get directions',
-      'access arguments' => array('access gmap getdirections'),
-      'page callback' => 'getdirections_setlocation',
-      'page arguments' => array(2, 3),
-      'type' => MENU_CALLBACK,
-    );
-    $items['getdirections/locations/%getdirections_id/%getdirections_id'] = array(
-      'title' => 'Get directions',
-      'access arguments' => array('access gmap getdirections'),
-      'page callback' => 'getdirections_setlocations',
-      'page arguments' => array(2, 3),
-      'type' => MENU_CALLBACK,
-    );
-    $items['getdirections/locations_via/%getdirections_via'] = array(
-      'title' => 'Get directions',
-      'access arguments' => array('access gmap getdirections'),
-      'page callback' => 'getdirections_setlocations_via',
-      'page arguments' => array(2),
-      'type' => MENU_CALLBACK,
-    );
-    $items['getdirections/location_user/%getdirections_fromto/%getdirections_uid'] = array(
-      'title' => 'Get directions',
-      'access arguments' => array('access gmap getdirections'),
-      'page callback' => 'getdirections_user_setlocation',
-      'page arguments' => array(2, 3),
-      'type' => MENU_CALLBACK,
-    );
-    $items['getdirections/locations_user/%getdirections_uid/%getdirections_uid'] = array(
-      'title' => 'Get directions',
-      'access arguments' => array('access gmap getdirections'),
-      'page callback' => 'getdirections_user_setlocations',
-      'page arguments' => array(2, 3),
-      'type' => MENU_CALLBACK,
-    );
-    $items['getdirections/location_n2u/%getdirections_id/%getdirections_uid'] = array(
-      'title' => 'Get directions',
-      'access arguments' => array('access gmap getdirections'),
-      'page callback' => 'getdirections_n2u_setlocation',
-      'page arguments' => array(2, 3),
-      'type' => MENU_CALLBACK,
-    );
-    $items['getdirections/location_u2n/%getdirections_uid/%getdirections_id'] = array(
-      'title' => 'Get directions',
-      'access arguments' => array('access gmap getdirections'),
-      'page callback' => 'getdirections_u2n_setlocation',
-      'page arguments' => array(2, 3),
-      'type' => MENU_CALLBACK,
-    );
-    $items['getdirections/locations_user_via/%getdirections_via'] = array(
-      'title' => 'Get directions',
-      'access arguments' => array('access gmap getdirections'),
-      'page callback' => 'getdirections_user_setlocations_via',
-      'page arguments' => array(2),
-      'type' => MENU_CALLBACK,
-    );
+  // location enabled
+  $items['getdirections/location/%getdirections_fromto/%getdirections_id'] = array(
+    'title' => 'Get directions',
+    'access callback' => 'getdirections_access_location',
+    'page callback' => 'getdirections_setlocation',
+    'page arguments' => array(2, 3),
+    'type' => MENU_CALLBACK,
+  );
+  $items['getdirections/locations/%getdirections_id/%getdirections_id'] = array(
+    'title' => 'Get directions',
+    'access callback' => 'getdirections_access_location',
+    'page callback' => 'getdirections_setlocations',
+    'page arguments' => array(2, 3),
+    'type' => MENU_CALLBACK,
+  );
+  $items['getdirections/locations_via/%getdirections_via'] = array(
+    'title' => 'Get directions',
+    'access callback' => 'getdirections_access_location',
+    'page callback' => 'getdirections_setlocations_via',
+    'page arguments' => array(2),
+    'type' => MENU_CALLBACK,
+  );
+  $items['getdirections/location_user/%getdirections_fromto/%getdirections_uid'] = array(
+    'title' => 'Get directions',
+    'access callback' => 'getdirections_access_location',
+    'page callback' => 'getdirections_user_setlocation',
+    'page arguments' => array(2, 3),
+    'type' => MENU_CALLBACK,
+  );
+  $items['getdirections/locations_user/%getdirections_uid/%getdirections_uid'] = array(
+    'title' => 'Get directions',
+    'access callback' => 'getdirections_access_location',
+    'page callback' => 'getdirections_user_setlocations',
+    'page arguments' => array(2, 3),
+    'type' => MENU_CALLBACK,
+  );
+  $items['getdirections/location_n2u/%getdirections_id/%getdirections_uid'] = array(
+    'title' => 'Get directions',
+    'access callback' => 'getdirections_access_location',
+    'page callback' => 'getdirections_n2u_setlocation',
+    'page arguments' => array(2, 3),
+    'type' => MENU_CALLBACK,
+  );
+  $items['getdirections/location_u2n/%getdirections_uid/%getdirections_id'] = array(
+    'title' => 'Get directions',
+    'access callback' => 'getdirections_access_location',
+    'page callback' => 'getdirections_u2n_setlocation',
+    'page arguments' => array(2, 3),
+    'type' => MENU_CALLBACK,
+  );
+  $items['getdirections/locations_user_via/%getdirections_via'] = array(
+    'title' => 'Get directions',
+    'access callback' => 'getdirections_access_location',
+    'page callback' => 'getdirections_user_setlocations_via',
+    'page arguments' => array(2),
+    'type' => MENU_CALLBACK,
+  );
 
-  }
   return $items;
 }
 
@@ -142,6 +141,16 @@ function getdirections_via_load($arg) {
       }
     }
     return $arg;
+  }
+  return FALSE;
+}
+
+/**
+ * menu access functions
+ */
+function getdirections_access_location() {
+  if (module_exists('location') && user_access('access gmap getdirections')) {
+    return TRUE;
   }
   return FALSE;
 }
