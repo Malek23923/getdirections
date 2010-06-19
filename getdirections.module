@@ -172,7 +172,7 @@ function getdirections_access_location() {
 function getdirections_direction($direction='', $location='', $country='', $latlon='') {
   $getdirections_defaults = getdirections_defaults();
   getdirections_setup_map($getdirections_defaults);
-  $lla = split(',', $getdirections_defaults['latlong']);
+  $lla = explode(',', $getdirections_defaults['latlong']);
   $getdirections_settings = array(
     'lat' => $lla[0],
     'lng' => $lla[1],
@@ -213,7 +213,7 @@ function getdirections_locations($fromlocs, $fromlatlon, $tolocs, $tolatlon) {
   global $language;
   $getdirections_defaults = getdirections_defaults();
   getdirections_setup_map($getdirections_defaults);
-  $lla = split(',', $getdirections_defaults['latlong']);
+  $lla = explode(',', $getdirections_defaults['latlong']);
   $getdirections_settings = array(
     'lat' => $lla[0],
     'lng' => $lla[1],
@@ -252,7 +252,7 @@ function getdirections_locations_via($locs, $latlons) {
   global $language;
   $getdirections_defaults = getdirections_defaults();
   getdirections_setup_map($getdirections_defaults);
-  $lla = split(',', $getdirections_defaults['latlong']);
+  $lla = explode(',', $getdirections_defaults['latlong']);
   $getdirections_settings = array(
     'lat' => $lla[0],
     'lng' => $lla[1],
