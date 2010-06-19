@@ -3,7 +3,9 @@
 
 Get Directions for D6 in D-6--2, 2010-06-19
 ------------------------------------
-by hutch, added menu access callback, replaced split with explode
+by hutch, added menu access callback,
+  replaced split with explode
+  fixed update bug
 
 Get Directions for D6 in D-6--2, 2010-06-15
 ------------------------------------
