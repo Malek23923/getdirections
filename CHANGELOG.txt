@@ -1,6 +1,12 @@
 // $Id$
 // $Name$
 
+Get Directions for D6 in D-6--2, 2010-06-20
+------------------------------------
+by hutch, added page return link option
+  added validation of admin settings form
+  replaced hidden form elements with value
+
 Get Directions for D6 in D-6--2, 2010-06-19
 ------------------------------------
 by hutch, added menu access callback,

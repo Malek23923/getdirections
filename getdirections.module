@@ -169,7 +169,7 @@ function getdirections_access_location() {
  * @return
  *   Returns the themed map and form
  */
-function getdirections_direction($direction='', $location='', $country='', $latlon='') {
+function getdirections_direction($direction='', $location='', $country='', $latlon='', $nid=0) {
   $getdirections_defaults = getdirections_defaults();
   getdirections_setup_map($getdirections_defaults);
   $lla = explode(',', $getdirections_defaults['latlong']);
@@ -192,7 +192,7 @@ function getdirections_direction($direction='', $location='', $country='', $latl
   $width = $getdirections_defaults['width'];
   $height = $getdirections_defaults['height'];
   $form = drupal_get_form('getdirections_direction_form', $direction, $location, $country, $latlon);
-  return theme('getdirections_show', $form, $width, $height);
+  return theme('getdirections_show', $form, $width, $height, $nid);
 }
 
 /**
@@ -325,7 +325,7 @@ function getdirections_direction_form($form_state, $fromto='', $loc='', $country
   );
   if ($fromto == 'from') {
     $form['from'] = array(
-      '#type' => 'hidden',
+      '#type' => 'value',
       '#value' => $latlon,
     );
 
@@ -351,7 +351,7 @@ function getdirections_direction_form($form_state, $fromto='', $loc='', $country
   }
   if ($fromto == 'to') {
     $form['to'] = array(
-      '#type' => 'hidden',
+      '#type' => 'value',
       '#value' => $latlon,
     );
     $form['mto'] = array(
@@ -406,7 +406,7 @@ function getdirections_direction_form($form_state, $fromto='', $loc='', $country
   }
 
   $form['locale'] = array(
-    '#type' => 'hidden',
+    '#type' => 'value',
     '#value' => $language->language,
   );
   $form['submit'] = array(
@@ -527,7 +527,7 @@ function getdirections_setlocation($direction, $nid) {
       $loc = _getdirections_loadaddress($location[0]);
       // $locs only used for display now
       $locs = implode(', ', $loc);
-      $content = getdirections_direction($direction, $locs, $country, $latlon);
+      $content = getdirections_direction($direction, $locs, $country, $latlon, $nid);
       return $content;
     }
   }

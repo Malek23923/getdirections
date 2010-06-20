@@ -289,6 +289,8 @@ function getdirections_settings_form() {
     '#default_value' => $getdirections_defaults['from_width'],
     '#size' => 5,
     '#description' => t("The width of the Get directions 'From' box."),
+    // need this to get validation to work
+    '#parents' => array('getdirections_default', 'from_width'),
   );
   $form['getdirections_default']['to_width'] = array(
     '#type' => 'textfield',
@@ -296,8 +298,48 @@ function getdirections_settings_form() {
     '#default_value' => $getdirections_defaults['to_width'],
     '#size' => 5,
     '#description' => t("The width of the Get directions 'To' box."),
+    // need this to get validation to work
+    '#parents' => array('getdirections_default', 'to_width'),
   );
+  // return link
+  $form['getdirections_returnlink'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Link back to page'),
+    '#description' => t('Enable and format a \'Return to page\' link.'),
+    // This will store all the defaults in one variable.
+    '#tree' => TRUE,
+  );
+  $getdirections_returnlink = variable_get('getdirections_returnlink', array('enable' => 0, 'link' => t('Return to page')));
+  $form['getdirections_returnlink']['enable'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Enable Return Link'),
+    '#default_value' =>  $getdirections_returnlink['enable'],
+    '#return_value' => 1,
+  );
+  $form['getdirections_returnlink']['link'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Text of return link'),
+    '#default_value' => $getdirections_returnlink['link'],
+    '#size' => 30,
+    // need this to get validation to work
+    '#parents' => array('getdirections_returnlink', 'link'),
+  );
+  $form['#validate'][] = 'getdirections_settings_validate';
 
   return system_settings_form($form);
 
 }
+
+function getdirections_settings_validate($form, &$form_state) {
+  if ( ! is_numeric($form_state['values']['getdirections_default']['to_width']) || $form_state['values']['getdirections_default']['to_width'] < 1) {
+    form_set_error('getdirections_default][to_width', t('Width of To box must be a positive number'));
+  }
+  if ( ! is_numeric($form_state['values']['getdirections_default']['from_width']) || $form_state['values']['getdirections_default']['from_width'] < 1) {
+    form_set_error('getdirections_default][from_width', t('Width of From box must be a positive number'));
+  }
+  if ( empty($form_state['values']['getdirections_returnlink']['link'])) {
+    form_set_error('getdirections_returnlink][link', t('Text of return link cannot be empty'));
+  }
+  $form_state['values']['getdirections_returnlink']['link'] = check_plain($form_state['values']['getdirections_returnlink']['link']);
+}
+

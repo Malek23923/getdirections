@@ -20,6 +20,7 @@ function getdirections_theme() {
         'form' => array(),
         'width' => '',
         'height' => '',
+        'nid' => 0,
       ),
     ),
     'getdirections_show_locations' => array(
@@ -47,8 +48,15 @@ function getdirections_theme() {
  * Theme to use for when one or no locations are supplied.
  *
  */
-function theme_getdirections_show($form, $width, $height) {
-  $output = $form;
+function theme_getdirections_show($form, $width, $height, $nid) {
+  $output = '';
+  $getdirections_returnlink = variable_get('getdirections_returnlink', array('enable' => 0, 'link' => t('Return to page')));
+  if ($getdirections_returnlink['enable'] && $nid > 0) {
+    $link = l($getdirections_returnlink['link'], 'node/' . $nid);
+    $output .= '<div class="getdirections_returnlink">'. $link .'</div>';
+  }
+
+  $output .= $form;
   $header = array();
 
   $rows[] = array(
