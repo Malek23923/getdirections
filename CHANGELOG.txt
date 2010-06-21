@@ -1,6 +1,12 @@
 // $Id$
 // $Name$
 
+Get Directions for D6 in D-6--2, 2010-06-21
+------------------------------------
+by hutch, added user return link option
+  fixed bug in getdirections_user view
+  fixed bug in initial default settings
+
 Get Directions for D6 in D-6--2, 2010-06-20
 ------------------------------------
 by hutch, added page return link option

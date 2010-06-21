@@ -169,7 +169,7 @@ function getdirections_access_location() {
  * @return
  *   Returns the themed map and form
  */
-function getdirections_direction($direction='', $location='', $country='', $latlon='', $nid=0) {
+function getdirections_direction($direction='', $location='', $country='', $latlon='', $id=0, $type='node') {
   $getdirections_defaults = getdirections_defaults();
   getdirections_setup_map($getdirections_defaults);
   $lla = explode(',', $getdirections_defaults['latlong']);
@@ -192,7 +192,7 @@ function getdirections_direction($direction='', $location='', $country='', $latl
   $width = $getdirections_defaults['width'];
   $height = $getdirections_defaults['height'];
   $form = drupal_get_form('getdirections_direction_form', $direction, $location, $country, $latlon);
-  return theme('getdirections_show', $form, $width, $height, $nid);
+  return theme('getdirections_show', $form, $width, $height, $id, $type);
 }
 
 /**
@@ -453,6 +453,8 @@ function getdirections_defaults() {
     if ( module_exists('gmap')) {
       $defaults = gmap_defaults();
       $defaults['api_version'] =  GMAP_API_VERSION;
+      $defaults['from_width'] = 20;
+      $defaults['to_width'] = 20;
     }
     else {
       $defaults = array(
@@ -527,7 +529,7 @@ function getdirections_setlocation($direction, $nid) {
       $loc = _getdirections_loadaddress($location[0]);
       // $locs only used for display now
       $locs = implode(', ', $loc);
-      $content = getdirections_direction($direction, $locs, $country, $latlon, $nid);
+      $content = getdirections_direction($direction, $locs, $country, $latlon, $nid, 'node');
       return $content;
     }
   }
@@ -552,7 +554,7 @@ function getdirections_user_setlocation($direction, $uid) {
       $loc = _getdirections_loadaddress($location[0]);
       // $locs only used for display now
       $locs = implode(', ', $loc);
-      $content = getdirections_direction($direction, $locs, $country, $latlon);
+      $content = getdirections_direction($direction, $locs, $country, $latlon, $uid, 'user');
       return $content;
     }
   }

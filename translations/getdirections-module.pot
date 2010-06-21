@@ -12,7 +12,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2010-06-20 13:41+0100\n"
+"POT-Creation-Date: 2010-06-21 09:48+0100\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -257,23 +257,63 @@ msgstr ""
 msgid "The width of the Get directions 'From' box."
 msgstr ""
 
-#: getdirections.admin.inc:295
+#: getdirections.admin.inc:297
 msgid "Width of To box"
 msgstr ""
 
-#: getdirections.admin.inc:298
+#: getdirections.admin.inc:300
 msgid "The width of the Get directions 'To' box."
 msgstr ""
 
-#: getdirections.theme.inc:78;109 getdirections.module:334
+#: getdirections.admin.inc:307
+msgid "Links back to page"
+msgstr ""
+
+#: getdirections.admin.inc:308
+msgid "Enable and format 'Return to page' links."
+msgstr ""
+
+#: getdirections.admin.inc:314;316 getdirections.theme.inc:56;58
+msgid "Return to page"
+msgstr ""
+
+#: getdirections.admin.inc:320
+msgid "Enable Page Return Link"
+msgstr ""
+
+#: getdirections.admin.inc:326
+msgid "Text of page return link"
+msgstr ""
+
+#: getdirections.admin.inc:335
+msgid "Enable User Return Link"
+msgstr ""
+
+#: getdirections.admin.inc:341
+msgid "Text of user return link"
+msgstr ""
+
+#: getdirections.admin.inc:356
+msgid "Width of To box must be a positive number"
+msgstr ""
+
+#: getdirections.admin.inc:359
+msgid "Width of From box must be a positive number"
+msgstr ""
+
+#: getdirections.admin.inc:362;366
+msgid "Text of return link cannot be empty"
+msgstr ""
+
+#: getdirections.theme.inc:96;127 getdirections.module:334
 msgid "From"
 msgstr ""
 
-#: getdirections.theme.inc:79;112 getdirections.module:359
+#: getdirections.theme.inc:97;130 getdirections.module:359
 msgid "To"
 msgstr ""
 
-#: getdirections.theme.inc:115
+#: getdirections.theme.inc:133
 msgid "Via"
 msgstr ""
 

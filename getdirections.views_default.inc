@@ -23,7 +23,7 @@ function getdirections_views_default_views() {
   $view->base_table = 'node';
   $view->is_cacheable = FALSE;
   $view->api_version = 2;
-  $view->disabled = TRUE; /* Edit this to true to make a default view disabled initially */
+  $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
   $handler = $view->new_display('default', 'Defaults', 'default');
   $handler->override_option('fields', array(
     'title' => array(
@@ -191,7 +191,7 @@ function getdirections_views_default_views() {
   $view->base_table = 'users';
   $view->is_cacheable = FALSE;
   $view->api_version = 2;
-  $view->disabled = TRUE; /* Edit this to true to make a default view disabled initially */
+  $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
   $handler = $view->new_display('default', 'Defaults', 'default');
   $handler->override_option('fields', array(
   'name' => array(
@@ -217,7 +217,7 @@ function getdirections_views_default_views() {
     'empty' => '',
     'hide_empty' => 0,
     'empty_zero' => 0,
-    'link_to_user' => 1,
+    'link_to_user' => 0,
     'overwrite_anonymous' => 0,
     'anonymous_text' => '',
     'exclude' => 1,

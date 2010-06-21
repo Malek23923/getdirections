@@ -21,6 +21,7 @@ function getdirections_theme() {
         'width' => '',
         'height' => '',
         'nid' => 0,
+        'type' => '',
       ),
     ),
     'getdirections_show_locations' => array(
@@ -48,11 +49,20 @@ function getdirections_theme() {
  * Theme to use for when one or no locations are supplied.
  *
  */
-function theme_getdirections_show($form, $width, $height, $nid) {
+function theme_getdirections_show($form, $width, $height, $nid, $type) {
   $output = '';
-  $getdirections_returnlink = variable_get('getdirections_returnlink', array('enable' => 0, 'link' => t('Return to page')));
-  if ($getdirections_returnlink['enable'] && $nid > 0) {
-    $link = l($getdirections_returnlink['link'], 'node/' . $nid);
+  $getdirections_returnlink = variable_get('getdirections_returnlink', array(
+    'page_enable' => 0,
+    'page_link' => t('Return to page'),
+    'user_enable' => 0,
+    'user_link' => t('Return to page'),
+  ));
+  if ($getdirections_returnlink['page_enable'] && $nid > 0 && $type == 'node') {
+    $link = l($getdirections_returnlink['page_link'], 'node/' . $nid);
+    $output .= '<div class="getdirections_returnlink">'. $link .'</div>';
+  }
+  elseif ($getdirections_returnlink['user_enable'] && $nid > 0 && $type == 'user') {
+    $link = l($getdirections_returnlink['page_link'], 'user/' . $nid);
     $output .= '<div class="getdirections_returnlink">'. $link .'</div>';
   }
 
