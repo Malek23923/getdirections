@@ -406,7 +406,7 @@ function getdirections_direction_form($form_state, $fromto='', $loc='', $country
   }
 
   $form['locale'] = array(
-    '#type' => 'value',
+    '#type' => 'hidden',
     '#value' => $language->language,
   );
   $form['submit'] = array(
