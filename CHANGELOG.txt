@@ -3,6 +3,11 @@
 
 Get Directions for D6 in D-6--2, 2010-06-21
 ------------------------------------
+by hutch, fixed bug in form, reset value elements
+to hidden, required for js.
+
+Get Directions for D6 in D-6--2, 2010-06-21
+------------------------------------
 by hutch, added user return link option
   fixed bug in getdirections_user view
   fixed bug in initial default settings
