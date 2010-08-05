@@ -3,16 +3,16 @@
 # LANGUAGE translation of Drupal (general)
 # Copyright YEAR NAME <EMAIL@ADDRESS>
 # Generated from files:
-#  getdirections.admin.inc,v 1.3.2.2.2.1 2010/06/15 22:23:54 hutch
-#  getdirections.theme.inc,v 1.2.2.3 2010/03/22 23:17:07 hutch
-#  getdirections.module,v 1.4.2.10.2.3 2010/06/19 11:59:51 hutch
+#  getdirections.admin.inc,v 1.3.2.2.2.4 2010/08/05 18:49:00 hutch
+#  getdirections.theme.inc,v 1.2.2.3.2.3 2010/08/05 16:00:48 hutch
+#  getdirections.module,v 1.4.2.10.2.9 2010/08/05 18:49:00 hutch
 #  getdirections.info,v 1.2.2.1 2010/03/18 20:41:17 hutch
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2010-06-21 09:48+0100\n"
+"POT-Creation-Date: 2010-08-05 19:50+0100\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -305,11 +305,11 @@ msgstr ""
 msgid "Text of return link cannot be empty"
 msgstr ""
 
-#: getdirections.theme.inc:96;127 getdirections.module:334
+#: getdirections.theme.inc:96;127 getdirections.module:332
 msgid "From"
 msgstr ""
 
-#: getdirections.theme.inc:97;130 getdirections.module:359
+#: getdirections.theme.inc:97;130 getdirections.module:355
 msgid "To"
 msgstr ""
 
@@ -321,7 +321,7 @@ msgstr ""
 msgid "Fetches google map directions."
 msgstr ""
 
-#: getdirections.module:191;235;273;414 getdirections.info:0
+#: getdirections.module:191;235;273;404 getdirections.info:0
 msgid "Get Directions"
 msgstr ""
 
@@ -333,28 +333,52 @@ msgstr ""
 msgid "Please select"
 msgstr ""
 
-#: getdirections.module:343
+#: getdirections.module:339
 msgid "Starting from"
 msgstr ""
 
-#: getdirections.module:346
+#: getdirections.module:342
 msgid "Enter the address, postcode and/or city from where you want to start your journey."
 msgstr ""
 
-#: getdirections.module:368
+#: getdirections.module:362
 msgid "Destination"
 msgstr ""
 
-#: getdirections.module:371
+#: getdirections.module:365
 msgid "Enter the address, postcode and/or city of your journey destination."
 msgstr ""
 
-#: getdirections.module:382
+#: getdirections.module:376
 msgid "Travel mode"
 msgstr ""
 
-#: getdirections.module:396
+#: getdirections.module:378
+msgid "Driving"
+msgstr ""
+
+#: getdirections.module:379
+msgid "Walking"
+msgstr ""
+
+#: getdirections.module:380
+msgid "Bicycling"
+msgstr ""
+
+#: getdirections.module:388
 msgid "Travel options"
+msgstr ""
+
+#: getdirections.module:390
+msgid "Avoid Highways"
+msgstr ""
+
+#: getdirections.module:391
+msgid "Avoid Tolls"
+msgstr ""
+
+#: getdirections.module:392
+msgid "Alternative routes"
 msgstr ""
 
 #: getdirections.module:34
