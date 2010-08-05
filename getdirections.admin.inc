@@ -286,7 +286,7 @@ function getdirections_settings_form() {
   $form['getdirections_default']['from_width'] = array(
     '#type' => 'textfield',
     '#title' => t('Width of From box'),
-    '#default_value' => $getdirections_defaults['from_width'],
+    '#default_value' => ($getdirections_defaults['from_width'] ? $getdirections_defaults['from_width'] : 20),
     '#size' => 5,
     '#description' => t("The width of the Get directions 'From' box."),
     // need this to get validation to work
@@ -295,7 +295,7 @@ function getdirections_settings_form() {
   $form['getdirections_default']['to_width'] = array(
     '#type' => 'textfield',
     '#title' => t('Width of To box'),
-    '#default_value' => $getdirections_defaults['to_width'],
+    '#default_value' => ($getdirections_defaults['to_width'] ? $getdirections_defaults['to_width'] : 20),
     '#size' => 5,
     '#description' => t("The width of the Get directions 'To' box."),
     // need this to get validation to work

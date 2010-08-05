@@ -375,9 +375,9 @@ function getdirections_direction_form($form_state, $fromto='', $loc='', $country
         '#type' => 'select',
         '#title' => t('Travel mode'),
         '#options' => array(
-          'driving' => 'Driving',
-          'walking' => 'Walking',
-          'bicycling' => 'Bicycling',
+          'driving' => t('Driving'),
+          'walking' => t('Walking'),
+          'bicycling' => t('Bicycling'),
         ),
         '#default_value' => 'driving',
       );
@@ -387,9 +387,9 @@ function getdirections_direction_form($form_state, $fromto='', $loc='', $country
         '#type' => 'checkboxes',
         '#title' => t('Travel options'),
         '#options' => array(
-          'avoidhighways' => 'Avoid Highways',
-          'avoidtolls' => 'Avoid Tolls',
-          'altroute' => 'Alternative routes',
+          'avoidhighways' => t('Avoid Highways'),
+          'avoidtolls' => t('Avoid Tolls'),
+          'altroute' => t('Alternative routes'),
         ),
       );
     }

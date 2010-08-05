@@ -4,8 +4,9 @@
 Get Directions for D6 in D-6--2, 2010-06-21
 ------------------------------------
 by hutch, fixed bug in form, reset value elements
-to hidden, required for js. Moved prefix and suffix
-from form to theme.
+to hidden, required for js.
+Moved prefix and suffix from form to theme.
+Added more t() to form. Fixed some defaults in admin
 
 Get Directions for D6 in D-6--2, 2010-06-21
 ------------------------------------

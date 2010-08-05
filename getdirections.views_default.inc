@@ -9,7 +9,7 @@
  */
 
 /**
- * Implementation of hook_views_default_views()
+ * Implementation of hook_views_default_views().
  */
 function getdirections_views_default_views() {
   $views = array();
