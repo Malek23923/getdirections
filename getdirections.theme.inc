@@ -158,6 +158,31 @@ function theme_getdirections_show_locations_via($width, $height, $locs) {
 
 function theme_getdirections_direction_form($form) {
   // if you want to do fancy things with the form, do it here ;-)
+  if (isset($form['mto'])) {
+    $form['mto']['#prefix'] = '<div class="container-inline getdirections_display">';
+    $form['mto']['#suffix'] = '</div>';
+  }
+  if (isset($form['mfrom'])) {
+    $form['mfrom']['#prefix'] = '<div class="container-inline getdirections_display">';
+    $form['mfrom']['#suffix'] = '</div>';
+  }
+  if (isset($form['travelmode'])) {
+    $form['travelmode']['#prefix'] = '<div class="container-inline getdirections_display">';
+    $form['travelmode']['#suffix'] = '</div>';
+  }
+  if (isset($form['travelextras'])) {
+    $form['travelextras']['#prefix'] = '<div class="container-inline getdirections_display">';
+    $form['travelextras']['#suffix'] = '</div>';
+  }
+  if (isset($form['country_from'])) {
+    $form['country_from']['#prefix'] = '<div class="container-inline getdirections_display">';
+    $form['country_from']['#suffix'] = '</div>';
+  }
+  if (isset($form['country_to'])) {
+    $form['country_to']['#prefix'] = '<div class="container-inline getdirections_display">';
+    $form['country_to']['#suffix'] = '</div>';
+  }
+
   $output = '';
   $output .= drupal_render($form);
   return $output;

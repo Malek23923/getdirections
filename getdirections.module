@@ -311,9 +311,7 @@ function getdirections_direction_form($form_state, $fromto='', $loc='', $country
       '#type' => 'select',
       '#title' => t('Country'),
       '#options' => array_merge(array('' => t('Please select')), _location_supported_countries()),
-      '#default_value' => variable_get('location_default_country', 'uk'),
-      '#prefix' => '<div class="container-inline getdirections_display">',
-      '#suffix' => '</div>',
+      '#default_value' => variable_get('location_default_country', ''),
     );
   }
   $form = array(
@@ -333,8 +331,6 @@ function getdirections_direction_form($form_state, $fromto='', $loc='', $country
       '#type' => 'item',
       '#title' => t('From'),
       '#value' => $loc .', '. drupal_strtoupper($country),
-      '#prefix' => '<div class="container-inline getdirections_display">',
-      '#suffix' => '</div>',
     );
   }
   else {
@@ -358,8 +354,6 @@ function getdirections_direction_form($form_state, $fromto='', $loc='', $country
       '#type' => 'item',
       '#title' => t('To'),
       '#value' => $loc .', '. drupal_strtoupper($country),
-      '#prefix' => '<div class="container-inline getdirections_display">',
-      '#suffix' => '</div>',
     );
   }
   else {
@@ -386,8 +380,6 @@ function getdirections_direction_form($form_state, $fromto='', $loc='', $country
           'bicycling' => 'Bicycling',
         ),
         '#default_value' => 'driving',
-        '#prefix' => '<div class="container-inline getdirections_display">',
-        '#suffix' => '</div>',
       );
     }
     if ($getdirections_defaults['travelextras_show']) {
@@ -399,8 +391,6 @@ function getdirections_direction_form($form_state, $fromto='', $loc='', $country
           'avoidtolls' => 'Avoid Tolls',
           'altroute' => 'Alternative routes',
         ),
-        '#prefix' => '<div class="container-inline getdirections_display">',
-        '#suffix' => '</div>',
       );
     }
   }
