@@ -126,7 +126,7 @@ function getRequest(fromAddress, toAddress, waypts) {
   var request = new Object();
   request = {
     origin: fromAddress,
-    destination: toAddress,
+    destination: toAddress
   };
 
   var tmode = $("#edit-travelmode").val();
