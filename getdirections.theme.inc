@@ -58,17 +58,14 @@ function theme_getdirections_show($form, $width, $height, $nid, $type) {
     'user_link' => t('Return to page'),
   ));
   if ($getdirections_returnlink['page_enable'] && $nid > 0 && $type == 'node') {
-    $link = l($getdirections_returnlink['page_link'], 'node/' . $nid);
-    $output .= '<div class="getdirections_returnlink">'. $link .'</div>';
+    $output .= '<div class="getdirections_returnlink">'. l($getdirections_returnlink['page_link'], 'node/' . $nid) .'</div>';
   }
   elseif ($getdirections_returnlink['user_enable'] && $nid > 0 && $type == 'user') {
-    $link = l($getdirections_returnlink['page_link'], 'user/' . $nid);
-    $output .= '<div class="getdirections_returnlink">'. $link .'</div>';
+    $output .= '<div class="getdirections_returnlink">'. l($getdirections_returnlink['page_link'], 'user/' . $nid) .'</div>';
   }
-
   $output .= $form;
-  $header = array();
 
+  $header = array();
   $rows[] = array(
     array(
       'data' => '<div id="getdirections_map_canvas" style="width: '. $width .'; height: '. $height .'" ></div>',
@@ -84,6 +81,10 @@ function theme_getdirections_show($form, $width, $height, $nid, $type) {
     ),
   );
   $output .= '<div class="getdirections">'. theme('table', $header, $rows) .'</div>';
+  if (getdirections_is_advanced()) {
+    $getdirections_defaults = getdirections_defaults();
+    $output .= '<div id="getdirections_advanced">Drag <img src="http://labs.google.com/ridefinder/images/mm_20_'. $getdirections_defaults['waypoint_color'] .'.png"> to activate a waypoint</div>';
+  }
   return $output;
 }
 
@@ -174,16 +175,40 @@ function theme_getdirections_direction_form($form) {
     $form['travelextras']['#prefix'] = '<div class="container-inline getdirections_display">';
     $form['travelextras']['#suffix'] = '</div>';
   }
-  if (isset($form['country_from'])) {
-    $form['country_from']['#prefix'] = '<div class="container-inline getdirections_display">';
-    $form['country_from']['#suffix'] = '</div>';
+  if (getdirections_is_advanced()) {
+    if (isset($form['from']) && $form['from']['#type'] == 'textfield' ) {
+      $form['from']['#suffix'] = '</div>';
+    }
+    if (isset($form['country_from'])) {
+      $form['country_from']['#prefix'] = '<div id="getdirections_start"><div class="container-inline getdirections_display">';
+      $form['country_from']['#suffix'] = '</div>';
+    }
+    if (isset($form['to']) && $form['to']['#type'] == 'textfield' ) {
+      $form['to']['#suffix'] = '</div>';
+    }
+    if (isset($form['country_to'])) {
+      $form['country_to']['#prefix'] = '<div id="getdirections_end"><div class="container-inline getdirections_display">';
+      $form['country_to']['#suffix'] = '</div>';
+    }
+    $desc = t('Select a country first, then type in a town.<br />You can also click on the map and move the marker.');
   }
-  if (isset($form['country_to'])) {
-    $form['country_to']['#prefix'] = '<div class="container-inline getdirections_display">';
-    $form['country_to']['#suffix'] = '</div>';
+  else {
+    if (isset($form['country_from'])) {
+      $form['country_from']['#prefix'] = '<div class="container-inline getdirections_display">';
+      $form['country_from']['#suffix'] = '</div>';
+    }
+    if (isset($form['country_to'])) {
+      $form['country_to']['#prefix'] = '<div class="container-inline getdirections_display">';
+      $form['country_to']['#suffix'] = '</div>';
+    }
+    $desc = t('Fill in the form below.');
   }
 
-  $output = '';
+  if (isset($form['submit'])) {
+    $form['submit']['#prefix'] = '<div id="getdirections_btn">';
+    $form['submit']['#suffix'] = '</div>';
+  }
+  $output = '<p class="description">'. $desc .'</p>';
   $output .= drupal_render($form);
   return $output;
 }

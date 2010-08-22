@@ -16,6 +16,7 @@
  */
 function getdirections_settings_form() {
   $getdirections_defaults = getdirections_defaults();
+
   $form = array();
   $form['getdirections_use_v3'] = array(
     '#type' => 'checkbox',
@@ -109,9 +110,9 @@ function getdirections_settings_form() {
     }
     $opts2 = array(
       'none' => t('None'),
-      'standard' => t('Standard (GMapTypeControl)'),
-      'hier' => t('Hierarchical (GHierarchicalMapTypeControl)'),
-      'menu' => t('Dropdown (GMenuMapTypeControl)'),
+      'standard' => t('Standard'),
+      'hier' => t('Hierarchical'),
+      'menu' => t('Dropdown'),
     );
   }
   else {
@@ -301,6 +302,45 @@ function getdirections_settings_form() {
     // need this to get validation to work
     '#parents' => array('getdirections_default', 'to_width'),
   );
+
+  $form['getdirections_default']['use_advanced'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Use advanced features'),
+    '#description' => t('Advanced features include a clickable map and waypoints.'),
+    '#default_value' => ($getdirections_defaults['use_advanced'] ? $getdirections_defaults['use_advanced'] : 0),
+    '#return_value' => 1,
+  );
+  $waypoints_opts = range(0, GETDIRECTIONS_WAYPOINTS_MAX);
+  $waypoints_opts[0] = t('None');
+  $form['getdirections_default']['waypoints'] = array(
+    '#type' => 'select',
+    '#title' => t('Number of waypoints'),
+    '#description' => t('The number of waypoints to display on the map.'),
+    '#default_value' => (isset($getdirections_defaults['waypoints']) ? $getdirections_defaults['waypoints'] : 3),
+    '#options' => $waypoints_opts,
+    '#prefix' => '<div id="wrap-waypoints">',
+  );
+
+  $form['getdirections_default']['waypoint_color'] = array(
+    '#type' => 'select',
+    '#title' => t('Color of waypoint markers'),
+    '#description' => t('The color of waypoint markers used on the map.'),
+    '#default_value' => ($getdirections_defaults['waypoint_color'] ? $getdirections_defaults['waypoint_color'] : 'white'),
+    '#options' => array(
+      'black' => t('Black'),
+      'blue' => t('Blue'),
+      'brown' => t('Brown'),
+      'gray' => t('Gray'),
+      'green' => t('Green'),
+      'orange' => t('Orange'),
+      'purple' => t('Purple'),
+      'red' => t('Red'),
+      'white' => t('White'),
+      'yellow' => t('Yellow'),
+    ),
+    '#suffix' => '</div>',
+  );
+
   // return link
   $form['getdirections_returnlink'] = array(
     '#type' => 'fieldset',
@@ -328,6 +368,8 @@ function getdirections_settings_form() {
     '#size' => 30,
     // need this to get validation to work
     '#parents' => array('getdirections_returnlink', 'page_link'),
+    '#prefix' => '<div id="wrap-page-link">',
+    '#suffix' => '</div>',
   );
 
   $form['getdirections_returnlink']['user_enable'] = array(
@@ -343,6 +385,8 @@ function getdirections_settings_form() {
     '#size' => 30,
     // need this to get validation to work
     '#parents' => array('getdirections_returnlink', 'user_link'),
+    '#prefix' => '<div id="wrap-user-link">',
+    '#suffix' => '</div>',
   );
 
   $form['#validate'][] = 'getdirections_settings_validate';

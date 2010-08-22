@@ -10,164 +10,123 @@
  * this is for googlemaps API version 2
 */
 
-// Global killswitch
-if (Drupal.jsEnabled) {
+// errorcodes
+var reasons = [];
+reasons[G_GEO_SUCCESS]             = "Success";
+reasons[G_GEO_MISSING_ADDRESS]     = "Missing Address: The address was either missing or had no value.";
+reasons[G_GEO_UNKNOWN_ADDRESS]     = "Unknown Address:  No corresponding geographic location could be found for the specified address.";
+reasons[G_GEO_UNAVAILABLE_ADDRESS] = "Unavailable Address:  The geocode for the given address cannot be returned due to legal or contractual reasons.";
+reasons[G_GEO_BAD_KEY]             = "Bad Key: The API key is either invalid or does not match the domain for which it was given";
+reasons[G_GEO_TOO_MANY_QUERIES]    = "Too Many Queries: The daily geocoding quota for this site has been exceeded.";
+reasons[G_GEO_SERVER_ERROR]        = "Server error: The geocoding request could not be successfully processed.";
+reasons[G_GEO_BAD_REQUEST]         = "A directions request could not be successfully parsed.";
+reasons[G_GEO_MISSING_QUERY]       = "No query was specified in the input.";
+reasons[G_GEO_UNKNOWN_DIRECTIONS]  = "The GDirections object could not compute directions between the points.";
 
-  var map;
-  var gdir;
+var gdir;
+var mylocale;
 
-  function initialize() {
-    if (GBrowserIsCompatible()) {
-      Drupal.settings.getdirections.map = new GMap2(document.getElementById("getdirections_map_canvas"));
-      var lat = Drupal.settings.getdirections.lat;
-      var lng = Drupal.settings.getdirections.lng;
-      var zoom = Drupal.settings.getdirections.zoom;
-      var controltype = Drupal.settings.getdirections.controltype;
-      var mtc = Drupal.settings.getdirections.mtc;
-      var scale = Drupal.settings.getdirections.scale;
-      var overview = Drupal.settings.getdirections.overview;
-      var maptype = (Drupal.settings.getdirections.maptype ? Drupal.settings.getdirections.maptype : '');
-      var baselayers = (Drupal.settings.getdirections.baselayers ? Drupal.settings.getdirections.baselayers : '');
+function setDirectionsvia(lls, locale) {
+  var arr = lls.split('|');
+  gdir.loadFromWaypoints(arr, { "locale": locale });
+}
 
-      var fromlatlon = (Drupal.settings.getdirections.fromlatlon ? Drupal.settings.getdirections.fromlatlon : '');
-      var tolatlon = (Drupal.settings.getdirections.tolatlon ? Drupal.settings.getdirections.tolatlon : '');
-      var mylocale = (Drupal.settings.getdirections.mylocale ? Drupal.settings.getdirections.mylocale : 'en');
-      // pipe delim
-      var latlons = (Drupal.settings.getdirections.latlons ? Drupal.settings.getdirections.latlons : '');
+function onGDirectionsLoad(){
+  // Use this function to access information about the latest load() results.
+  // e.g.
+  //document.getElementById("getdirections_info").innerHTML = gdir.getStatus().code;
+  // and yada yada yada...
+}
 
-      // menu type
-      if (mtc == 'standard') {
-        Drupal.settings.getdirections.map.addControl(new GMapTypeControl());
-      }
-      else if (mtc == 'hier') {
-        Drupal.settings.getdirections.map.addControl(new GHierarchicalMapTypeControl());
-      }
-      else if (mtc == 'menu') {
-        Drupal.settings.getdirections.map.addControl(new GMenuMapTypeControl());
-      }
+function initialize() {
+  if (! GBrowserIsCompatible()) {
+    return;
+  }
+  var lat = Drupal.settings.getdirections.lat;
+  var lng = Drupal.settings.getdirections.lng;
+  var zoom = Drupal.settings.getdirections.zoom;
+  var controltype = Drupal.settings.getdirections.controltype;
+  var mtc = Drupal.settings.getdirections.mtc;
+  var scale = Drupal.settings.getdirections.scale;
+  var overview = Drupal.settings.getdirections.overview;
+  var maptype = (Drupal.settings.getdirections.maptype ? Drupal.settings.getdirections.maptype : '');
+  var baselayers = (Drupal.settings.getdirections.baselayers ? Drupal.settings.getdirections.baselayers : '');
 
-      // nav control type
-      if (controltype == 'Micro') {
-        Drupal.settings.getdirections.map.addControl(new GSmallZoomControl());
-      }
-      else if (controltype == 'Micro3D') {
-        Drupal.settings.getdirections.map.addControl(new GSmallZoomControl3D());
-      }
-      else if (controltype == 'Small') {
-        Drupal.settings.getdirections.map.addControl(new GSmallMapControl());
-      }
-      else if (controltype == 'Large') {
-        Drupal.settings.getdirections.map.addControl(new GLargeMapControl());
-      }
-      else if (controltype == 'Large3D') {
-        Drupal.settings.getdirections.map.addControl(new GLargeMapControl3D());
-      }
+  var fromlatlon = (Drupal.settings.getdirections.fromlatlon ? Drupal.settings.getdirections.fromlatlon : '');
+  var tolatlon = (Drupal.settings.getdirections.tolatlon ? Drupal.settings.getdirections.tolatlon : '');
+  var mylocale = (Drupal.settings.getdirections.mylocale ? Drupal.settings.getdirections.mylocale : 'en');
+  // pipe delim
+  var latlons = (Drupal.settings.getdirections.latlons ? Drupal.settings.getdirections.latlons : '');
 
-      if (baselayers['Physical']) {
-        Drupal.settings.getdirections.map.addMapType(G_PHYSICAL_MAP);
-      }
+  map = new GMap2(document.getElementById("getdirections_map_canvas"));
 
-      // map type
-      if (maptype) {
-        if (maptype == 'Map' && baselayers['Map']) {
-          Drupal.settings.getdirections.map.setMapType(G_NORMAL_MAP);
-        }
-        if (maptype == 'Satellite' && baselayers['Satellite'] ) {
-          Drupal.settings.getdirections.map.setMapType(G_SATELLITE_MAP);
+  // menu type
+  if (mtc == 'standard') { map.addControl(new GMapTypeControl()); }
+  else if (mtc == 'hier') { map.addControl(new GHierarchicalMapTypeControl()); }
+  else if (mtc == 'menu') { map.addControl(new GMenuMapTypeControl()); }
+  // nav control type
+  if (controltype == 'Micro') { map.addControl(new GSmallZoomControl()); }
+  else if (controltype == 'Micro3D') { map.addControl(new GSmallZoomControl3D()); }
+  else if (controltype == 'Small') { map.addControl(new GSmallMapControl()); }
+  else if (controltype == 'Large') { map.addControl(new GLargeMapControl()); }
+  else if (controltype == 'Large3D') { map.addControl(new GLargeMapControl3D()); }
+  if (baselayers.Physical) { map.addMapType(G_PHYSICAL_MAP); }
+  // map type
+  if (maptype) {
+    if (maptype == 'Map' && baselayers.Map) { map.setMapType(G_NORMAL_MAP); }
+    if (maptype == 'Satellite' && baselayers.Satellite) { map.setMapType(G_SATELLITE_MAP); }
+    if (maptype == 'Hybrid' && baselayers.Hybrid) { map.setMapType(G_HYBRID_MAP); }
+    if (maptype == 'Physical' && baselayers.Physical) { map.setMapType(G_PHYSICAL_MAP); }
+  }
+  //GScaleControl()
+  if (scale) { map.addControl(new GScaleControl()); }
+  //GOverviewMapControl()
+  if (overview) { map.addControl(new GOverviewMapControl()); }
 
-        }
-        if (maptype == 'Hybrid' && baselayers['Hybrid'] ) {
-          Drupal.settings.getdirections.map.setMapType(G_HYBRID_MAP);
+  latlng = new GLatLng(lat, lng);
+  map.setCenter(latlng, parseInt(zoom));
 
-        }
-        if (maptype == 'Physical' && baselayers['Physical'] ) {
-          Drupal.settings.getdirections.map.setMapType(G_PHYSICAL_MAP);
-        }
-      }
+  gdir = new GDirections(map, document.getElementById("getdirections_directions"));
 
-      //GScaleControl()
-      if (scale) {
-        Drupal.settings.getdirections.map.addControl(new GScaleControl());
-      }
-      //GOverviewMapControl()
-      if (overview) {
-        Drupal.settings.getdirections.map.addControl(new GOverviewMapControl());
-      }
-
-      latlng = new GLatLng(lat, lng);
-      Drupal.settings.getdirections.map.setCenter(latlng, parseInt(zoom));
-
-      gdir = new GDirections(Drupal.settings.getdirections.map, document.getElementById("getdirections_directions"));
-      GEvent.addListener(gdir, "load", onGDirectionsLoad);
-      GEvent.addListener(gdir, "error", handleErrors);
-
-      if (fromlatlon && tolatlon) {
-        setDirectionsfromto(fromlatlon, tolatlon, mylocale);
-      }
-      if (latlons) {
-        setDirectionsvia(latlons, mylocale);
-      }
+  GEvent.addListener(gdir, "error", function() {
+    var code = gdir.getStatus().code;
+    var reason="Code " + code;
+    if (reasons[code]) {
+      reason = "Code " + code + " : " + reasons[code];
     }
-  }
-
-  // without location module
-  function setDirectionsfromto(fromAddress, toAddress, locale) {
-    gdir.load("from: " + fromAddress + " to: " + toAddress, { "locale": locale });
-  }
-
-  // with location module
-  function setDirectionsfromto2(fromCountry, fromAddress, toCountry, toAddress, locale) {
-    var s = "from: " + fromAddress + ", " + fromCountry + " to: " + toAddress + ", " + toCountry;
-    gdir.load(s, { "locale": locale });
-  }
-  function setDirectionsfrom(fromAddress, toCountry, toAddress, locale) {
-    var s = "from: " + fromAddress + " to: " + toAddress + ", " + toCountry;
-    gdir.load(s, { "locale": locale });
-  }
-  function setDirectionsto(fromCountry, fromAddress, toAddress, locale) {
-    var s = "from: " + fromAddress + ", " + fromCountry + " to: " + toAddress;
-    gdir.load(s, { "locale": locale });
-  }
-  function setDirectionsvia(lls, locale) {
-    arr = new Array();
-    arr = lls.split('|');
-    gdir.loadFromWaypoints(arr, { "locale": locale });
-  }
-
-  function handleErrors(){
-    if (gdir.getStatus().code == G_GEO_UNKNOWN_ADDRESS)
-      alert("No corresponding geographic location could be found for one of the specified addresses. This may be due to the fact that the address is relatively new, or it may be incorrect.\nError code: " + gdir.getStatus().code);
-
-    else if (gdir.getStatus().code == G_GEO_SERVER_ERROR)
-      alert("A geocoding or directions request could not be successfully processed, yet the exact reason for the failure is not known.\n Error code: " + gdir.getStatus().code);
-
-    else if (gdir.getStatus().code == G_GEO_MISSING_QUERY)
-      alert("The HTTP q parameter was either missing or had no value. For geocoder requests, this means that an empty address was specified as input. For directions requests, this means that no query was specified in the input.\n Error code: " + gdir.getStatus().code);
-
-//   else if (gdir.getStatus().code == G_UNAVAILABLE_ADDRESS)  <--- Doc bug... this is either not defined, or Doc is wrong
-//     alert("The geocode for the given address or the route for the given directions query cannot be returned due to legal or contractual reasons.\n Error code: " + gdir.getStatus().code);
-
-    else if (gdir.getStatus().code == G_GEO_BAD_KEY)
-      alert("The given key is either invalid or does not match the domain for which it was given. \n Error code: " + gdir.getStatus().code);
-
-    else if (gdir.getStatus().code == G_GEO_BAD_REQUEST)
-      alert("A directions request could not be successfully parsed.\n Error code: " + gdir.getStatus().code);
-
-    else alert("An unknown error occurred.");
-
-  }
-
-  function onGDirectionsLoad(){
-    // Use this function to access information about the latest load() results.
-    // e.g.
-    //document.getElementById("getdirections_info").innerHTML = gdir.getStatus().code;
-    // and yada yada yada...
-  }
-
-  $(document).ready( function() {
-    initialize();
+    alert("Failed to obtain directions, " + reason);
   });
+
+  GEvent.addListener(gdir, "load", onGDirectionsLoad);
+
+  if (fromlatlon && tolatlon) {
+    gdir.load("from: " + fromlatlon + " to: " + tolatlon, { "locale": mylocale });
+  }
+
+  if (latlons) {
+    setDirectionsvia(latlons, mylocale);
+  }
+
+}
+
+function mygetDirections() {
+  // collect form info from the DOM
+  var from = $("#edit-from").val();
+  if ($("#edit-country-from").val()) {
+    from += ', ' + $("#edit-country-from").val();
+  }
+  var to = $("#edit-to").val();
+  if ($("#edit-country-to").val()) {
+    to += ', ' + $("#edit-country-to").val();
+  }
+  var s = "from: " + from + " to: " + to;
+  gdir.load(s, {locale: mylocale});
+}
+
+Drupal.behaviors.getdirections = function() {
+  initialize();
+
   $(window).unload(function(){
     GUnload();
   });
-}
+};

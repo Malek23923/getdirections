@@ -190,6 +190,6 @@ function getdirections_location_n2u_path($fromnid, $touid) {
  * @return
  *   Returns the themed map.
  */
-function getdirections_locations_bylatlon($fromlocs, $fromlatlon, $tolocs, $tolatlon) {
-  return getdirections_locations($fromlocs, $fromlatlon, $tolocs, $tolatlon);
+function getdirections_locations_bylatlon($fromlocs, $fromlatlon, $tolocs, $tolatlon, $width='', $height='') {
+  return getdirections_locations($fromlocs, $fromlatlon, $tolocs, $tolatlon, $width, $height);
 }

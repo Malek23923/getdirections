@@ -22,6 +22,9 @@ function getdirections_help($path, $arg) {
  * Implementation of hook_init().
  */
 function getdirections_init() {
+  if (! module_load_include('inc', 'getdirections', 'getdirections.config')) {
+    define('GETDIRECTIONS_WAYPOINTS_MAX', 8);
+  }
   module_load_include('inc', 'getdirections', 'getdirections.api');
   module_load_include('inc', 'getdirections', 'getdirections.theme');
   drupal_add_js(drupal_get_path('module', 'getdirections') .'/getdirections.js');
@@ -169,7 +172,8 @@ function getdirections_access_location() {
  * @return
  *   Returns the themed map and form
  */
-function getdirections_direction($direction='', $location='', $country='', $latlon='', $id=0, $type='node') {
+function getdirections_direction($direction='', $location='', $country='', $latlon='', $id=0, $type='node', $width='', $height='') {
+  global $language;
   $getdirections_defaults = getdirections_defaults();
   getdirections_setup_map($getdirections_defaults);
   $lla = explode(',', $getdirections_defaults['latlong']);
@@ -186,11 +190,18 @@ function getdirections_direction($direction='', $location='', $country='', $latl
     'scrollwheel' => $getdirections_defaults['behavior']['scrollwheel'],
     'draggable' => $getdirections_defaults['behavior']['draggable'],
     'unitsystem' => $getdirections_defaults['unitsystem'],
+    'mylocale' => $language->language,
+    'waypoints' => intval($getdirections_defaults['waypoints']),
+    'waypoint_color' => $getdirections_defaults['waypoint_color'],
   );
   drupal_add_js(array('getdirections' => $getdirections_settings), 'setting');
   drupal_set_title(t("Get Directions"));
-  $width = $getdirections_defaults['width'];
-  $height = $getdirections_defaults['height'];
+  if (empty($width)) {
+    $width = $getdirections_defaults['width'];
+  }
+  if (empty($height)) {
+    $height = $getdirections_defaults['height'];
+  }
   $form = drupal_get_form('getdirections_direction_form', $direction, $location, $country, $latlon);
   return theme('getdirections_show', $form, $width, $height, $id, $type);
 }
@@ -209,7 +220,7 @@ function getdirections_direction($direction='', $location='', $country='', $latl
  * @return
  *   Returns the themed map.
  */
-function getdirections_locations($fromlocs, $fromlatlon, $tolocs, $tolatlon) {
+function getdirections_locations($fromlocs, $fromlatlon, $tolocs, $tolatlon, $width='', $height='') {
   global $language;
   $getdirections_defaults = getdirections_defaults();
   getdirections_setup_map($getdirections_defaults);
@@ -230,11 +241,17 @@ function getdirections_locations($fromlocs, $fromlatlon, $tolocs, $tolatlon) {
     'fromlatlon' => $fromlatlon,
     'tolatlon' => $tolatlon,
     'mylocale' => $language->language,
+    'waypoints' => intval($getdirections_defaults['waypoints']),
+    'waypoint_color' => $getdirections_defaults['waypoint_color'],
   );
   drupal_add_js(array('getdirections' => $getdirections_settings), 'setting');
   drupal_set_title(t("Get Directions"));
-  $width = $getdirections_defaults['width'];
-  $height = $getdirections_defaults['height'];
+  if (empty($width)) {
+    $width = $getdirections_defaults['width'];
+  }
+  if (empty($height)) {
+    $height = $getdirections_defaults['height'];
+  }
   return theme('getdirections_show_locations', $width, $height, $fromlocs, $tolocs);
 }
 
@@ -248,7 +265,7 @@ function getdirections_locations($fromlocs, $fromlatlon, $tolocs, $tolatlon) {
  * @return
  *   Returns the themed map.
  */
-function getdirections_locations_via($locs, $latlons) {
+function getdirections_locations_via($locs, $latlons, $width='', $height='') {
   global $language;
   $getdirections_defaults = getdirections_defaults();
   getdirections_setup_map($getdirections_defaults);
@@ -268,11 +285,17 @@ function getdirections_locations_via($locs, $latlons) {
     'unitsystem' => $getdirections_defaults['unitsystem'],
     'latlons' => implode('|', $latlons),
     'mylocale' => $language->language,
+    'waypoints' => intval($getdirections_defaults['waypoints']),
+    'waypoint_color' => $getdirections_defaults['waypoint_color'],
   );
   drupal_add_js(array('getdirections' => $getdirections_settings), 'setting');
   drupal_set_title(t("Get Directions"));
-  $width = $getdirections_defaults['width'];
-  $height = $getdirections_defaults['height'];
+  if (empty($width)) {
+    $width = $getdirections_defaults['width'];
+  }
+  if (empty($height)) {
+    $height = $getdirections_defaults['height'];
+  }
   return theme('getdirections_show_locations_via', $width, $height, $locs);
 }
 
@@ -286,27 +309,14 @@ function getdirections_locations_via($locs, $latlons) {
  * @param string $country
  *   Optional. The country
  * @param string $latlon
- *   Optional. Comma delimted string containg latitude and longitude
+ *   Optional. Comma delimted string containing latitude and longitude
  * @return
  *   Returns the form
  */
 function getdirections_direction_form($form_state, $fromto='', $loc='', $country='', $latlon='') {
-  global $language;
   $getdirections_defaults = getdirections_defaults();
   $location = module_exists('location');
-  if (!$location) {
-    $setdirections = "setDirectionsfromto(this.from.value, this.to.value, this.locale.value); return false;";
-  }
-  else {
-    if ($fromto == 'to') {
-      $setdirections = "setDirectionsto(this.from.value, this.country_from.value, this.to.value, this.locale.value); return false;";
-    }
-    elseif ($fromto == 'from') {
-      $setdirections = "setDirectionsfrom(this.from.value, this.to.value, this.country_to.value, this.locale.value); return false;";
-    }
-    else {
-      $setdirections = "setDirectionsfromto2(this.from.value, this.country_from.value, this.to.value, this.country_to.value, this.locale.value); return false;";
-    }
+  if ($location) {
     $countries = array(
       '#type' => 'select',
       '#title' => t('Country'),
@@ -314,6 +324,21 @@ function getdirections_direction_form($form_state, $fromto='', $loc='', $country
       '#default_value' => variable_get('location_default_country', ''),
     );
   }
+  $setdirections = "mygetDirections(); return false;";
+  // weights
+  if (getdirections_is_advanced()) {
+    $from_country_weight = 1;
+    $from_weight = 2;
+    $to_country_weight = 3;
+    $to_weight = 4;
+  }
+  else {
+    $from_weight = 1;
+    $from_country_weight = 2;
+    $to_weight = 3;
+    $to_country_weight = 4;
+  }
+
   $form = array(
     '#action' => '#',
     '#attributes' => array(
@@ -334,16 +359,18 @@ function getdirections_direction_form($form_state, $fromto='', $loc='', $country
     );
   }
   else {
+    if ($location) {
+      $form['country_from'] = $countries;
+      $form['country_from']['#weight'] = $from_country_weight;
+    }
     $form['from'] = array(
       '#type' => 'textfield',
       '#title' => t('Starting from'),
       '#size' => $getdirections_defaults['from_width'],
       '#required' => TRUE,
       '#description' => t('Enter the address, postcode and/or city from where you want to start your journey.'),
+      '#weight' => $from_weight,
     );
-    if ($location) {
-      $form['country_from'] = $countries;
-    }
   }
   if ($fromto == 'to') {
     $form['to'] = array(
@@ -357,16 +384,18 @@ function getdirections_direction_form($form_state, $fromto='', $loc='', $country
     );
   }
   else {
+    if ($location) {
+      $form['country_to'] = $countries;
+      $form['country_to']['#weight'] = $to_country_weight;
+    }
     $form['to'] = array(
       '#type' => 'textfield',
       '#title' => t('Destination'),
       '#size' => $getdirections_defaults['to_width'],
       '#required' => TRUE,
       '#description' => t('Enter the address, postcode and/or city of your journey destination.'),
+      '#weight' => $to_weight,
     );
-    if ($location) {
-      $form['country_to'] = $countries;
-    }
   }
 
   if (variable_get('getdirections_use_v3', 0)) {
@@ -380,6 +409,7 @@ function getdirections_direction_form($form_state, $fromto='', $loc='', $country
           'bicycling' => t('Bicycling'),
         ),
         '#default_value' => 'driving',
+        '#weight' => 5,
       );
     }
     if ($getdirections_defaults['travelextras_show']) {
@@ -391,17 +421,24 @@ function getdirections_direction_form($form_state, $fromto='', $loc='', $country
           'avoidtolls' => t('Avoid Tolls'),
           'altroute' => t('Alternative routes'),
         ),
+        '#weight' => 6,
       );
     }
   }
-
-  $form['locale'] = array(
-    '#type' => 'hidden',
-    '#value' => $language->language,
-  );
+  if (getdirections_is_advanced()) {
+    $form['next'] = array(
+      '#type' => 'button',
+      '#value' => t('Next'),
+      '#weight' => 9,
+      '#attributes' => array( 'onClick' => 'nextbtn(); return false;'),
+      '#prefix' => '<div id="getdirections_nextbtn">',
+      '#suffix' => '</div>',
+    );
+  }
   $form['submit'] = array(
     '#type' => 'submit',
     '#value' => t('Get Directions'),
+    '#weight' => 10,
   );
   return $form;
 }
@@ -437,6 +474,9 @@ function getdirections_defaults() {
       'to_width' => 20,
       'travelmode_show' => 0,
       'travelextras_show' => 0,
+      'use_advanced' => 0,
+      'waypoints' => 0,
+      'waypoint_color' => 'white',
     );
   }
   else {
@@ -445,6 +485,9 @@ function getdirections_defaults() {
       $defaults['api_version'] =  GMAP_API_VERSION;
       $defaults['from_width'] = 20;
       $defaults['to_width'] = 20;
+      $defaults['use_advanced'] = 0;
+      $defaults['waypoints'] = 0;
+      $defaults['waypoint_color'] = 'white';
     }
     else {
       $defaults = array(
@@ -468,6 +511,9 @@ function getdirections_defaults() {
         ),
         'from_width' => 20,
         'to_width' => 20,
+        'use_advanced' => 0,
+        'waypoints' => 0,
+        'waypoint_color' => 'white',
       );
     }
   }
@@ -509,7 +555,7 @@ function getdirections_defaults() {
  * @return
  *   Returns the themed map and form
  */
-function getdirections_setlocation($direction, $nid) {
+function getdirections_setlocation($direction, $nid, $width='', $height='') {
   if (module_exists('location')) {
     $vid = getdirections_get_vid($nid);
     $location = location_load_locations($vid);
@@ -519,7 +565,7 @@ function getdirections_setlocation($direction, $nid) {
       $loc = _getdirections_loadaddress($location[0]);
       // $locs only used for display now
       $locs = implode(', ', $loc);
-      $content = getdirections_direction($direction, $locs, $country, $latlon, $nid, 'node');
+      $content = getdirections_direction($direction, $locs, $country, $latlon, $nid, 'node', $width, $height);
       return $content;
     }
   }
@@ -535,7 +581,7 @@ function getdirections_setlocation($direction, $nid) {
  * @return
  *   Returns the themed map and form
  */
-function getdirections_user_setlocation($direction, $uid) {
+function getdirections_user_setlocation($direction, $uid, $width='', $height='') {
   if (module_exists('location') && $uid) {
     $location = location_load_locations($uid, 'uid');
     if (count($location)) {
@@ -544,7 +590,7 @@ function getdirections_user_setlocation($direction, $uid) {
       $loc = _getdirections_loadaddress($location[0]);
       // $locs only used for display now
       $locs = implode(', ', $loc);
-      $content = getdirections_direction($direction, $locs, $country, $latlon, $uid, 'user');
+      $content = getdirections_direction($direction, $locs, $country, $latlon, $uid, 'user', $width, $height);
       return $content;
     }
   }
@@ -560,7 +606,7 @@ function getdirections_user_setlocation($direction, $uid) {
  * @return
  *   Returns the themed map
  */
-function getdirections_setlocations($fromnid, $tonid) {
+function getdirections_setlocations($fromnid, $tonid, $width='', $height='') {
   if (module_exists('location')) {
     // From
     $fromvid = getdirections_get_vid($fromnid);
@@ -582,7 +628,7 @@ function getdirections_setlocations($fromnid, $tonid) {
           $toloc[] = drupal_strtoupper($tolocation[0]['country']);
         }
         $tolocs = implode(', ', $toloc);
-        $content = getdirections_locations($fromlocs, $fromlatlon, $tolocs, $tolatlon);
+        $content = getdirections_locations($fromlocs, $fromlatlon, $tolocs, $tolatlon, $width, $height);
         return $content;
       }
     }
@@ -599,7 +645,7 @@ function getdirections_setlocations($fromnid, $tonid) {
  * @return
  *   Returns the themed map
  */
-function getdirections_user_setlocations($fromuid, $touid) {
+function getdirections_user_setlocations($fromuid, $touid, $width='', $height='') {
   if (module_exists('location') && is_numeric($fromuid) && is_numeric($touid)) {
     // From
     $fromlocation = location_load_locations($fromuid, 'uid');
@@ -619,7 +665,7 @@ function getdirections_user_setlocations($fromuid, $touid) {
           $toloc[] = drupal_strtoupper($tolocation[0]['country']);
         }
         $tolocs = implode(', ', $toloc);
-        $content = getdirections_locations($fromlocs, $fromlatlon, $tolocs, $tolatlon);
+        $content = getdirections_locations($fromlocs, $fromlatlon, $tolocs, $tolatlon, $width, $height);
         return $content;
       }
     }
@@ -634,7 +680,7 @@ function getdirections_user_setlocations($fromuid, $touid) {
  * @return
  *   Returns the themed map
  */
-function getdirections_setlocations_via($nids) {
+function getdirections_setlocations_via($nids, $width='', $height='') {
   if (module_exists('location')) {
     $arrnids = explode(',', $nids);
     foreach ($arrnids AS $key => $nid) {
@@ -654,7 +700,7 @@ function getdirections_setlocations_via($nids) {
       $locs[] = implode(', ', $loc);
       $latlons[] = $location[0]['latitude'] .','. $location[0]['longitude'];
     }
-    $content = getdirections_locations_via($locs, $latlons);
+    $content = getdirections_locations_via($locs, $latlons, $width, $height);
     return $content;
   }
 }
@@ -669,7 +715,7 @@ function getdirections_setlocations_via($nids) {
  * @return
  *   Returns the themed map
  */
-function getdirections_n2u_setlocation($nid, $uid) {
+function getdirections_n2u_setlocation($nid, $uid, $width='', $height='') {
   if (module_exists('location')) {
     // From
     $vid = getdirections_get_vid($nid);
@@ -690,7 +736,7 @@ function getdirections_n2u_setlocation($nid, $uid) {
           $toloc[] = drupal_strtoupper($tolocation[0]['country']);
         }
         $tolocs = implode(', ', $toloc);
-        $content = getdirections_locations($fromlocs, $fromlatlon, $tolocs, $tolatlon);
+        $content = getdirections_locations($fromlocs, $fromlatlon, $tolocs, $tolatlon, $width, $height);
         return $content;
       }
     }
@@ -707,7 +753,7 @@ function getdirections_n2u_setlocation($nid, $uid) {
  * @return
  *   Returns the themed map
  */
-function getdirections_u2n_setlocation($uid, $nid) {
+function getdirections_u2n_setlocation($uid, $nid, $width='', $height='') {
   if (module_exists('location')) {
     // From
     $fromlocation = location_load_locations($uid, 'uid');
@@ -728,7 +774,7 @@ function getdirections_u2n_setlocation($uid, $nid) {
           $toloc[] = drupal_strtoupper($tolocation[0]['country']);
         }
         $tolocs = implode(', ', $toloc);
-        $content = getdirections_locations($fromlocs, $fromlatlon, $tolocs, $tolatlon);
+        $content = getdirections_locations($fromlocs, $fromlatlon, $tolocs, $tolatlon, $width, $height);
         return $content;
       }
     }
@@ -743,7 +789,7 @@ function getdirections_u2n_setlocation($uid, $nid) {
  * @return
  *   Returns the themed map
  */
-function getdirections_user_setlocations_via($uids) {
+function getdirections_user_setlocations_via($uids, $width='', $height='') {
   if (module_exists('location')) {
     $arruids = explode(',', $uids);
     foreach ($arruids AS $key => $uid) {
@@ -762,7 +808,7 @@ function getdirections_user_setlocations_via($uids) {
       $locs[] = implode(', ', $loc);
       $latlons[] = $location[0]['latitude'] .','. $location[0]['longitude'];
     }
-    $content = getdirections_locations_via($locs, $latlons);
+    $content = getdirections_locations_via($locs, $latlons, $width, $height);
     return $content;
   }
 }
@@ -776,6 +822,7 @@ function getdirections_user_setlocations_via($uids) {
  */
 function getdirections_setup_map($defaults) {
   global $language;
+  $modulepath = drupal_get_path('module', 'getdirections');
   if (variable_get('getdirections_use_v3', 0)) {
    // v3 googlemaps API
     $query = array(
@@ -783,7 +830,12 @@ function getdirections_setup_map($defaults) {
       'language' => $language->language,
     );
     $head = '<script src="'. url('http://maps.google.com/maps/api/js', array('query' => $query)) .'" type="text/javascript"></script>';
-    $js = drupal_get_path('module', 'getdirections') .'/getdirections_v3.js';
+    if ($defaults['use_advanced']) {
+      $js = $modulepath .'/getdirections_v3a.js';
+    }
+    else {
+      $js = $modulepath .'/getdirections_v3.js';
+    }
   }
   else {
     // v2 googlemaps API
@@ -804,10 +856,15 @@ function getdirections_setup_map($defaults) {
       );
     }
     $head = '<script src="'. url('http://maps.google.com/maps', array('query' => $query)) .'" type="text/javascript"></script>';
-    $js = drupal_get_path('module', 'getdirections') .'/getdirections_v2.js';
+    if ($defaults['use_advanced']) {
+      $js = $modulepath .'/getdirections_v2a.js';
+    }
+    else {
+      $js = $modulepath .'/getdirections_v2.js';
+    }
   }
   drupal_set_html_head($head);
-  drupal_add_css(drupal_get_path('module', 'getdirections') .'/getdirections.css');
+  drupal_add_css($modulepath .'/getdirections.css');
   drupal_add_js($js);
 }
 
@@ -875,3 +932,12 @@ function getdirections_get_vid($nid) {
   $row = db_fetch_array($result);
   return (isset($row['vid']) && $row['vid'] ? $row['vid'] : FALSE);
 }
+
+function getdirections_is_advanced() {
+  $defaults = getdirections_defaults();
+  if ( isset($defaults['use_advanced']) && $defaults['use_advanced']) {
+    return TRUE;
+  }
+  return FALSE;
+}
+
