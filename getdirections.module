@@ -195,7 +195,10 @@ function getdirections_direction($direction='', $location='', $country='', $latl
     'waypoint_color' => $getdirections_defaults['waypoint_color'],
   );
   drupal_add_js(array('getdirections' => $getdirections_settings), 'setting');
-  drupal_set_title(t("Get Directions"));
+  $getdirections_misc = variable_get('getdirections_misc', array('keep_title' => 0));
+  if (! $getdirections_misc['keep_title']) {
+    drupal_set_title(t("Get Directions"));
+  }
   if (empty($width)) {
     $width = $getdirections_defaults['width'];
   }
@@ -245,7 +248,10 @@ function getdirections_locations($fromlocs, $fromlatlon, $tolocs, $tolatlon, $wi
     'waypoint_color' => $getdirections_defaults['waypoint_color'],
   );
   drupal_add_js(array('getdirections' => $getdirections_settings), 'setting');
-  drupal_set_title(t("Get Directions"));
+  $getdirections_misc = variable_get('getdirections_misc', array('keep_title' => 0));
+  if (! $getdirections_misc['keep_title']) {
+    drupal_set_title(t("Get Directions"));
+  }
   if (empty($width)) {
     $width = $getdirections_defaults['width'];
   }
@@ -289,7 +295,10 @@ function getdirections_locations_via($locs, $latlons, $width='', $height='') {
     'waypoint_color' => $getdirections_defaults['waypoint_color'],
   );
   drupal_add_js(array('getdirections' => $getdirections_settings), 'setting');
-  drupal_set_title(t("Get Directions"));
+  $getdirections_misc = variable_get('getdirections_misc', array('keep_title' => 0));
+  if (! $getdirections_misc['keep_title']) {
+    drupal_set_title(t("Get Directions"));
+  }
   if (empty($width)) {
     $width = $getdirections_defaults['width'];
   }
@@ -564,7 +573,7 @@ function getdirections_setlocation($direction, $nid, $width='', $height='') {
       $latlon = $location[0]['latitude'] .','. $location[0]['longitude'];
       // sanity check
       if (! preg_match("/[0-9.\-],[0-9.\-]/", $latlon)) {
-        watchdog('getdirections', t('Lat, Lon failed for node id !nid'), array('!nid' => $nid), WATCHDOG_WARNING);
+        watchdog('getdirections', 'Lat, Lon failed for node id !nid', array('!nid' => $nid), WATCHDOG_WARNING);
       }
       $loc = _getdirections_loadaddress($location[0]);
       // $locs only used for display now
@@ -593,7 +602,7 @@ function getdirections_user_setlocation($direction, $uid, $width='', $height='')
       $latlon = $location[0]['latitude'] .','. $location[0]['longitude'];
       // sanity check
       if (! preg_match("/[0-9.\-],[0-9.\-]/", $latlon)) {
-        watchdog('getdirections', t('Lat, Lon failed for user id !uid'), array('!uid' => $uid), WATCHDOG_WARNING);
+        watchdog('getdirections', 'Lat, Lon failed for user id !uid', array('!uid' => $uid), WATCHDOG_WARNING);
       }
       $loc = _getdirections_loadaddress($location[0]);
       // $locs only used for display now
@@ -623,7 +632,7 @@ function getdirections_setlocations($fromnid, $tonid, $width='', $height='') {
       $fromlatlon = $fromlocation[0]['latitude'] .','. $fromlocation[0]['longitude'];
       // sanity check
       if (! preg_match("/[0-9.\-],[0-9.\-]/", $fromlatlon)) {
-        watchdog('getdirections', t('Lat, Lon failed for node id !nid'), array('!nid' => $fromnid), WATCHDOG_WARNING);
+        watchdog('getdirections', 'Lat, Lon failed for node id !nid', array('!nid' => $fromnid), WATCHDOG_WARNING);
       }
       $fromloc = _getdirections_loadaddress($fromlocation[0]);
       if ($fromlocation[0]['country']) {
@@ -637,7 +646,7 @@ function getdirections_setlocations($fromnid, $tonid, $width='', $height='') {
         $tolatlon = $tolocation[0]['latitude'] .','. $tolocation[0]['longitude'];
         // sanity check
         if (! preg_match("/[0-9.\-],[0-9.\-]/", $tolatlon)) {
-          watchdog('getdirections', t('Lat, Lon failed for node id !nid'), array('!nid' => $tonid), WATCHDOG_WARNING);
+          watchdog('getdirections', 'Lat, Lon failed for node id !nid', array('!nid' => $tonid), WATCHDOG_WARNING);
         }
         $toloc = _getdirections_loadaddress($tolocation[0]);
         if ($tolocation[0]['country']) {
@@ -669,7 +678,7 @@ function getdirections_user_setlocations($fromuid, $touid, $width='', $height=''
       $fromlatlon = $fromlocation[0]['latitude'] .','. $fromlocation[0]['longitude'];
       // sanity check
       if (! preg_match("/[0-9.\-],[0-9.\-]/", $fromlatlon)) {
-        watchdog('getdirections', t('Lat, Lon failed for user id !nid'), array('!nid' => $fromuid), WATCHDOG_WARNING);
+        watchdog('getdirections', 'Lat, Lon failed for user id !nid', array('!nid' => $fromuid), WATCHDOG_WARNING);
       }
       $fromloc = _getdirections_loadaddress($fromlocation[0]);
       if ($fromlocation[0]['country']) {
@@ -682,7 +691,7 @@ function getdirections_user_setlocations($fromuid, $touid, $width='', $height=''
         $tolatlon = $tolocation[0]['latitude'] .','. $tolocation[0]['longitude'];
         // sanity check
         if (! preg_match("/[0-9.\-],[0-9.\-]/", $tolatlon)) {
-          watchdog('getdirections', t('Lat, Lon failed for user id !nid'), array('!nid' => $touid), WATCHDOG_WARNING);
+          watchdog('getdirections', 'Lat, Lon failed for user id !nid', array('!nid' => $touid), WATCHDOG_WARNING);
         }
         $toloc = _getdirections_loadaddress($tolocation[0]);
         if ($tolocation[0]['country']) {
@@ -725,7 +734,7 @@ function getdirections_setlocations_via($nids, $width='', $height='') {
       $latlon = $location[0]['latitude'] .','. $location[0]['longitude'];
       // sanity check
       if (! preg_match("/[0-9.\-],[0-9.\-]/", $latlon)) {
-        watchdog('getdirections', t('Lat, Lon failed for node id !nid'), array('!nid' => $nid), WATCHDOG_WARNING);
+        watchdog('getdirections', 'Lat, Lon failed for node id !nid', array('!nid' => $nid), WATCHDOG_WARNING);
       }
       $latlons[] = $latlon;
     }
@@ -753,7 +762,7 @@ function getdirections_n2u_setlocation($nid, $uid, $width='', $height='') {
       $fromlatlon = $fromlocation[0]['latitude'] .','. $fromlocation[0]['longitude'];
       // sanity check
       if (! preg_match("/[0-9.\-],[0-9.\-]/", $fromlatlon)) {
-        watchdog('getdirections', t('Lat, Lon failed for node id !nid'), array('!nid' => $nid), WATCHDOG_WARNING);
+        watchdog('getdirections', 'Lat, Lon failed for node id !nid', array('!nid' => $nid), WATCHDOG_WARNING);
       }
       $fromloc = _getdirections_loadaddress($fromlocation[0]);
       if ($fromlocation[0]['country']) {
@@ -766,7 +775,7 @@ function getdirections_n2u_setlocation($nid, $uid, $width='', $height='') {
         $tolatlon = $tolocation[0]['latitude'] .','. $tolocation[0]['longitude'];
         // sanity check
         if (! preg_match("/[0-9.\-],[0-9.\-]/", $tolatlon)) {
-          watchdog('getdirections', t('Lat, Lon failed for user id !nid'), array('!nid' => $uid), WATCHDOG_WARNING);
+          watchdog('getdirections', 'Lat, Lon failed for user id !nid', array('!nid' => $uid), WATCHDOG_WARNING);
         }
         $toloc = _getdirections_loadaddress($tolocation[0]);
         if ($tolocation[0]['country']) {
@@ -798,7 +807,7 @@ function getdirections_u2n_setlocation($uid, $nid, $width='', $height='') {
       $fromlatlon = $fromlocation[0]['latitude'] .','. $fromlocation[0]['longitude'];
       // sanity check
       if (! preg_match("/[0-9.\-],[0-9.\-]/", $fromlatlon)) {
-        watchdog('getdirections', t('Lat, Lon failed for user id !nid'), array('!nid' => $uid), WATCHDOG_WARNING);
+        watchdog('getdirections', 'Lat, Lon failed for user id !nid', array('!nid' => $uid), WATCHDOG_WARNING);
       }
       $fromloc = _getdirections_loadaddress($fromlocation[0]);
       if ($fromlocation[0]['country']) {
@@ -812,7 +821,7 @@ function getdirections_u2n_setlocation($uid, $nid, $width='', $height='') {
         $tolatlon = $tolocation[0]['latitude'] .','. $tolocation[0]['longitude'];
       // sanity check
         if (! preg_match("/[0-9.\-],[0-9.\-]/", $tolatlon)) {
-          watchdog('getdirections', t('Lat, Lon failed for node id !nid'), array('!nid' => $nid), WATCHDOG_WARNING);
+          watchdog('getdirections', 'Lat, Lon failed for node id !nid', array('!nid' => $nid), WATCHDOG_WARNING);
         }
         $toloc = _getdirections_loadaddress($tolocation[0]);
         if ($tolocation[0]['country']) {
@@ -854,7 +863,7 @@ function getdirections_user_setlocations_via($uids, $width='', $height='') {
       $latlon = $location[0]['latitude'] .','. $location[0]['longitude'];
       // sanity check
       if (! preg_match("/[0-9.\-],[0-9.\-]/", $latlon)) {
-        watchdog('getdirections', t('Lat, Lon failed for user id !nid'), array('!nid' => $uid), WATCHDOG_WARNING);
+        watchdog('getdirections', 'Lat, Lon failed for user id !nid', array('!nid' => $uid), WATCHDOG_WARNING);
       }
       $latlons[] = $latlon;
     }

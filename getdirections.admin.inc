@@ -389,6 +389,24 @@ function getdirections_settings_form() {
     '#suffix' => '</div>',
   );
 
+  // various
+  $form['getdirections_misc'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Other settings'),
+    // This will store all the defaults in one variable.
+    '#tree' => TRUE,
+  );
+  $getdirections_misc = variable_get('getdirections_misc', array(
+    'keep_title' => 0,
+  ));
+  $form['getdirections_misc']['keep_title'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Keep original title'),
+    '#description' => t('Use the original title when using the getdirections_direction(), getdirections_locations() and getdirections_locations_via() functions'),
+    '#default_value' =>  $getdirections_misc['keep_title'],
+    '#return_value' => 1,
+  );
+
   $form['#validate'][] = 'getdirections_settings_validate';
 
   return system_settings_form($form);
