@@ -264,7 +264,7 @@ function initialize() {
         $("#getdirections_start").show();
         $("#getdirections_end").hide();
         $("#getdirections_btn").hide();
-        $("#getdirections_advanced").hide();
+        $("#getdirections_help").hide();
       }
     }
     if (state == 1) {
@@ -275,7 +275,7 @@ function initialize() {
         $("#getdirections_start").hide();
         $("#getdirections_end").show();
         $("#getdirections_btn").hide();
-        $("#getdirections_advanced").hide();
+        $("#getdirections_help").hide();
       }
     }
     if (state == 2) {
@@ -287,7 +287,9 @@ function initialize() {
       $("#getdirections_end").hide();
       $("#getdirections_btn").show();
       $("#getdirections_nextbtn").hide();
-      $("#getdirections_advanced").show();
+      if (waypoints) {
+        $("#getdirections_help").show();
+      }
     }
   } // end handleState
 
@@ -364,7 +366,9 @@ function initialize() {
     handleState();
     dovias();
     setendbounds();
-    $("#getdirections_advanced").show();
+    if (waypoints) {
+      $("#getdirections_help").show();
+    }
   }
 
   function dovias() {

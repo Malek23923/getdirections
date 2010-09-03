@@ -81,10 +81,12 @@ function theme_getdirections_show($form, $width, $height, $nid, $type) {
     ),
   );
   $output .= '<div class="getdirections">'. theme('table', $header, $rows) .'</div>';
+  $help = '';
   if (getdirections_is_advanced()) {
     $getdirections_defaults = getdirections_defaults();
-    $output .= '<div id="getdirections_advanced">Drag <img src="http://labs.google.com/ridefinder/images/mm_20_'. $getdirections_defaults['waypoint_color'] .'.png"> to activate a waypoint</div>';
+    $help = 'Drag <img src="http://labs.google.com/ridefinder/images/mm_20_'. $getdirections_defaults['waypoint_color'] .'.png"> to activate a waypoint';
   }
+  $output .= '<div id="getdirections_help">'. $help .'</div>';
   return $output;
 }
 
