@@ -49,7 +49,7 @@ If you are using the location_user module you can make
 a link to a user's location with the user id:
 getdirections/location_user/to/66
 
-Same goes for from
+Same goes for 'from'
 
 You can also get a map with waypoints of user locations with the user ids:
 getdirections/locations_user_via/1,2,3,99
@@ -61,6 +61,12 @@ Where 66 is is user id, 99 is node id
 and vice-versa
 getdirections/location_n2u/99/66
 Where 66 is is user id, 99 is node id
+
+If you have the Colorbox module installed and enabled in Get Directions
+you can place any of the above paths in a colorbox iframe by replacing
+'getdirections' with 'getdirections_box' and adding rel="getdirectionsbox"
+to the url, eg
+<a href="/getdirections_box" rel="getdirectionsbox">See map</a>
 
 
 ------------------
@@ -91,3 +97,4 @@ If you are using Views and Location it will provide a 'Get driving directions' b
 when you are viewing a location node or a user with a location.
 
 Getdirections now supports the Googlemaps API version 3, this has many new features.
+

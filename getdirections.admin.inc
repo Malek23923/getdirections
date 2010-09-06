@@ -16,6 +16,7 @@
  */
 function getdirections_settings_form() {
   $getdirections_defaults = getdirections_defaults();
+  drupal_add_js(drupal_get_path('module', 'getdirections') .'/getdirections_admin.js');
 
   $form = array();
   $form['getdirections_use_v3'] = array(
@@ -38,6 +39,7 @@ function getdirections_settings_form() {
       '#disabled' => ($gmap_key ? TRUE : FALSE),
       '#default_value' => (variable_get('getdirections_api_key', '') ? variable_get('getdirections_api_key', '') : $gmap_key),
       '#description' => t('Required for version 2 of the Googlemaps API.'),
+      '#required' => ($gmap_key ? FALSE : TRUE),
     );
   }
 
@@ -54,6 +56,7 @@ function getdirections_settings_form() {
       '#size' => 15,
       '#description' => t("The Google Maps API version to use. Cen be a specific version number or '2' for Current, '2.x' for Latest or '2.s' for Stable."),
       '#default_value' => ($getdirections_defaults['api_version'] ? $getdirections_defaults['api_version'] : (defined('GMAP_API_VERSION') ? GMAP_API_VERSION : 2)),
+      '#required' => TRUE,
     );
   }
 
@@ -64,6 +67,7 @@ function getdirections_settings_form() {
     '#size' => 25,
     '#maxlength' => 25,
     '#description' => t('The default width of a Google map, as a CSS length or percentage. Examples: <em>50px</em>, <em>5em</em>, <em>2.5in</em>, <em>95%</em>'),
+    '#required' => TRUE,
   );
   $form['getdirections_default']['height'] = array(
     '#type' => 'textfield',
@@ -72,6 +76,7 @@ function getdirections_settings_form() {
     '#size' => 25,
     '#maxlength' => 25,
     '#description' => t('The default height of a Google map, as a CSS length or percentage. Examples: <em>50px</em>, <em>5em</em>, <em>2.5in</em>, <em>95%</em>'),
+    '#required' => TRUE,
   );
   $form['getdirections_default']['latlong'] = array(
     '#type' => 'textfield',
@@ -80,6 +85,7 @@ function getdirections_settings_form() {
     '#size' => 50,
     '#maxlength' => 255,
     '#description' => t('The default center coordinates of Google map, expressed as a decimal latitude and longitude, separated by a comma.'),
+    '#required' => TRUE,
   );
   $form['getdirections_default']['zoom'] = array(
     '#type' => 'select',
@@ -290,6 +296,7 @@ function getdirections_settings_form() {
     '#default_value' => ($getdirections_defaults['from_width'] ? $getdirections_defaults['from_width'] : 20),
     '#size' => 5,
     '#description' => t("The width of the Get directions 'From' box."),
+    '#required' => TRUE,
     // need this to get validation to work
     '#parents' => array('getdirections_default', 'from_width'),
   );
@@ -299,6 +306,7 @@ function getdirections_settings_form() {
     '#default_value' => ($getdirections_defaults['to_width'] ? $getdirections_defaults['to_width'] : 20),
     '#size' => 5,
     '#description' => t("The width of the Get directions 'To' box."),
+    '#required' => TRUE,
     // need this to get validation to work
     '#parents' => array('getdirections_default', 'to_width'),
   );
@@ -388,6 +396,46 @@ function getdirections_settings_form() {
     '#prefix' => '<div id="wrap-user-link">',
     '#suffix' => '</div>',
   );
+
+  if (module_exists('colorbox')) {
+    $form['getdirections_colorbox'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('Colorbox settings'),
+      // This will store all the defaults in one variable.
+      '#tree' => TRUE,
+    );
+    $getdirections_colorbox = variable_get('getdirections_colorbox', array(
+      'enable' => 0,
+      'width' => 600,
+      'height' => 600,
+    ));
+    $form['getdirections_colorbox']['enable'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Enable Colorbox'),
+      '#default_value' =>  $getdirections_colorbox['enable'],
+      '#return_value' => 1,
+    );
+    $form['getdirections_colorbox']['width'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Colorbox width'),
+      '#default_value' => $getdirections_colorbox['width'],
+      '#size' => 5,
+      '#required' => TRUE,
+      // need this to get validation to work
+      '#parents' => array('getdirections_colorbox', 'width'),
+      '#prefix' => '<div id="wrap-getdirections-colorbox">',
+    );
+    $form['getdirections_colorbox']['height'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Colorbox height'),
+      '#default_value' => $getdirections_colorbox['height'],
+      '#size' => 5,
+      '#required' => TRUE,
+      // need this to get validation to work
+      '#parents' => array('getdirections_colorbox', 'height'),
+      '#suffix' => '</div>',
+    );
+  }
 
   // various
   $form['getdirections_misc'] = array(

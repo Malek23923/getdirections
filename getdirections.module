@@ -27,6 +27,18 @@ function getdirections_init() {
   }
   module_load_include('inc', 'getdirections', 'getdirections.api');
   module_load_include('inc', 'getdirections', 'getdirections.theme');
+  if (module_exists('colorbox')) {
+    $getdirections_colorbox = variable_get('getdirections_colorbox', array(
+      'enable' => 0,
+      'width' => 600,
+      'height' => 600,
+    ));
+    $settings = array('getdirections_colorbox' => $getdirections_colorbox);
+  }
+  else {
+    $settings = array('getdirections_colorbox' => array('enable' => 0));
+  }
+  drupal_add_js($settings, 'setting');
   drupal_add_js(drupal_get_path('module', 'getdirections') .'/getdirections.js');
 }
 
@@ -112,6 +124,13 @@ function getdirections_menu() {
     'access callback' => 'getdirections_access_location',
     'page callback' => 'getdirections_user_setlocations_via',
     'page arguments' => array(2),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['getdirections_box'] = array(
+    'title' => 'Get directions',
+    'access arguments' => array('access gmap getdirections'),
+    'page callback' => 'getdirections_direction_box',
     'type' => MENU_CALLBACK,
   );
 
@@ -999,4 +1018,55 @@ function getdirections_is_advanced() {
   }
   return FALSE;
 }
+
+// for colorbox and suchlike
+function getdirections_direction_box() {
+
+  $a1 = FALSE;
+  $a2 = FALSE;
+  $a3 = FALSE;
+
+  if (arg(1)) {
+    $a1 = arg(1);
+  }
+  if (arg(2)) {
+    $a2 = arg(2);
+  }
+  if (arg(3)) {
+    $a3 = arg(3);
+  }
+
+  if ($a1 == 'location' && ($a2 == 'from' || $a2 == 'to') && is_numeric($a3) ) {
+    $content = getdirections_setlocation($a2, $a3);
+  }
+  elseif ($a1 == 'locations' && is_numeric($a2) && is_numeric($a3)) {
+    $content = getdirections_setlocations($a2, $a3);
+  }
+  elseif ($a1 == 'locations_via' && $a2) {
+    $content = getdirections_setlocations_via($a2);
+  }
+  elseif ($a1 == 'locations_user_via' && $a2) {
+    $content = getdirections_user_setlocations_via($a2);
+  }
+  elseif ($a1 == 'location_user' && ($a2 == 'from' || $a2 == 'to') && is_numeric($a3)) {
+    $content = getdirections_user_setlocation($a2, $a3);
+  }
+  elseif ($a1 == 'locations_users' && is_numeric($a2) && is_numeric($a3)) {
+    $content = getdirections_user_setlocations($a2, $a3);
+  }
+  elseif ($a1 == 'location_n2u' && is_numeric($a2) && is_numeric($a3)) {
+    $content = getdirections_n2u_setlocation($a2, $a3);
+  }
+  elseif ($a1 == 'location_u2n' && is_numeric($a2) && is_numeric($a3)) {
+    $content = getdirections_n2u_setlocation($a2, $a3);
+  }
+  else {
+    $content = getdirections_direction();
+  }
+
+  $output = theme('getdirections_box', $content);
+  print $output;
+  exit;
+}
+
 
