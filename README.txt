@@ -64,10 +64,20 @@ Where 66 is is user id, 99 is node id
 
 If you have the Colorbox module installed and enabled in Get Directions
 you can place any of the above paths in a colorbox iframe by replacing
-'getdirections' with 'getdirections_box' and adding rel="getdirectionsbox"
-to the url, eg
+'getdirections' with 'getdirections_box'.
+To enable this for a link you can use the 'colorbox-load' method,
+make sure that this feature has been enabled in colorbox
+and use a url like this:
+<a href="/getdirections_box?width=700&height=600&iframe=true" class="colorbox-load">See map</a>
+
+or (advanced use) by adding rel="getdirectionsbox" to the url, eg
 <a href="/getdirections_box" rel="getdirectionsbox">See map</a>
 
+The last method uses the settings in admin/settings/getdirections for colorbox
+and uses its own colorbox event handler, see getdirections.js. You can define your own
+event handlers in your theme's javascript.
+'getdirections_box' has it's own template, getdirections_box.tpl.php which can be
+copied over to your theme's folder and tweaked there.
 
 ------------------
 Get Directions API
