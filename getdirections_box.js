@@ -9,7 +9,11 @@
  * jquery stuff
 */
 
-Drupal.behaviors.getdirections_box = function() {
-  // hide the returnlinks in a box
-  $(".getdirections_returnlink").hide();
-}
+(function ($) {
+  Drupal.behaviors.getdirections_box = {
+    attach: function() {
+      // hide the returnlinks in a box
+      $(".getdirections_returnlink").hide();
+    }
+  }
+})(jQuery);

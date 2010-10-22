@@ -11,7 +11,10 @@
  * Implementation of hook_uninstall().
   */
 function getdirections_uninstall() {
-  db_query("DELETE FROM {variable} WHERE name LIKE 'getdirections_%'");
+  variable_del('getdirections_default');
+  variable_del('getdirections_api_key');
+  variable_del('getdirections_use_v3');
+  variable_del('getdirections_misc');
 }
 
 function getdirections_update_6000() {

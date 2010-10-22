@@ -2,6 +2,14 @@
 ; $Name$
 name = Get Directions
 description = "Fetches Google map directions."
-package = Other
-core = 6.x
+core = 7.x
 php = 5
+
+files[] = getdirections.install
+files[] = getdirections.module
+files[] = getdirections.admin.inc
+files[] = getdirections.theme.inc
+;files[] = getdirections.views.default.inc
+
+configure = admin/config/services/getdirections
+

@@ -22,7 +22,7 @@
  *   Returns a path relative to the drupal root.
  */
 function getdirections_location_path($direction, $nid) {
-  if (module_exists('location') && is_numeric($nid) && ($direction == 'to' || $direction == 'from')) {
+  if (GETDIRECTIONS_USE_LOCATION && module_exists('location') && is_numeric($nid) && ($direction == 'to' || $direction == 'from')) {
     return "getdirections/location/$direction/$nid";
   }
 }
@@ -42,7 +42,7 @@ function getdirections_location_path($direction, $nid) {
  *   Returns a path relative to the drupal root.
  */
 function getdirections_location_user_path($direction, $uid) {
-  if (module_exists('location') && is_numeric($uid) && ($direction == 'to' || $direction == 'from')) {
+  if (GETDIRECTIONS_USE_LOCATION && module_exists('location') && is_numeric($uid) && ($direction == 'to' || $direction == 'from')) {
     return "getdirections/location_user/$direction/$uid";
   }
 }
@@ -62,7 +62,7 @@ function getdirections_location_user_path($direction, $uid) {
  *   Returns a path relative to the drupal root.
  */
 function getdirections_locations_path($fromnid, $tonid) {
-  if (module_exists('location') && is_numeric($fromnid) && is_numeric($tonid)) {
+  if (GETDIRECTIONS_USE_LOCATION && module_exists('location') && is_numeric($fromnid) && is_numeric($tonid)) {
     return "getdirections/locations/$fromnid/$tonid";
   }
 }
@@ -82,7 +82,7 @@ function getdirections_locations_path($fromnid, $tonid) {
  *   Returns a path relative to the drupal root.
  */
 function getdirections_locations_user_path($fromuid, $touid) {
-  if (module_exists('location') && is_numeric($fromuid) && is_numeric($touid)) {
+  if (GETDIRECTIONS_USE_LOCATION && module_exists('location') && is_numeric($fromuid) && is_numeric($touid)) {
     return "getdirections/locations_user/$fromuid/$touid";
   }
 }
@@ -104,7 +104,7 @@ function getdirections_locations_user_path($fromuid, $touid) {
  *   Returns a path relative to the drupal root.
  */
 function getdirections_locations_user_via_path($uids) {
-  if (module_exists('location')) {
+  if (GETDIRECTIONS_USE_LOCATION && module_exists('location')) {
     return "getdirections/locations_user_via/$uids";
   }
 }
@@ -126,7 +126,7 @@ function getdirections_locations_user_via_path($uids) {
  *   Returns a path relative to the drupal root.
  */
 function getdirections_locations_via_path($nids) {
-  if (module_exists('location')) {
+  if (GETDIRECTIONS_USE_LOCATION && module_exists('location')) {
     return "getdirections/locations_via/$nids";
   }
 }
@@ -149,7 +149,7 @@ function getdirections_locations_via_path($nids) {
  *   Returns a path relative to the drupal root.
  */
 function getdirections_location_u2n_path($fromuid, $tonid) {
-  if (module_exists('location') && is_numeric($fromuid) && is_numeric($tonid)) {
+  if (GETDIRECTIONS_USE_LOCATION && module_exists('location') && is_numeric($fromuid) && is_numeric($tonid)) {
     return "getdirections/location_u2n/$fromuid/$tonid";
   }
 }
@@ -171,7 +171,7 @@ function getdirections_location_u2n_path($fromuid, $tonid) {
  *   Returns a path relative to the drupal root.
  */
 function getdirections_location_n2u_path($fromnid, $touid) {
-  if (module_exists('location') && is_numeric($fromnid) && is_numeric($touid)) {
+  if (GETDIRECTIONS_USE_LOCATION && module_exists('location') && is_numeric($fromnid) && is_numeric($touid)) {
     return "getdirections/location_u2n/$fromnid/$touid";
   }
 }

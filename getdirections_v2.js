@@ -1,5 +1,6 @@
 // $Id$
 // $Name$
+// D7
 
 /**
  * @file
@@ -9,124 +10,131 @@
  * code derived from gmap_direx module
  * this is for googlemaps API version 2
 */
+(function ($) {
 
-// errorcodes
-var reasons = [];
-reasons[G_GEO_SUCCESS]             = "Success";
-reasons[G_GEO_MISSING_ADDRESS]     = "Missing Address: The address was either missing or had no value.";
-reasons[G_GEO_UNKNOWN_ADDRESS]     = "Unknown Address:  No corresponding geographic location could be found for the specified address.";
-reasons[G_GEO_UNAVAILABLE_ADDRESS] = "Unavailable Address:  The geocode for the given address cannot be returned due to legal or contractual reasons.";
-reasons[G_GEO_BAD_KEY]             = "Bad Key: The API key is either invalid or does not match the domain for which it was given";
-reasons[G_GEO_TOO_MANY_QUERIES]    = "Too Many Queries: The daily geocoding quota for this site has been exceeded.";
-reasons[G_GEO_SERVER_ERROR]        = "Server error: The geocoding request could not be successfully processed.";
-reasons[G_GEO_BAD_REQUEST]         = "A directions request could not be successfully parsed.";
-reasons[G_GEO_MISSING_QUERY]       = "No query was specified in the input.";
-reasons[G_GEO_UNKNOWN_DIRECTIONS]  = "The GDirections object could not compute directions between the points.";
+  // errorcodes
+  var reasons = [];
+  reasons[G_GEO_SUCCESS]             = "Success";
+  reasons[G_GEO_MISSING_ADDRESS]     = "Missing Address: The address was either missing or had no value.";
+  reasons[G_GEO_UNKNOWN_ADDRESS]     = "Unknown Address:  No corresponding geographic location could be found for the specified address.";
+  reasons[G_GEO_UNAVAILABLE_ADDRESS] = "Unavailable Address:  The geocode for the given address cannot be returned due to legal or contractual reasons.";
+  reasons[G_GEO_BAD_KEY]             = "Bad Key: The API key is either invalid or does not match the domain for which it was given";
+  reasons[G_GEO_TOO_MANY_QUERIES]    = "Too Many Queries: The daily geocoding quota for this site has been exceeded.";
+  reasons[G_GEO_SERVER_ERROR]        = "Server error: The geocoding request could not be successfully processed.";
+  reasons[G_GEO_BAD_REQUEST]         = "A directions request could not be successfully parsed.";
+  reasons[G_GEO_MISSING_QUERY]       = "No query was specified in the input.";
+  reasons[G_GEO_UNKNOWN_DIRECTIONS]  = "The GDirections object could not compute directions between the points.";
 
-var gdir;
-var mylocale;
+  var gdir;
+  var mylocale;
 
-function setDirectionsvia(lls, locale) {
-  var arr = lls.split('|');
-  gdir.loadFromWaypoints(arr, { "locale": locale });
-}
-
-function onGDirectionsLoad(){
-  // Use this function to access information about the latest load() results.
-  // e.g.
-  //document.getElementById("getdirections_info").innerHTML = gdir.getStatus().code;
-  // and yada yada yada...
-}
-
-function initialize() {
-  if (! GBrowserIsCompatible()) {
-    return;
+  function setDirectionsvia(lls, locale) {
+    var arr = lls.split('|');
+    gdir.loadFromWaypoints(arr, { "locale": locale });
   }
-  var lat = Drupal.settings.getdirections.lat;
-  var lng = Drupal.settings.getdirections.lng;
-  var zoom = Drupal.settings.getdirections.zoom;
-  var controltype = Drupal.settings.getdirections.controltype;
-  var mtc = Drupal.settings.getdirections.mtc;
-  var scale = Drupal.settings.getdirections.scale;
-  var overview = Drupal.settings.getdirections.overview;
-  var maptype = (Drupal.settings.getdirections.maptype ? Drupal.settings.getdirections.maptype : '');
-  var baselayers = (Drupal.settings.getdirections.baselayers ? Drupal.settings.getdirections.baselayers : '');
 
-  var fromlatlon = (Drupal.settings.getdirections.fromlatlon ? Drupal.settings.getdirections.fromlatlon : '');
-  var tolatlon = (Drupal.settings.getdirections.tolatlon ? Drupal.settings.getdirections.tolatlon : '');
-  var mylocale = (Drupal.settings.getdirections.mylocale ? Drupal.settings.getdirections.mylocale : 'en');
-  // pipe delim
-  var latlons = (Drupal.settings.getdirections.latlons ? Drupal.settings.getdirections.latlons : '');
-
-  map = new GMap2(document.getElementById("getdirections_map_canvas"));
-
-  // menu type
-  if (mtc == 'standard') { map.addControl(new GMapTypeControl()); }
-  else if (mtc == 'hier') { map.addControl(new GHierarchicalMapTypeControl()); }
-  else if (mtc == 'menu') { map.addControl(new GMenuMapTypeControl()); }
-  // nav control type
-  if (controltype == 'Micro') { map.addControl(new GSmallZoomControl()); }
-  else if (controltype == 'Micro3D') { map.addControl(new GSmallZoomControl3D()); }
-  else if (controltype == 'Small') { map.addControl(new GSmallMapControl()); }
-  else if (controltype == 'Large') { map.addControl(new GLargeMapControl()); }
-  else if (controltype == 'Large3D') { map.addControl(new GLargeMapControl3D()); }
-  if (baselayers.Physical) { map.addMapType(G_PHYSICAL_MAP); }
-  // map type
-  if (maptype) {
-    if (maptype == 'Map' && baselayers.Map) { map.setMapType(G_NORMAL_MAP); }
-    if (maptype == 'Satellite' && baselayers.Satellite) { map.setMapType(G_SATELLITE_MAP); }
-    if (maptype == 'Hybrid' && baselayers.Hybrid) { map.setMapType(G_HYBRID_MAP); }
-    if (maptype == 'Physical' && baselayers.Physical) { map.setMapType(G_PHYSICAL_MAP); }
+  function onGDirectionsLoad(){
+    // Use this function to access information about the latest load() results.
+    // e.g.
+    //document.getElementById("getdirections_info").innerHTML = gdir.getStatus().code;
+    // and yada yada yada...
   }
-  //GScaleControl()
-  if (scale) { map.addControl(new GScaleControl()); }
-  //GOverviewMapControl()
-  if (overview) { map.addControl(new GOverviewMapControl()); }
 
-  latlng = new GLatLng(lat, lng);
-  map.setCenter(latlng, parseInt(zoom));
+  function initialize() {
 
-  gdir = new GDirections(map, document.getElementById("getdirections_directions"));
-
-  GEvent.addListener(gdir, "error", function() {
-    var code = gdir.getStatus().code;
-    var reason="Code " + code;
-    if (reasons[code]) {
-      reason = "Code " + code + " : " + reasons[code];
+    if (! GBrowserIsCompatible()) {
+      return;
     }
-    alert("Failed to obtain directions, " + reason);
-  });
+    var lat = Drupal.settings.getdirections.lat;
+    var lng = Drupal.settings.getdirections.lng;
+    var zoom = Drupal.settings.getdirections.zoom;
+    var controltype = Drupal.settings.getdirections.controltype;
+    var mtc = Drupal.settings.getdirections.mtc;
+    var scale = Drupal.settings.getdirections.scale;
+    var overview = Drupal.settings.getdirections.overview;
+    var maptype = (Drupal.settings.getdirections.maptype ? Drupal.settings.getdirections.maptype : '');
+    var baselayers = (Drupal.settings.getdirections.baselayers ? Drupal.settings.getdirections.baselayers : '');
 
-  GEvent.addListener(gdir, "load", onGDirectionsLoad);
+    var fromlatlon = (Drupal.settings.getdirections.fromlatlon ? Drupal.settings.getdirections.fromlatlon : '');
+    var tolatlon = (Drupal.settings.getdirections.tolatlon ? Drupal.settings.getdirections.tolatlon : '');
+    var mylocale = (Drupal.settings.getdirections.mylocale ? Drupal.settings.getdirections.mylocale : 'en');
+    // pipe delim
+    var latlons = (Drupal.settings.getdirections.latlons ? Drupal.settings.getdirections.latlons : '');
 
-  if (fromlatlon && tolatlon) {
-    gdir.load("from: " + fromlatlon + " to: " + tolatlon, { "locale": mylocale });
+    map = new GMap2(document.getElementById("getdirections_map_canvas"));
+
+    // menu type
+    if (mtc == 'standard') { map.addControl(new GMapTypeControl()); }
+    else if (mtc == 'hier') { map.addControl(new GHierarchicalMapTypeControl()); }
+    else if (mtc == 'menu') { map.addControl(new GMenuMapTypeControl()); }
+    // nav control type
+    if (controltype == 'Micro') { map.addControl(new GSmallZoomControl()); }
+    else if (controltype == 'Micro3D') { map.addControl(new GSmallZoomControl3D()); }
+    else if (controltype == 'Small') { map.addControl(new GSmallMapControl()); }
+    else if (controltype == 'Large') { map.addControl(new GLargeMapControl()); }
+    else if (controltype == 'Large3D') { map.addControl(new GLargeMapControl3D()); }
+    if (baselayers.Physical) { map.addMapType(G_PHYSICAL_MAP); }
+    // map type
+    if (maptype) {
+      if (maptype == 'Map' && baselayers.Map) { map.setMapType(G_NORMAL_MAP); }
+      if (maptype == 'Satellite' && baselayers.Satellite) { map.setMapType(G_SATELLITE_MAP); }
+      if (maptype == 'Hybrid' && baselayers.Hybrid) { map.setMapType(G_HYBRID_MAP); }
+      if (maptype == 'Physical' && baselayers.Physical) { map.setMapType(G_PHYSICAL_MAP); }
+    }
+    //GScaleControl()
+    if (scale) { map.addControl(new GScaleControl()); }
+    //GOverviewMapControl()
+    if (overview) { map.addControl(new GOverviewMapControl()); }
+
+    latlng = new GLatLng(lat, lng);
+    map.setCenter(latlng, parseInt(zoom));
+
+    gdir = new GDirections(map, document.getElementById("getdirections_directions"));
+
+    GEvent.addListener(gdir, "error", function() {
+      var code = gdir.getStatus().code;
+      var reason="Code " + code;
+      if (reasons[code]) {
+        reason = "Code " + code + " : " + reasons[code];
+      }
+      alert("Failed to obtain directions, " + reason);
+    });
+
+    GEvent.addListener(gdir, "load", onGDirectionsLoad);
+
+    if (fromlatlon && tolatlon) {
+      gdir.load("from: " + fromlatlon + " to: " + tolatlon, { "locale": mylocale });
+    }
+
+    if (latlons) {
+      setDirectionsvia(latlons, mylocale);
+    }
+
   }
 
-  if (latlons) {
-    setDirectionsvia(latlons, mylocale);
+  Drupal.mygetDirections = function() {
+    // collect form info from the DOM
+    var from = $("#edit-from").val();
+    if ($("#edit-country-from").val()) {
+      from += ', ' + $("#edit-country-from").val();
+    }
+    var to = $("#edit-to").val();
+    if ($("#edit-country-to").val()) {
+      to += ', ' + $("#edit-country-to").val();
+    }
+    var s = "from: " + from + " to: " + to;
+    gdir.load(s, {locale: mylocale});
   }
 
-}
 
-function mygetDirections() {
-  // collect form info from the DOM
-  var from = $("#edit-from").val();
-  if ($("#edit-country-from").val()) {
-    from += ', ' + $("#edit-country-from").val();
-  }
-  var to = $("#edit-to").val();
-  if ($("#edit-country-to").val()) {
-    to += ', ' + $("#edit-country-to").val();
-  }
-  var s = "from: " + from + " to: " + to;
-  gdir.load(s, {locale: mylocale});
-}
+  Drupal.behaviors.getdirections = {
+    attach: function() {
+      initialize();
 
-Drupal.behaviors.getdirections = function() {
-  initialize();
+      $(window).unload(function(){
+        GUnload();
+      });
+    }
+  };
 
-  $(window).unload(function(){
-    GUnload();
-  });
-};
+})(jQuery);

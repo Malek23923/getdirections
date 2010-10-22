@@ -1,6 +1,10 @@
 // $Id$
 // $Name$
 
+Get Directions for D7 in D-7--2, 2010-10-22
+------------------------------------
+by hutch, first D7 version
+
 Get Directions for D6 in D-6--2, 2010-10-20
 ------------------------------------
 by hutch, updated translations

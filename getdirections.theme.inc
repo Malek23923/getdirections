@@ -11,12 +11,12 @@
 /**
  * Implementation of hook_theme().
  *
- * This lets us tell Drupal about our theme functions and their arguments.
+ * This lets us tell Drupal about our theme functions and their variables.
  */
 function getdirections_theme() {
   return array(
     'getdirections_show' => array(
-      'arguments' => array(
+      'variables' => array(
         'form' => array(),
         'width' => '',
         'height' => '',
@@ -25,7 +25,7 @@ function getdirections_theme() {
       ),
     ),
     'getdirections_show_locations' => array(
-      'arguments' => array(
+      'variables' => array(
         'width' => '',
         'height' => '',
         'fromlocs' => '',
@@ -33,17 +33,17 @@ function getdirections_theme() {
       ),
     ),
     'getdirections_show_locations_via' => array(
-      'arguments' => array(
+      'variables' => array(
         'width' => '',
         'height' => '',
         'locs' => NULL,
       ),
     ),
     'getdirections_direction_form' => array(
-      'arguments' => array('form' => NULL),
+      'variables' => array('form' => NULL),
     ),
     'getdirections_box' => array(
-      'arguments' => array('content' => NULL),
+      'variables' => array('content' => NULL),
       'template' => 'getdirections_box',
     ),
   );
@@ -53,7 +53,12 @@ function getdirections_theme() {
  * Theme to use for when one or no locations are supplied.
  *
  */
-function theme_getdirections_show($form, $width, $height, $nid, $type) {
+function theme_getdirections_show($variables) {
+  $form = $variables['form'];
+  $width = $variables['width'];
+  $height = $variables['height'];
+  $nid = $variables['nid'];
+  $type =  $variables['type'];
   $output = '';
   $getdirections_returnlink = variable_get('getdirections_returnlink', array(
     'page_enable' => 0,
@@ -67,6 +72,9 @@ function theme_getdirections_show($form, $width, $height, $nid, $type) {
   elseif ($getdirections_returnlink['user_enable'] && $nid > 0 && $type == 'user') {
     $output .= '<div class="getdirections_returnlink">'. l($getdirections_returnlink['page_link'], 'user/' . $nid) .'</div>';
   }
+  #if (is_array($form)) {
+  #  $output .= theme('getdirections_direction_form', array('form' => $form));
+  #}
   $output .= $form;
 
   $header = array();
@@ -84,7 +92,7 @@ function theme_getdirections_show($form, $width, $height, $nid, $type) {
       'class' => 'getdirections-list',
     ),
   );
-  $output .= '<div class="getdirections">'. theme('table', $header, $rows) .'</div>';
+  $output .= '<div class="getdirections">'. theme('table', array('header' => $header, 'rows' => $rows)) .'</div>';
   $help = '';
   if (getdirections_is_advanced()) {
     $getdirections_defaults = getdirections_defaults();
@@ -100,7 +108,11 @@ function theme_getdirections_show($form, $width, $height, $nid, $type) {
  * Theme to use for when both locations are supplied.
  *
  */
-function theme_getdirections_show_locations($width, $height, $fromlocs, $tolocs) {
+function theme_getdirections_show_locations($variables) {
+  $width = $variables['width'];
+  $height = $variables['height'];
+  $fromlocs = $variables['fromlocs'];
+  $tolocs = $variables['tolocs'];
   $output = "";
   $output .= "<div class='getdirections_display'><label>". t('From') .":</label> ". $fromlocs ."</div>";
   $output .= "<div class='getdirections_display'><label>". t('To') .":</label> ". $tolocs ."</div>";
@@ -121,7 +133,7 @@ function theme_getdirections_show_locations($width, $height, $fromlocs, $tolocs)
       'class' => 'getdirections-list',
     ),
   );
-  $output .= '<div class="getdirections">'. theme('table', $header, $rows) .'</div>';
+  $output .= '<div class="getdirections">'. theme('table', array('header' => $header, 'rows' => $rows)) .'</div>';
   return $output;
 }
 
@@ -129,7 +141,10 @@ function theme_getdirections_show_locations($width, $height, $fromlocs, $tolocs)
  * Theme to use for when both locations are supplied with waypoints.
  *
  */
-function theme_getdirections_show_locations_via($width, $height, $locs) {
+function theme_getdirections_show_locations_via($variables) {
+  $width = $variables['width'];
+  $height = $variables['height'];
+  $locs = $variables['locs'];
   $output = "";
   foreach ($locs AS $key => $loc) {
     if ($key == 0) {
@@ -160,64 +175,68 @@ function theme_getdirections_show_locations_via($width, $height, $locs) {
       'class' => 'getdirections-list',
     ),
   );
-  $output .= '<div class="getdirections">'. theme('table', $header, $rows) .'</div>';
+  $output .= '<div class="getdirections">'. theme('table', array('header' => $header, 'rows' => $rows)) .'</div>';
   return $output;
 }
 
 
-function theme_getdirections_direction_form($form) {
-  // if you want to do fancy things with the form, do it here ;-)
-  if (isset($form['mto'])) {
-    $form['mto']['#prefix'] = '<div class="container-inline getdirections_display">';
-    $form['mto']['#suffix'] = '</div>';
-  }
-  if (isset($form['mfrom'])) {
-    $form['mfrom']['#prefix'] = '<div class="container-inline getdirections_display">';
-    $form['mfrom']['#suffix'] = '</div>';
-  }
-  if (isset($form['travelmode'])) {
-    $form['travelmode']['#prefix'] = '<div class="container-inline getdirections_display">';
-    $form['travelmode']['#suffix'] = '</div>';
-  }
-  if (isset($form['travelextras'])) {
-    $form['travelextras']['#prefix'] = '<div class="container-inline getdirections_display">';
-    $form['travelextras']['#suffix'] = '</div>';
-  }
-  if (getdirections_is_advanced()) {
-    if (isset($form['from']) && $form['from']['#type'] == 'textfield' ) {
-      $form['from']['#suffix'] = '</div>';
+function theme_getdirections_direction_form($variables) {
+  $form = $variables['form'];
+  $output = '';
+  if (is_array($form)) {
+    // if you want to do fancy things with the form, do it here ;-)
+    if (isset($form['mto'])) {
+      $form['mto']['#prefix'] = '<div class="container-inline getdirections_display">';
+      $form['mto']['#suffix'] = '</div>';
     }
-    if (isset($form['country_from'])) {
-      $form['country_from']['#prefix'] = '<div id="getdirections_start"><div class="container-inline getdirections_display">';
-      $form['country_from']['#suffix'] = '</div>';
+    if (isset($form['mfrom'])) {
+      $form['mfrom']['#prefix'] = '<div class="container-inline getdirections_display">';
+      $form['mfrom']['#suffix'] = '</div>';
     }
-    if (isset($form['to']) && $form['to']['#type'] == 'textfield' ) {
-      $form['to']['#suffix'] = '</div>';
+    if (isset($form['travelmode'])) {
+      $form['travelmode']['#prefix'] = '<div class="container-inline getdirections_display">';
+      $form['travelmode']['#suffix'] = '</div>';
     }
-    if (isset($form['country_to'])) {
-      $form['country_to']['#prefix'] = '<div id="getdirections_end"><div class="container-inline getdirections_display">';
-      $form['country_to']['#suffix'] = '</div>';
+    if (isset($form['travelextras'])) {
+      $form['travelextras']['#prefix'] = '<div class="container-inline getdirections_display">';
+      $form['travelextras']['#suffix'] = '</div>';
     }
-    $desc = t('Select a country first, then type in a town.<br />You can also click on the map and move the marker.');
-  }
-  else {
-    if (isset($form['country_from'])) {
-      $form['country_from']['#prefix'] = '<div class="container-inline getdirections_display">';
-      $form['country_from']['#suffix'] = '</div>';
+    if (getdirections_is_advanced()) {
+      if (isset($form['from']) && $form['from']['#type'] == 'textfield' ) {
+        $form['from']['#suffix'] = '</div>';
+      }
+      if (isset($form['country_from'])) {
+        $form['country_from']['#prefix'] = '<div id="getdirections_start"><div class="container-inline getdirections_display">';
+        $form['country_from']['#suffix'] = '</div>';
+      }
+      if (isset($form['to']) && $form['to']['#type'] == 'textfield' ) {
+        $form['to']['#suffix'] = '</div>';
+      }
+      if (isset($form['country_to'])) {
+        $form['country_to']['#prefix'] = '<div id="getdirections_end"><div class="container-inline getdirections_display">';
+        $form['country_to']['#suffix'] = '</div>';
+      }
+      $desc = t('Select a country first, then type in a town.<br />You can also click on the map and move the marker.');
     }
-    if (isset($form['country_to'])) {
-      $form['country_to']['#prefix'] = '<div class="container-inline getdirections_display">';
-      $form['country_to']['#suffix'] = '</div>';
+    else {
+      if (isset($form['country_from'])) {
+        $form['country_from']['#prefix'] = '<div class="container-inline getdirections_display">';
+        $form['country_from']['#suffix'] = '</div>';
+      }
+      if (isset($form['country_to'])) {
+        $form['country_to']['#prefix'] = '<div class="container-inline getdirections_display">';
+        $form['country_to']['#suffix'] = '</div>';
+      }
+      $desc = t('Fill in the form below.');
     }
-    $desc = t('Fill in the form below.');
-  }
 
-  if (isset($form['submit'])) {
-    $form['submit']['#prefix'] = '<div id="getdirections_btn">';
-    $form['submit']['#suffix'] = '</div>';
+    if (isset($form['submit'])) {
+      $form['submit']['#prefix'] = '<div id="getdirections_btn">';
+      $form['submit']['#suffix'] = '</div>';
+    }
+    $output = '<p class="description">'. $desc .'</p>';
+    $output .= drupal_render($form);
   }
-  $output = '<p class="description">'. $desc .'</p>';
-  $output .= drupal_render($form);
   return $output;
 }
 
@@ -226,7 +245,7 @@ function template_preprocess_getdirections_box(&$variables) {
   if(module_exists('admin_menu')) {
     admin_menu_suppress();
   }
-  drupal_add_js(drupal_get_path('module', 'getdirections') .'/getdirections_box.js');
+  drupal_add_js(GETDIRECTIONS_PATH . '/getdirections_box.js');
 
   // Construct page title
   if (drupal_get_title()) {
