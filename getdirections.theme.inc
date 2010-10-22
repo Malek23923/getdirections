@@ -202,10 +202,12 @@ function theme_getdirections_direction_form($variables) {
       $form['travelextras']['#suffix'] = '</div>';
     }
     if (getdirections_is_advanced()) {
+      $desc = t('Fill in the form below.<br />You can also click on the map and move the marker.');
       if (isset($form['from']) && $form['from']['#type'] == 'textfield' ) {
         // $form['from']['#suffix'] = '</div>';
       }
       if (isset($form['country_from'])) {
+        $desc = t('Select a country first, then type in a town.<br />You can also click on the map and move the marker.');
         $form['country_from']['#prefix'] = '<div id="getdirections_start"><div class="container-inline getdirections_display">';
         $form['country_from']['#suffix'] = '</div>';
       }
@@ -216,7 +218,6 @@ function theme_getdirections_direction_form($variables) {
         $form['country_to']['#prefix'] = '<div id="getdirections_end"><div class="container-inline getdirections_display">';
         $form['country_to']['#suffix'] = '</div>';
       }
-      $desc = t('Select a country first, then type in a town.<br />You can also click on the map and move the marker.');
     }
     else {
       if (isset($form['country_from'])) {
