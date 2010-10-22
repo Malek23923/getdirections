@@ -203,14 +203,14 @@ function theme_getdirections_direction_form($variables) {
     }
     if (getdirections_is_advanced()) {
       if (isset($form['from']) && $form['from']['#type'] == 'textfield' ) {
-        $form['from']['#suffix'] = '</div>';
+        // $form['from']['#suffix'] = '</div>';
       }
       if (isset($form['country_from'])) {
         $form['country_from']['#prefix'] = '<div id="getdirections_start"><div class="container-inline getdirections_display">';
         $form['country_from']['#suffix'] = '</div>';
       }
       if (isset($form['to']) && $form['to']['#type'] == 'textfield' ) {
-        $form['to']['#suffix'] = '</div>';
+        // $form['to']['#suffix'] = '</div>';
       }
       if (isset($form['country_to'])) {
         $form['country_to']['#prefix'] = '<div id="getdirections_end"><div class="container-inline getdirections_display">';
