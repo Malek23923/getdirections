@@ -237,7 +237,7 @@ function getdirections_direction($direction='', $location='', $country='', $latl
     $height = $getdirections_defaults['height'];
   }
   $form = drupal_get_form('getdirections_direction_form', $direction, $location, $country, $latlon);
-  $form = drupal_render($form);
+  $form = render($form);
   return theme('getdirections_show', array('form' => $form, 'width' => $width, 'height' => $height, 'nid' => $id, 'type' => $type) );
 }
 
