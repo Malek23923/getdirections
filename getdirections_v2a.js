@@ -388,7 +388,7 @@
           todone = true;
           state = 2;
           // no vias in this instance, no button to click
-          mygetDirections();
+          Drupal.mygetDirections();
         }
     }
 

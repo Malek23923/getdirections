@@ -3,6 +3,10 @@
 
 Get Directions for D7 in D-7--2, 2010-10-23
 ------------------------------------
+by hutch, fixed js bug, fixed form theming
+
+Get Directions for D7 in D-7--2, 2010-10-23
+------------------------------------
 by hutch fixed getdirection_box for colorbox
 
 Get Directions for D7 in D-7--2, 2010-10-22

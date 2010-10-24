@@ -237,7 +237,7 @@ function getdirections_direction($direction='', $location='', $country='', $latl
     $height = $getdirections_defaults['height'];
   }
   $form = drupal_get_form('getdirections_direction_form', $direction, $location, $country, $latlon);
-  $form = theme('getdirections_direction_form', array('form' => $form));
+  $form = drupal_render($form);
   return theme('getdirections_show', array('form' => $form, 'width' => $width, 'height' => $height, 'nid' => $id, 'type' => $type) );
 }
 
@@ -343,9 +343,9 @@ function getdirections_locations_via($locs, $latlons, $width='', $height='') {
 /**
  * Function to setup the form
  *
- * @param string $direction
+ * @param string $fromto
  *   Optional. The direction the supplied input applies to
- * @param string $location
+ * @param string $loc
  *   Optional. The string to search with
  * @param string $country
  *   Optional. The country
@@ -354,7 +354,7 @@ function getdirections_locations_via($locs, $latlons, $width='', $height='') {
  * @return
  *   Returns the form
  */
-function getdirections_direction_form($form_state, $fromto='', $loc='', $country='', $latlon='') {
+function getdirections_direction_form($form, &$form_state, $fromto='', $loc='', $country='', $latlon='') {
   $getdirections_defaults = getdirections_defaults();
   $location = (GETDIRECTIONS_USE_LOCATION && module_exists('location'));
   if ($location) {

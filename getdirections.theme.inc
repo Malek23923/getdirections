@@ -17,7 +17,7 @@ function getdirections_theme() {
   return array(
     'getdirections_show' => array(
       'variables' => array(
-        'form' => array(),
+        'form' => NULL,
         'width' => '',
         'height' => '',
         'nid' => 0,
@@ -40,7 +40,7 @@ function getdirections_theme() {
       ),
     ),
     'getdirections_direction_form' => array(
-      'variables' => array('form' => NULL),
+      'render element' => 'form',
     ),
     'getdirections_box' => array(
       'variables' => array('content' => NULL),
@@ -183,61 +183,61 @@ function theme_getdirections_show_locations_via($variables) {
 function theme_getdirections_direction_form($variables) {
   $form = $variables['form'];
   $output = '';
-  if (is_array($form)) {
-    // if you want to do fancy things with the form, do it here ;-)
-    if (isset($form['mto'])) {
-      $form['mto']['#prefix'] = '<div class="container-inline getdirections_display">';
-      $form['mto']['#suffix'] = '</div>';
-    }
-    if (isset($form['mfrom'])) {
-      $form['mfrom']['#prefix'] = '<div class="container-inline getdirections_display">';
-      $form['mfrom']['#suffix'] = '</div>';
-    }
-    if (isset($form['travelmode'])) {
-      $form['travelmode']['#prefix'] = '<div class="container-inline getdirections_display">';
-      $form['travelmode']['#suffix'] = '</div>';
-    }
-    if (isset($form['travelextras'])) {
-      $form['travelextras']['#prefix'] = '<div class="container-inline getdirections_display">';
-      $form['travelextras']['#suffix'] = '</div>';
-    }
-    if (getdirections_is_advanced()) {
-      $desc = t('Fill in the form below.<br />You can also click on the map and move the marker.');
-      if (isset($form['from']) && $form['from']['#type'] == 'textfield' ) {
-        // $form['from']['#suffix'] = '</div>';
-      }
-      if (isset($form['country_from'])) {
-        $desc = t('Select a country first, then type in a town.<br />You can also click on the map and move the marker.');
-        $form['country_from']['#prefix'] = '<div id="getdirections_start"><div class="container-inline getdirections_display">';
-        $form['country_from']['#suffix'] = '</div>';
-      }
-      if (isset($form['to']) && $form['to']['#type'] == 'textfield' ) {
-        // $form['to']['#suffix'] = '</div>';
-      }
-      if (isset($form['country_to'])) {
-        $form['country_to']['#prefix'] = '<div id="getdirections_end"><div class="container-inline getdirections_display">';
-        $form['country_to']['#suffix'] = '</div>';
-      }
-    }
-    else {
-      if (isset($form['country_from'])) {
-        $form['country_from']['#prefix'] = '<div class="container-inline getdirections_display">';
-        $form['country_from']['#suffix'] = '</div>';
-      }
-      if (isset($form['country_to'])) {
-        $form['country_to']['#prefix'] = '<div class="container-inline getdirections_display">';
-        $form['country_to']['#suffix'] = '</div>';
-      }
-      $desc = t('Fill in the form below.');
-    }
 
-    if (isset($form['submit'])) {
-      $form['submit']['#prefix'] = '<div id="getdirections_btn">';
-      $form['submit']['#suffix'] = '</div>';
-    }
-    $output = '<p class="description">'. $desc .'</p>';
-    $output .= drupal_render($form);
+  // if you want to do fancy things with the form, do it here ;-)
+  if (isset($form['mto'])) {
+    $form['mto']['#prefix'] = '<div class="container-inline getdirections_display">';
+    $form['mto']['#suffix'] = '</div>';
   }
+  if (isset($form['mfrom'])) {
+    $form['mfrom']['#prefix'] = '<div class="container-inline getdirections_display">';
+    $form['mfrom']['#suffix'] = '</div>';
+  }
+  if (isset($form['travelmode'])) {
+    $form['travelmode']['#prefix'] = '<div class="container-inline getdirections_display">';
+    $form['travelmode']['#suffix'] = '</div>';
+  }
+  if (isset($form['travelextras'])) {
+    $form['travelextras']['#prefix'] = '<div class="container-inline getdirections_display">';
+    $form['travelextras']['#suffix'] = '</div>';
+  }
+  if (getdirections_is_advanced()) {
+    $desc = t('Fill in the form below.<br />You can also click on the map and move the marker.');
+    if (isset($form['from']) && $form['from']['#type'] == 'textfield' ) {
+      // $form['from']['#suffix'] = '</div>';
+    }
+    if (isset($form['country_from'])) {
+      $desc = t('Select a country first, then type in a town.<br />You can also click on the map and move the marker.');
+      $form['country_from']['#prefix'] = '<div id="getdirections_start"><div class="container-inline getdirections_display">';
+      $form['country_from']['#suffix'] = '</div>';
+    }
+    if (isset($form['to']) && $form['to']['#type'] == 'textfield' ) {
+      // $form['to']['#suffix'] = '</div>';
+    }
+    if (isset($form['country_to'])) {
+      $form['country_to']['#prefix'] = '<div id="getdirections_end"><div class="container-inline getdirections_display">';
+      $form['country_to']['#suffix'] = '</div>';
+    }
+  }
+  else {
+    if (isset($form['country_from'])) {
+      $form['country_from']['#prefix'] = '<div class="container-inline getdirections_display">';
+      $form['country_from']['#suffix'] = '</div>';
+    }
+    if (isset($form['country_to'])) {
+      $form['country_to']['#prefix'] = '<div class="container-inline getdirections_display">';
+      $form['country_to']['#suffix'] = '</div>';
+    }
+    $desc = t('Fill in the form below.');
+  }
+
+  if (isset($form['submit'])) {
+    $form['submit']['#prefix'] = '<div id="getdirections_btn">';
+    $form['submit']['#suffix'] = '</div>';
+  }
+  $output = '<p class="description">'. $desc .'</p>';
+  $output .= drupal_render_children($form);
+
   return $output;
 }
 
