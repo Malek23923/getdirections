@@ -247,7 +247,7 @@ function template_preprocess_getdirections_box(&$variables) {
   $variables['styles']            = drupal_get_css();
   $variables['scripts']           = drupal_get_js();
   if (module_exists('jquery_update')) {
-    jquery_update_preprocess_page(&$variables);
+    jquery_update_preprocess_page($variables);
   }
   $variables['title']             = drupal_get_title();
   // Closure should be filled last.
