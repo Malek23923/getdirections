@@ -126,6 +126,13 @@ function getdirections_menu() {
     'page arguments' => array(2),
     'type' => MENU_CALLBACK,
   );
+  $items['getdirections/latlon/%getdirections_fromto/%getdirections_latlon/%'] = array(
+    'title' => 'Get directions',
+    'access arguments' => array('access gmap getdirections'),
+    'page callback' => 'getdirections_latlon',
+    'page arguments' => array(2, 3, 4),
+    'type' => MENU_CALLBACK,
+  );
 
   $items['getdirections_box'] = array(
     'title' => 'Get directions',
@@ -163,6 +170,16 @@ function getdirections_via_load($arg) {
       }
     }
     return $arg;
+  }
+  return FALSE;
+}
+
+function getdirections_latlon_load($arg) {
+  if (stristr($arg, ',')) {
+    $x = explode(',', $arg);
+    if (count($x) == 2 && is_numeric($x[0]) && is_numeric($x[1])) {
+      return $arg;
+    }
   }
   return FALSE;
 }
@@ -379,11 +396,22 @@ function getdirections_direction_form($form_state, $fromto='', $loc='', $country
       '#type' => 'hidden',
       '#value' => $latlon,
     );
-
+    if (empty($loc) && empty($country)) {
+      $mfrom = t('Starting point');
+    }
+    elseif ( empty($loc) && ! empty($country)) {
+      $mfrom = drupal_strtoupper($country);
+    }
+    elseif (! empty($loc) && empty($country)) {
+      $mfrom = $loc;
+    }
+    else {
+      $mfrom = $loc .', '. drupal_strtoupper($country);
+    }
     $form['mfrom'] = array(
       '#type' => 'item',
       '#title' => t('From'),
-      '#value' => $loc .', '. drupal_strtoupper($country),
+      '#value' => $mfrom,
     );
   }
   else {
@@ -405,10 +433,22 @@ function getdirections_direction_form($form_state, $fromto='', $loc='', $country
       '#type' => 'hidden',
       '#value' => $latlon,
     );
+    if (empty($loc) && empty($country)) {
+      $mto = t('Destination');
+    }
+    elseif ( empty($loc) && ! empty($country)) {
+      $mto = drupal_strtoupper($country);
+    }
+    elseif (! empty($loc) && empty($country)) {
+      $mto = $loc;
+    }
+    else {
+      $mto = $loc .', '. drupal_strtoupper($country);
+    }
     $form['mto'] = array(
       '#type' => 'item',
       '#title' => t('To'),
-      '#value' => $loc .', '. drupal_strtoupper($country),
+      '#value' => $mto,
     );
   }
   else {
@@ -889,6 +929,26 @@ function getdirections_user_setlocations_via($uids, $width='', $height='') {
     $content = getdirections_locations_via($locs, $latlons, $width, $height);
     return $content;
   }
+}
+
+/**
+ * Function to setup the map and form
+ *
+ * @param string $direction
+ *   Required. The direction the supplied input applies to
+ * @param string $latlon
+ *   Required. A latitude,longitude pair
+ * @param string $locs
+ * Optional. a description of the target.
+ * @return
+ *   Returns the themed map and form
+ */
+function getdirections_latlon($direction, $latlon, $locs='', $width='', $height='') {
+  $country = '';
+  $nid = 0;
+  $type = 'other';
+  $content = getdirections_direction($direction, $locs, $country, $latlon, $nid, $type, $width, $height);
+  return $content;
 }
 
 /**
