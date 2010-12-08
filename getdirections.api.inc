@@ -177,6 +177,33 @@ function getdirections_location_n2u_path($fromnid, $touid) {
 }
 
 /**
+ * API Function to generate a url path for use by other modules/themes.
+ *
+ * Example Usage:
+ * $path = getdirections_location_latlon_path('to', '1.1234,1.234', 'my place');
+ * $url = l(t('Get directions'), $path);
+ *
+ *
+ * @param string $direction
+ *   Required. The direction the supplied input applies to. Must be either 'to' or 'from'
+ * @param string $latlon
+ *   Required. The location point to be used. In decimal latitude,longitude
+ * @param string $locs
+ *   Optional. A description of the point.
+ * @return
+ *   Returns a path relative to the drupal root.
+ */
+function getdirections_location_latlon_path($direction, $latlon, $locs='') {
+  if (($direction == 'to' || $direction == 'from') && preg_match("/[0-9.\-],[0-9.\-]/", $latlon)) {
+    $out = "getdirections/latlon/$direction/$latlon";
+    if ($locs) {
+      $out .= "/$locs";
+    }
+    return $out;
+  }
+}
+
+/**
  * API Function to setup a map with two points
  *
  * @param string $fromlocs
