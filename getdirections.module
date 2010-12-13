@@ -133,6 +133,13 @@ function getdirections_menu() {
     'page arguments' => array(2, 3, 4),
     'type' => MENU_CALLBACK,
   );
+  $items['getdirections/location_id/%getdirections_fromto/%getdirections_id'] = array(
+    'title' => 'Get directions',
+    'access callback' => 'getdirections_access_location',
+    'page callback' => 'getdirections_setlocation_id',
+    'page arguments' => array(2, 3),
+    'type' => MENU_CALLBACK,
+  );
 
   $items['getdirections_box'] = array(
     'title' => 'Get directions',
@@ -946,6 +953,35 @@ function getdirections_latlon($direction, $latlon, $locs='', $width='', $height=
   $type = 'other';
   $content = getdirections_direction($direction, $locs, $country, $latlon, $nid, $type, $width, $height);
   return $content;
+}
+
+/**
+ * Function to setup the map and form
+ *
+ * @param string $direction
+ *   Required. The direction the supplied input applies to
+ * @param int $lid
+ *   Required. The lid of the location
+ * @return
+ *   Returns the themed map and form
+ */
+function getdirections_setlocation_id($direction, $lid, $width='', $height='') {
+  if (module_exists('location')) {
+    $location = location_load_location($lid);
+    if (count($location)) {
+      $country = $location['country'];
+      $latlon = $location['latitude'] .','. $location['longitude'];
+      // sanity check
+      if (! preg_match("/[0-9.\-],[0-9.\-]/", $latlon)) {
+        watchdog('getdirections', 'Lat, Lon failed for location id !lid', array('!lid' => $lid), WATCHDOG_WARNING);
+      }
+      $loc = _getdirections_loadaddress($location);
+      // $locs only used for display now
+      $locs = implode(', ', $loc);
+      $content = getdirections_direction($direction, $locs, $country, $latlon, $lid, 'location', $width, $height);
+      return $content;
+    }
+  }
 }
 
 /**

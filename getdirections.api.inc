@@ -204,6 +204,26 @@ function getdirections_location_latlon_path($direction, $latlon, $locs='') {
 }
 
 /**
+ * API Function to generate a url path for use by other modules/themes.
+ *
+ * Example Usage:
+ * $path = getdirections_location_id_path('to', $lid);
+ * $url = l(t('Get directions'), $path);
+ *
+ * @param string $direction
+ *   Required. The direction the supplied input applies to. Must be either 'to' or 'from'
+ * @param int $lid
+ *   Required. The lid (location id) of the location, as found in the location table
+ * @return
+ *   Returns a path relative to the drupal root.
+ */
+function getdirections_location_id_path($direction, $lid) {
+  if (module_exists('location') && is_numeric($lid) && ($direction == 'to' || $direction == 'from')) {
+    return "getdirections/location_id/$direction/$lid";
+  }
+}
+
+/**
  * API Function to setup a map with two points
  *
  * @param string $fromlocs
