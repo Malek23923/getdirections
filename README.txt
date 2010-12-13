@@ -101,6 +101,9 @@ Where $fromlocs is a description of the starting point,
 $fromlatlon is the latitude,longitude of the starting point
 and $tolocs and $tolatlon are the same thing for the endpoint
 
+getdirections_location_id_path($direction, $lid)
+Where $direction is either 'to' or 'from' and $lid is the location id concerned.
+
 See getdirections.api.inc for more detail.
 
 If you are using Views and Location it will provide a 'Get driving directions' block
@@ -117,3 +120,8 @@ The URL method would be in the form of
 You can also use the function getdirections_location_latlon_path() in getdirections.api.inc to
 generate the string for you.
 
+Themeing
+To change the way the map is displayed you should copy the theme function you want to change
+to your theme's template.php, renaming appropriately and editing it there.
+see getdirections.theme.inc
+There is plenty of help on themeing on drupal.org
