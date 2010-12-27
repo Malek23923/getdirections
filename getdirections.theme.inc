@@ -69,6 +69,13 @@ function theme_getdirections_show($form, $width, $height, $nid, $type) {
   }
   $output .= $form;
 
+  $getdirections_misc = variable_get('getdirections_misc', array(
+    'keep_title' => 0,
+    'show_distance' => 0,
+  ));
+  if ($getdirections_misc['show_distance']) {
+    $output .= '<div id="getdirections_show_distance"></div>';
+  }
   $header = array();
   $rows[] = array(
     array(

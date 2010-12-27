@@ -98,20 +98,20 @@ function getdirections_settings_form() {
     $version = $getdirections_defaults['api_version'];
     if ($version == '2' || $version == '2.x' || $version == '2.s') {
       $opts = array(
-        'None' => t('None'),
-        'Micro' => t('Micro'),
-        'Micro3D' => t('Micro 3D'),
-        'Small' => t('Small'),
-        'Large' => t('Large'),
-        'Large3D' => t('Large 3D'),
+        'none' => t('None'),
+        'micro' => t('Micro'),
+        'micro3D' => t('Micro 3D'),
+        'small' => t('Small'),
+        'large' => t('Large'),
+        'large3D' => t('Large 3D'),
       );
     }
     else {
       $opts = array(
-        'None' => t('None'),
-        'Micro' => t('Micro'),
-        'Small' => t('Small'),
-        'Large' => t('Large'),
+        'none' => t('None'),
+        'micro' => t('Micro'),
+        'small' => t('Small'),
+        'large' => t('Large'),
       );
     }
     $opts2 = array(
@@ -125,8 +125,7 @@ function getdirections_settings_form() {
     // v3
     $opts = array(
       'none' => t('None'),
-      'default' => t('Default'),
-      'android' => t('Android'),
+      'micro' => t('Android'),
       'small' => t('Small'),
       'large' => t('Large'),
     );
@@ -230,10 +229,9 @@ function getdirections_settings_form() {
     $form['getdirections_default']['unitsystem'] = array(
       '#type' => 'select',
       '#title' => t('Default distance units'),
-      '#description' => t("Units to display distances in. 'Automatic' uses the country of origin."),
+      '#description' => t("Units to display distances in."),
       '#default_value' => $getdirections_defaults['unitsystem'],
       '#options' => array(
-        'auto' => t('Automatic'),
         'metric' => t('Metric'),
         'imperial' => t('Imperial'),
       ),
@@ -446,12 +444,20 @@ function getdirections_settings_form() {
   );
   $getdirections_misc = variable_get('getdirections_misc', array(
     'keep_title' => 0,
+    'show_distance' => 0,
   ));
   $form['getdirections_misc']['keep_title'] = array(
     '#type' => 'checkbox',
     '#title' => t('Keep original title'),
     '#description' => t('Use the original title when using the getdirections_direction(), getdirections_locations() and getdirections_locations_via() functions'),
     '#default_value' =>  $getdirections_misc['keep_title'],
+    '#return_value' => 1,
+  );
+
+  $form['getdirections_misc']['show_distance'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Show total distance'),
+    '#default_value' =>  $getdirections_misc['show_distance'],
     '#return_value' => 1,
   );
 

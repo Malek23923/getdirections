@@ -216,6 +216,11 @@ function getdirections_direction($direction='', $location='', $country='', $latl
   global $language;
   $getdirections_defaults = getdirections_defaults();
   getdirections_setup_map($getdirections_defaults);
+
+  $getdirections_misc = variable_get('getdirections_misc', array(
+    'keep_title' => 0,
+    'show_distance' => 0,
+  ));
   $lla = explode(',', $getdirections_defaults['latlong']);
   $getdirections_settings = array(
     'lat' => $lla[0],
@@ -233,9 +238,9 @@ function getdirections_direction($direction='', $location='', $country='', $latl
     'mylocale' => $language->language,
     'waypoints' => intval($getdirections_defaults['waypoints']),
     'waypoint_color' => $getdirections_defaults['waypoint_color'],
+    'show_distance' => ($getdirections_misc['show_distance'] ? t('Total distance') : ''),
   );
   drupal_add_js(array('getdirections' => $getdirections_settings), 'setting');
-  $getdirections_misc = variable_get('getdirections_misc', array('keep_title' => 0));
   if (! $getdirections_misc['keep_title']) {
     drupal_set_title(t("Get Directions"));
   }
@@ -267,6 +272,11 @@ function getdirections_locations($fromlocs, $fromlatlon, $tolocs, $tolatlon, $wi
   global $language;
   $getdirections_defaults = getdirections_defaults();
   getdirections_setup_map($getdirections_defaults);
+
+  $getdirections_misc = variable_get('getdirections_misc', array(
+    'keep_title' => 0,
+    'show_distance' => 0,
+  ));
   $lla = explode(',', $getdirections_defaults['latlong']);
   $getdirections_settings = array(
     'lat' => $lla[0],
@@ -286,9 +296,9 @@ function getdirections_locations($fromlocs, $fromlatlon, $tolocs, $tolatlon, $wi
     'mylocale' => $language->language,
     'waypoints' => intval($getdirections_defaults['waypoints']),
     'waypoint_color' => $getdirections_defaults['waypoint_color'],
+    'show_distance' => ($getdirections_misc['show_distance'] ? t('Total distance') : ''),
   );
   drupal_add_js(array('getdirections' => $getdirections_settings), 'setting');
-  $getdirections_misc = variable_get('getdirections_misc', array('keep_title' => 0));
   if (! $getdirections_misc['keep_title']) {
     drupal_set_title(t("Get Directions"));
   }
@@ -315,6 +325,10 @@ function getdirections_locations_via($locs, $latlons, $width='', $height='') {
   global $language;
   $getdirections_defaults = getdirections_defaults();
   getdirections_setup_map($getdirections_defaults);
+  $getdirections_misc = variable_get('getdirections_misc', array(
+    'keep_title' => 0,
+    'show_distance' => 0,
+  ));
   $lla = explode(',', $getdirections_defaults['latlong']);
   $getdirections_settings = array(
     'lat' => $lla[0],
@@ -333,9 +347,9 @@ function getdirections_locations_via($locs, $latlons, $width='', $height='') {
     'mylocale' => $language->language,
     'waypoints' => intval($getdirections_defaults['waypoints']),
     'waypoint_color' => $getdirections_defaults['waypoint_color'],
+    'show_distance' => ($getdirections_misc['show_distance'] ? t('Total distance') : ''),
   );
   drupal_add_js(array('getdirections' => $getdirections_settings), 'setting');
-  $getdirections_misc = variable_get('getdirections_misc', array('keep_title' => 0));
   if (! $getdirections_misc['keep_title']) {
     drupal_set_title(t("Get Directions"));
   }
@@ -526,7 +540,7 @@ function getdirections_defaults() {
       'width' => '300px',
       'height' => '200px',
       'zoom' => 3,
-      'controltype' => 'default',
+      'controltype' => 'small',
       'latlong' => '40,0',
       'maptype' => 'Map',
       'mtc' => 'standard',
@@ -541,7 +555,7 @@ function getdirections_defaults() {
         'scrollwheel' => 0,
         'draggable' => 1,
       ),
-      'unitsystem' => 'auto',
+      'unitsystem' => 'metric',
       'from_width' => 20,
       'to_width' => 20,
       'travelmode_show' => 0,
@@ -567,7 +581,7 @@ function getdirections_defaults() {
         'width' => '300px',
         'height' => '200px',
         'zoom' => 3,
-        'controltype' => 'Small',
+        'controltype' => 'small',
         'latlong' => '40,0',
         'maptype' => 'Map',
         'mtc' => 'standard',

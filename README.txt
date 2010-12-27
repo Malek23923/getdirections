@@ -7,7 +7,7 @@ This module provides a form to make a Google directions map.
 
 Installation
 Upload the whole getdirections directory into sites/all/modules/ or
-sites/<domain>/modules/ for multisite setups.
+sites/(domain)/modules/ for multisite setups.
 
 Login to Drupal site as a user with administrative rights and go to
 Administer > Site building > Modules. Scroll down to Other modules section, you
@@ -107,7 +107,11 @@ Where $direction is either 'to' or 'from' and $lid is the location id concerned.
 See getdirections.api.inc for more detail.
 
 If you are using Views and Location it will provide a 'Get driving directions' block
-when you are viewing a location node or a user with a location.
+when you are viewing a node with a single or a user with a single location.
+If you are using multiple locations per node or multiple locations per user then enable
+the getdirections_multi type of view. If you are using CCK you can add the relevant
+node type to the filter for that view, especially useful if you have both
+'one location per node' and 'multiple locations per node' node types.
 
 Getdirections now supports the Googlemaps API version 3, this has many new features.
 

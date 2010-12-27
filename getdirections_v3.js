@@ -72,8 +72,8 @@ function getRequest(fromAddress, toAddress, waypts) {
   else { trmode = google.maps.DirectionsTravelMode.DRIVING; }
   request.travelMode = trmode;
 
-  if (unitsys == 'metric') { request.unitSystem = google.maps.DirectionsUnitSystem.METRIC; }
-  else if (unitsys == 'imperial') { request.unitSystem = google.maps.DirectionsUnitSystem.IMPERIAL; }
+  if (unitsys == 'imperial') { request.unitSystem = google.maps.DirectionsUnitSystem.IMPERIAL; }
+  else { request.unitSystem = google.maps.DirectionsUnitSystem.METRIC; }
 
   var avoidh = false;
   if ($("#edit-travelextras-avoidhighways").attr('checked')) { avoidh = true; }
@@ -177,6 +177,26 @@ function setDirectionsfromto(fromlatlon, tolatlon) {
   renderdirections(request);
 }
 
+// Total distance
+function computeTotalDistance(result) {
+  var meters = 0;
+  var myroute = result.routes[0];
+  for (i = 0; i < myroute.legs.length; i++) {
+    meters += myroute.legs[i].distance.value;
+  }
+  distance = meters * 0.001;
+  if (unitsys == 'imperial') {
+    distance = distance * 0.6214;
+    distance = distance.toFixed(2) + ' mi';
+  }
+  else {
+    distance = distance.toFixed(2) + ' km';
+  }
+  if (Drupal.settings.getdirections.show_distance) {
+    $("#getdirections_show_distance").html(Drupal.settings.getdirections.show_distance + ': ' + distance);
+  }
+}
+
 function initialize() {
   var lat = parseFloat(Drupal.settings.getdirections.lat);
   var lng = parseFloat(Drupal.settings.getdirections.lng);
@@ -202,10 +222,9 @@ function initialize() {
   else { mtc = false; }
 
   // nav control type
-  if (controltype == 'android') { controltype = google.maps.NavigationControlStyle.ANDROID; }
+  if (controltype == 'micro') { controltype = google.maps.NavigationControlStyle.ANDROID; }
   else if (controltype == 'small') { controltype = google.maps.NavigationControlStyle.SMALL; }
   else if (controltype == 'large') { controltype = google.maps.NavigationControlStyle.ZOOM_PAN; }
-  else if (controltype == 'default') { controltype = google.maps.NavigationControlStyle.DEFAULT; }
   else { controltype = false; }
 
   // map type
@@ -293,6 +312,11 @@ function initialize() {
   dirrenderer = new google.maps.DirectionsRenderer();
   dirrenderer.setMap(map);
   dirrenderer.setPanel(document.getElementById("getdirections_directions"));
+
+  google.maps.event.addListener(dirrenderer, 'directions_changed', function() {
+    computeTotalDistance(dirrenderer.directions);
+  });
+
   dirservice = new google.maps.DirectionsService();
 
   if (fromlatlon && tolatlon) {
