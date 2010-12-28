@@ -1,6 +1,10 @@
 // $Id$
 // $Name$
 
+Get Directions for D6 in D-6--2, 2010-12-28
+------------------------------------
+by hutch, added trafficinfo
+
 Get Directions for D6 in D-6--2, 2010-12-27
 ------------------------------------
 by hutch, added total distance calculation, 

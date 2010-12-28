@@ -29,6 +29,8 @@ var gdir;
 var geo;
 var bounds;
 var map;
+var trafficInfo;
+var traffictoggleState = 1;
 
 var path = [];
 var active = [];
@@ -323,6 +325,12 @@ function initialize() {
   latlng = new GLatLng(lat, lng);
   map.setCenter(latlng, parseInt(zoom));
 
+  if (Drupal.settings.getdirections.trafficinfo) {
+    var trafficOptions = {incidents:true};
+    trafficInfo = new GTrafficOverlay(trafficOptions);
+    map.addOverlay(trafficInfo);
+  }
+
   // some icons
   var baseIcon = new GIcon(G_DEFAULT_ICON);
   baseIcon.iconSize=new GSize(24,38);
@@ -406,6 +414,17 @@ function initialize() {
 
 function nextbtn() {
   return;
+}
+
+function toggleTraffic() {
+  if (traffictoggleState == 1) {
+    map.removeOverlay(trafficInfo);
+    traffictoggleState = 0;
+  }
+  else {
+    map.addOverlay(trafficInfo);
+    traffictoggleState = 1;
+  }
 }
 
 Drupal.behaviors.getdirections = function() {

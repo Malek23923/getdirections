@@ -220,6 +220,7 @@ function getdirections_direction($direction='', $location='', $country='', $latl
   $getdirections_misc = variable_get('getdirections_misc', array(
     'keep_title' => 0,
     'show_distance' => 0,
+    'trafficinfo' => 0,
   ));
   $lla = explode(',', $getdirections_defaults['latlong']);
   $getdirections_settings = array(
@@ -239,6 +240,8 @@ function getdirections_direction($direction='', $location='', $country='', $latl
     'waypoints' => intval($getdirections_defaults['waypoints']),
     'waypoint_color' => $getdirections_defaults['waypoint_color'],
     'show_distance' => ($getdirections_misc['show_distance'] ? t('Total distance') : ''),
+    'trafficinfo' => $getdirections_misc['trafficinfo'],
+
   );
   drupal_add_js(array('getdirections' => $getdirections_settings), 'setting');
   if (! $getdirections_misc['keep_title']) {
@@ -276,6 +279,7 @@ function getdirections_locations($fromlocs, $fromlatlon, $tolocs, $tolatlon, $wi
   $getdirections_misc = variable_get('getdirections_misc', array(
     'keep_title' => 0,
     'show_distance' => 0,
+    'trafficinfo' => 0,
   ));
   $lla = explode(',', $getdirections_defaults['latlong']);
   $getdirections_settings = array(
@@ -297,6 +301,7 @@ function getdirections_locations($fromlocs, $fromlatlon, $tolocs, $tolatlon, $wi
     'waypoints' => intval($getdirections_defaults['waypoints']),
     'waypoint_color' => $getdirections_defaults['waypoint_color'],
     'show_distance' => ($getdirections_misc['show_distance'] ? t('Total distance') : ''),
+    'trafficinfo' => $getdirections_misc['trafficinfo'],
   );
   drupal_add_js(array('getdirections' => $getdirections_settings), 'setting');
   if (! $getdirections_misc['keep_title']) {
@@ -328,6 +333,7 @@ function getdirections_locations_via($locs, $latlons, $width='', $height='') {
   $getdirections_misc = variable_get('getdirections_misc', array(
     'keep_title' => 0,
     'show_distance' => 0,
+    'trafficinfo' => 0,
   ));
   $lla = explode(',', $getdirections_defaults['latlong']);
   $getdirections_settings = array(
@@ -348,6 +354,7 @@ function getdirections_locations_via($locs, $latlons, $width='', $height='') {
     'waypoints' => intval($getdirections_defaults['waypoints']),
     'waypoint_color' => $getdirections_defaults['waypoint_color'],
     'show_distance' => ($getdirections_misc['show_distance'] ? t('Total distance') : ''),
+    'trafficinfo' => $getdirections_misc['trafficinfo'],
   );
   drupal_add_js(array('getdirections' => $getdirections_settings), 'setting');
   if (! $getdirections_misc['keep_title']) {
@@ -511,11 +518,26 @@ function getdirections_direction_form($form_state, $fromto='', $loc='', $country
       );
     }
   }
+  $getdirections_misc = variable_get('getdirections_misc', array(
+    'keep_title' => 0,
+    'show_distance' => 0,
+    'trafficinfo' => 0,
+  ));
+  if ($getdirections_misc['trafficinfo']) {
+    $form['trafficinfo'] = array(
+      '#type' => 'button',
+      '#value' => t('Toggle traffic info'),
+      '#weight' => 8,
+      '#attributes' => array( 'onClick' => 'toggleTraffic(); return false;'),
+      '#prefix' => '<div id="getdirections_trafficinfo">',
+      '#suffix' => '</div>',
+    );
+  }
   if (getdirections_is_advanced()) {
     $form['next'] = array(
       '#type' => 'button',
       '#value' => t('Next'),
-      '#weight' => 9,
+      '#weight' => 10,
       '#attributes' => array( 'onClick' => 'nextbtn(); return false;'),
       '#prefix' => '<div id="getdirections_nextbtn">',
       '#suffix' => '</div>',
@@ -524,7 +546,7 @@ function getdirections_direction_form($form_state, $fromto='', $loc='', $country
   $form['submit'] = array(
     '#type' => 'submit',
     '#value' => t('Get Directions'),
-    '#weight' => 10,
+    '#weight' => 12,
   );
   return $form;
 }

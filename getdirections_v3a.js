@@ -16,6 +16,8 @@ var geocoder;
 var bounds;
 var map;
 var distance = '';
+var trafficInfo;
+var traffictoggleState = 1;
 
 var path = [];
 var active = [];
@@ -524,6 +526,11 @@ function initialize() {
   };
   map = new google.maps.Map(document.getElementById("getdirections_map_canvas"), mapOpts);
 
+  if (Drupal.settings.getdirections.trafficinfo) {
+    trafficInfo = new google.maps.TrafficLayer();
+    trafficInfo.setMap(map);
+  }
+
   google.maps.event.addListener(map, 'click', function(event) {
     if (event.latLng) {
       point = new google.maps.LatLng(event.latLng.lat(), event.latLng.lng());
@@ -607,11 +614,6 @@ function initialize() {
   // Bounding
   bounds = new google.maps.LatLngBounds();
 
-  // distance
-//  distance = google.maps.DirectionsDistance();
-
-//  dirresult = new google.maps.DirectionsResult();
-
   handleState();
 
   // any initial markers?
@@ -655,6 +657,17 @@ function initialize() {
 
 function nextbtn() {
   return;
+}
+
+function toggleTraffic() {
+  if (traffictoggleState == 1) {
+    trafficInfo.setMap();
+    traffictoggleState = 0;
+  }
+  else {
+    trafficInfo.setMap(map);
+    traffictoggleState = 1;
+  }
 }
 
 // gogogo

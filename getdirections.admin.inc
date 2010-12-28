@@ -263,7 +263,6 @@ function getdirections_settings_form() {
       '#default_value' =>  $getdirections_defaults['behavior']['scrollwheel'],
       '#return_value' => 1,
     );
-
     $form['getdirections_default']['behavior']['draggable'] = array(
       '#type' => 'checkbox',
       '#title' => t('Draggable'),
@@ -271,7 +270,6 @@ function getdirections_settings_form() {
       '#default_value' =>  $getdirections_defaults['behavior']['draggable'],
       '#return_value' => 1,
     );
-
     $form['getdirections_default']['travelmode_show'] = array(
       '#type' => 'checkbox',
       '#title' => t('Show travel mode'),
@@ -347,54 +345,55 @@ function getdirections_settings_form() {
     '#suffix' => '</div>',
   );
 
-  // return link
-  $form['getdirections_returnlink'] = array(
-    '#type' => 'fieldset',
-    '#title' => t('Links back to page'),
-    '#description' => t('Enable and format \'Return to page\' links.'),
-    // This will store all the defaults in one variable.
-    '#tree' => TRUE,
-  );
-  $getdirections_returnlink = variable_get('getdirections_returnlink', array(
-    'page_enable' => 0,
-    'page_link' => t('Return to page'),
-    'user_enable' => 0,
-    'user_link' => t('Return to page'),
-  ));
-  $form['getdirections_returnlink']['page_enable'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Enable Page Return Link'),
-    '#default_value' =>  $getdirections_returnlink['page_enable'],
-    '#return_value' => 1,
-  );
-  $form['getdirections_returnlink']['page_link'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Text of page return link'),
-    '#default_value' => $getdirections_returnlink['page_link'],
-    '#size' => 30,
-    // need this to get validation to work
-    '#parents' => array('getdirections_returnlink', 'page_link'),
-    '#prefix' => '<div id="wrap-page-link">',
-    '#suffix' => '</div>',
-  );
+  if (module_exists('location')) {
+    // return link
+    $form['getdirections_returnlink'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('Links back to page'),
+      '#description' => t('Enable and format \'Return to page\' links.'),
+      // This will store all the defaults in one variable.
+      '#tree' => TRUE,
+    );
+    $getdirections_returnlink = variable_get('getdirections_returnlink', array(
+      'page_enable' => 0,
+      'page_link' => t('Return to page'),
+      'user_enable' => 0,
+      'user_link' => t('Return to page'),
+    ));
+    $form['getdirections_returnlink']['page_enable'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Enable Page Return Link'),
+      '#default_value' =>  $getdirections_returnlink['page_enable'],
+      '#return_value' => 1,
+    );
+    $form['getdirections_returnlink']['page_link'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Text of page return link'),
+      '#default_value' => $getdirections_returnlink['page_link'],
+      '#size' => 30,
+      // need this to get validation to work
+      '#parents' => array('getdirections_returnlink', 'page_link'),
+      '#prefix' => '<div id="wrap-page-link">',
+      '#suffix' => '</div>',
+    );
 
-  $form['getdirections_returnlink']['user_enable'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Enable User Return Link'),
-    '#default_value' =>  $getdirections_returnlink['user_enable'],
-    '#return_value' => 1,
-  );
-  $form['getdirections_returnlink']['user_link'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Text of user return link'),
-    '#default_value' => $getdirections_returnlink['user_link'],
-    '#size' => 30,
-    // need this to get validation to work
-    '#parents' => array('getdirections_returnlink', 'user_link'),
-    '#prefix' => '<div id="wrap-user-link">',
-    '#suffix' => '</div>',
-  );
-
+    $form['getdirections_returnlink']['user_enable'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Enable User Return Link'),
+      '#default_value' =>  $getdirections_returnlink['user_enable'],
+      '#return_value' => 1,
+    );
+    $form['getdirections_returnlink']['user_link'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Text of user return link'),
+      '#default_value' => $getdirections_returnlink['user_link'],
+      '#size' => 30,
+      // need this to get validation to work
+      '#parents' => array('getdirections_returnlink', 'user_link'),
+      '#prefix' => '<div id="wrap-user-link">',
+      '#suffix' => '</div>',
+    );
+  }
   if (module_exists('colorbox')) {
     $form['getdirections_colorbox'] = array(
       '#type' => 'fieldset',
@@ -445,19 +444,33 @@ function getdirections_settings_form() {
   $getdirections_misc = variable_get('getdirections_misc', array(
     'keep_title' => 0,
     'show_distance' => 0,
+    'trafficinfo' => 0,
   ));
-  $form['getdirections_misc']['keep_title'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Keep original title'),
-    '#description' => t('Use the original title when using the getdirections_direction(), getdirections_locations() and getdirections_locations_via() functions'),
-    '#default_value' =>  $getdirections_misc['keep_title'],
-    '#return_value' => 1,
-  );
-
+  if (module_exists('location')) {
+    $form['getdirections_misc']['keep_title'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Keep original title'),
+      '#description' => t('Use the original title when using the getdirections_direction(), getdirections_locations() and getdirections_locations_via() functions'),
+      '#default_value' =>  $getdirections_misc['keep_title'],
+      '#return_value' => 1,
+    );
+  }
+  else {
+    $form['getdirections_misc']['keep_title'] = array(
+      '#type' => 'value',
+      '#value' => 0,
+    );
+  }
   $form['getdirections_misc']['show_distance'] = array(
     '#type' => 'checkbox',
     '#title' => t('Show total distance'),
     '#default_value' =>  $getdirections_misc['show_distance'],
+    '#return_value' => 1,
+  );
+  $form['getdirections_misc']['trafficinfo'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Enable Traffic information'),
+    '#default_value' =>  $getdirections_misc['trafficinfo'],
     '#return_value' => 1,
   );
 
@@ -474,13 +487,17 @@ function getdirections_settings_validate($form, &$form_state) {
   if ( ! is_numeric($form_state['values']['getdirections_default']['from_width']) || $form_state['values']['getdirections_default']['from_width'] < 1) {
     form_set_error('getdirections_default][from_width', t('Width of From box must be a positive number'));
   }
-  if ( empty($form_state['values']['getdirections_returnlink']['page_link'])) {
-    form_set_error('getdirections_returnlink][page_link', t('Text of return link cannot be empty'));
+  if (isset($form_state['values']['getdirections_returnlink']['page_link'])) {
+    if ( empty($form_state['values']['getdirections_returnlink']['page_link'])) {
+      form_set_error('getdirections_returnlink][page_link', t('Text of return link cannot be empty'));
+    }
+    $form_state['values']['getdirections_returnlink']['page_link'] = check_plain($form_state['values']['getdirections_returnlink']['page_link']);
   }
-  $form_state['values']['getdirections_returnlink']['page_link'] = check_plain($form_state['values']['getdirections_returnlink']['page_link']);
-  if ( empty($form_state['values']['getdirections_returnlink']['user_link'])) {
-    form_set_error('getdirections_returnlink][user_link', t('Text of return link cannot be empty'));
+  if (isset($form_state['values']['getdirections_returnlink']['user_link'])) {
+    if ( empty($form_state['values']['getdirections_returnlink']['user_link'])) {
+      form_set_error('getdirections_returnlink][user_link', t('Text of return link cannot be empty'));
+    }
+    $form_state['values']['getdirections_returnlink']['user_link'] = check_plain($form_state['values']['getdirections_returnlink']['user_link']);
   }
-  $form_state['values']['getdirections_returnlink']['user_link'] = check_plain($form_state['values']['getdirections_returnlink']['user_link']);
 }
 

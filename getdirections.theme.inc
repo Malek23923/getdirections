@@ -72,6 +72,7 @@ function theme_getdirections_show($form, $width, $height, $nid, $type) {
   $getdirections_misc = variable_get('getdirections_misc', array(
     'keep_title' => 0,
     'show_distance' => 0,
+    'trafficinfo' => 0,
   ));
   if ($getdirections_misc['show_distance']) {
     $output .= '<div id="getdirections_show_distance"></div>';
@@ -112,6 +113,14 @@ function theme_getdirections_show_locations($width, $height, $fromlocs, $tolocs)
   $output .= "<div class='getdirections_display'><label>". t('From') .":</label> ". $fromlocs ."</div>";
   $output .= "<div class='getdirections_display'><label>". t('To') .":</label> ". $tolocs ."</div>";
 
+  $getdirections_misc = variable_get('getdirections_misc', array(
+    'keep_title' => 0,
+    'show_distance' => 0,
+    'trafficinfo' => 0,
+  ));
+  if ($getdirections_misc['show_distance']) {
+    $output .= '<div id="getdirections_show_distance"></div>';
+  }
   $header = array();
 
   $rows[] = array(
@@ -151,6 +160,14 @@ function theme_getdirections_show_locations_via($width, $height, $locs) {
     $output .= "<div class='getdirections_display'><label>". $label .":</label> ". $loc ."</div>";
   }
 
+  $getdirections_misc = variable_get('getdirections_misc', array(
+    'keep_title' => 0,
+    'show_distance' => 0,
+    'trafficinfo' => 0,
+  ));
+  if ($getdirections_misc['show_distance']) {
+    $output .= '<div id="getdirections_show_distance"></div>';
+  }
   $header = array();
 
   $rows[] = array(

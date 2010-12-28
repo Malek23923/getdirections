@@ -21,6 +21,8 @@ var shadowIconUrl = "http://www.google.com/mapfiles/shadow50.png"
 
 var tomarker;
 var frommarker;
+var trafficInfo;
+var traffictoggleState = 1;
 
 // error codes
 function getdirectionserrcode(errcode) {
@@ -251,6 +253,11 @@ function initialize() {
   };
   map = new google.maps.Map(document.getElementById("getdirections_map_canvas"), mapOpts);
 
+  if (Drupal.settings.getdirections.trafficinfo) {
+    trafficInfo = new google.maps.TrafficLayer();
+    trafficInfo.setMap(map);
+  }
+
   // define some icons
   var icon1 = new google.maps.MarkerImage(
     startIconUrl,
@@ -327,6 +334,17 @@ function initialize() {
     setDirectionsvia(latlons);
   }
 } // end initialise
+
+function toggleTraffic() {
+  if (traffictoggleState == 1) {
+    trafficInfo.setMap();
+    traffictoggleState = 0;
+  }
+  else {
+    trafficInfo.setMap(map);
+    traffictoggleState = 1;
+  }
+}
 
 // gogogo
 Drupal.behaviors.getdirections = function() {

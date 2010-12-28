@@ -25,6 +25,8 @@ reasons[G_GEO_UNKNOWN_DIRECTIONS]  = "The GDirections object could not compute d
 
 var gdir;
 var mylocale;
+var trafficInfo;
+var traffictoggleState = 1;
 
 function setDirectionsvia(lls, locale) {
   var arr = lls.split('|');
@@ -89,6 +91,12 @@ function initialize() {
   latlng = new GLatLng(lat, lng);
   map.setCenter(latlng, parseInt(zoom));
 
+  if (Drupal.settings.getdirections.trafficinfo) {
+    var trafficOptions = {incidents:true};
+    trafficInfo = new GTrafficOverlay(trafficOptions);
+    map.addOverlay(trafficInfo);
+  }
+
   gdir = new GDirections(map, document.getElementById("getdirections_directions"));
 
   GEvent.addListener(gdir, "error", function() {
@@ -124,6 +132,17 @@ function mygetDirections() {
   }
   var s = "from: " + from + " to: " + to;
   gdir.load(s, {locale: mylocale});
+}
+
+function toggleTraffic() {
+  if (traffictoggleState == 1) {
+    map.removeOverlay(trafficInfo);
+    traffictoggleState = 0;
+  }
+  else {
+    map.addOverlay(trafficInfo);
+    traffictoggleState = 1;
+  }
 }
 
 Drupal.behaviors.getdirections = function() {
