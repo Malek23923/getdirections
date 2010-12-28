@@ -72,11 +72,16 @@ function theme_getdirections_show($variables) {
   elseif ($getdirections_returnlink['user_enable'] && $nid > 0 && $type == 'user') {
     $output .= '<div class="getdirections_returnlink">'. l($getdirections_returnlink['page_link'], 'user/' . $nid) .'</div>';
   }
-  #if (is_array($form)) {
-  #  $output .= theme('getdirections_direction_form', array('form' => $form));
-  #}
   $output .= $form;
 
+  $getdirections_misc = variable_get('getdirections_misc', array(
+    'keep_title' => 0,
+    'show_distance' => 0,
+    'trafficinfo' => 0,
+  ));
+  if ($getdirections_misc['show_distance']) {
+    $output .= '<div id="getdirections_show_distance"></div>';
+  }
   $header = array();
   $rows[] = array(
     array(
@@ -117,6 +122,15 @@ function theme_getdirections_show_locations($variables) {
   $output .= "<div class='getdirections_display'><label>". t('From') .":</label> ". $fromlocs ."</div>";
   $output .= "<div class='getdirections_display'><label>". t('To') .":</label> ". $tolocs ."</div>";
 
+  $getdirections_misc = variable_get('getdirections_misc', array(
+    'keep_title' => 0,
+    'show_distance' => 0,
+    'trafficinfo' => 0,
+
+  ));
+  if ($getdirections_misc['show_distance']) {
+    $output .= '<div id="getdirections_show_distance"></div>';
+  }
   $header = array();
 
   $rows[] = array(
@@ -159,6 +173,14 @@ function theme_getdirections_show_locations_via($variables) {
     $output .= "<div class='getdirections_display'><label>". $label .":</label> ". $loc ."</div>";
   }
 
+  $getdirections_misc = variable_get('getdirections_misc', array(
+    'keep_title' => 0,
+    'show_distance' => 0,
+    'trafficinfo' => 0,
+  ));
+  if ($getdirections_misc['show_distance']) {
+    $output .= '<div id="getdirections_show_distance"></div>';
+  }
   $header = array();
 
   $rows[] = array(
@@ -266,9 +288,9 @@ function template_preprocess_getdirections_box(&$variables) {
   $variables['css']               = drupal_add_css();
   $variables['styles']            = drupal_get_css();
   $variables['scripts']           = drupal_get_js();
-  if (module_exists('jquery_update')) {
-    jquery_update_preprocess_page(&$variables);
-  }
+#  if (module_exists('jquery_update')) {
+#    jquery_update_preprocess_page(&$variables);
+#  }
   $variables['title']             = drupal_get_title();
   // Closure should be filled last.
   $variables['closure']           = theme('closure');

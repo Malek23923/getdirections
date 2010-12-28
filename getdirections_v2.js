@@ -27,6 +27,8 @@
 
   var gdir;
   var mylocale;
+  var trafficInfo;
+  var traffictoggleState = 1;
 
   function setDirectionsvia(lls, locale) {
     var arr = lls.split('|');
@@ -38,6 +40,9 @@
     // e.g.
     //document.getElementById("getdirections_info").innerHTML = gdir.getStatus().code;
     // and yada yada yada...
+    if (Drupal.settings.getdirections.show_distance) {
+      $("#getdirections_show_distance").html(Drupal.settings.getdirections.show_distance + ': ' + gdir.getDistance().html);
+    }
   }
 
   function initialize() {
@@ -68,11 +73,11 @@
     else if (mtc == 'hier') { map.addControl(new GHierarchicalMapTypeControl()); }
     else if (mtc == 'menu') { map.addControl(new GMenuMapTypeControl()); }
     // nav control type
-    if (controltype == 'Micro') { map.addControl(new GSmallZoomControl()); }
-    else if (controltype == 'Micro3D') { map.addControl(new GSmallZoomControl3D()); }
-    else if (controltype == 'Small') { map.addControl(new GSmallMapControl()); }
-    else if (controltype == 'Large') { map.addControl(new GLargeMapControl()); }
-    else if (controltype == 'Large3D') { map.addControl(new GLargeMapControl3D()); }
+    if (controltype == 'micro') { map.addControl(new GSmallZoomControl()); }
+    else if (controltype == 'micro3D') { map.addControl(new GSmallZoomControl3D()); }
+    else if (controltype == 'small') { map.addControl(new GSmallMapControl()); }
+    else if (controltype == 'large') { map.addControl(new GLargeMapControl()); }
+    else if (controltype == 'large3D') { map.addControl(new GLargeMapControl3D()); }
     if (baselayers.Physical) { map.addMapType(G_PHYSICAL_MAP); }
     // map type
     if (maptype) {
@@ -88,6 +93,12 @@
 
     latlng = new GLatLng(lat, lng);
     map.setCenter(latlng, parseInt(zoom));
+
+    if (Drupal.settings.getdirections.trafficinfo) {
+      var trafficOptions = {incidents:true};
+      trafficInfo = new GTrafficOverlay(trafficOptions);
+      map.addOverlay(trafficInfo);
+    }
 
     gdir = new GDirections(map, document.getElementById("getdirections_directions"));
 
@@ -126,6 +137,16 @@
     gdir.load(s, {locale: mylocale});
   }
 
+  Drupal.toggleTraffic = function() {
+    if (traffictoggleState == 1) {
+      map.removeOverlay(trafficInfo);
+      traffictoggleState = 0;
+    }
+    else {
+      map.addOverlay(trafficInfo);
+      traffictoggleState = 1;
+    }
+  }
 
   Drupal.behaviors.getdirections = {
     attach: function() {

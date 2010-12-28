@@ -40,7 +40,7 @@ function getdirections_settings_form() {
       '#default_value' => (variable_get('getdirections_api_key', '') ? variable_get('getdirections_api_key', '') : $gmap_key),
       '#description' => t('Required for version 2 of the Googlemaps API.'),
       '#size' => 92,
-      '#required' => FALSE,
+      '#required' => ($gmap_key ? FALSE : TRUE),
     );
   }
 
@@ -99,20 +99,20 @@ function getdirections_settings_form() {
     $version = $getdirections_defaults['api_version'];
     if ($version == '2' || $version == '2.x' || $version == '2.s') {
       $opts = array(
-        'None' => t('None'),
-        'Micro' => t('Micro'),
-        'Micro3D' => t('Micro 3D'),
-        'Small' => t('Small'),
-        'Large' => t('Large'),
-        'Large3D' => t('Large 3D'),
+        'none' => t('None'),
+        'micro' => t('Micro'),
+        'micro3D' => t('Micro 3D'),
+        'small' => t('Small'),
+        'large' => t('Large'),
+        'large3D' => t('Large 3D'),
       );
     }
     else {
       $opts = array(
-        'None' => t('None'),
-        'Micro' => t('Micro'),
-        'Small' => t('Small'),
-        'Large' => t('Large'),
+        'none' => t('None'),
+        'micro' => t('Micro'),
+        'small' => t('Small'),
+        'large' => t('Large'),
       );
     }
     $opts2 = array(
@@ -126,8 +126,7 @@ function getdirections_settings_form() {
     // v3
     $opts = array(
       'none' => t('None'),
-      'default' => t('Default'),
-      'android' => t('Android'),
+      'micro' => t('Android'),
       'small' => t('Small'),
       'large' => t('Large'),
     );
@@ -231,10 +230,9 @@ function getdirections_settings_form() {
     $form['getdirections_default']['unitsystem'] = array(
       '#type' => 'select',
       '#title' => t('Default distance units'),
-      '#description' => t("Units to display distances in. 'Automatic' uses the country of origin."),
+      '#description' => t("Units to display distances in."),
       '#default_value' => $getdirections_defaults['unitsystem'],
       '#options' => array(
-        'auto' => t('Automatic'),
         'metric' => t('Metric'),
         'imperial' => t('Imperial'),
       ),
@@ -266,7 +264,6 @@ function getdirections_settings_form() {
       '#default_value' =>  $getdirections_defaults['behavior']['scrollwheel'],
       '#return_value' => 1,
     );
-
     $form['getdirections_default']['behavior']['draggable'] = array(
       '#type' => 'checkbox',
       '#title' => t('Draggable'),
@@ -274,7 +271,6 @@ function getdirections_settings_form() {
       '#default_value' =>  $getdirections_defaults['behavior']['draggable'],
       '#return_value' => 1,
     );
-
     $form['getdirections_default']['travelmode_show'] = array(
       '#type' => 'checkbox',
       '#title' => t('Show travel mode'),
@@ -349,6 +345,7 @@ function getdirections_settings_form() {
     ),
     '#suffix' => '</div>',
   );
+
   if (GETDIRECTIONS_USE_LOCATION && module_exists('location')) {
     // return link
     $form['getdirections_returnlink'] = array(
@@ -437,18 +434,20 @@ function getdirections_settings_form() {
       '#suffix' => '</div>',
     );
   }
-  if (GETDIRECTIONS_USE_LOCATION && module_exists('location')) {
 
-    // various
-    $form['getdirections_misc'] = array(
-      '#type' => 'fieldset',
-      '#title' => t('Other settings'),
-      // This will store all the defaults in one variable.
-      '#tree' => TRUE,
-    );
-    $getdirections_misc = variable_get('getdirections_misc', array(
-      'keep_title' => 0,
-    ));
+  // various
+  $form['getdirections_misc'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Other settings'),
+    // This will store all the defaults in one variable.
+    '#tree' => TRUE,
+  );
+  $getdirections_misc = variable_get('getdirections_misc', array(
+    'keep_title' => 0,
+    'show_distance' => 0,
+    'trafficinfo' => 0,
+  ));
+  if (GETDIRECTIONS_USE_LOCATION && module_exists('location')) {
     $form['getdirections_misc']['keep_title'] = array(
       '#type' => 'checkbox',
       '#title' => t('Keep original title'),
@@ -457,6 +456,24 @@ function getdirections_settings_form() {
       '#return_value' => 1,
     );
   }
+  else {
+    $form['getdirections_misc']['keep_title'] = array(
+      '#type' => 'value',
+      '#value' => 0,
+    );
+  }
+  $form['getdirections_misc']['show_distance'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Show total distance'),
+    '#default_value' =>  $getdirections_misc['show_distance'],
+    '#return_value' => 1,
+  );
+  $form['getdirections_misc']['trafficinfo'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Enable Traffic information'),
+    '#default_value' =>  $getdirections_misc['trafficinfo'],
+    '#return_value' => 1,
+  );
 
   $form['#validate'][] = 'getdirections_settings_validate';
 

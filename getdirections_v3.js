@@ -22,6 +22,8 @@
 
   var tomarker;
   var frommarker;
+  var trafficInfo;
+  var traffictoggleState = 1;
 
   // error codes
   function getdirectionserrcode(errcode) {
@@ -73,8 +75,8 @@
     else { trmode = google.maps.DirectionsTravelMode.DRIVING; }
     request.travelMode = trmode;
 
-    if (unitsys == 'metric') { request.unitSystem = google.maps.DirectionsUnitSystem.METRIC; }
-    else if (unitsys == 'imperial') { request.unitSystem = google.maps.DirectionsUnitSystem.IMPERIAL; }
+    if (unitsys == 'imperial') { request.unitSystem = google.maps.DirectionsUnitSystem.IMPERIAL; }
+    else { request.unitSystem = google.maps.DirectionsUnitSystem.METRIC; }
 
     var avoidh = false;
     if ($("#edit-travelextras-avoidhighways").attr('checked')) { avoidh = true; }
@@ -179,6 +181,26 @@
     renderdirections(request);
   }
 
+  // Total distance
+  function computeTotalDistance(result) {
+    var meters = 0;
+    var myroute = result.routes[0];
+    for (i = 0; i < myroute.legs.length; i++) {
+      meters += myroute.legs[i].distance.value;
+    }
+    distance = meters * 0.001;
+    if (unitsys == 'imperial') {
+      distance = distance * 0.6214;
+      distance = distance.toFixed(2) + ' mi';
+    }
+    else {
+      distance = distance.toFixed(2) + ' km';
+    }
+    if (Drupal.settings.getdirections.show_distance) {
+      $("#getdirections_show_distance").html(Drupal.settings.getdirections.show_distance + ': ' + distance);
+    }
+  }
+
   function initialize() {
     var lat = parseFloat(Drupal.settings.getdirections.lat);
     var lng = parseFloat(Drupal.settings.getdirections.lng);
@@ -203,12 +225,11 @@
     else if (mtc == 'menu' ) { mtc = google.maps.MapTypeControlStyle.DROPDOWN_MENU; }
     else { mtc = false; }
 
-    // nav control type
-    if (controltype == 'android') { controltype = google.maps.NavigationControlStyle.ANDROID; }
-    else if (controltype == 'small') { controltype = google.maps.NavigationControlStyle.SMALL; }
-    else if (controltype == 'large') { controltype = google.maps.NavigationControlStyle.ZOOM_PAN; }
-    else if (controltype == 'default') { controltype = google.maps.NavigationControlStyle.DEFAULT; }
-    else { controltype = false; }
+  // nav control type
+  if (controltype == 'micro') { controltype = google.maps.NavigationControlStyle.ANDROID; }
+  else if (controltype == 'small') { controltype = google.maps.NavigationControlStyle.SMALL; }
+  else if (controltype == 'large') { controltype = google.maps.NavigationControlStyle.ZOOM_PAN; }
+  else { controltype = false; }
 
     // map type
     if (maptype) {
@@ -233,6 +254,11 @@
       scaleControlOptions: {style: google.maps.ScaleControlStyle.DEFAULT}
     };
     map = new google.maps.Map(document.getElementById("getdirections_map_canvas"), mapOpts);
+
+    if (Drupal.settings.getdirections.trafficinfo) {
+      trafficInfo = new google.maps.TrafficLayer();
+      trafficInfo.setMap(map);
+    }
 
     // define some icons
     var icon1 = new google.maps.MarkerImage(
@@ -295,6 +321,11 @@
     dirrenderer = new google.maps.DirectionsRenderer();
     dirrenderer.setMap(map);
     dirrenderer.setPanel(document.getElementById("getdirections_directions"));
+
+    google.maps.event.addListener(dirrenderer, 'directions_changed', function() {
+      computeTotalDistance(dirrenderer.directions);
+    });
+
     dirservice = new google.maps.DirectionsService();
 
     if (fromlatlon && tolatlon) {
@@ -305,6 +336,17 @@
       setDirectionsvia(latlons);
     }
   } // end initialise
+
+  Drupal.toggleTraffic = function() {
+    if (traffictoggleState == 1) {
+      trafficInfo.setMap();
+      traffictoggleState = 0;
+    }
+    else {
+      trafficInfo.setMap(map);
+      traffictoggleState = 1;
+    }
+  }
 
   // gogogo
   Drupal.behaviors.getdirections = {
