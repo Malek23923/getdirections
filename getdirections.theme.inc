@@ -249,7 +249,6 @@ function theme_getdirections_direction_form($form) {
     $form['next']['#suffix'] = '</div>';
   }
 
-
   if (isset($form['submit'])) {
     $form['submit']['#prefix'] = '<div id="getdirections_btn">';
     $form['submit']['#suffix'] = '</div>';

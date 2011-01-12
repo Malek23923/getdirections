@@ -221,6 +221,7 @@ function getdirections_direction($direction='', $location='', $country='', $latl
     'keep_title' => 0,
     'show_distance' => 0,
     'trafficinfo' => 0,
+    'switchfromto' => 0,
   ));
   $lla = explode(',', $getdirections_defaults['latlong']);
   $getdirections_settings = array(
