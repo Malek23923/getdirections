@@ -348,6 +348,27 @@
     }
   }
 
+  Drupal.toggleFromto = function() {
+    var from = $("#edit-from").val();
+    var countryfrom = false;
+    if ($("#edit-country-from").val()) {
+      countryfrom = $("#edit-country-from").val();
+    }
+    var to = $("#edit-to").val();
+    var countryto = false;
+    if ($("#edit-country-to").val()) {
+      countryto = $("#edit-country-to").val();
+    }
+    $("#edit-from").val(to);
+    $("#edit-to").val(from);
+    if (countryfrom) {
+      $("#edit-country-to").val(countryfrom);
+    }
+    if (countryto) {
+      $("#edit-country-from").val(countryto);
+    }
+  }
+
   // gogogo
   Drupal.behaviors.getdirections = {
     attach: function() {

@@ -253,6 +253,19 @@ function theme_getdirections_direction_form($variables) {
     $desc = t('Fill in the form below.');
   }
 
+  if (isset($form['trafficinfo'])) {
+    $form['trafficinfo']['#prefix'] = '<div id="getdirections_trafficinfo">';
+    $form['trafficinfo']['#suffix'] = '</div>';
+  }
+  if (isset($form['switchfromto'])) {
+    $form['switchfromto']['#prefix'] = '<div id="getdirections_switchfromto">';
+    $form['switchfromto']['#suffix'] = '</div>';
+  }
+  if (isset($form['next'])) {
+    $form['next']['#prefix'] = '<div id="getdirections_nextbtn">';
+    $form['next']['#suffix'] = '</div>';
+  }
+
   if (isset($form['submit'])) {
     $form['submit']['#prefix'] = '<div id="getdirections_btn">';
     $form['submit']['#suffix'] = '</div>';

@@ -212,6 +212,7 @@ function getdirections_direction($direction='', $location='', $country='', $latl
     'keep_title' => 0,
     'show_distance' => 0,
     'trafficinfo' => 0,
+    'switchfromto' => 0,
   ));
   $lla = explode(',', $getdirections_defaults['latlong']);
   $getdirections_settings = array(
@@ -232,7 +233,8 @@ function getdirections_direction($direction='', $location='', $country='', $latl
     'waypoint_color' => $getdirections_defaults['waypoint_color'],
     'show_distance' => ($getdirections_misc['show_distance'] ? t('Total distance') : ''),
     'trafficinfo' => $getdirections_misc['trafficinfo'],
-  );
+     'switchfromto' => $getdirections_misc['switchfromto'],
+ );
   drupal_add_js(array('getdirections' => $getdirections_settings), 'setting');
   if (! $getdirections_misc['keep_title']) {
     drupal_set_title(t("Get Directions"));
@@ -271,6 +273,7 @@ function getdirections_locations($fromlocs, $fromlatlon, $tolocs, $tolatlon, $wi
     'keep_title' => 0,
     'show_distance' => 0,
     'trafficinfo' => 0,
+    'switchfromto' => 0,
   ));
   $lla = explode(',', $getdirections_defaults['latlong']);
   $getdirections_settings = array(
@@ -326,6 +329,7 @@ function getdirections_locations_via($locs, $latlons, $width='', $height='') {
     'keep_title' => 0,
     'show_distance' => 0,
     'trafficinfo' => 0,
+    'switchfromto' => 0,
   ));
   $lla = explode(',', $getdirections_defaults['latlong']);
   $getdirections_settings = array(
@@ -496,6 +500,7 @@ function getdirections_direction_form($form, &$form_state, $fromto='', $loc='', 
     'keep_title' => 0,
     'show_distance' => 0,
     'trafficinfo' => 0,
+    'switchfromto' => 0,
   ));
   if ($getdirections_misc['trafficinfo']) {
     $form['trafficinfo'] = array(
@@ -503,15 +508,22 @@ function getdirections_direction_form($form, &$form_state, $fromto='', $loc='', 
       '#value' => t('Toggle traffic info'),
       '#weight' => 8,
       '#attributes' => array( 'onClick' => 'Drupal.toggleTraffic(); return false;'),
-      '#prefix' => '<div id="getdirections_trafficinfo">',
-      '#suffix' => '</div>',
     );
   }
+  if ($getdirections_misc['switchfromto'] && ! $fromto && ! getdirections_is_advanced()) {
+    $form['switchfromto'] = array(
+      '#type' => 'button',
+      '#value' => t('Switch From/To'),
+      '#weight' => 9,
+      '#attributes' => array( 'onClick' => 'Drupal.toggleFromto(); return false;'),
+    );
+  }
+
   if (getdirections_is_advanced()) {
     $form['next'] = array(
       '#type' => 'button',
       '#value' => t('Next'),
-      '#weight' => 9,
+      '#weight' => 10,
       '#attributes' => array( 'onClick' => 'Drupal.nextbtn(); return false;'),
       '#prefix' => '<div id="getdirections_nextbtn">',
       '#suffix' => '</div>',
@@ -520,7 +532,7 @@ function getdirections_direction_form($form, &$form_state, $fromto='', $loc='', 
   $form['submit'] = array(
     '#type' => 'submit',
     '#value' => t('Get Directions'),
-    '#weight' => 10,
+    '#weight' => 12,
   );
   return $form;
 }
