@@ -3,22 +3,16 @@
 #getdirections_directions {
   width: 250px;
   padding: 2px;
-
 }
 
 #getdirections_map_canvas {
-
 }
-
 .getdirections {
   margin-top: 8px;
-
-
 }
 .getdirections-list {
   background: #FFFFFF;
 }
-
 .getdirections-map {
   padding: 2px;
   border: 1px solid #C0C0C0;
@@ -37,13 +31,16 @@ tbody, thead {
   border-top: 0;
   border-bottom: 0;
 }
+
 .getdirections_returnlink {
   margin-bottom: 8px;
 }
 #getdirections_trafficinfo {
   margin-bottom: 8px;
 }
-
+#getdirections_switchfromto {
+  margin-bottom: 8px;
+}
 #getdirections_show_distance {
   margin-top: 8px;
 }

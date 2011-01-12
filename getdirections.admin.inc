@@ -445,6 +445,7 @@ function getdirections_settings_form() {
     'keep_title' => 0,
     'show_distance' => 0,
     'trafficinfo' => 0,
+    'switchfromto' => 0,
   ));
   if (module_exists('location')) {
     $form['getdirections_misc']['keep_title'] = array(
@@ -471,6 +472,12 @@ function getdirections_settings_form() {
     '#type' => 'checkbox',
     '#title' => t('Enable Traffic information'),
     '#default_value' =>  $getdirections_misc['trafficinfo'],
+    '#return_value' => 1,
+  );
+  $form['getdirections_misc']['switchfromto'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Enable From/To Switch'),
+    '#default_value' =>  $getdirections_misc['switchfromto'],
     '#return_value' => 1,
   );
 

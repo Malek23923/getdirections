@@ -1,6 +1,10 @@
 // $Id$
 // $Name$
 
+Get Directions for D6 in D-6--2, 2011-01-12
+------------------------------------
+by hutch, added togglefromto
+
 Get Directions for D6 in D-6--2, 2010-12-28
 ------------------------------------
 by hutch, added trafficinfo
