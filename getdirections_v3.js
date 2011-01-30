@@ -100,10 +100,9 @@
 
   // from the form
   Drupal.mygetDirections = function() {
-//  function mygetDirections() {
 
     // collect form info from the DOM
-    var from = $("#edit-from").val();
+    var from = $("input[name=from]").val();
     if ($("#edit-country-from").val()) {
       from += ', ' + $("#edit-country-from").val();
     }
@@ -113,7 +112,7 @@
       from = new google.maps.LatLng(farr[0], farr[1]);
     }
 
-    var to = $("#edit-to").val();
+    var to = $("input[name=to]").val();
     if ($("#edit-country-to").val()) {
       to += ', ' + $("#edit-country-to").val();
     }
@@ -288,8 +287,8 @@
     var shape1 = {coord: [1,1,22,34], type: 'rect'};
 
     // any initial markers?
-    var from =  $("#edit-from").val();
-    var to =  $("#edit-to").val();
+    var from =  $("input[name=from]").val();
+    var to =  $("input[name=to]").val();
 
     if (from && from.match(llpatt)) {
       // we have lat,lon

@@ -9,7 +9,14 @@ files[] = getdirections.install
 files[] = getdirections.module
 files[] = getdirections.admin.inc
 files[] = getdirections.theme.inc
-;files[] = getdirections.views.default.inc
+files[] = getdirections.views.default.inc
 
 configure = admin/config/services/getdirections
+
+
+; Information added by drupal.org packaging script on 2011-01-13
+version = "7.x-2.x-dev"
+core = "7.x"
+project = "getdirections"
+datestamp = "1294877913"
 

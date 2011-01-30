@@ -11,8 +11,9 @@
 
 define('GETDIRECTIONS_PATH', drupal_get_path('module', 'getdirections'));
 // enable once gmap/location modules are working in D7
-define('GETDIRECTIONS_USE_GMAP', FALSE);
-define('GETDIRECTIONS_USE_LOCATION', FALSE);
+#define('GETDIRECTIONS_USE_GMAP', FALSE);
+define('GETDIRECTIONS_USE_GMAP', TRUE);
+define('GETDIRECTIONS_USE_LOCATION', TRUE);
 
 /**
  * Implement of hook_help().
@@ -225,16 +226,19 @@ function getdirections_direction($direction='', $location='', $country='', $latl
     'baselayers' => $getdirections_defaults['baselayers'],
     'scale' => $getdirections_defaults['behavior']['scale'],
     'overview' => $getdirections_defaults['behavior']['overview'],
-    'scrollwheel' => $getdirections_defaults['behavior']['scrollwheel'],
-    'draggable' => $getdirections_defaults['behavior']['draggable'],
-    'unitsystem' => $getdirections_defaults['unitsystem'],
     'mylocale' => $language->language,
     'waypoints' => intval($getdirections_defaults['waypoints']),
     'waypoint_color' => $getdirections_defaults['waypoint_color'],
     'show_distance' => ($getdirections_misc['show_distance'] ? t('Total distance') : ''),
     'trafficinfo' => $getdirections_misc['trafficinfo'],
-     'switchfromto' => $getdirections_misc['switchfromto'],
- );
+    'switchfromto' => $getdirections_misc['switchfromto'],
+  );
+  if (variable_get('getdirections_use_v3', 0)) {
+    $getdirections_settings['scrollwheel'] = $getdirections_defaults['behavior']['scrollwheel'];
+    $getdirections_settings['draggable'] = $getdirections_defaults['behavior']['draggable'];
+    $getdirections_settings['unitsystem'] = $getdirections_defaults['unitsystem'];
+  }
+
   drupal_add_js(array('getdirections' => $getdirections_settings), 'setting');
   if (! $getdirections_misc['keep_title']) {
     drupal_set_title(t("Get Directions"));
@@ -245,8 +249,8 @@ function getdirections_direction($direction='', $location='', $country='', $latl
   if (empty($height)) {
     $height = $getdirections_defaults['height'];
   }
-  $form = drupal_get_form('getdirections_direction_form', $direction, $location, $country, $latlon);
-  $form = render($form);
+  $form = render(drupal_get_form('getdirections_direction_form', $direction, $location, $country, $latlon));
+#  $form = render($form);
   return theme('getdirections_show', array('form' => $form, 'width' => $width, 'height' => $height, 'nid' => $id, 'type' => $type) );
 }
 
@@ -286,9 +290,6 @@ function getdirections_locations($fromlocs, $fromlatlon, $tolocs, $tolatlon, $wi
     'baselayers' => $getdirections_defaults['baselayers'],
     'scale' => $getdirections_defaults['behavior']['scale'],
     'overview' => $getdirections_defaults['behavior']['overview'],
-    'scrollwheel' => $getdirections_defaults['behavior']['scrollwheel'],
-    'draggable' => $getdirections_defaults['behavior']['draggable'],
-    'unitsystem' => $getdirections_defaults['unitsystem'],
     'fromlatlon' => $fromlatlon,
     'tolatlon' => $tolatlon,
     'mylocale' => $language->language,
@@ -297,6 +298,11 @@ function getdirections_locations($fromlocs, $fromlatlon, $tolocs, $tolatlon, $wi
     'show_distance' => ($getdirections_misc['show_distance'] ? t('Total distance') : ''),
     'trafficinfo' => $getdirections_misc['trafficinfo'],
   );
+  if (variable_get('getdirections_use_v3', 0)) {
+    $getdirections_settings['scrollwheel'] = $getdirections_defaults['behavior']['scrollwheel'];
+    $getdirections_settings['draggable'] = $getdirections_defaults['behavior']['draggable'];
+    $getdirections_settings['unitsystem'] = $getdirections_defaults['unitsystem'];
+  }
   drupal_add_js(array('getdirections' => $getdirections_settings), 'setting');
   if (! $getdirections_misc['keep_title']) {
     drupal_set_title(t("Get Directions"));
@@ -342,9 +348,6 @@ function getdirections_locations_via($locs, $latlons, $width='', $height='') {
     'baselayers' => $getdirections_defaults['baselayers'],
     'scale' => $getdirections_defaults['behavior']['scale'],
     'overview' => $getdirections_defaults['behavior']['overview'],
-    'scrollwheel' => $getdirections_defaults['behavior']['scrollwheel'],
-    'draggable' => $getdirections_defaults['behavior']['draggable'],
-    'unitsystem' => $getdirections_defaults['unitsystem'],
     'latlons' => implode('|', $latlons),
     'mylocale' => $language->language,
     'waypoints' => intval($getdirections_defaults['waypoints']),
@@ -352,6 +355,11 @@ function getdirections_locations_via($locs, $latlons, $width='', $height='') {
     'show_distance' => ($getdirections_misc['show_distance'] ? t('Total distance') : ''),
     'trafficinfo' => $getdirections_misc['trafficinfo'],
   );
+  if (variable_get('getdirections_use_v3', 0)) {
+    $getdirections_settings['scrollwheel'] = $getdirections_defaults['behavior']['scrollwheel'];
+    $getdirections_settings['draggable'] = $getdirections_defaults['behavior']['draggable'];
+    $getdirections_settings['unitsystem'] = $getdirections_defaults['unitsystem'];
+  }
   drupal_add_js(array('getdirections' => $getdirections_settings), 'setting');
   if (! $getdirections_misc['keep_title']) {
     drupal_set_title(t("Get Directions"));
@@ -421,7 +429,7 @@ function getdirections_direction_form($form, &$form_state, $fromto='', $loc='', 
     $form['mfrom'] = array(
       '#type' => 'item',
       '#title' => t('From'),
-      '#value' => $loc .', '. drupal_strtoupper($country),
+      '#markup' => $loc .', '. drupal_strtoupper($country),
     );
   }
   else {
@@ -449,7 +457,7 @@ function getdirections_direction_form($form, &$form_state, $fromto='', $loc='', 
     $form['mto'] = array(
       '#type' => 'item',
       '#title' => t('To'),
-      '#value' => $loc .', '. drupal_strtoupper($country),
+      '#markup' => $loc .', '. drupal_strtoupper($country),
     );
   }
   else {
@@ -525,8 +533,8 @@ function getdirections_direction_form($form, &$form_state, $fromto='', $loc='', 
       '#value' => t('Next'),
       '#weight' => 10,
       '#attributes' => array( 'onClick' => 'Drupal.nextbtn(); return false;'),
-      '#prefix' => '<div id="getdirections_nextbtn">',
-      '#suffix' => '</div>',
+#      '#prefix' => '<div id="getdirections_nextbtn">',
+#      '#suffix' => '</div>',
     );
   }
   $form['submit'] = array(
@@ -534,6 +542,7 @@ function getdirections_direction_form($form, &$form_state, $fromto='', $loc='', 
     '#value' => t('Get Directions'),
     '#weight' => 12,
   );
+  $form['#theme'] = 'getdirections_direction_form';
   return $form;
 }
 
@@ -653,7 +662,9 @@ function getdirections_defaults() {
 function getdirections_setlocation($direction, $nid, $width='', $height='') {
   if (GETDIRECTIONS_USE_LOCATION && module_exists('location')) {
     $vid = getdirections_get_vid($nid);
+
     $location = location_load_locations($vid);
+
     if (count($location)) {
       $country = $location[0]['country'];
       $latlon = $location[0]['latitude'] .','. $location[0]['longitude'];
@@ -1018,9 +1029,9 @@ function getdirections_setup_map($defaults) {
 /**
  * Implementation of hook_views_api().
  */
-#function getdirections_views_api() {
-#  return array('api' => 2);
-#}
+function getdirections_views_api() {
+  return array('api' => 2);
+}
 
 /**
  * Function to collect an address
@@ -1031,6 +1042,7 @@ function getdirections_setup_map($defaults) {
  *   Returns array.
  */
 function _getdirections_loadaddress($location) {
+
     if (isset($location['name']) && $location['name']) {
       $loc[] = $location['name'];
     }
@@ -1049,6 +1061,7 @@ function _getdirections_loadaddress($location) {
     if (isset($location['postal_code']) && $location['postal_code']) {
       $loc[] = $location['postal_code'];
     }
+
     return $loc;
 }
 
@@ -1061,8 +1074,10 @@ function _getdirections_loadaddress($location) {
  *   Returns status.
  */
 function getdirections_user_check($uid) {
-  $result = db_query('SELECT status FROM {users} WHERE uid=%d', array($uid));
-  $row = db_fetch_array($result);
+  $query = db_select('users', 'u');
+  $query->fields('u', array('status'));
+  $query->condition('u.uid', $uid);
+  $row = $query->execute()->fetchAssoc();
   return (isset($row['status']) && $row['status'] ? TRUE : FALSE);
 }
 
@@ -1075,8 +1090,10 @@ function getdirections_user_check($uid) {
  *   Returns vid.
  */
 function getdirections_get_vid($nid) {
-  $result = db_query('SELECT vid FROM {node} WHERE nid=%d', array($nid));
-  $row = db_fetch_array($result);
+  $query = db_select('node', 'n');
+  $query->fields('n', array('vid'));
+  $query->condition('n.nid', $nid);
+  $row = $query->execute()->fetchAssoc();
   return (isset($row['vid']) && $row['vid'] ? $row['vid'] : FALSE);
 }
 

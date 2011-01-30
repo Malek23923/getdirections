@@ -125,11 +125,11 @@
 
   Drupal.mygetDirections = function() {
     // collect form info from the DOM
-    var from = $("#edit-from").val();
+    var from = $("input[name=from]").val();
     if ($("#edit-country-from").val()) {
       from += ', ' + $("#edit-country-from").val();
     }
-    var to = $("#edit-to").val();
+    var to = $("input[name=to]").val();
     if ($("#edit-country-to").val()) {
       to += ', ' + $("#edit-country-to").val();
     }

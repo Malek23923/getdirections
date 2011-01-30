@@ -110,7 +110,7 @@
       var e;
       var point;
       if (! todone) {
-        e = $("#edit-to").val();
+        e = $("input[name=to]").val();
         if (e && e.match(llpatt)) {
           arr = e.split(",");
           point = new GLatLng(arr[0], arr[1]);
@@ -122,7 +122,7 @@
       }
 
       if (! fromdone) {
-        e = $("#edit-from").val();
+        e = $("input[name=from]").val();
         if (e && e.match(llpatt)) {
           arr = e.split(",");
           point = new GLatLng(arr[0], arr[1]);
@@ -234,14 +234,14 @@
     function showAddress() {
       var s;
       if (state == 0) {
-        s = $("#edit-from").val();
+        s = $("input[name=from]").val();
         if ($("#edit-country-from").val()) {
           s += ', ' + $("#edit-country-from").val();
         }
         addresses[startpoint] = s;
       }
       if (state == 1) {
-        s = $("#edit-to").val();
+        s = $("input[name=to]").val();
         if ($("#edit-country-to").val()) {
           s += ', ' + $("#edit-country-to").val();
         }
@@ -404,10 +404,10 @@
     }
 
     // minding textfields
-    $("#edit-from").change( function() {
+    $("input[name=from]").change( function() {
       showAddress();
     });
-    $("#edit-to").change( function() {
+    $("input[name=to]").change( function() {
       showAddress();
     });
 
