@@ -39,6 +39,7 @@ function getdirections_settings_form() {
       '#disabled' => ($gmap_key ? TRUE : FALSE),
       '#default_value' => (variable_get('getdirections_api_key', '') ? variable_get('getdirections_api_key', '') : $gmap_key),
       '#description' => t('Required for version 2 of the Googlemaps API.'),
+      '#size' => 92,
       '#required' => ($gmap_key ? FALSE : TRUE),
     );
   }
@@ -247,6 +248,13 @@ function getdirections_settings_form() {
   );
 
   if (! variable_get('getdirections_use_v3', 0)) {
+    $form['getdirections_default']['behavior']['googlebar'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Show Googlebar'),
+      '#description' => t('Enable Googlebar search on map.'),
+      '#default_value' =>  $getdirections_defaults['behavior']['googlebar'],
+      '#return_value' => 1,
+    );
     $form['getdirections_default']['behavior']['overview'] = array(
       '#type' => 'checkbox',
       '#title' => t('Overview map'),
@@ -285,7 +293,6 @@ function getdirections_settings_form() {
       '#return_value' => 1,
     );
   }
-
   $form['getdirections_default']['from_width'] = array(
     '#type' => 'textfield',
     '#title' => t('Width of From box'),

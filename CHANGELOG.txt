@@ -1,6 +1,10 @@
 // $Id$
 // $Name$
 
+Get Directions for D6 in D-6--2, 2011-01-31
+------------------------------------
+by hutch, added googlebar
+
 Get Directions for D6 in D-6--2, 2011-01-12
 ------------------------------------
 by hutch, added togglefromto

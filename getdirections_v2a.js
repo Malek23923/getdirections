@@ -273,6 +273,7 @@ function initialize() {
   var mtc = Drupal.settings.getdirections.mtc;
   var scale = Drupal.settings.getdirections.scale;
   var overview = Drupal.settings.getdirections.overview;
+  var googlebar = Drupal.settings.getdirections.googlebar;
   var maptype = (Drupal.settings.getdirections.maptype ? Drupal.settings.getdirections.maptype : '');
   var baselayers = (Drupal.settings.getdirections.baselayers ? Drupal.settings.getdirections.baselayers : '');
 
@@ -296,8 +297,17 @@ function initialize() {
     active[endpoint] = true;
   }
 
+  var mapOptions = {};
+  if (googlebar) {
+    mapOptions = {
+      googleBarOptions : {
+        style : "new",
+      }
+    }
+  }
+
   // make map
-  map = new GMap2(document.getElementById("getdirections_map_canvas"));
+  map = new GMap2(document.getElementById("getdirections_map_canvas"), mapOptions);
 
   // menu type
   if (mtc == 'standard') { map.addControl(new GMapTypeControl()); }
@@ -324,6 +334,10 @@ function initialize() {
 
   latlng = new GLatLng(lat, lng);
   map.setCenter(latlng, parseInt(zoom));
+
+  if (googlebar) {
+    map.enableGoogleBar();
+  }
 
   if (Drupal.settings.getdirections.trafficinfo) {
     var trafficOptions = {incidents:true};
