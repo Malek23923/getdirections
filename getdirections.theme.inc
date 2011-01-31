@@ -233,7 +233,6 @@ function theme_getdirections_direction_form($variables) {
     if (isset($form['from']) && $form['from']['#type'] == 'textfield' ) {
       $form['from']['#suffix'] = '</div><!-- /from -->';
     }
-
     if (isset($form['country_to'])) {
       $form['country_to']['#prefix'] = '<!-- to --><div id="getdirections_end"><div class="container-inline getdirections_display">';
       $form['country_to']['#suffix'] = '</div>';
@@ -271,10 +270,8 @@ function theme_getdirections_direction_form($variables) {
     $form['submit']['#prefix'] = '<div id="getdirections_btn">';
     $form['submit']['#suffix'] = '</div>';
   }
-#dd($form);
   $output = '<p class="description">'. $desc .'</p><!-- end theme -->';
   $output .= drupal_render_children($form);
-
   return $output;
 }
 

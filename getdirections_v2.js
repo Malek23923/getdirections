@@ -57,6 +57,7 @@
     var mtc = Drupal.settings.getdirections.mtc;
     var scale = Drupal.settings.getdirections.scale;
     var overview = Drupal.settings.getdirections.overview;
+    var googlebar = Drupal.settings.getdirections.googlebar;
     var maptype = (Drupal.settings.getdirections.maptype ? Drupal.settings.getdirections.maptype : '');
     var baselayers = (Drupal.settings.getdirections.baselayers ? Drupal.settings.getdirections.baselayers : '');
 
@@ -66,7 +67,16 @@
     // pipe delim
     var latlons = (Drupal.settings.getdirections.latlons ? Drupal.settings.getdirections.latlons : '');
 
-    map = new GMap2(document.getElementById("getdirections_map_canvas"));
+    var mapOptions = {};
+    if (googlebar) {
+      mapOptions = {
+        googleBarOptions : {
+          style : "new",
+        }
+      }
+    }
+
+    map = new GMap2(document.getElementById("getdirections_map_canvas"), mapOptions);
 
     // menu type
     if (mtc == 'standard') { map.addControl(new GMapTypeControl()); }
@@ -93,6 +103,10 @@
 
     latlng = new GLatLng(lat, lng);
     map.setCenter(latlng, parseInt(zoom));
+
+    if (googlebar) {
+      map.enableGoogleBar();
+    }
 
     if (Drupal.settings.getdirections.trafficinfo) {
       var trafficOptions = {incidents:true};

@@ -1,6 +1,10 @@
 // $Id$
 // $Name$
 
+Get Directions for D7 in D-7--2, 2011-01-31
+------------------------------------
+by hutch, added googlebar
+
 Get Directions for D7 in D-7--2, 2011-01-30
 ------------------------------------
 by hutch, enabled gmap and location modules

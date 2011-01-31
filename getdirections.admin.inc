@@ -248,6 +248,13 @@ function getdirections_settings_form() {
   );
 
   if (! variable_get('getdirections_use_v3', 0)) {
+    $form['getdirections_default']['behavior']['googlebar'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Show Googlebar'),
+      '#description' => t('Enable Googlebar search on map.'),
+      '#default_value' =>  $getdirections_defaults['behavior']['googlebar'],
+      '#return_value' => 1,
+    );
     $form['getdirections_default']['behavior']['overview'] = array(
       '#type' => 'checkbox',
       '#title' => t('Overview map'),
