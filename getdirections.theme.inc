@@ -78,9 +78,13 @@ function theme_getdirections_show($variables) {
     'keep_title' => 0,
     'show_distance' => 0,
     'trafficinfo' => 0,
+    'show_duration' => 0,
   ));
   if ($getdirections_misc['show_distance']) {
     $output .= '<div id="getdirections_show_distance"></div>';
+  }
+  if ($getdirections_misc['show_duration']) {
+    $output .= '<div id="getdirections_show_duration"></div>';
   }
   $header = array();
   $rows[] = array(
@@ -126,10 +130,13 @@ function theme_getdirections_show_locations($variables) {
     'keep_title' => 0,
     'show_distance' => 0,
     'trafficinfo' => 0,
-
+    'show_duration' => 0,
   ));
   if ($getdirections_misc['show_distance']) {
     $output .= '<div id="getdirections_show_distance"></div>';
+  }
+  if ($getdirections_misc['show_duration']) {
+    $output .= '<div id="getdirections_show_duration"></div>';
   }
   $header = array();
 
@@ -177,9 +184,13 @@ function theme_getdirections_show_locations_via($variables) {
     'keep_title' => 0,
     'show_distance' => 0,
     'trafficinfo' => 0,
+    'show_duration' => 0,
   ));
   if ($getdirections_misc['show_distance']) {
     $output .= '<div id="getdirections_show_distance"></div>';
+  }
+  if ($getdirections_misc['show_duration']) {
+    $output .= '<div id="getdirections_show_duration"></div>';
   }
   $header = array();
 

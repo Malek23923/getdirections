@@ -43,6 +43,9 @@
     if (Drupal.settings.getdirections.show_distance) {
       $("#getdirections_show_distance").html(Drupal.settings.getdirections.show_distance + ': ' + gdir.getDistance().html);
     }
+    if (Drupal.settings.getdirections.show_duration) {
+      $("#getdirections_show_duration").html(Drupal.settings.getdirections.show_duration + ': ' + gdir.getDuration().html);
+    }
   }
 
   function initialize() {
