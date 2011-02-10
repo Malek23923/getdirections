@@ -453,6 +453,7 @@ function getdirections_settings_form() {
     'show_distance' => 0,
     'trafficinfo' => 0,
     'switchfromto' => 0,
+    'show_duration' => 0,
   ));
   if (module_exists('location')) {
     $form['getdirections_misc']['keep_title'] = array(
@@ -473,6 +474,12 @@ function getdirections_settings_form() {
     '#type' => 'checkbox',
     '#title' => t('Show total distance'),
     '#default_value' =>  $getdirections_misc['show_distance'],
+    '#return_value' => 1,
+  );
+  $form['getdirections_misc']['show_duration'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Show total duration'),
+    '#default_value' =>  $getdirections_misc['show_duration'],
     '#return_value' => 1,
   );
   $form['getdirections_misc']['trafficinfo'] = array(

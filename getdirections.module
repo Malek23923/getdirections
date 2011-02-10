@@ -222,6 +222,7 @@ function getdirections_direction($direction='', $location='', $country='', $latl
     'show_distance' => 0,
     'trafficinfo' => 0,
     'switchfromto' => 0,
+    'show_duration' => 0,
   ));
   $lla = explode(',', $getdirections_defaults['latlong']);
   $getdirections_settings = array(
@@ -241,6 +242,7 @@ function getdirections_direction($direction='', $location='', $country='', $latl
     'show_distance' => ($getdirections_misc['show_distance'] ? t('Total distance') : ''),
     'trafficinfo' => $getdirections_misc['trafficinfo'],
     'switchfromto' => $getdirections_misc['switchfromto'],
+    'show_duration' => ($getdirections_misc['show_duration'] ? t('Total duration') : ''),
   );
   if (variable_get('getdirections_use_v3', 0)) {
     $getdirections_settings['scrollwheel'] = $getdirections_defaults['behavior']['scrollwheel'];
@@ -286,6 +288,7 @@ function getdirections_locations($fromlocs, $fromlatlon, $tolocs, $tolatlon, $wi
     'show_distance' => 0,
     'trafficinfo' => 0,
     'switchfromto' => 0,
+    'show_duration' => 0,
   ));
   $lla = explode(',', $getdirections_defaults['latlong']);
   $getdirections_settings = array(
@@ -306,6 +309,7 @@ function getdirections_locations($fromlocs, $fromlatlon, $tolocs, $tolatlon, $wi
     'waypoint_color' => $getdirections_defaults['waypoint_color'],
     'show_distance' => ($getdirections_misc['show_distance'] ? t('Total distance') : ''),
     'trafficinfo' => $getdirections_misc['trafficinfo'],
+    'show_duration' => ($getdirections_misc['show_duration'] ? t('Total duration') : ''),
   );
   if (variable_get('getdirections_use_v3', 0)) {
     $getdirections_settings['scrollwheel'] = $getdirections_defaults['behavior']['scrollwheel'];
@@ -344,6 +348,7 @@ function getdirections_locations_via($locs, $latlons, $width='', $height='') {
     'show_distance' => 0,
     'trafficinfo' => 0,
     'switchfromto' => 0,
+    'show_duration' => 0,
   ));
   $lla = explode(',', $getdirections_defaults['latlong']);
   $getdirections_settings = array(
@@ -363,6 +368,7 @@ function getdirections_locations_via($locs, $latlons, $width='', $height='') {
     'waypoint_color' => $getdirections_defaults['waypoint_color'],
     'show_distance' => ($getdirections_misc['show_distance'] ? t('Total distance') : ''),
     'trafficinfo' => $getdirections_misc['trafficinfo'],
+    'show_duration' => ($getdirections_misc['show_duration'] ? t('Total duration') : ''),
   );
   if (variable_get('getdirections_use_v3', 0)) {
     $getdirections_settings['scrollwheel'] = $getdirections_defaults['behavior']['scrollwheel'];

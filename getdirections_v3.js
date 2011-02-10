@@ -179,23 +179,59 @@ function setDirectionsfromto(fromlatlon, tolatlon) {
   renderdirections(request);
 }
 
-// Total distance
-function computeTotalDistance(result) {
+// Total distance and duration
+function computeTotals(result) {
   var meters = 0;
+  var seconds = 0;
   var myroute = result.routes[0];
   for (i = 0; i < myroute.legs.length; i++) {
     meters += myroute.legs[i].distance.value;
+    seconds += myroute.legs[i].duration.value;
   }
-  distance = meters * 0.001;
-  if (unitsys == 'imperial') {
-    distance = distance * 0.6214;
-    distance = distance.toFixed(2) + ' mi';
-  }
-  else {
-    distance = distance.toFixed(2) + ' km';
-  }
+
   if (Drupal.settings.getdirections.show_distance) {
+    distance = meters * 0.001;
+    if (unitsys == 'imperial') {
+      distance = distance * 0.6214;
+      distance = distance.toFixed(2) + ' mi';
+    }
+    else {
+      distance = distance.toFixed(2) + ' km';
+    }
     $("#getdirections_show_distance").html(Drupal.settings.getdirections.show_distance + ': ' + distance);
+  }
+
+  if (Drupal.settings.getdirections.show_duration) {
+    mins = seconds * 0.016666667;
+    minutes = mins.toFixed(0);
+    // hours
+    hours = 0;
+    while (minutes >= 60 ) {
+      minutes = minutes - 60;
+      hours++;
+    }
+    // days
+    days = 0;
+    while (hours >= 24) {
+      hours = hours - 24
+      days++;
+    }
+    duration = '';
+    if (days > 0) {
+      duration += Drupal.formatPlural(days, '1 day', '@count days') + ' ';
+    }
+    if (hours > 0) {
+      //duration += hours + ' ' + (hours > 1 ? 'hours' : 'hour') + ' ';
+      duration += Drupal.formatPlural(hours, '1 hour', '@count hours') + ' ';
+    }
+    if (minutes > 0) {
+      //duration += minutes + ' ' + (minutes > 1 ? 'minutes' : 'minute');
+      duration += Drupal.formatPlural(minutes, '1 minute', '@count minutes');
+    }
+    if (seconds < 60) {
+      duration = Drupal.t('About 1 minute');
+    }
+    $("#getdirections_show_duration").html(Drupal.settings.getdirections.show_duration + ': ' + duration );
   }
 }
 
@@ -320,9 +356,11 @@ function initialize() {
   dirrenderer.setMap(map);
   dirrenderer.setPanel(document.getElementById("getdirections_directions"));
 
-  google.maps.event.addListener(dirrenderer, 'directions_changed', function() {
-    computeTotalDistance(dirrenderer.directions);
-  });
+  if (Drupal.settings.getdirections.show_distance || Drupal.settings.getdirections.show_duration) {
+    google.maps.event.addListener(dirrenderer, 'directions_changed', function() {
+      computeTotals(dirrenderer.directions);
+    });
+  }
 
   dirservice = new google.maps.DirectionsService();
 
