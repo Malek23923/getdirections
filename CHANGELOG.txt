@@ -1,6 +1,10 @@
 // $Id$
 // $Name$
 
+Get Directions for D7 in D-7--2, 2011-02-21
+------------------------------------
+by hutch, fixed api key validation bug
+
 Get Directions for D7 in D-7--2, 2011-02-10
 ------------------------------------
 by hutch, added show duration feature
