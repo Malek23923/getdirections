@@ -40,7 +40,6 @@ function getdirections_settings_form() {
       '#default_value' => (variable_get('getdirections_api_key', '') ? variable_get('getdirections_api_key', '') : $gmap_key),
       '#description' => t('Required for version 2 of the Googlemaps API.'),
       '#size' => 92,
-      '#required' => ($gmap_key ? FALSE : TRUE),
     );
   }
 
@@ -519,6 +518,10 @@ function getdirections_settings_validate($form, &$form_state) {
       form_set_error('getdirections_returnlink][user_link', t('Text of return link cannot be empty'));
     }
     $form_state['values']['getdirections_returnlink']['user_link'] = check_plain($form_state['values']['getdirections_returnlink']['user_link']);
+  }
+
+  if (! variable_get('getdirections_use_v3', 0) && ! $form_state['values']['getdirections_use_v3'] && empty($form_state['values']['getdirections_api_key'])) {
+    form_set_error('getdirections_api_key', t('API key is required for version 2 of the Googlemaps API'));
   }
 }
 
