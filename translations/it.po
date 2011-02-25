@@ -1,4 +1,3 @@
-# $Id$
 #
 # Traduzione italiana di Enzo De Simone (hopfrog)
 # Copyright 2010 <info@hopfrog.it>
