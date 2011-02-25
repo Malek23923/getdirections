@@ -1,4 +1,3 @@
-// $Id$
 // $Name$
 
 Get Directions for D6 in D-6--1, 2010-04-22
