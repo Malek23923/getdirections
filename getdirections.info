@@ -1,4 +1,3 @@
-; $Name$
 name = Get Directions
 description = "Fetches Google map directions."
 package = Other

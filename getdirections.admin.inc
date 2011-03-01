@@ -1,5 +1,4 @@
 <?php
-// $Name$
 
 // optionally using version 3 googlemaps API
 
