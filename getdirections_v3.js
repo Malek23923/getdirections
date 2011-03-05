@@ -1,4 +1,3 @@
-// $Name$
 
 /**
  * @file
@@ -23,6 +22,7 @@
   var frommarker;
   var trafficInfo;
   var traffictoggleState = 1;
+  var bicycletoggleState = 1;
 
   // error codes
   function getdirectionserrcode(errcode) {
@@ -293,6 +293,10 @@
       trafficInfo = new google.maps.TrafficLayer();
       trafficInfo.setMap(map);
     }
+    if (Drupal.settings.getdirections.bicycleinfo) {
+      bicycleInfo = new google.maps.BicyclingLayer();
+      bicycleInfo.setMap(map);
+    }
 
     // define some icons
     var icon1 = new google.maps.MarkerImage(
@@ -381,6 +385,17 @@
     else {
       trafficInfo.setMap(map);
       traffictoggleState = 1;
+    }
+  }
+
+  Drupal.toggleBicycle = function() {
+    if (bicycletoggleState == 1) {
+      bicycleInfo.setMap();
+      bicycletoggleState = 0;
+    }
+    else {
+      bicycleInfo.setMap(map);
+      bicycletoggleState = 1;
     }
   }
 

@@ -1,5 +1,4 @@
 <?php
-// $Name$
 
 /**
  * @file getdirections_box.tpl.php
