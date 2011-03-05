@@ -16,6 +16,7 @@ var map;
 var distance = '';
 var trafficInfo;
 var traffictoggleState = 1;
+var bicycletoggleState = 1;
 
 var path = [];
 var active = [];
@@ -564,6 +565,10 @@ function initialize() {
     trafficInfo = new google.maps.TrafficLayer();
     trafficInfo.setMap(map);
   }
+  if (Drupal.settings.getdirections.bicycleinfo) {
+    bicycleInfo = new google.maps.BicyclingLayer();
+    bicycleInfo.setMap(map);
+  }
 
   google.maps.event.addListener(map, 'click', function(event) {
     if (event.latLng) {
@@ -703,6 +708,17 @@ function toggleTraffic() {
   else {
     trafficInfo.setMap(map);
     traffictoggleState = 1;
+  }
+}
+
+function toggleBicycle() {
+  if (bicycletoggleState == 1) {
+    bicycleInfo.setMap();
+    bicycletoggleState = 0;
+  }
+  else {
+    bicycleInfo.setMap(map);
+    bicycletoggleState = 1;
   }
 }
 

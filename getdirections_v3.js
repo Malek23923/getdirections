@@ -21,6 +21,7 @@ var tomarker;
 var frommarker;
 var trafficInfo;
 var traffictoggleState = 1;
+var bicycletoggleState = 1;
 
 // error codes
 function getdirectionserrcode(errcode) {
@@ -291,6 +292,10 @@ function initialize() {
     trafficInfo = new google.maps.TrafficLayer();
     trafficInfo.setMap(map);
   }
+  if (Drupal.settings.getdirections.bicycleinfo) {
+    bicycleInfo = new google.maps.BicyclingLayer();
+    bicycleInfo.setMap(map);
+  }
 
   // define some icons
   var icon1 = new google.maps.MarkerImage(
@@ -381,6 +386,18 @@ function toggleTraffic() {
     traffictoggleState = 1;
   }
 }
+
+function toggleBicycle() {
+  if (bicycletoggleState == 1) {
+    bicycleInfo.setMap();
+    bicycletoggleState = 0;
+  }
+  else {
+    bicycleInfo.setMap(map);
+    bicycletoggleState = 1;
+  }
+}
+
 function toggleFromto() {
 
   var from = $("#edit-from").val();

@@ -219,6 +219,7 @@ function getdirections_direction($direction='', $location='', $country='', $latl
     'keep_title' => 0,
     'show_distance' => 0,
     'trafficinfo' => 0,
+    'bicycleinfo' => 0,
     'switchfromto' => 0,
     'show_duration' => 0,
   ));
@@ -239,6 +240,7 @@ function getdirections_direction($direction='', $location='', $country='', $latl
     'waypoint_color' => $getdirections_defaults['waypoint_color'],
     'show_distance' => ($getdirections_misc['show_distance'] ? t('Total distance') : ''),
     'trafficinfo' => $getdirections_misc['trafficinfo'],
+    'bicycleinfo' => $getdirections_misc['bicycleinfo'],
     'switchfromto' => $getdirections_misc['switchfromto'],
     'show_duration' => ($getdirections_misc['show_duration'] ? t('Total duration') : ''),
   );
@@ -285,6 +287,7 @@ function getdirections_locations($fromlocs, $fromlatlon, $tolocs, $tolatlon, $wi
     'keep_title' => 0,
     'show_distance' => 0,
     'trafficinfo' => 0,
+    'bicycleinfo' => 0,
     'switchfromto' => 0,
     'show_duration' => 0,
   ));
@@ -307,6 +310,7 @@ function getdirections_locations($fromlocs, $fromlatlon, $tolocs, $tolatlon, $wi
     'waypoint_color' => $getdirections_defaults['waypoint_color'],
     'show_distance' => ($getdirections_misc['show_distance'] ? t('Total distance') : ''),
     'trafficinfo' => $getdirections_misc['trafficinfo'],
+    'bicycleinfo' => $getdirections_misc['bicycleinfo'],
     'show_duration' => ($getdirections_misc['show_duration'] ? t('Total duration') : ''),
   );
   if (variable_get('getdirections_use_v3', 0)) {
@@ -345,6 +349,7 @@ function getdirections_locations_via($locs, $latlons, $width='', $height='') {
     'keep_title' => 0,
     'show_distance' => 0,
     'trafficinfo' => 0,
+    'bicycleinfo' => 0,
     'switchfromto' => 0,
     'show_duration' => 0,
   ));
@@ -366,6 +371,7 @@ function getdirections_locations_via($locs, $latlons, $width='', $height='') {
     'waypoint_color' => $getdirections_defaults['waypoint_color'],
     'show_distance' => ($getdirections_misc['show_distance'] ? t('Total distance') : ''),
     'trafficinfo' => $getdirections_misc['trafficinfo'],
+    'bicycleinfo' => $getdirections_misc['bicycleinfo'],
     'show_duration' => ($getdirections_misc['show_duration'] ? t('Total duration') : ''),
   );
   if (variable_get('getdirections_use_v3', 0)) {
@@ -543,6 +549,7 @@ function getdirections_direction_form($form_state, $fromto='', $loc='', $country
     'keep_title' => 0,
     'show_distance' => 0,
     'trafficinfo' => 0,
+    'bicycleinfo' => 0,
     'switchfromto' => 0,
   ));
   if ($getdirections_misc['trafficinfo']) {
@@ -553,6 +560,17 @@ function getdirections_direction_form($form_state, $fromto='', $loc='', $country
       '#attributes' => array( 'onClick' => 'toggleTraffic(); return false;'),
     );
   }
+  if (variable_get('getdirections_use_v3', 0)) {
+    if ($getdirections_misc['bicycleinfo']) {
+      $form['bicycleinfo'] = array(
+        '#type' => 'button',
+        '#value' => t('Toggle bicycling info'),
+        '#weight' => 8,
+        '#attributes' => array( 'onClick' => 'toggleBicycle(); return false;'),
+      );
+    }
+  }
+
   if ($getdirections_misc['switchfromto'] && ! $fromto && ! getdirections_is_advanced()) {
     $form['switchfromto'] = array(
       '#type' => 'button',
@@ -604,6 +622,7 @@ function getdirections_defaults() {
         'scrollwheel' => 0,
         'draggable' => 1,
         'overview' => 0,
+        'googlebar' => 0,
       ),
       'unitsystem' => 'metric',
       'from_width' => 20,

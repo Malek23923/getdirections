@@ -449,6 +449,7 @@ function getdirections_settings_form() {
     'keep_title' => 0,
     'show_distance' => 0,
     'trafficinfo' => 0,
+    'bicycleinfo' => 0,
     'switchfromto' => 0,
     'show_duration' => 0,
   ));
@@ -485,6 +486,14 @@ function getdirections_settings_form() {
     '#default_value' =>  $getdirections_misc['trafficinfo'],
     '#return_value' => 1,
   );
+  if (variable_get('getdirections_use_v3', 0)) {
+    $form['getdirections_misc']['bicycleinfo'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Enable Bicycling information'),
+      '#default_value' =>  $getdirections_misc['bicycleinfo'],
+      '#return_value' => 1,
+    );
+  }
   $form['getdirections_misc']['switchfromto'] = array(
     '#type' => 'checkbox',
     '#title' => t('Enable From/To Switch'),
