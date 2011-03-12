@@ -346,8 +346,19 @@ function getdirections_settings_form() {
       'white' => t('White'),
       'yellow' => t('Yellow'),
     ),
-    '#suffix' => '</div>',
+    '#suffix' => (! variable_get('getdirections_use_v3', 0) ? '</div>' : ''),
   );
+
+  if (variable_get('getdirections_use_v3', 0)) {
+    $form['getdirections_default']['advanced_alternate'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Use draggable route'),
+      '#description' => t('An alternative to waypoints.'),
+      '#default_value' => ($getdirections_defaults['advanced_alternate'] ? $getdirections_defaults['advanced_alternate'] : 0),
+      '#return_value' => 1,
+      '#suffix' => '</div>',
+    );
+  }
 
   if (module_exists('location')) {
     // return link
@@ -445,14 +456,7 @@ function getdirections_settings_form() {
     // This will store all the defaults in one variable.
     '#tree' => TRUE,
   );
-  $getdirections_misc = variable_get('getdirections_misc', array(
-    'keep_title' => 0,
-    'show_distance' => 0,
-    'trafficinfo' => 0,
-    'bicycleinfo' => 0,
-    'switchfromto' => 0,
-    'show_duration' => 0,
-  ));
+  $getdirections_misc = getdirections_misc_defaults();
   if (module_exists('location')) {
     $form['getdirections_misc']['keep_title'] = array(
       '#type' => 'checkbox',
@@ -484,6 +488,7 @@ function getdirections_settings_form() {
     '#type' => 'checkbox',
     '#title' => t('Enable Traffic information'),
     '#default_value' =>  $getdirections_misc['trafficinfo'],
+    '#description' => t('Google trafficinfo layer, limited availability.'),
     '#return_value' => 1,
   );
   if (variable_get('getdirections_use_v3', 0)) {
@@ -491,15 +496,21 @@ function getdirections_settings_form() {
       '#type' => 'checkbox',
       '#title' => t('Enable Bicycling information'),
       '#default_value' =>  $getdirections_misc['bicycleinfo'],
+      '#description' => t('Google bicycling layer, limited availability.'),
       '#return_value' => 1,
     );
   }
-  $form['getdirections_misc']['switchfromto'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Enable From/To Switch'),
-    '#default_value' =>  $getdirections_misc['switchfromto'],
-    '#return_value' => 1,
-  );
+  if(! $getdirections_defaults['use_advanced']) {
+    $form['getdirections_misc']['switchfromto'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Enable From/To Switch'),
+      '#default_value' =>  $getdirections_misc['switchfromto'],
+      '#return_value' => 1,
+    );
+  }
+  else {
+    $form['getdirections_misc']['switchfromto'] = array('#type' => 'value', '#value' => $getdirections_misc['switchfromto']);
+  }
 
   $form['#validate'][] = 'getdirections_settings_validate';
 

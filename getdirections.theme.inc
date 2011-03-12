@@ -67,12 +67,9 @@ function theme_getdirections_show($form, $width, $height, $nid, $type) {
   }
   $output .= $form;
 
-  $getdirections_misc = variable_get('getdirections_misc', array(
-    'keep_title' => 0,
-    'show_distance' => 0,
-    'trafficinfo' => 0,
-    'show_duration' => 0,
-  ));
+  $getdirections_defaults = getdirections_defaults();
+  $getdirections_misc = getdirections_misc_defaults();
+
   if ($getdirections_misc['show_distance']) {
     $output .= '<div id="getdirections_show_distance"></div>';
   }
@@ -88,7 +85,7 @@ function theme_getdirections_show($form, $width, $height, $nid, $type) {
       'class' => 'getdirections-map',
     ),
     array(
-      'data' => '<div id="getdirections_directions"></div>',
+      'data' => ($getdirections_defaults['advanced_alternate'] ? '<button id="getdirections-undo" onclick="getdirectionsundo()">' . t('Undo') . '</button>' : '') .'<div id="getdirections_directions"></div>',
       'valign' => 'top' ,
       'align' => 'left',
       'class' => 'getdirections-list',
@@ -97,9 +94,11 @@ function theme_getdirections_show($form, $width, $height, $nid, $type) {
   $output .= '<div class="getdirections">'. theme('table', $header, $rows) .'</div>';
   $help = '';
   if (getdirections_is_advanced()) {
-    $getdirections_defaults = getdirections_defaults();
-    if ($getdirections_defaults['waypoints'] > 0) {
-      $help = 'Drag <img src="http://labs.google.com/ridefinder/images/mm_20_'. $getdirections_defaults['waypoint_color'] .'.png"> to activate a waypoint';
+    if ($getdirections_defaults['waypoints'] > 0 && ! $getdirections_defaults['advanced_alternate'] ) {
+      $help = t('Drag <img src="http://labs.google.com/ridefinder/images/mm_20_!c.png"> to activate a waypoint', array('!c' => $getdirections_defaults['waypoint_color']));
+    }
+    elseif ($getdirections_defaults['advanced_alternate']) {
+      $help = t('You can drag the route to change it');
     }
   }
   $output .= '<div id="getdirections_help">'. $help .'</div>';
@@ -115,12 +114,7 @@ function theme_getdirections_show_locations($width, $height, $fromlocs, $tolocs)
   $output .= "<div class='getdirections_display'><label>". t('From') .":</label> ". $fromlocs ."</div>";
   $output .= "<div class='getdirections_display'><label>". t('To') .":</label> ". $tolocs ."</div>";
 
-  $getdirections_misc = variable_get('getdirections_misc', array(
-    'keep_title' => 0,
-    'show_distance' => 0,
-    'trafficinfo' => 0,
-    'show_duration' => 0,
-  ));
+  $getdirections_misc = getdirections_misc_defaults();
   if ($getdirections_misc['show_distance']) {
     $output .= '<div id="getdirections_show_distance"></div>';
   }
@@ -166,12 +160,7 @@ function theme_getdirections_show_locations_via($width, $height, $locs) {
     $output .= "<div class='getdirections_display'><label>". $label .":</label> ". $loc ."</div>";
   }
 
-  $getdirections_misc = variable_get('getdirections_misc', array(
-    'keep_title' => 0,
-    'show_distance' => 0,
-    'trafficinfo' => 0,
-    'show_duration' => 0,
-  ));
+  $getdirections_misc = getdirections_misc_defaults();
   if ($getdirections_misc['show_distance']) {
     $output .= '<div id="getdirections_show_distance"></div>';
   }
@@ -224,14 +213,14 @@ function theme_getdirections_direction_form($form) {
       $form['country_from']['#prefix'] = '<div id="getdirections_start"><div class="container-inline getdirections_display">';
       $form['country_from']['#suffix'] = '</div>';
     }
-    if (isset($form['from']) && $form['from']['#type'] == 'textfield' ) {
+    if (isset($form['from']) && $form['from']['#type'] == 'textfield' && module_exists('location')) {
       $form['from']['#suffix'] = '</div>';
     }
     if (isset($form['country_to'])) {
       $form['country_to']['#prefix'] = '<div id="getdirections_end"><div class="container-inline getdirections_display">';
       $form['country_to']['#suffix'] = '</div>';
     }
-    if (isset($form['to']) && $form['to']['#type'] == 'textfield' ) {
+    if (isset($form['to']) && $form['to']['#type'] == 'textfield' && module_exists('location')) {
       $form['to']['#suffix'] = '</div>';
     }
   }
