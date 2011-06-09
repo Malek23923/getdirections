@@ -1,3 +1,8 @@
+Get Directions for D6 in 6.x-2.x, 2011-04-09
+------------------------------------
+by hutch, improved v3 googlemaps js
+  to match recent changes in API
+
 Get Directions for D6 in 6.x-2.x, 2011-03-12
 ------------------------------------
 by hutch, added draggable route, fixed div in theme

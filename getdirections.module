@@ -240,6 +240,9 @@ function getdirections_direction($direction='', $location='', $country='', $latl
     $getdirections_settings['scrollwheel'] = $getdirections_defaults['behavior']['scrollwheel'];
     $getdirections_settings['draggable'] = $getdirections_defaults['behavior']['draggable'];
     $getdirections_settings['unitsystem'] = $getdirections_defaults['unitsystem'];
+    $getdirections_settings['overview_opened'] = $getdirections_defaults['behavior']['overview_opened'];
+    $getdirections_settings['streetview_show'] = $getdirections_defaults['streetview_show'];
+    $getdirections_settings['pancontrol'] = $getdirections_defaults['pancontrol'];
   }
 
   drupal_add_js(array('getdirections' => $getdirections_settings), 'setting');
@@ -301,6 +304,9 @@ function getdirections_locations($fromlocs, $fromlatlon, $tolocs, $tolatlon, $wi
     $getdirections_settings['scrollwheel'] = $getdirections_defaults['behavior']['scrollwheel'];
     $getdirections_settings['draggable'] = $getdirections_defaults['behavior']['draggable'];
     $getdirections_settings['unitsystem'] = $getdirections_defaults['unitsystem'];
+    $getdirections_settings['overview_opened'] = $getdirections_defaults['behavior']['overview_opened'];
+    $getdirections_settings['streetview_show'] = $getdirections_defaults['streetview_show'];
+    $getdirections_settings['pancontrol'] = $getdirections_defaults['pancontrol'];
   }
   drupal_add_js(array('getdirections' => $getdirections_settings), 'setting');
   if (! $getdirections_misc['keep_title']) {
@@ -355,6 +361,9 @@ function getdirections_locations_via($locs, $latlons, $width='', $height='') {
     $getdirections_settings['scrollwheel'] = $getdirections_defaults['behavior']['scrollwheel'];
     $getdirections_settings['draggable'] = $getdirections_defaults['behavior']['draggable'];
     $getdirections_settings['unitsystem'] = $getdirections_defaults['unitsystem'];
+    $getdirections_settings['overview_opened'] = $getdirections_defaults['behavior']['overview_opened'];
+    $getdirections_settings['streetview_show'] = $getdirections_defaults['streetview_show'];
+    $getdirections_settings['pancontrol'] = $getdirections_defaults['pancontrol'];
   }
   drupal_add_js(array('getdirections' => $getdirections_settings), 'setting');
   if (! $getdirections_misc['keep_title']) {
@@ -579,6 +588,7 @@ function getdirections_defaults() {
       'height' => '200px',
       'zoom' => 3,
       'controltype' => 'small',
+      'pancontrol' => 1,
       'latlong' => '40,0',
       'maptype' => 'Map',
       'mtc' => 'standard',
@@ -593,13 +603,14 @@ function getdirections_defaults() {
         'scrollwheel' => 0,
         'draggable' => 1,
         'overview' => 0,
-        'googlebar' => 0,
+        'overview_opened' => 0,
       ),
       'unitsystem' => 'metric',
       'from_width' => 20,
       'to_width' => 20,
       'travelmode_show' => 0,
       'travelextras_show' => 0,
+      'streetview_show' => 0,
       'use_advanced' => 0,
       'waypoints' => 0,
       'waypoint_color' => 'white',
