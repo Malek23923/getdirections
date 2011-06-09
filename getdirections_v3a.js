@@ -491,7 +491,11 @@
     var lng = parseFloat(Drupal.settings.getdirections.lng);
     var selzoom = parseInt(Drupal.settings.getdirections.zoom);
     var controltype = Drupal.settings.getdirections.controltype;
+    var pancontrol = Drupal.settings.getdirections.pancontrol;
     var scale = Drupal.settings.getdirections.scale;
+    var overview = Drupal.settings.getdirections.overview;
+    var overview_opened = Drupal.settings.getdirections.overview_opened;
+    var streetview_show = Drupal.settings.getdirections.streetview_show;
     var scrollw = Drupal.settings.getdirections.scrollwheel;
     var drag = Drupal.settings.getdirections.draggable;
     unitsys = Drupal.settings.getdirections.unitsystem;
@@ -531,9 +535,9 @@
     else { mtc = false; }
 
     // nav control type
-    if (controltype == 'micro') { controltype = google.maps.NavigationControlStyle.ANDROID; }
-    else if (controltype == 'small') { controltype = google.maps.NavigationControlStyle.SMALL; }
-    else if (controltype == 'large') { controltype = google.maps.NavigationControlStyle.ZOOM_PAN; }
+    if (controltype == 'default') { controltype = google.maps.ZoomControlStyle.DEFAULT; }
+    else if (controltype == 'small') { controltype = google.maps.ZoomControlStyle.SMALL; }
+    else if (controltype == 'large') { controltype = google.maps.ZoomControlStyle.LARGE; }
     else { controltype = false; }
 
     // map type
@@ -550,11 +554,15 @@
       center: new google.maps.LatLng(lat, lng),
       mapTypeControl: (mtc ? true : false),
       mapTypeControlOptions: {style: mtc},
-      navigationControl: (controltype ? true : false),
-      navigationControlOptions: {style: controltype},
+      zoomControl: (controltype ? true : false),
+      zoomControlOptions: {style: controltype},
+      panControl: (pancontrol ? true : false),
       mapTypeId: maptype,
       scrollwheel: (scrollw ? true : false),
       draggable: (drag ? true : false),
+      overviewMapControl: (overview ? true : false),
+      overviewMapControlOptions: {opened: (overview_opened ? true : false)},
+      streetViewControl: (streetview_show ? true : false),
       scaleControl: (scale ? true : false),
       scaleControlOptions: {style: google.maps.ScaleControlStyle.DEFAULT}
     };

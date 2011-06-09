@@ -9,6 +9,10 @@
 .getdirections {
   margin-top: 8px;
 }
+.getdirections td {
+  vertical-align: top;
+}
+
 .getdirections-list {
   background: #FFFFFF;
 }

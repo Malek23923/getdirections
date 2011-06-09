@@ -123,7 +123,7 @@ function getdirections_settings_form() {
     // v3
     $opts = array(
       'none' => t('None'),
-      'micro' => t('Android'),
+      'default' => t('Default'),
       'small' => t('Small'),
       'large' => t('Large'),
     );
@@ -139,6 +139,15 @@ function getdirections_settings_form() {
     '#options' => $opts,
     '#default_value' => $getdirections_defaults['controltype'],
   );
+
+  if (variable_get('getdirections_use_v3', 0)) {
+    $form['getdirections_default']['pancontrol'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Show Pan control'),
+      '#default_value' => $getdirections_defaults['pancontrol'],
+      '#return_value' => 1,
+    );
+  }
 
   $form['getdirections_default']['mtc'] = array(
     '#type' => 'select',
@@ -243,6 +252,13 @@ function getdirections_settings_form() {
     '#default_value' =>  $getdirections_defaults['behavior']['scale'],
     '#return_value' => 1,
   );
+  $form['getdirections_default']['behavior']['overview'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Overview map'),
+    '#description' => t('Show overview map'),
+    '#default_value' =>  $getdirections_defaults['behavior']['overview'],
+    '#return_value' => 1,
+  );
 
   if (! variable_get('getdirections_use_v3', 0)) {
     $form['getdirections_default']['behavior']['googlebar'] = array(
@@ -252,15 +268,15 @@ function getdirections_settings_form() {
       '#default_value' =>  $getdirections_defaults['behavior']['googlebar'],
       '#return_value' => 1,
     );
-    $form['getdirections_default']['behavior']['overview'] = array(
-      '#type' => 'checkbox',
-      '#title' => t('Overview map'),
-      '#description' => t('Show overview map'),
-      '#default_value' =>  $getdirections_defaults['behavior']['overview'],
-      '#return_value' => 1,
-    );
   }
   else {
+    $form['getdirections_default']['behavior']['overview_opened'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Overview map state'),
+      '#description' => t('Show overview map as open by default'),
+      '#default_value' =>  $getdirections_defaults['behavior']['overview_opened'],
+      '#return_value' => 1,
+    );
     $form['getdirections_default']['behavior']['scrollwheel'] = array(
       '#type' => 'checkbox',
       '#title' => t('Scrollwheel'),
@@ -273,6 +289,12 @@ function getdirections_settings_form() {
       '#title' => t('Draggable'),
       '#description' => t('Enable dragging on the map'),
       '#default_value' =>  $getdirections_defaults['behavior']['draggable'],
+      '#return_value' => 1,
+    );
+    $form['getdirections_default']['streetview_show'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Show streetview button'),
+      '#default_value' =>  $getdirections_defaults['streetview_show'],
       '#return_value' => 1,
     );
     $form['getdirections_default']['travelmode_show'] = array(
@@ -290,7 +312,6 @@ function getdirections_settings_form() {
       '#return_value' => 1,
     );
   }
-
   $form['getdirections_default']['from_width'] = array(
     '#type' => 'textfield',
     '#title' => t('Width of From box'),
@@ -427,6 +448,7 @@ function getdirections_settings_form() {
       '#title' => t('Enable Colorbox'),
       '#default_value' =>  $getdirections_colorbox['enable'],
       '#return_value' => 1,
+      '#description' => t('Show Getdirections in a Colorbox.'),
     );
     $form['getdirections_colorbox']['width'] = array(
       '#type' => 'textfield',
