@@ -1141,25 +1141,26 @@ function getdirections_views_api() {
  *   Returns array.
  */
 function _getdirections_loadaddress($location) {
-    if (isset($location['name']) && $location['name']) {
-      $loc[] = $location['name'];
-    }
-    if (isset($location['street']) && $location['street']) {
-      $loc[] = $location['street'];
-    }
-    if (isset($location['additional']) && $location['additional']) {
-      $loc[] = $location['additional'];
-    }
-    if (isset($location['city']) && $location['city']) {
-      $loc[] = $location['city'];
-    }
-    if (isset($location['province_name']) && $location['province_name']) {
-      $loc[] = $location['province_name'];
-    }
-    if (isset($location['postal_code']) && $location['postal_code']) {
-      $loc[] = $location['postal_code'];
-    }
-    return $loc;
+  $loc = array();
+  if (isset($location['name']) && $location['name']) {
+    $loc[] = $location['name'];
+  }
+  if (isset($location['street']) && $location['street']) {
+    $loc[] = $location['street'];
+  }
+  if (isset($location['additional']) && $location['additional']) {
+    $loc[] = $location['additional'];
+  }
+  if (isset($location['city']) && $location['city']) {
+    $loc[] = $location['city'];
+  }
+  if (isset($location['province_name']) && $location['province_name']) {
+    $loc[] = $location['province_name'];
+  }
+  if (isset($location['postal_code']) && $location['postal_code']) {
+    $loc[] = $location['postal_code'];
+  }
+  return $loc;
 }
 
 /**
