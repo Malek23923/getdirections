@@ -160,7 +160,7 @@ function getdirections_settings_form() {
       // layers
       $baselayers = array();
       foreach (module_implements('gmap') as $module) {
-        call_user_func_array($module .'_gmap', array('baselayers', &$baselayers));
+        call_user_func_array($module . '_gmap', array('baselayers', &$baselayers));
       }
       $options = array();
       foreach ($baselayers as $name => $layers) {
@@ -523,7 +523,7 @@ function getdirections_settings_form() {
       '#return_value' => 1,
     );
   }
-  if(! $getdirections_defaults['use_advanced']) {
+  if (! $getdirections_defaults['use_advanced']) {
     $form['getdirections_misc']['switchfromto'] = array(
       '#type' => 'checkbox',
       '#title' => t('Enable From/To Switch'),

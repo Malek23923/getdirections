@@ -1,3 +1,7 @@
+Get Directions for D7 in 7.x-2.x, 2011-06-24
+------------------------------------
+by hutch, fixed array bug in _getdirections_loadaddress
+
 Get Directions for D7 in 7.x-2.x, 2011-04-09
 ------------------------------------
 by hutch, by hutch, improved v3 googlemaps js

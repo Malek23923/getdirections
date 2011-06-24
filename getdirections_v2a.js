@@ -262,7 +262,7 @@
           else {
             reason = "";
           }
-          alert('Could not find "' + s + '" ' + reason);
+          alert(Drupal.t('Could not find') + ' "' + s + '" ' + reason);
         }
       });
     }
@@ -390,7 +390,7 @@
       if (reasons[code]) {
         reason = "Code " + code + " : " + reasons[code];
       }
-      alert("Failed to obtain directions, " + reason);
+      alert(Drupal.t('Failed to obtain directions') + ", " + reason);
     });
 
     GEvent.addListener(gdir, "load", onGDirectionsLoad);

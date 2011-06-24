@@ -16,7 +16,7 @@ define('GETDIRECTIONS_USE_LOCATION', TRUE);
 function getdirections_help($path, $arg) {
   switch ($path) {
     case 'admin/help#getdirections':
-      $output = '<p>'. t('Fetches google map directions.') .'</p>';
+      $output = '<p>' . t('Fetches google map directions.') . '</p>';
       return $output;
   }
 }
@@ -450,7 +450,7 @@ function getdirections_direction_form($form, &$form_state, $fromto='', $loc='', 
       $mfrom = $loc;
     }
     else {
-      $mfrom = $loc .', '. drupal_strtoupper($country);
+      $mfrom = $loc . ', ' . drupal_strtoupper($country);
     }
     $form['mfrom'] = array(
       '#type' => 'item',
@@ -489,7 +489,7 @@ function getdirections_direction_form($form, &$form_state, $fromto='', $loc='', 
       $mto = $loc;
     }
     else {
-      $mto = $loc .', '. drupal_strtoupper($country);
+      $mto = $loc . ', ' . drupal_strtoupper($country);
     }
     $form['mto'] = array(
       '#type' => 'item',
@@ -723,7 +723,7 @@ function getdirections_setlocation($direction, $nid, $width='', $height='') {
     $location = location_load_locations($vid);
     if (count($location)) {
       $country = $location[0]['country'];
-      $latlon = $location[0]['latitude'] .','. $location[0]['longitude'];
+      $latlon = $location[0]['latitude'] . ',' . $location[0]['longitude'];
       // sanity check
       if (! getdirections_latlon_load($latlon)) {
         watchdog('getdirections', 'Lat, Lon failed for node id !nid', array('!nid' => $nid), WATCHDOG_WARNING);
@@ -752,7 +752,7 @@ function getdirections_user_setlocation($direction, $uid, $width='', $height='')
     $location = location_load_locations($uid, 'uid');
     if (count($location)) {
       $country = $location[0]['country'];
-      $latlon = $location[0]['latitude'] .','. $location[0]['longitude'];
+      $latlon = $location[0]['latitude'] . ',' . $location[0]['longitude'];
       // sanity check
       if (! getdirections_latlon_load($latlon)) {
         watchdog('getdirections', 'Lat, Lon failed for user id !uid', array('!uid' => $uid), WATCHDOG_WARNING);
@@ -782,7 +782,7 @@ function getdirections_setlocations($fromnid, $tonid, $width='', $height='') {
     $fromvid = getdirections_get_vid($fromnid);
     $fromlocation = location_load_locations($fromvid);
     if (count($fromlocation)) {
-      $fromlatlon = $fromlocation[0]['latitude'] .','. $fromlocation[0]['longitude'];
+      $fromlatlon = $fromlocation[0]['latitude'] . ',' . $fromlocation[0]['longitude'];
       // sanity check
       if (! getdirections_latlon_load($fromlatlon)) {
         watchdog('getdirections', 'Lat, Lon failed for node id !nid', array('!nid' => $fromnid), WATCHDOG_WARNING);
@@ -796,7 +796,7 @@ function getdirections_setlocations($fromnid, $tonid, $width='', $height='') {
       $tovid = getdirections_get_vid($tonid);
       $tolocation = location_load_locations($tovid);
       if (count($tolocation)) {
-        $tolatlon = $tolocation[0]['latitude'] .','. $tolocation[0]['longitude'];
+        $tolatlon = $tolocation[0]['latitude'] . ',' . $tolocation[0]['longitude'];
         // sanity check
         if (! getdirections_latlon_load($tolatlon)) {
           watchdog('getdirections', 'Lat, Lon failed for node id !nid', array('!nid' => $tonid), WATCHDOG_WARNING);
@@ -828,7 +828,7 @@ function getdirections_user_setlocations($fromuid, $touid, $width='', $height=''
     // From
     $fromlocation = location_load_locations($fromuid, 'uid');
     if (count($fromlocation)) {
-      $fromlatlon = $fromlocation[0]['latitude'] .','. $fromlocation[0]['longitude'];
+      $fromlatlon = $fromlocation[0]['latitude'] . ',' . $fromlocation[0]['longitude'];
       // sanity check
       if (! getdirections_latlon_load($fromlatlon)) {
         watchdog('getdirections', 'Lat, Lon failed for user id !nid', array('!nid' => $fromuid), WATCHDOG_WARNING);
@@ -841,7 +841,7 @@ function getdirections_user_setlocations($fromuid, $touid, $width='', $height=''
       // To
       $tolocation = location_load_locations($touid, 'uid');
       if (count($tolocation)) {
-        $tolatlon = $tolocation[0]['latitude'] .','. $tolocation[0]['longitude'];
+        $tolatlon = $tolocation[0]['latitude'] . ',' . $tolocation[0]['longitude'];
         // sanity check
         if (! getdirections_latlon_load($tolatlon)) {
           watchdog('getdirections', 'Lat, Lon failed for user id !nid', array('!nid' => $touid), WATCHDOG_WARNING);
@@ -884,7 +884,7 @@ function getdirections_setlocations_via($nids, $width='', $height='') {
         $loc[] = drupal_strtoupper($location[0]['country']);
       }
       $locs[] = implode(', ', $loc);
-      $latlon = $location[0]['latitude'] .','. $location[0]['longitude'];
+      $latlon = $location[0]['latitude'] . ',' . $location[0]['longitude'];
       // sanity check
       if (! getdirections_latlon_load($latlon)) {
         watchdog('getdirections', 'Lat, Lon failed for node id !nid', array('!nid' => $nid), WATCHDOG_WARNING);
@@ -913,7 +913,7 @@ function getdirections_n2u_setlocation($nid, $uid, $width='', $height='') {
     $vid = getdirections_get_vid($nid);
     $fromlocation = location_load_locations($vid);
     if (count($fromlocation)) {
-      $fromlatlon = $fromlocation[0]['latitude'] .','. $fromlocation[0]['longitude'];
+      $fromlatlon = $fromlocation[0]['latitude'] . ',' . $fromlocation[0]['longitude'];
       // sanity check
       if (! getdirections_latlon_load($fromlatlon)) {
         watchdog('getdirections', 'Lat, Lon failed for node id !nid', array('!nid' => $nid), WATCHDOG_WARNING);
@@ -926,7 +926,7 @@ function getdirections_n2u_setlocation($nid, $uid, $width='', $height='') {
       // To
       $tolocation = location_load_locations($uid, 'uid');
       if (count($tolocation)) {
-        $tolatlon = $tolocation[0]['latitude'] .','. $tolocation[0]['longitude'];
+        $tolatlon = $tolocation[0]['latitude'] . ',' . $tolocation[0]['longitude'];
         // sanity check
         if (! getdirections_latlon_load($tolatlon)) {
           watchdog('getdirections', 'Lat, Lon failed for user id !nid', array('!nid' => $uid), WATCHDOG_WARNING);
@@ -958,7 +958,7 @@ function getdirections_u2n_setlocation($uid, $nid, $width='', $height='') {
     // From
     $fromlocation = location_load_locations($uid, 'uid');
     if (count($fromlocation)) {
-      $fromlatlon = $fromlocation[0]['latitude'] .','. $fromlocation[0]['longitude'];
+      $fromlatlon = $fromlocation[0]['latitude'] . ',' . $fromlocation[0]['longitude'];
       // sanity check
       if (! getdirections_latlon_load($fromlatlon)) {
         watchdog('getdirections', 'Lat, Lon failed for user id !nid', array('!nid' => $uid), WATCHDOG_WARNING);
@@ -972,7 +972,7 @@ function getdirections_u2n_setlocation($uid, $nid, $width='', $height='') {
       $vid = getdirections_get_vid($nid);
       $tolocation = location_load_locations($vid);
       if (count($tolocation)) {
-        $tolatlon = $tolocation[0]['latitude'] .','. $tolocation[0]['longitude'];
+        $tolatlon = $tolocation[0]['latitude'] . ',' . $tolocation[0]['longitude'];
       // sanity check
         if (! getdirections_latlon_load($tolatlon)) {
           watchdog('getdirections', 'Lat, Lon failed for node id !nid', array('!nid' => $nid), WATCHDOG_WARNING);
@@ -1013,7 +1013,7 @@ function getdirections_user_setlocations_via($uids, $width='', $height='') {
         $loc[] = drupal_strtoupper($location[0]['country']);
       }
       $locs[] = implode(', ', $loc);
-      $latlon = $location[0]['latitude'] .','. $location[0]['longitude'];
+      $latlon = $location[0]['latitude'] . ',' . $location[0]['longitude'];
       // sanity check
       if (! getdirections_latlon_load($latlon)) {
         watchdog('getdirections', 'Lat, Lon failed for user id !nid', array('!nid' => $uid), WATCHDOG_WARNING);
@@ -1061,7 +1061,7 @@ function getdirections_setlocation_id($direction, $lid, $width='', $height='') {
     $location = location_load_location($lid);
     if (count($location)) {
       $country = $location['country'];
-      $latlon = $location['latitude'] .','. $location['longitude'];
+      $latlon = $location['latitude'] . ',' . $location['longitude'];
       // sanity check
       if (! getdirections_latlon_load($latlon)) {
         watchdog('getdirections', 'Lat, Lon failed for location id !lid', array('!lid' => $lid), WATCHDOG_WARNING);
@@ -1090,7 +1090,7 @@ function getdirections_setup_map($defaults) {
       'sensor' => 'false',
       'language' => $language->language,
     );
-    #$head = '<script src="'. url('http://maps.google.com/maps/api/js', array('query' => $query)) .'" type="text/javascript"></script>';
+
     $gmaplink = url('http://maps.google.com/maps/api/js', array('query' => $query));
     if ($defaults['use_advanced']) {
       if ($defaults['advanced_alternate']) {
@@ -1122,22 +1122,22 @@ function getdirections_setup_map($defaults) {
         'hl' => $language->language,
       );
     }
-    #$head = '<script src="'. url('http://maps.google.com/maps', array('query' => $query)) .'" type="text/javascript"></script>';
+
     $gmaplink = url('http://maps.google.com/maps', array('query' => $query));
     if ($defaults['use_advanced']) {
       $js = GETDIRECTIONS_PATH . '/getdirections_v2a.js';
     }
     else {
-      $js = GETDIRECTIONS_PATH .'/getdirections_v2.js';
+      $js = GETDIRECTIONS_PATH . '/getdirections_v2.js';
     }
   }
   drupal_add_js($gmaplink, 'external');
-  drupal_add_css(GETDIRECTIONS_PATH .'/getdirections.css');
+  drupal_add_css(GETDIRECTIONS_PATH . '/getdirections.css');
   drupal_add_js($js);
 }
 
 /**
- * Implementation of hook_views_api().
+ * Implements hook_views_api().
  */
 function getdirections_views_api() {
   return array('api' => 2);
@@ -1152,25 +1152,26 @@ function getdirections_views_api() {
  *   Returns array.
  */
 function _getdirections_loadaddress($location) {
-    if (isset($location['name']) && $location['name']) {
-      $loc[] = $location['name'];
-    }
-    if (isset($location['street']) && $location['street']) {
-      $loc[] = $location['street'];
-    }
-    if (isset($location['additional']) && $location['additional']) {
-      $loc[] = $location['additional'];
-    }
-    if (isset($location['city']) && $location['city']) {
-      $loc[] = $location['city'];
-    }
-    if (isset($location['province_name']) && $location['province_name']) {
-      $loc[] = $location['province_name'];
-    }
-    if (isset($location['postal_code']) && $location['postal_code']) {
-      $loc[] = $location['postal_code'];
-    }
-    return $loc;
+  $loc = array();
+  if (isset($location['name']) && $location['name']) {
+    $loc[] = $location['name'];
+  }
+  if (isset($location['street']) && $location['street']) {
+    $loc[] = $location['street'];
+  }
+  if (isset($location['additional']) && $location['additional']) {
+    $loc[] = $location['additional'];
+  }
+  if (isset($location['city']) && $location['city']) {
+    $loc[] = $location['city'];
+  }
+  if (isset($location['province_name']) && $location['province_name']) {
+    $loc[] = $location['province_name'];
+  }
+  if (isset($location['postal_code']) && $location['postal_code']) {
+    $loc[] = $location['postal_code'];
+  }
+  return $loc;
 }
 
 /**

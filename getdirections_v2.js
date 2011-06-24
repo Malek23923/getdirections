@@ -11,16 +11,16 @@
 
   // errorcodes
   var reasons = [];
-  reasons[G_GEO_SUCCESS]             = "Success";
-  reasons[G_GEO_MISSING_ADDRESS]     = "Missing Address: The address was either missing or had no value.";
-  reasons[G_GEO_UNKNOWN_ADDRESS]     = "Unknown Address:  No corresponding geographic location could be found for the specified address.";
-  reasons[G_GEO_UNAVAILABLE_ADDRESS] = "Unavailable Address:  The geocode for the given address cannot be returned due to legal or contractual reasons.";
-  reasons[G_GEO_BAD_KEY]             = "Bad Key: The API key is either invalid or does not match the domain for which it was given";
-  reasons[G_GEO_TOO_MANY_QUERIES]    = "Too Many Queries: The daily geocoding quota for this site has been exceeded.";
-  reasons[G_GEO_SERVER_ERROR]        = "Server error: The geocoding request could not be successfully processed.";
-  reasons[G_GEO_BAD_REQUEST]         = "A directions request could not be successfully parsed.";
-  reasons[G_GEO_MISSING_QUERY]       = "No query was specified in the input.";
-  reasons[G_GEO_UNKNOWN_DIRECTIONS]  = "The GDirections object could not compute directions between the points.";
+  reasons[G_GEO_SUCCESS]             = Drupal.t("Success");
+  reasons[G_GEO_MISSING_ADDRESS]     = Drupal.t("Missing Address: The address was either missing or had no value.");
+  reasons[G_GEO_UNKNOWN_ADDRESS]     = Drupal.t("Unknown Address:  No corresponding geographic location could be found for the specified address.");
+  reasons[G_GEO_UNAVAILABLE_ADDRESS] = Drupal.t("Unavailable Address:  The geocode for the given address cannot be returned due to legal or contractual reasons.");
+  reasons[G_GEO_BAD_KEY]             = Drupal.t("Bad Key: The API key is either invalid or does not match the domain for which it was given");
+  reasons[G_GEO_TOO_MANY_QUERIES]    = Drupal.t("Too Many Queries: The daily geocoding quota for this site has been exceeded.");
+  reasons[G_GEO_SERVER_ERROR]        = Drupal.t("Server error: The geocoding request could not be successfully processed.");
+  reasons[G_GEO_BAD_REQUEST]         = Drupal.t("A directions request could not be successfully parsed.");
+  reasons[G_GEO_MISSING_QUERY]       = Drupal.t("No query was specified in the input.");
+  reasons[G_GEO_UNKNOWN_DIRECTIONS]  = Drupal.t("The GDirections object could not compute directions between the points.");
 
   var gdir;
   var mylocale;
@@ -118,11 +118,11 @@
 
     GEvent.addListener(gdir, "error", function() {
       var code = gdir.getStatus().code;
-      var reason="Code " + code;
+      var reason = "Code " + code;
       if (reasons[code]) {
         reason = "Code " + code + " : " + reasons[code];
       }
-      alert("Failed to obtain directions, " + reason);
+      alert(Drupal.t("Failed to obtain directions, @reason", {'@reason':reason}));
     });
 
     GEvent.addListener(gdir, "load", onGDirectionsLoad);

@@ -7,7 +7,7 @@
 
 
 /**
- * Implementation of hook_theme().
+ * Implements hook_theme().
  *
  * This lets us tell Drupal about our theme functions and their variables.
  */
@@ -65,10 +65,10 @@ function theme_getdirections_show($variables) {
     'user_link' => t('Return to page'),
   ));
   if ($getdirections_returnlink['page_enable'] && $nid > 0 && $type == 'node') {
-    $output .= '<div class="getdirections_returnlink">'. l($getdirections_returnlink['page_link'], 'node/' . $nid) .'</div>';
+    $output .= '<div class="getdirections_returnlink">' . l($getdirections_returnlink['page_link'], 'node/' . $nid) . '</div>';
   }
   elseif ($getdirections_returnlink['user_enable'] && $nid > 0 && $type == 'user') {
-    $output .= '<div class="getdirections_returnlink">'. l($getdirections_returnlink['page_link'], 'user/' . $nid) .'</div>';
+    $output .= '<div class="getdirections_returnlink">' . l($getdirections_returnlink['page_link'], 'user/' . $nid) . '</div>';
   }
   $output .= $form;
 
@@ -84,19 +84,19 @@ function theme_getdirections_show($variables) {
   $header = array();
   $rows[] = array(
     array(
-      'data' => '<div id="getdirections_map_canvas" style="width: '. $width .'; height: '. $height .'" ></div>',
+      'data' => '<div id="getdirections_map_canvas" style="width: ' . $width . '; height: ' . $height . '" ></div>',
       'valign' => 'top',
       'align' => 'center',
       'class' => 'getdirections-map',
     ),
     array(
-      'data' => ($getdirections_defaults['advanced_alternate'] ? '<button id="getdirections-undo" onclick="Drupal.getdirectionsundo()">' . t('Undo') . '</button>' : '') .'<div id="getdirections_directions"></div>',
+      'data' => ($getdirections_defaults['advanced_alternate'] ? '<button id="getdirections-undo" onclick="Drupal.getdirectionsundo()">' . t('Undo') . '</button>' : '') . '<div id="getdirections_directions"></div>',
       'valign' => 'top' ,
       'align' => 'left',
       'class' => 'getdirections-list',
     ),
   );
-  $output .= '<div class="getdirections">'. theme('table', array('header' => $header, 'rows' => $rows)) .'</div>';
+  $output .= '<div class="getdirections">' . theme('table', array('header' => $header, 'rows' => $rows)) . '</div>';
   $help = '';
   if (getdirections_is_advanced()) {
     if ($getdirections_defaults['waypoints'] > 0 && ! $getdirections_defaults['advanced_alternate'] ) {
@@ -106,7 +106,7 @@ function theme_getdirections_show($variables) {
       $help = t('You can drag the route to change it');
     }
   }
-  $output .= '<div id="getdirections_help">'. $help .'</div>';
+  $output .= '<div id="getdirections_help">' . $help . '</div>';
   return $output;
 }
 
@@ -120,8 +120,8 @@ function theme_getdirections_show_locations($variables) {
   $fromlocs = $variables['fromlocs'];
   $tolocs = $variables['tolocs'];
   $output = "";
-  $output .= "<div class='getdirections_display'><label>". t('From') .":</label> ". $fromlocs ."</div>";
-  $output .= "<div class='getdirections_display'><label>". t('To') .":</label> ". $tolocs ."</div>";
+  $output .= "<div class='getdirections_display'><label>" . t('From') . ":</label> " . $fromlocs . "</div>";
+  $output .= "<div class='getdirections_display'><label>" . t('To') . ":</label> " . $tolocs . "</div>";
 
   $getdirections_misc = getdirections_misc_defaults();
   if ($getdirections_misc['show_distance']) {
@@ -134,7 +134,7 @@ function theme_getdirections_show_locations($variables) {
 
   $rows[] = array(
     array(
-      'data' => '<div id="getdirections_map_canvas" style="width: '. $width .'; height: '. $height .'" ></div>',
+      'data' => '<div id="getdirections_map_canvas" style="width: ' . $width . '; height: ' . $height . '" ></div>',
       'valign' => 'top',
       'align' => 'center',
       'class' => 'getdirections-map',
@@ -146,7 +146,7 @@ function theme_getdirections_show_locations($variables) {
       'class' => 'getdirections-list',
     ),
   );
-  $output .= '<div class="getdirections">'. theme('table', array('header' => $header, 'rows' => $rows)) .'</div>';
+  $output .= '<div class="getdirections">' . theme('table', array('header' => $header, 'rows' => $rows)) . '</div>';
   return $output;
 }
 
@@ -169,7 +169,7 @@ function theme_getdirections_show_locations_via($variables) {
     else {
       $label = t('Via');
     }
-    $output .= "<div class='getdirections_display'><label>". $label .":</label> ". $loc ."</div>";
+    $output .= "<div class='getdirections_display'><label>" . $label . ":</label> " . $loc . "</div>";
   }
 
   $getdirections_misc = getdirections_misc_defaults();
@@ -183,7 +183,7 @@ function theme_getdirections_show_locations_via($variables) {
 
   $rows[] = array(
     array(
-      'data' => '<div id="getdirections_map_canvas" style="width: '. $width .'; height: '. $height .'" ></div>',
+      'data' => '<div id="getdirections_map_canvas" style="width: ' . $width . '; height: ' . $height . '" ></div>',
       'valign' => 'top',
       'align' => 'center',
       'class' => 'getdirections-map',
@@ -195,7 +195,7 @@ function theme_getdirections_show_locations_via($variables) {
       'class' => 'getdirections-list',
     ),
   );
-  $output .= '<div class="getdirections">'. theme('table', array('header' => $header, 'rows' => $rows)) .'</div>';
+  $output .= '<div class="getdirections">' . theme('table', array('header' => $header, 'rows' => $rows)) . '</div>';
   return $output;
 }
 
@@ -272,14 +272,14 @@ function theme_getdirections_direction_form($variables) {
     $form['submit']['#prefix'] = '<div id="getdirections_btn">';
     $form['submit']['#suffix'] = '</div>';
   }
-  $output = '<p class="description">'. $desc .'</p><!-- end theme -->';
+  $output = '<p class="description">' . $desc . '</p>';
   $output .= drupal_render_children($form);
   return $output;
 }
 
 function template_preprocess_getdirections_box(&$variables) {
 
-  if(module_exists('admin_menu')) {
+  if (module_exists('admin_menu')) {
     admin_menu_suppress();
   }
   drupal_add_js(GETDIRECTIONS_PATH . '/getdirections_box.js');

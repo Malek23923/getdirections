@@ -28,25 +28,25 @@
   function getdirectionserrcode(errcode) {
     var errstr;
     if (errcode == google.maps.DirectionsStatus.INVALID_REQUEST) {
-      errstr = "The DirectionsRequest provided was invalid.";
+      errstr = Drupal.t("The DirectionsRequest provided was invalid.");
     }
     else if (errcode == google.maps.DirectionsStatus.MAX_WAYPOINTS_EXCEEDED) {
-      errstr = "Too many DirectionsWaypoints were provided in the DirectionsRequest. The total allowed waypoints is 8, plus the origin, and destination.";
+      errstr = Drupal.t("Too many DirectionsWaypoints were provided in the DirectionsRequest. The total allowed waypoints is 8, plus the origin, and destination.");
     }
     else if (errcode == google.maps.DirectionsStatus.NOT_FOUND) {
-      errstr = "At least one of the origin, destination, or waypoints could not be geocoded.";
+      errstr = Drupal.t("At least one of the origin, destination, or waypoints could not be geocoded.");
     }
     else if (errcode == google.maps.DirectionsStatus.OVER_QUERY_LIMIT) {
-      errstr = "The webpage has gone over the requests limit in too short a period of time.";
+      errstr = Drupal.t("The webpage has gone over the requests limit in too short a period of time.");
     }
     else if (errcode == google.maps.DirectionsStatus.REQUEST_DENIED) {
-      errstr = "The webpage is not allowed to use the directions service.";
+      errstr = Drupal.t("The webpage is not allowed to use the directions service.");
     }
     else if (errcode == google.maps.DirectionsStatus.UNKNOWN_ERROR) {
-      errstr = "A directions request could not be processed due to a server error. The request may succeed if you try again.";
+      errstr = Drupal.t("A directions request could not be processed due to a server error. The request may succeed if you try again.");
     }
     else if (errcode == google.maps.DirectionsStatus.ZERO_RESULTS) {
-      errstr = "No route could be found between the origin and destination.";
+      errstr = Drupal.t("No route could be found between the origin and destination.");
     }
     return errstr;
   }
@@ -57,7 +57,7 @@
         dirrenderer.setDirections(response);
       } else {
         var err = getdirectionserrcode(status);
-        alert('Error: ' + err);
+        alert(Drupal.t('Error') + ': ' + err);
       }
     });
   }
