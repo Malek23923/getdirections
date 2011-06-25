@@ -1111,13 +1111,13 @@ function getdirections_setlocation_id($direction, $lid, $width='', $height='') {
  */
 function getdirections_setup_map($defaults, $misc_defaults) {
   global $language;
-  $libraries = array();
   if (variable_get('getdirections_use_v3', 0)) {
    // v3 googlemaps API
     $query = array(
       'sensor' => 'false',
       'language' => $language->language,
     );
+    $libraries = array();
     if($misc_defaults['panoramio_show']) {
       $libraries[] = 'panoramio';
     }
