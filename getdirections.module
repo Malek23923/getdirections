@@ -1107,6 +1107,7 @@ function getdirections_setup_map($defaults, $misc_defaults) {
       'sensor' => 'false',
       'language' => $language->language,
     );
+    $libraries = array();
     if($misc_defaults['panoramio_show']) {
       $libraries[] = 'panoramio';
     }
