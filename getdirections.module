@@ -739,6 +739,7 @@ function getdirections_setlocation($direction, $nid, $width='', $height='') {
       // sanity check
       if (! getdirections_latlon_load($latlon)) {
         watchdog('getdirections', 'Lat, Lon failed for node id !nid', array('!nid' => $nid), WATCHDOG_WARNING);
+        $latlon = getdirections_load_latlon_defaults();
       }
       $loc = _getdirections_loadaddress($location[0]);
       // $locs only used for display now
@@ -768,6 +769,7 @@ function getdirections_user_setlocation($direction, $uid, $width='', $height='')
       // sanity check
       if (! getdirections_latlon_load($latlon)) {
         watchdog('getdirections', 'Lat, Lon failed for user id !uid', array('!uid' => $uid), WATCHDOG_WARNING);
+        $latlon = getdirections_load_latlon_defaults();
       }
       $loc = _getdirections_loadaddress($location[0]);
       // $locs only used for display now
@@ -798,6 +800,7 @@ function getdirections_setlocations($fromnid, $tonid, $width='', $height='') {
       // sanity check
       if (! getdirections_latlon_load($fromlatlon)) {
         watchdog('getdirections', 'Lat, Lon failed for node id !nid', array('!nid' => $fromnid), WATCHDOG_WARNING);
+        $fromlatlon = getdirections_load_latlon_defaults();
       }
       $fromloc = _getdirections_loadaddress($fromlocation[0]);
       if ($fromlocation[0]['country']) {
@@ -812,6 +815,7 @@ function getdirections_setlocations($fromnid, $tonid, $width='', $height='') {
         // sanity check
         if (! getdirections_latlon_load($tolatlon)) {
           watchdog('getdirections', 'Lat, Lon failed for node id !nid', array('!nid' => $tonid), WATCHDOG_WARNING);
+          $tolatlon = getdirections_load_latlon_defaults();
         }
         $toloc = _getdirections_loadaddress($tolocation[0]);
         if ($tolocation[0]['country']) {
@@ -844,6 +848,7 @@ function getdirections_user_setlocations($fromuid, $touid, $width='', $height=''
       // sanity check
       if (! getdirections_latlon_load($fromlatlon)) {
         watchdog('getdirections', 'Lat, Lon failed for user id !nid', array('!nid' => $fromuid), WATCHDOG_WARNING);
+        $fromlatlon = getdirections_load_latlon_defaults();
       }
       $fromloc = _getdirections_loadaddress($fromlocation[0]);
       if ($fromlocation[0]['country']) {
@@ -857,6 +862,7 @@ function getdirections_user_setlocations($fromuid, $touid, $width='', $height=''
         // sanity check
         if (! getdirections_latlon_load($tolatlon)) {
           watchdog('getdirections', 'Lat, Lon failed for user id !nid', array('!nid' => $touid), WATCHDOG_WARNING);
+          $tolatlon = getdirections_load_latlon_defaults();
         }
         $toloc = _getdirections_loadaddress($tolocation[0]);
         if ($tolocation[0]['country']) {
@@ -929,6 +935,7 @@ function getdirections_n2u_setlocation($nid, $uid, $width='', $height='') {
       // sanity check
       if (! getdirections_latlon_load($fromlatlon)) {
         watchdog('getdirections', 'Lat, Lon failed for node id !nid', array('!nid' => $nid), WATCHDOG_WARNING);
+        $fromlatlon = getdirections_load_latlon_defaults();
       }
       $fromloc = _getdirections_loadaddress($fromlocation[0]);
       if ($fromlocation[0]['country']) {
@@ -942,6 +949,7 @@ function getdirections_n2u_setlocation($nid, $uid, $width='', $height='') {
         // sanity check
         if (! getdirections_latlon_load($tolatlon)) {
           watchdog('getdirections', 'Lat, Lon failed for user id !nid', array('!nid' => $uid), WATCHDOG_WARNING);
+          $tolatlon = getdirections_load_latlon_defaults();
         }
         $toloc = _getdirections_loadaddress($tolocation[0]);
         if ($tolocation[0]['country']) {
@@ -974,6 +982,7 @@ function getdirections_u2n_setlocation($uid, $nid, $width='', $height='') {
       // sanity check
       if (! getdirections_latlon_load($fromlatlon)) {
         watchdog('getdirections', 'Lat, Lon failed for user id !nid', array('!nid' => $uid), WATCHDOG_WARNING);
+        $fromlatlon = getdirections_load_latlon_defaults();
       }
       $fromloc = _getdirections_loadaddress($fromlocation[0]);
       if ($fromlocation[0]['country']) {
@@ -988,6 +997,7 @@ function getdirections_u2n_setlocation($uid, $nid, $width='', $height='') {
       // sanity check
         if (! getdirections_latlon_load($tolatlon)) {
           watchdog('getdirections', 'Lat, Lon failed for node id !nid', array('!nid' => $nid), WATCHDOG_WARNING);
+          $tolatlon = getdirections_load_latlon_defaults();
         }
         $toloc = _getdirections_loadaddress($tolocation[0]);
         if ($tolocation[0]['country']) {
@@ -1054,6 +1064,10 @@ function getdirections_latlon($direction, $latlon, $locs='', $width='', $height=
   $country = '';
   $nid = 0;
   $type = 'other';
+  if (! getdirections_latlon_load($latlon)) {
+    watchdog('getdirections', 'Lat, Lon failed for user id !uid', array('!uid' => $uid), WATCHDOG_WARNING);
+    $latlon = getdirections_load_latlon_defaults();
+  }
   $content = getdirections_direction($direction, $locs, $country, $latlon, $nid, $type, $width, $height);
   return $content;
 }
@@ -1077,6 +1091,7 @@ function getdirections_setlocation_id($direction, $lid, $width='', $height='') {
       // sanity check
       if (! getdirections_latlon_load($latlon)) {
         watchdog('getdirections', 'Lat, Lon failed for location id !lid', array('!lid' => $lid), WATCHDOG_WARNING);
+        $latlon = getdirections_load_latlon_defaults();
       }
       $loc = _getdirections_loadaddress($location);
       // $locs only used for display now
@@ -1235,6 +1250,11 @@ function getdirections_is_advanced() {
     return TRUE;
   }
   return FALSE;
+}
+
+function getdirections_load_latlon_defaults() {
+  $getdirections_defaults = getdirections_defaults();
+  return $getdirections_defaults['latlong'];
 }
 
 // for colorbox and suchlike
