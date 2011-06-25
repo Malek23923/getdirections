@@ -37,6 +37,12 @@ tbody, thead {
 #getdirections_trafficinfo {
   margin-bottom: 8px;
 }
+#getdirections_bicycleinfo {
+  margin-bottom: 8px;
+}
+#getdirections_panoramio {
+  margin-bottom: 8px;
+}
 #getdirections_switchfromto {
   margin-bottom: 8px;
 }
