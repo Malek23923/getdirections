@@ -21,8 +21,12 @@
   var tomarker;
   var frommarker;
   var trafficInfo;
+  var bicycleInfo;
   var traffictoggleState = 1;
   var bicycletoggleState = 1;
+
+  var panoramioLayer;
+  var panoramiotoggleState = 1;
 
   // error codes
   function getdirectionserrcode(errcode) {
@@ -305,6 +309,10 @@
       bicycleInfo = new google.maps.BicyclingLayer();
       bicycleInfo.setMap(map);
     }
+    if (Drupal.settings.getdirections.panoramio_show) {
+      panoramioLayer = new google.maps.panoramio.PanoramioLayer();
+      panoramioLayer.setMap(map);
+    }
 
     // define some icons
     var icon1 = new google.maps.MarkerImage(
@@ -404,6 +412,16 @@
     else {
       bicycleInfo.setMap(map);
       bicycletoggleState = 1;
+    }
+  }
+  Drupal.togglePanoramio = function() {
+    if (panoramiotoggleState == 1) {
+      panoramioLayer.setMap();
+      panoramiotoggleState = 0;
+    }
+    else {
+      panoramioLayer.setMap(map);
+      panoramiotoggleState = 1;
     }
   }
 

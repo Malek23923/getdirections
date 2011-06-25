@@ -6,6 +6,7 @@
 }
 #getdirections_map_canvas {
 }
+
 .getdirections {
   margin-top: 8px;
 }
@@ -39,6 +40,12 @@ tbody, thead {
   margin-bottom: 8px;
 }
 #getdirections_trafficinfo {
+  margin-bottom: 8px;
+}
+#getdirections_bicycleinfo {
+  margin-bottom: 8px;
+}
+#getdirections_panoramio {
   margin-bottom: 8px;
 }
 #getdirections_switchfromto {

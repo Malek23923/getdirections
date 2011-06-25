@@ -135,7 +135,7 @@ function getdirections_settings_form() {
   }
   $form['getdirections_default']['controltype'] = array(
     '#type' => 'select',
-    '#title' => t('Control type'),
+    '#title' => (variable_get('getdirections_use_v3', 0) ? t('Zoom Control type') : t('Control type')),
     '#options' => $opts,
     '#default_value' => $getdirections_defaults['controltype'],
   );
@@ -151,7 +151,7 @@ function getdirections_settings_form() {
 
   $form['getdirections_default']['mtc'] = array(
     '#type' => 'select',
-    '#title' => t('Map Type Control selection'),
+    '#title' => t('Map Control Type'),
     '#options' => $opts2,
     '#default_value' => $getdirections_defaults['mtc'],
   );
@@ -520,6 +520,13 @@ function getdirections_settings_form() {
       '#title' => t('Enable Bicycling information'),
       '#default_value' =>  $getdirections_misc['bicycleinfo'],
       '#description' => t('Google bicycling layer, limited availability.'),
+      '#return_value' => 1,
+    );
+    $form['getdirections_misc']['panoramio_show'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Enable Panoramio'),
+      '#default_value' =>  $getdirections_misc['panoramio_show'],
+      '#description' => t('Google panoramio picture links.'),
       '#return_value' => 1,
     );
   }

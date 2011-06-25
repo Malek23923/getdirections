@@ -14,8 +14,12 @@
   var bounds;
   var map;
   var trafficInfo;
+  var bicycleInfo;
   var traffictoggleState = 1;
   var bicycletoggleState = 1;
+
+  var panoramioLayer;
+  var panoramiotoggleState = 1;
 
   var path = [];
   var gmarkers = [];
@@ -487,6 +491,10 @@
       bicycleInfo = new google.maps.BicyclingLayer();
       bicycleInfo.setMap(map);
     }
+    if (Drupal.settings.getdirections.panoramio_show) {
+      panoramioLayer = new google.maps.panoramio.PanoramioLayer();
+      panoramioLayer.setMap(map);
+    }
 
     google.maps.event.addListener(map, 'click', function(event) {
       if (event.latLng) {
@@ -616,6 +624,17 @@
     else {
       bicycleInfo.setMap(map);
       bicycletoggleState = 1;
+    }
+  }
+
+  Drupal.togglePanoramio = function() {
+    if (panoramiotoggleState == 1) {
+      panoramioLayer.setMap();
+      panoramiotoggleState = 0;
+    }
+    else {
+      panoramioLayer.setMap(map);
+      panoramiotoggleState = 1;
     }
   }
 

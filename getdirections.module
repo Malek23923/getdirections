@@ -223,8 +223,8 @@ function getdirections_access_location() {
 function getdirections_direction($direction='', $location='', $country='', $latlon='', $id=0, $type='node', $width='', $height='') {
   global $language;
   $getdirections_defaults = getdirections_defaults();
-  getdirections_setup_map($getdirections_defaults);
   $getdirections_misc = getdirections_misc_defaults();
+  getdirections_setup_map($getdirections_defaults, $getdirections_misc);
   $lla = explode(',', $getdirections_defaults['latlong']);
   $getdirections_settings = array(
     'lat' => $lla[0],
@@ -253,6 +253,7 @@ function getdirections_direction($direction='', $location='', $country='', $latl
     $getdirections_settings['overview_opened'] = $getdirections_defaults['behavior']['overview_opened'];
     $getdirections_settings['streetview_show'] = $getdirections_defaults['streetview_show'];
     $getdirections_settings['pancontrol'] = $getdirections_defaults['pancontrol'];
+    $getdirections_settings['panoramio_show'] = $getdirections_misc['panoramio_show'];
   }
 
   drupal_add_js(array('getdirections' => $getdirections_settings), 'setting');
@@ -286,8 +287,8 @@ function getdirections_direction($direction='', $location='', $country='', $latl
 function getdirections_locations($fromlocs, $fromlatlon, $tolocs, $tolatlon, $width='', $height='') {
   global $language;
   $getdirections_defaults = getdirections_defaults();
-  getdirections_setup_map($getdirections_defaults);
   $getdirections_misc = getdirections_misc_defaults();
+  getdirections_setup_map($getdirections_defaults, $getdirections_misc);
   $lla = explode(',', $getdirections_defaults['latlong']);
   $getdirections_settings = array(
     'lat' => $lla[0],
@@ -317,6 +318,7 @@ function getdirections_locations($fromlocs, $fromlatlon, $tolocs, $tolatlon, $wi
     $getdirections_settings['overview_opened'] = $getdirections_defaults['behavior']['overview_opened'];
     $getdirections_settings['streetview_show'] = $getdirections_defaults['streetview_show'];
     $getdirections_settings['pancontrol'] = $getdirections_defaults['pancontrol'];
+    $getdirections_settings['panoramio_show'] = $getdirections_misc['panoramio_show'];
   }
   drupal_add_js(array('getdirections' => $getdirections_settings), 'setting');
   if (! $getdirections_misc['keep_title']) {
@@ -344,8 +346,8 @@ function getdirections_locations($fromlocs, $fromlatlon, $tolocs, $tolatlon, $wi
 function getdirections_locations_via($locs, $latlons, $width='', $height='') {
   global $language;
   $getdirections_defaults = getdirections_defaults();
-  getdirections_setup_map($getdirections_defaults);
   $getdirections_misc = getdirections_misc_defaults();
+  getdirections_setup_map($getdirections_defaults, $getdirections_misc);
   $lla = explode(',', $getdirections_defaults['latlong']);
   $getdirections_settings = array(
     'lat' => $lla[0],
@@ -374,6 +376,7 @@ function getdirections_locations_via($locs, $latlons, $width='', $height='') {
     $getdirections_settings['overview_opened'] = $getdirections_defaults['behavior']['overview_opened'];
     $getdirections_settings['streetview_show'] = $getdirections_defaults['streetview_show'];
     $getdirections_settings['pancontrol'] = $getdirections_defaults['pancontrol'];
+    $getdirections_settings['panoramio_show'] = $getdirections_misc['panoramio_show'];
   }
   drupal_add_js(array('getdirections' => $getdirections_settings), 'setting');
   if (! $getdirections_misc['keep_title']) {
@@ -525,7 +528,7 @@ function getdirections_direction_form($form, &$form_state, $fromto='', $loc='', 
           'bicycling' => t('Bicycling'),
         ),
         '#default_value' => 'driving',
-        '#weight' => 5,
+        '#weight' => 6,
       );
     }
     if ($getdirections_defaults['travelextras_show']) {
@@ -537,7 +540,7 @@ function getdirections_direction_form($form, &$form_state, $fromto='', $loc='', 
           'avoidtolls' => t('Avoid Tolls'),
           'altroute' => t('Alternative routes'),
         ),
-        '#weight' => 6,
+        '#weight' => 8,
       );
     }
   }
@@ -546,7 +549,7 @@ function getdirections_direction_form($form, &$form_state, $fromto='', $loc='', 
     $form['trafficinfo'] = array(
       '#type' => 'button',
       '#value' => t('Toggle traffic info'),
-      '#weight' => 8,
+      '#weight' => 10,
       '#attributes' => array( 'onClick' => 'Drupal.toggleTraffic(); return false;', 'title' => t('Limited Availability')),
     );
   }
@@ -555,8 +558,16 @@ function getdirections_direction_form($form, &$form_state, $fromto='', $loc='', 
       $form['bicycleinfo'] = array(
         '#type' => 'button',
         '#value' => t('Toggle bicycling info'),
-        '#weight' => 8,
+        '#weight' => 12,
         '#attributes' => array( 'onClick' => 'Drupal.toggleBicycle(); return false;', 'title' => t('Limited Availability')),
+      );
+    }
+    if ($getdirections_misc['panoramio_show']) {
+      $form['panoramio'] = array(
+        '#type' => 'button',
+        '#value' => t('Toggle Panoramio'),
+        '#weight' => 14,
+        '#attributes' => array( 'onClick' => 'Drupal.togglePanoramio(); return false;'),
       );
     }
   }
@@ -564,7 +575,7 @@ function getdirections_direction_form($form, &$form_state, $fromto='', $loc='', 
     $form['switchfromto'] = array(
       '#type' => 'button',
       '#value' => t('Switch From/To'),
-      '#weight' => 9,
+      '#weight' => 16,
       '#attributes' => array( 'onClick' => 'Drupal.toggleFromto(); return false;'),
     );
   }
@@ -573,14 +584,14 @@ function getdirections_direction_form($form, &$form_state, $fromto='', $loc='', 
     $form['next'] = array(
       '#type' => 'button',
       '#value' => t('Next'),
-      '#weight' => 10,
+      '#weight' => 18,
       '#attributes' => array( 'onClick' => 'Drupal.nextbtn(); return false;'),
     );
   }
   $form['submit'] = array(
     '#type' => 'submit',
     '#value' => t('Get Directions'),
-    '#weight' => 12,
+    '#weight' => 20,
   );
   return $form;
 }
@@ -703,6 +714,7 @@ function getdirections_misc_defaults() {
     'bicycleinfo' => 0,
     'switchfromto' => 0,
     'show_duration' => 0,
+    'panoramio_show' => 0,
   ));
   return $getdirections_misc;
 }
@@ -1082,16 +1094,27 @@ function getdirections_setlocation_id($direction, $lid, $width='', $height='') {
  *   Required. the current settings.
  * Sets up the call to googlemaps, css and the relevant getdirections js in html head
  */
-function getdirections_setup_map($defaults) {
+function getdirections_setup_map($defaults, $misc_defaults) {
   global $language;
+  $libraries = array();
   if (variable_get('getdirections_use_v3', 0)) {
    // v3 googlemaps API
     $query = array(
       'sensor' => 'false',
       'language' => $language->language,
     );
+    if($misc_defaults['panoramio_show']) {
+      $libraries[] = 'panoramio';
+    }
+    // more libraries here
+
+    // load libraries if any
+    if (count($libraries)) {
+      $query['libraries'] = implode(',', $libraries);
+    }
 
     $gmaplink = url('http://maps.google.com/maps/api/js', array('query' => $query));
+
     if ($defaults['use_advanced']) {
       if ($defaults['advanced_alternate']) {
         $js = GETDIRECTIONS_PATH . '/getdirections_v3b.js';

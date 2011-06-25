@@ -259,6 +259,10 @@ function theme_getdirections_direction_form($variables) {
     $form['bicycleinfo']['#prefix'] = '<div id="getdirections_bicycleinfo">';
     $form['bicycleinfo']['#suffix'] = '</div>';
   }
+  if (isset($form['panoramio'])) {
+    $form['panoramio']['#prefix'] = '<div id="getdirections_panoramio">';
+    $form['panoramio']['#suffix'] = '</div>';
+  }
   if (isset($form['switchfromto'])) {
     $form['switchfromto']['#prefix'] = '<div id="getdirections_switchfromto">';
     $form['switchfromto']['#suffix'] = '</div>';
