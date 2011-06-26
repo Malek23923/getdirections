@@ -624,6 +624,7 @@ function getdirections_defaults() {
         'draggable' => 1,
         'overview' => 0,
         'overview_opened' => 0,
+        'googlebar' => 0,
       ),
       'unitsystem' => 'metric',
       'from_width' => 20,

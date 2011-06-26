@@ -270,6 +270,10 @@ function getdirections_settings_form() {
     );
   }
   else {
+    $form['getdirections_default']['behavior']['googlebar'] = array(
+      '#type' => 'value',
+      '#value' => 0,
+    );
     $form['getdirections_default']['behavior']['overview_opened'] = array(
       '#type' => 'checkbox',
       '#title' => t('Overview map state'),
@@ -528,6 +532,16 @@ function getdirections_settings_form() {
       '#default_value' =>  $getdirections_misc['panoramio_show'],
       '#description' => t('Google panoramio picture links.'),
       '#return_value' => 1,
+    );
+  }
+  else {
+    $form['getdirections_misc']['bicycleinfo'] = array(
+      '#type' => 'value',
+      '#value' => 0,
+    );
+    $form['getdirections_misc']['panoramio_show'] = array(
+      '#type' => 'value',
+      '#value' => 0,
     );
   }
   if (! $getdirections_defaults['use_advanced']) {
