@@ -1179,7 +1179,7 @@ function getdirections_setup_map($defaults, $misc_defaults) {
  * Implements hook_views_api().
  */
 function getdirections_views_api() {
-  return array('api' => 2);
+  return array('api' => 3);
 }
 
 /**
