@@ -81,6 +81,16 @@ function theme_getdirections_show($variables) {
   if ($getdirections_misc['show_duration']) {
     $output .= '<div id="getdirections_show_duration"></div>';
   }
+  $help = '';
+  if (getdirections_is_advanced()) {
+    if ($getdirections_defaults['waypoints'] > 0 && ! $getdirections_defaults['advanced_alternate'] ) {
+      $help = t('Drag <img src="http://labs.google.com/ridefinder/images/mm_20_!c.png"> to activate a waypoint', array('!c' => $getdirections_defaults['waypoint_color']));
+    }
+    elseif ($getdirections_defaults['advanced_alternate']) {
+      $help = t('You can drag the route to change it');
+    }
+  }
+  $output .= '<div id="getdirections_help">' . $help . '</div>';
   $header = array();
   $rows[] = array(
     array(
@@ -97,16 +107,6 @@ function theme_getdirections_show($variables) {
     ),
   );
   $output .= '<div class="getdirections">' . theme('table', array('header' => $header, 'rows' => $rows)) . '</div>';
-  $help = '';
-  if (getdirections_is_advanced()) {
-    if ($getdirections_defaults['waypoints'] > 0 && ! $getdirections_defaults['advanced_alternate'] ) {
-      $help = t('Drag <img src="http://labs.google.com/ridefinder/images/mm_20_!c.png"> to activate a waypoint', array('!c' => $getdirections_defaults['waypoint_color']));
-    }
-    elseif ($getdirections_defaults['advanced_alternate']) {
-      $help = t('You can drag the route to change it');
-    }
-  }
-  $output .= '<div id="getdirections_help">' . $help . '</div>';
   return $output;
 }
 

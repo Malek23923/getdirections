@@ -382,6 +382,13 @@ function getdirections_settings_form() {
       '#description' => t('An alternative to waypoints.'),
       '#default_value' => ($getdirections_defaults['advanced_alternate'] ? $getdirections_defaults['advanced_alternate'] : 0),
       '#return_value' => 1,
+    );
+    $form['getdirections_default']['advanced_autocomplete'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Use Google Autocomplete'),
+      '#description' => t('An alternative method for collecting starting point and destination.'),
+      '#default_value' => ($getdirections_defaults['advanced_autocomplete'] ? $getdirections_defaults['advanced_autocomplete'] : 0),
+      '#return_value' => 1,
       '#suffix' => '</div>',
     );
   }
