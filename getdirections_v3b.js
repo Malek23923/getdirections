@@ -128,6 +128,11 @@ function mygetDirections() {
 
   var request = getRequest(from, to);
   renderdirections(request);
+
+  // disable to and from boxes
+  $("#edit-from").attr('disabled', true);
+  $("#edit-to").attr('disabled', true);
+
 }
 
 // convert lat,lon into LatLng object
@@ -593,13 +598,34 @@ function initialize() {
   }
 
   // minding textfields
-  $("#edit-from").change( function() {
-    showAddress();
-  });
-  $("#edit-to").change( function() {
-    showAddress();
-  });
-
+  if (Drupal.settings.getdirections.advanced_autocomplete) {
+    if ($("input.form-text#edit-from")) {
+      var input_from = document.getElementById('edit-from');
+      var ac_from = new google.maps.places.Autocomplete(input_from);
+      google.maps.event.addListener(ac_from, 'place_changed', function() {
+        var place_from = ac_from.getPlace();
+        $("#edit-from").val(place_from.formatted_address);
+        showAddress();
+      });
+    }
+    if ($("input.form-text#edit-to")) {
+      var input_to = document.getElementById('edit-to');
+      var ac_to = new google.maps.places.Autocomplete(input_to);
+      google.maps.event.addListener(ac_to, 'place_changed', function() {
+        var place_to = ac_to.getPlace();
+        $("#edit-to").val(place_to.formatted_address);
+        showAddress();
+      });
+    }
+  }
+  else {
+    $("#edit-from").change( function() {
+      showAddress();
+    });
+    $("#edit-to").change( function() {
+      showAddress();
+    });
+  }
 
 } // end initialise
 

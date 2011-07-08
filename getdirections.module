@@ -243,6 +243,7 @@ function getdirections_direction($direction='', $location='', $country='', $latl
     $getdirections_settings['overview_opened'] = $getdirections_defaults['behavior']['overview_opened'];
     $getdirections_settings['streetview_show'] = $getdirections_defaults['streetview_show'];
     $getdirections_settings['pancontrol'] = $getdirections_defaults['pancontrol'];
+    $getdirections_settings['advanced_autocomplete'] = $getdirections_defaults['advanced_autocomplete'];
     $getdirections_settings['panoramio_show'] = $getdirections_misc['panoramio_show'];
   }
 
@@ -308,6 +309,7 @@ function getdirections_locations($fromlocs, $fromlatlon, $tolocs, $tolatlon, $wi
     $getdirections_settings['overview_opened'] = $getdirections_defaults['behavior']['overview_opened'];
     $getdirections_settings['streetview_show'] = $getdirections_defaults['streetview_show'];
     $getdirections_settings['pancontrol'] = $getdirections_defaults['pancontrol'];
+    $getdirections_settings['advanced_autocomplete'] = $getdirections_defaults['advanced_autocomplete'];
     $getdirections_settings['panoramio_show'] = $getdirections_misc['panoramio_show'];
   }
   drupal_add_js(array('getdirections' => $getdirections_settings), 'setting');
@@ -366,6 +368,7 @@ function getdirections_locations_via($locs, $latlons, $width='', $height='') {
     $getdirections_settings['overview_opened'] = $getdirections_defaults['behavior']['overview_opened'];
     $getdirections_settings['streetview_show'] = $getdirections_defaults['streetview_show'];
     $getdirections_settings['pancontrol'] = $getdirections_defaults['pancontrol'];
+    $getdirections_settings['advanced_autocomplete'] = $getdirections_defaults['advanced_autocomplete'];
     $getdirections_settings['panoramio_show'] = $getdirections_misc['panoramio_show'];
   }
   drupal_add_js(array('getdirections' => $getdirections_settings), 'setting');
@@ -398,7 +401,7 @@ function getdirections_locations_via($locs, $latlons, $width='', $height='') {
 function getdirections_direction_form($form_state, $fromto='', $loc='', $country='', $latlon='') {
   $getdirections_defaults = getdirections_defaults();
   $location = module_exists('location');
-  if ($location) {
+  if ($location && ! $getdirections_defaults['advanced_autocomplete']) {
     $countries = array(
       '#type' => 'select',
       '#title' => t('Country'),
@@ -453,7 +456,10 @@ function getdirections_direction_form($form_state, $fromto='', $loc='', $country
   }
   else {
     $from_desc = t('Enter the address, postcode and/or city and country from where you want to start your journey.');
-    if ($location) {
+    if ($getdirections_defaults['advanced_autocomplete']) {
+      $from_desc = t('Start typing the address of your starting point, then select from the dropdown menu.');
+    }
+    if ($location && ! $getdirections_defaults['advanced_autocomplete']) {
       $form['country_from'] = $countries;
       $form['country_from']['#weight'] = $from_country_weight;
      $from_desc = t('Enter the address, postcode and/or city from where you want to start your journey.');
@@ -492,7 +498,10 @@ function getdirections_direction_form($form_state, $fromto='', $loc='', $country
   }
   else {
     $to_desc = t('Enter the address, postcode and/or city and country of your journey destination.');
-    if ($location) {
+    if ($getdirections_defaults['advanced_autocomplete']) {
+      $to_desc = t('Start typing the address of your destination, then select from the dropdown menu.');
+    }
+    if ($location && ! $getdirections_defaults['advanced_autocomplete']) {
       $form['country_to'] = $countries;
       $form['country_to']['#weight'] = $to_country_weight;
       $to_desc = t('Enter the address, postcode and/or city of your journey destination.');
@@ -625,6 +634,7 @@ function getdirections_defaults() {
       'waypoints' => 0,
       'waypoint_color' => 'white',
       'advanced_alternate' => 0,
+      'advanced_autocomplete' => 0,
     );
   }
   else {
@@ -637,6 +647,7 @@ function getdirections_defaults() {
       $defaults['waypoints'] = 0;
       $defaults['waypoint_color'] = 'white';
       $defaults['advanced_alternate'] = 0;
+      $defaults['advanced_autocomplete'] = 0;
     }
     else {
       $defaults = array(
@@ -665,6 +676,7 @@ function getdirections_defaults() {
         'waypoints' => 0,
         'waypoint_color' => 'white',
         'advanced_alternate' => 0,
+        'advanced_autocomplete' => 0,
       );
     }
   }
@@ -1108,6 +1120,9 @@ function getdirections_setup_map($defaults, $misc_defaults) {
       'language' => $language->language,
     );
     $libraries = array();
+    if ($defaults['advanced_autocomplete']) {
+      $libraries[] = 'places';
+    }
     if($misc_defaults['panoramio_show']) {
       $libraries[] = 'panoramio';
     }
