@@ -203,6 +203,7 @@ function theme_getdirections_show_locations_via($variables) {
 function theme_getdirections_direction_form($variables) {
   $form = $variables['form'];
   $output = '';
+  $getdirections_defaults = getdirections_defaults();
 
   // if you want to do fancy things with the form, do it here ;-)
   if (isset($form['mto'])) {
@@ -228,14 +229,14 @@ function theme_getdirections_direction_form($variables) {
       $form['country_from']['#prefix'] = '<div id="getdirections_start"><div class="container-inline getdirections_display">';
       $form['country_from']['#suffix'] = '</div>';
     }
-    if (isset($form['from']) && $form['from']['#type'] == 'textfield' && module_exists('location')) {
+    if (isset($form['from']) && $form['from']['#type'] == 'textfield' && module_exists('location') && ! $getdirections_defaults['advanced_autocomplete']) {
       $form['from']['#suffix'] = '</div>';
     }
     if (isset($form['country_to'])) {
       $form['country_to']['#prefix'] = '<div id="getdirections_end"><div class="container-inline getdirections_display">';
       $form['country_to']['#suffix'] = '</div>';
     }
-    if (isset($form['to']) && $form['to']['#type'] == 'textfield' && module_exists('location')) {
+    if (isset($form['to']) && $form['to']['#type'] == 'textfield' && module_exists('location') && ! $getdirections_defaults['advanced_autocomplete']) {
       $form['to']['#suffix'] = '</div>';
     }
   }
