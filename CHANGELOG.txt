@@ -1,3 +1,7 @@
+Get Directions for D6 in 6.x-2.x, 2011-07-10
+------------------------------------
+by hutch, added config check
+
 Get Directions for D6 in 6.x-2.x, 2011-07-09
 ------------------------------------
 by hutch, fixed theming bug

@@ -211,6 +211,9 @@ function getdirections_access_location() {
  *   Returns the themed map and form
  */
 function getdirections_direction($direction='', $location='', $country='', $latlon='', $id=0, $type='node', $width='', $height='') {
+  if (! getdirections_check()) {
+    return t('You need to !c first.', array('!c' => l('configure Getdirections', 'admin/settings/getdirections')));
+  }
   global $language;
   $getdirections_defaults = getdirections_defaults();
   $getdirections_misc = getdirections_misc_defaults();
@@ -276,6 +279,9 @@ function getdirections_direction($direction='', $location='', $country='', $latl
  *   Returns the themed map.
  */
 function getdirections_locations($fromlocs, $fromlatlon, $tolocs, $tolatlon, $width='', $height='') {
+  if (! getdirections_check()) {
+    return t('You need to !c first.', array('!c' => l('configure Getdirections', 'admin/settings/getdirections')));
+  }
   global $language;
   $getdirections_defaults = getdirections_defaults();
   $getdirections_misc = getdirections_misc_defaults();
@@ -336,6 +342,9 @@ function getdirections_locations($fromlocs, $fromlatlon, $tolocs, $tolatlon, $wi
  *   Returns the themed map.
  */
 function getdirections_locations_via($locs, $latlons, $width='', $height='') {
+  if (! getdirections_check()) {
+    return t('You need to !c first.', array('!c' => l('configure Getdirections', 'admin/settings/getdirections')));
+  }
   global $language;
   $getdirections_defaults = getdirections_defaults();
   $getdirections_misc = getdirections_misc_defaults();
@@ -1254,6 +1263,14 @@ function getdirections_is_advanced() {
 function getdirections_load_latlon_defaults() {
   $getdirections_defaults = getdirections_defaults();
   return $getdirections_defaults['latlong'];
+}
+
+function getdirections_check() {
+  $check = variable_get('getdirections_default', 'xxx');
+  if ($check == 'xxx') {
+    return FALSE;
+  }
+  return TRUE;
 }
 
 // for colorbox and suchlike
