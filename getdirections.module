@@ -222,7 +222,7 @@ function getdirections_access_location() {
  */
 function getdirections_direction($direction='', $location='', $country='', $latlon='', $id=0, $type='node', $width='', $height='') {
   if (! getdirections_check()) {
-    return t('You need to !c first.', array('!c' => l('configure Getdirections', 'admin/settings/getdirections')));
+    return t('You need to !c first.', array('!c' => l('configure Getdirections', 'admin/config/services/getdirections')));
   }
   global $language;
   $getdirections_defaults = getdirections_defaults();
@@ -290,7 +290,7 @@ function getdirections_direction($direction='', $location='', $country='', $latl
  */
 function getdirections_locations($fromlocs, $fromlatlon, $tolocs, $tolatlon, $width='', $height='') {
   if (! getdirections_check()) {
-    return t('You need to !c first.', array('!c' => l('configure Getdirections', 'admin/settings/getdirections')));
+    return t('You need to !c first.', array('!c' => l('configure Getdirections', 'admin/config/services/getdirections')));
   }
   global $language;
   $getdirections_defaults = getdirections_defaults();
@@ -353,7 +353,7 @@ function getdirections_locations($fromlocs, $fromlatlon, $tolocs, $tolatlon, $wi
  */
 function getdirections_locations_via($locs, $latlons, $width='', $height='') {
   if (! getdirections_check()) {
-    return t('You need to !c first.', array('!c' => l('configure Getdirections', 'admin/settings/getdirections')));
+    return t('You need to !c first.', array('!c' => l('configure Getdirections', 'admin/config/services/getdirections')));
   }
   global $language;
   $getdirections_defaults = getdirections_defaults();

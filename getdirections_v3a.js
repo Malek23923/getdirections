@@ -133,6 +133,10 @@
 
     var request = getRequest(from, to, waypts);
     renderdirections(request);
+
+    // disable to and from boxes
+    $("#edit-from").attr('disabled', true);
+    $("#edit-to").attr('disabled', true);
   }
 
   // convert lat,lon into LatLng object

@@ -119,14 +119,18 @@
       gmarkers[endpoint].setMap(null);
     }
 
-  // reset undo button
-  setUndoDisabled(true);
-  oldDirections = [];
-  currentDirections = null;
-  $("#getdirections-undo").show();
+    // reset undo button
+    setUndoDisabled(true);
+    oldDirections = [];
+    currentDirections = null;
+    $("#getdirections-undo").show();
 
-  var request = getRequest(from, to);
+    var request = getRequest(from, to);
     renderdirections(request);
+
+    // disable to and from boxes
+    $("#edit-from").attr('disabled', true);
+    $("#edit-to").attr('disabled', true);
   }
 
   // convert lat,lon into LatLng object
