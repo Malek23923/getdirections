@@ -42,7 +42,7 @@ function getdirections_settings_form() {
       );
       $form['getdirections_api_key'] = array(
         '#type' => 'value',
-        '#value' => $gmap_key,
+        '#value' => (variable_get('getdirections_api_key', '') ? variable_get('getdirections_api_key', '') : $gmap_key),
       );
     }
     else {
