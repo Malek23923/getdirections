@@ -31,14 +31,29 @@ function getdirections_settings_form() {
     else {
       $gmap_key = '';
     }
-    $form['getdirections_api_key'] = array(
-      '#type' => 'textfield',
-      '#title' => t('Your Google Maps API key'),
-      '#disabled' => ($gmap_key ? TRUE : FALSE),
-      '#default_value' => (variable_get('getdirections_api_key', '') ? variable_get('getdirections_api_key', '') : $gmap_key),
-      '#description' => t('Required for version 2 of the Googlemaps API.'),
-      '#size' => 92,
-    );
+    if ($gmap_key) {
+      $form['getdirections_api_key_show'] = array(
+        '#type' => 'textfield',
+        '#title' => t('Your Google Maps API key'),
+        '#disabled' => TRUE,
+        '#default_value' => (variable_get('getdirections_api_key', '') ? variable_get('getdirections_api_key', '') : $gmap_key),
+        '#description' => t('Required for version 2 of the Googlemaps API.'),
+        '#size' => 92,
+      );
+      $form['getdirections_api_key'] = array(
+        '#type' => 'value',
+        '#value' => $gmap_key,
+      );
+    }
+    else {
+      $form['getdirections_api_key'] = array(
+        '#type' => 'textfield',
+        '#title' => t('Your Google Maps API key'),
+        '#default_value' => (variable_get('getdirections_api_key', '') ? variable_get('getdirections_api_key', '') : $gmap_key),
+        '#description' => t('Required for version 2 of the Googlemaps API.'),
+        '#size' => 92,
+      );
+    }
   }
 
   $form['getdirections_default'] = array(

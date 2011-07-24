@@ -108,3 +108,65 @@ when you are viewing a location node or a user with a location.
 
 Getdirections now supports the Googlemaps API version 3, this has many new features.
 
+
+The getdirections_latlon() function can be used in code or called by URL.
+getdirections_latlon($direction, $latlon, $locs)
+Where $direction is either 'to' or 'from', $latlon is the latitude,longitude to be used
+and $locs is an optional string to describe the point being used.
+The URL method would be in the form of
+<a href="/getdirections/latlon/(from or to)/(lat,lon)/optional description">My Link</a>
+You can also use the function getdirections_location_latlon_path() in getdirections.api.inc to
+generate the string for you.
+
+Themeing
+To change the way the map is displayed you should copy the theme function you want to change
+to your theme's template.php, renaming appropriately and editing it there.
+see getdirections.theme.inc
+There is plenty of help on themeing on drupal.org
+
+An example of a theming change, from http://drupal.org/node/1113042
+
+Your theme should have a template.php,
+copy the function theme_getdirections_show() from getdirections.theme.inc to your template.php,
+renaming it appropriately, eg from
+theme_getdirections_show
+to
+mythemename_getdirections_show
+where 'mythemename' is the name of your theme. Then change the following:
+
+  $rows[] = array(
+    array(
+      'data' => '<div id="getdirections_map_canvas" style="width: '. $width .'; height: '. $height .'" ></div>',
+      'valign' => 'top',
+      'align' => 'center',
+      'class' => 'getdirections-map',
+    ),
+    array(
+      'data' => ($getdirections_defaults['advanced_alternate'] ? '<button id="getdirections-undo" onclick="getdirectionsundo()">' . t('Undo') . '</button>' : '') .'<div id="getdirections_directions"></div>',
+      'valign' => 'top' ,
+      'align' => 'left',
+      'class' => 'getdirections-list',
+    ),
+  );
+
+to
+  $rows[] = array(
+    array(
+      'data' => '<div id="getdirections_map_canvas" style="width: '. $width .'; height: '. $height .'" ></div>',
+      'valign' => 'top',
+      'align' => 'center',
+      'class' => 'getdirections-map',
+    ),
+  );
+  $rows[] = array(
+    array(
+      'data' => ($getdirections_defaults['advanced_alternate'] ? '<button id="getdirections-undo" onclick="getdirectionsundo()">' . t('Undo') . '</button>' : '') .'<div id="getdirections_directions"></div>',
+      'valign' => 'top' ,
+      'align' => 'left',
+      'class' => 'getdirections-list',
+    ),
+  );
+
+What this does is rearrange the table so that it produces two rows with one datacell each instead of one row with two datacells.
+
+Make sure you flush the theme registry when you have made the changes, the devel and admin_menu modules are helpful for this.
