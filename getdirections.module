@@ -251,8 +251,16 @@ function getdirections_direction($direction='', $location='', $country='', $latl
   }
 
   drupal_add_js(array('getdirections' => $getdirections_settings), 'setting');
-  if (! $getdirections_misc['keep_title']) {
-    drupal_set_title(t("Get Directions"));
+
+  if ($getdirections_misc['keep_title'] && $id && $direction) {
+    if ($type == 'node') {
+      $node = node_load(array('nid' => $id ));
+      drupal_set_title(t('Get directions @d @t', array('@d' => $direction, '@t' => $node->title)));
+    }
+    elseif ($type == 'user') {
+      $account = user_load(array('uid' => $id ));
+      drupal_set_title(t('Get directions @d @t', array('@d' => $direction, '@t' => $account->name)));
+    }
   }
   if (empty($width)) {
     $width = $getdirections_defaults['width'];
@@ -319,9 +327,6 @@ function getdirections_locations($fromlocs, $fromlatlon, $tolocs, $tolatlon, $wi
     $getdirections_settings['panoramio_show'] = $getdirections_misc['panoramio_show'];
   }
   drupal_add_js(array('getdirections' => $getdirections_settings), 'setting');
-  if (! $getdirections_misc['keep_title']) {
-    drupal_set_title(t("Get Directions"));
-  }
   if (empty($width)) {
     $width = $getdirections_defaults['width'];
   }
@@ -381,9 +386,6 @@ function getdirections_locations_via($locs, $latlons, $width='', $height='') {
     $getdirections_settings['panoramio_show'] = $getdirections_misc['panoramio_show'];
   }
   drupal_add_js(array('getdirections' => $getdirections_settings), 'setting');
-  if (! $getdirections_misc['keep_title']) {
-    drupal_set_title(t("Get Directions"));
-  }
   if (empty($width)) {
     $width = $getdirections_defaults['width'];
   }

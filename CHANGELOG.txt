@@ -1,3 +1,7 @@
+Get Directions for D6 in 6.x-2.x, 2011-07-31
+------------------------------------
+by hutch, fixed show title feature
+
 Get Directions for D6 in 6.x-2.x, 2011-07-24
 ------------------------------------
 by hutch, fixed disabled bug in admin

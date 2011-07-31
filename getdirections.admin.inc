@@ -505,8 +505,8 @@ function getdirections_settings_form() {
   if (module_exists('location')) {
     $form['getdirections_misc']['keep_title'] = array(
       '#type' => 'checkbox',
-      '#title' => t('Keep original title'),
-      '#description' => t('Use the original title when using the getdirections_direction(), getdirections_locations() and getdirections_locations_via() functions'),
+      '#title' => t('Show original title'),
+      '#description' => t("Show the node title or user name when using 'to' or 'from'."),
       '#default_value' =>  $getdirections_misc['keep_title'],
       '#return_value' => 1,
     );
