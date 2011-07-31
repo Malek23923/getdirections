@@ -261,8 +261,16 @@ function getdirections_direction($direction='', $location='', $country='', $latl
   }
 
   drupal_add_js(array('getdirections' => $getdirections_settings), 'setting');
-  if (! $getdirections_misc['keep_title']) {
-    drupal_set_title(t("Get Directions"));
+
+  if ($getdirections_misc['keep_title'] && $id && $direction) {
+    if ($type == 'node') {
+      $node = node_load($id);
+      drupal_set_title(t('Get directions @d @t', array('@d' => $direction, '@t' => $node->title)));
+    }
+    elseif ($type == 'user') {
+      $account = user_load($id);
+      drupal_set_title(t('Get directions @d @t', array('@d' => $direction, '@t' => $account->name)));
+    }
   }
   if (empty($width)) {
     $width = $getdirections_defaults['width'];
