@@ -261,6 +261,12 @@ function getdirections_direction($direction='', $location='', $country='', $latl
       $account = user_load(array('uid' => $id ));
       drupal_set_title(t('Get directions @d @t', array('@d' => $direction, '@t' => $account->name)));
     }
+    elseif ($type == 'location') {
+      $t = getdirections_get_lid_title($id);
+      if ($t) {
+          drupal_set_title(t('Get directions @d @t', array('@d' => $direction, '@t' => $t)));
+      }
+    }
   }
   if (empty($width)) {
     $width = $getdirections_defaults['width'];
@@ -1252,6 +1258,22 @@ function getdirections_get_vid($nid) {
   $result = db_query('SELECT vid FROM {node} WHERE nid=%d', array($nid));
   $row = db_fetch_array($result);
   return (isset($row['vid']) && $row['vid'] ? $row['vid'] : FALSE);
+}
+
+function getdirections_get_nid_from_lid($lid) {
+  if (module_exists('location') && $lid) {
+    $result = db_query('SELECT nid FROM location_instance WHERE lid=%d',  array($lid));
+    $row = db_fetch_array($result);
+    return (isset($row['nid']) && $row['nid'] ? $row['nid'] : FALSE);
+  }
+}
+
+function getdirections_get_lid_title($lid) {
+  if (module_exists('location') && $lid) {
+    $result = db_query('SELECT name FROM location WHERE lid=%d', array($lid));
+    $row = db_fetch_array($result);
+    return (isset($row['name']) && $row['name'] ? $row['name'] : FALSE);
+  }
 }
 
 function getdirections_is_advanced() {

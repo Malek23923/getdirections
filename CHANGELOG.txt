@@ -1,3 +1,7 @@
+Get Directions for D6 in 6.x-2.x, 2011-08-12
+------------------------------------
+by hutch, added Return to page and show title for type location
+
 Get Directions for D6 in 6.x-2.x, 2011-07-31
 ------------------------------------
 by hutch, fixed show title feature

@@ -65,6 +65,13 @@ function theme_getdirections_show($form, $width, $height, $nid, $type) {
   elseif ($getdirections_returnlink['user_enable'] && $nid > 0 && $type == 'user') {
     $output .= '<div class="getdirections_returnlink">'. l($getdirections_returnlink['page_link'], 'user/' . $nid) .'</div>';
   }
+  elseif ($getdirections_returnlink['page_enable'] && $nid > 0 && $type == 'location') {
+    // $nid is actually lid
+    $id = getdirections_get_nid_from_lid($nid);
+    if ($id) {
+      $output .= '<div class="getdirections_returnlink">'. l($getdirections_returnlink['page_link'], 'node/' . $id) .'</div>';
+    }
+  }
   $output .= $form;
 
   $getdirections_defaults = getdirections_defaults();
