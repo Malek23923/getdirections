@@ -14,7 +14,7 @@
  */
 function getdirections_settings_form() {
   $getdirections_defaults = getdirections_defaults();
-  drupal_add_js(drupal_get_path('module', 'getdirections') .'/getdirections_admin.js');
+  drupal_add_js(GETDIRECTIONS_PATH .'/getdirections_admin.js');
 
   $form = array();
   $form['getdirections_use_v3'] = array(
@@ -428,6 +428,7 @@ function getdirections_settings_form() {
     $form['getdirections_returnlink']['page_link'] = array(
       '#type' => 'textfield',
       '#title' => t('Text of page return link'),
+      '#description' => t('Use %t to insert the page title'),
       '#default_value' => $getdirections_returnlink['page_link'],
       '#size' => 30,
       // need this to get validation to work
@@ -436,22 +437,25 @@ function getdirections_settings_form() {
       '#suffix' => '</div>',
     );
 
-    $form['getdirections_returnlink']['user_enable'] = array(
-      '#type' => 'checkbox',
-      '#title' => t('Enable User Return Link'),
-      '#default_value' =>  $getdirections_returnlink['user_enable'],
-      '#return_value' => 1,
-    );
-    $form['getdirections_returnlink']['user_link'] = array(
-      '#type' => 'textfield',
-      '#title' => t('Text of user return link'),
-      '#default_value' => $getdirections_returnlink['user_link'],
-      '#size' => 30,
-      // need this to get validation to work
-      '#parents' => array('getdirections_returnlink', 'user_link'),
-      '#prefix' => '<div id="wrap-user-link">',
-      '#suffix' => '</div>',
-    );
+    if (module_exists('location_user')) {
+      $form['getdirections_returnlink']['user_enable'] = array(
+        '#type' => 'checkbox',
+        '#title' => t('Enable User Return Link'),
+        '#default_value' =>  $getdirections_returnlink['user_enable'],
+        '#return_value' => 1,
+      );
+      $form['getdirections_returnlink']['user_link'] = array(
+        '#type' => 'textfield',
+        '#title' => t('Text of user return link'),
+        '#description' => t('Use %n to insert the user name'),
+        '#default_value' => $getdirections_returnlink['user_link'],
+        '#size' => 30,
+        // need this to get validation to work
+        '#parents' => array('getdirections_returnlink', 'user_link'),
+        '#prefix' => '<div id="wrap-user-link">',
+        '#suffix' => '</div>',
+      );
+    }
   }
   if (module_exists('colorbox')) {
     $form['getdirections_colorbox'] = array(
@@ -577,17 +581,17 @@ function getdirections_settings_validate($form, &$form_state) {
   if ( ! is_numeric($form_state['values']['getdirections_default']['from_width']) || $form_state['values']['getdirections_default']['from_width'] < 1) {
     form_set_error('getdirections_default][from_width', t('Width of From box must be a positive number'));
   }
-  if (isset($form_state['values']['getdirections_returnlink']['page_link'])) {
-    if ( empty($form_state['values']['getdirections_returnlink']['page_link'])) {
-      form_set_error('getdirections_returnlink][page_link', t('Text of return link cannot be empty'));
-    }
-    $form_state['values']['getdirections_returnlink']['page_link'] = check_plain($form_state['values']['getdirections_returnlink']['page_link']);
+
+  if ($form_state['values']['getdirections_returnlink']['page_enable'] && empty($form_state['values']['getdirections_returnlink']['page_link'])) {
+    form_set_error('getdirections_returnlink][page_link', t('Text of return link cannot be empty'));
   }
-  if (isset($form_state['values']['getdirections_returnlink']['user_link'])) {
-    if ( empty($form_state['values']['getdirections_returnlink']['user_link'])) {
+  #$form_state['values']['getdirections_returnlink']['page_link'] = check_plain($form_state['values']['getdirections_returnlink']['page_link']);
+
+  if (module_exists('location_user')) {
+    if ($form_state['values']['getdirections_returnlink']['user_enable'] && empty($form_state['values']['getdirections_returnlink']['user_link'])) {
       form_set_error('getdirections_returnlink][user_link', t('Text of return link cannot be empty'));
     }
-    $form_state['values']['getdirections_returnlink']['user_link'] = check_plain($form_state['values']['getdirections_returnlink']['user_link']);
+    #$form_state['values']['getdirections_returnlink']['user_link'] = check_plain($form_state['values']['getdirections_returnlink']['user_link']);
   }
 
   if (! variable_get('getdirections_use_v3', 0) && ! $form_state['values']['getdirections_use_v3'] && empty($form_state['values']['getdirections_api_key'])) {

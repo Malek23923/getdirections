@@ -60,16 +60,34 @@ function theme_getdirections_show($form, $width, $height, $nid, $type) {
     'user_link' => t('Return to page'),
   ));
   if ($getdirections_returnlink['page_enable'] && $nid > 0 && $type == 'node') {
-    $output .= '<div class="getdirections_returnlink">'. l($getdirections_returnlink['page_link'], 'node/' . $nid) .'</div>';
+    $node = node_load(array('nid' => $nid));
+    $linktext = $getdirections_returnlink['page_link'];
+    if ( preg_match("/%t/", $linktext)) {
+      $linktext = preg_replace("/%t/", $node->title, $linktext);
+    }
+    $l = l($linktext, 'node/' . $node->nid);
+    $output .= '<div class="getdirections_returnlink">'. $l .'</div>';
   }
   elseif ($getdirections_returnlink['user_enable'] && $nid > 0 && $type == 'user') {
-    $output .= '<div class="getdirections_returnlink">'. l($getdirections_returnlink['page_link'], 'user/' . $nid) .'</div>';
+    $account = user_load(array('uid' => $nid ));
+    $linktext = $getdirections_returnlink['user_link'];
+    if ( preg_match("/%n/", $linktext)) {
+      $linktext = preg_replace("/%n/", $account->name, $linktext);
+    }
+    $l = l($linktext, 'user/' . $account->uid);
+    $output .= '<div class="getlocations_returnlink">' . $l . '</div>';
   }
   elseif ($getdirections_returnlink['page_enable'] && $nid > 0 && $type == 'location') {
     // $nid is actually lid
     $id = getdirections_get_nid_from_lid($nid);
     if ($id) {
-      $output .= '<div class="getdirections_returnlink">'. l($getdirections_returnlink['page_link'], 'node/' . $id) .'</div>';
+      $node = node_load(array('nid' => $id));
+      $linktext = $getdirections_returnlink['page_link'];
+      if ( preg_match("/%t/", $linktext)) {
+        $linktext = preg_replace("/%t/", $node->title, $linktext);
+      }
+      $l = l($linktext, 'node/' . $node->nid);
+      $output .= '<div class="getdirections_returnlink">'. $l .'</div>';
     }
   }
   $output .= $form;
@@ -282,7 +300,7 @@ function template_preprocess_getdirections_box(&$variables) {
   if(module_exists('admin_menu')) {
     admin_menu_suppress();
   }
-  drupal_add_js(drupal_get_path('module', 'getdirections') .'/getdirections_box.js');
+  drupal_add_js(GETDIRECTIONS_PATH .'/getdirections_box.js');
 
   // Construct page title
   if (drupal_get_title()) {
