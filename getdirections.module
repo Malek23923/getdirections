@@ -6,12 +6,9 @@
  */
 
 define('GETDIRECTIONS_PATH', drupal_get_path('module', 'getdirections'));
-// enable once gmap/location modules are working in D7
-define('GETDIRECTIONS_USE_GMAP', TRUE);
-define('GETDIRECTIONS_USE_LOCATION', TRUE);
 
 /**
- * Implement of hook_help().
+ * Implements hook_help().
  */
 function getdirections_help($path, $arg) {
   switch ($path) {
@@ -22,7 +19,7 @@ function getdirections_help($path, $arg) {
 }
 
 /**
- * Implement hook_init().
+ * Implements hook_init().
  */
 function getdirections_init() {
   if (! module_load_include('inc', 'getdirections', 'getdirections.config')) {
@@ -46,13 +43,17 @@ function getdirections_init() {
 }
 
 /**
- * Implement hook_permission().
+ * Implements hook_permission().
  */
 function getdirections_permission() {
   return array(
     'access gmap getdirections' => array(
       'title' => t('Access Getdirections'),
       'description' => t('View and use the Getdirections module.')
+    ),
+    'access user getdirections' => array(
+      'title' => t('Access user Getdirections'),
+      'description' => t('View users with the Getdirections module.')
     ),
   );
 }
@@ -101,28 +102,28 @@ function getdirections_menu() {
   );
   $items['getdirections/location_user/%getdirections_fromto/%getdirections_uid'] = array(
     'title' => 'Get directions',
-    'access callback' => 'getdirections_access_location',
+    'access callback' => 'getdirections_access_user_location',
     'page callback' => 'getdirections_user_setlocation',
     'page arguments' => array(2, 3),
     'type' => MENU_CALLBACK,
   );
   $items['getdirections/locations_user/%getdirections_uid/%getdirections_uid'] = array(
     'title' => 'Get directions',
-    'access callback' => 'getdirections_access_location',
+    'access callback' => 'getdirections_access_user_location',
     'page callback' => 'getdirections_user_setlocations',
     'page arguments' => array(2, 3),
     'type' => MENU_CALLBACK,
   );
   $items['getdirections/location_n2u/%getdirections_id/%getdirections_uid'] = array(
     'title' => 'Get directions',
-    'access callback' => 'getdirections_access_location',
+    'access callback' => 'getdirections_access_user_location',
     'page callback' => 'getdirections_n2u_setlocation',
     'page arguments' => array(2, 3),
     'type' => MENU_CALLBACK,
   );
   $items['getdirections/location_u2n/%getdirections_uid/%getdirections_id'] = array(
     'title' => 'Get directions',
-    'access callback' => 'getdirections_access_location',
+    'access callback' => 'getdirections_access_user_location',
     'page callback' => 'getdirections_u2n_setlocation',
     'page arguments' => array(2, 3),
     'type' => MENU_CALLBACK,
@@ -190,7 +191,7 @@ function getdirections_via_load($arg) {
 }
 
 function getdirections_latlon_load($arg) {
-  if (preg_match("/[0-9.\-],[0-9.\-]/", $arg)) {
+  if (getdirections_latlon_check($arg)) {
     return $arg;
   }
   return FALSE;
@@ -200,7 +201,13 @@ function getdirections_latlon_load($arg) {
  * menu access functions
  */
 function getdirections_access_location() {
-  if (GETDIRECTIONS_USE_LOCATION && module_exists('location') && user_access('access gmap getdirections')) {
+  if (module_exists('location') && user_access('access gmap getdirections')) {
+    return TRUE;
+  }
+  return FALSE;
+}
+function getdirections_access_user_location() {
+  if (module_exists('location') && user_access('access user getdirections')) {
     return TRUE;
   }
   return FALSE;
@@ -427,7 +434,7 @@ function getdirections_locations_via($locs, $latlons, $width='', $height='') {
  */
 function getdirections_direction_form($form, &$form_state, $fromto='', $loc='', $country='', $latlon='') {
   $getdirections_defaults = getdirections_defaults();
-  $location = (GETDIRECTIONS_USE_LOCATION && module_exists('location'));
+  $location = module_exists('location');
   if ($location && ! $getdirections_defaults['advanced_autocomplete']) {
     $countries = array(
       '#type' => 'select',
@@ -436,7 +443,7 @@ function getdirections_direction_form($form, &$form_state, $fromto='', $loc='', 
       '#default_value' => variable_get('location_default_country', ''),
     );
   }
-  $setdirections = "Drupal.mygetDirections(); return false;";
+  $setdirections = "Drupal.getdirections.mygetDirections(); return false;";
   // weights
   if (getdirections_is_advanced()) {
     $from_country_weight = 1;
@@ -576,7 +583,7 @@ function getdirections_direction_form($form, &$form_state, $fromto='', $loc='', 
       '#type' => 'button',
       '#value' => t('Toggle traffic info'),
       '#weight' => 10,
-      '#attributes' => array( 'onClick' => 'Drupal.toggleTraffic(); return false;', 'title' => t('Limited Availability')),
+      '#attributes' => array( 'onClick' => 'Drupal.getdirections.toggleTraffic(); return false;', 'title' => t('Limited Availability')),
     );
   }
   if (variable_get('getdirections_use_v3', 0)) {
@@ -585,7 +592,7 @@ function getdirections_direction_form($form, &$form_state, $fromto='', $loc='', 
         '#type' => 'button',
         '#value' => t('Toggle bicycling info'),
         '#weight' => 12,
-        '#attributes' => array( 'onClick' => 'Drupal.toggleBicycle(); return false;', 'title' => t('Limited Availability')),
+        '#attributes' => array( 'onClick' => 'Drupal.getdirections.toggleBicycle(); return false;', 'title' => t('Limited Availability')),
       );
     }
     if ($getdirections_misc['panoramio_show']) {
@@ -593,7 +600,7 @@ function getdirections_direction_form($form, &$form_state, $fromto='', $loc='', 
         '#type' => 'button',
         '#value' => t('Toggle Panoramio'),
         '#weight' => 14,
-        '#attributes' => array( 'onClick' => 'Drupal.togglePanoramio(); return false;'),
+        '#attributes' => array( 'onClick' => 'Drupal.getdirections.togglePanoramio(); return false;'),
       );
     }
   }
@@ -602,7 +609,7 @@ function getdirections_direction_form($form, &$form_state, $fromto='', $loc='', 
       '#type' => 'button',
       '#value' => t('Switch From/To'),
       '#weight' => 16,
-      '#attributes' => array( 'onClick' => 'Drupal.toggleFromto(); return false;'),
+      '#attributes' => array( 'onClick' => 'Drupal.getdirections.toggleFromto(); return false;'),
     );
   }
 
@@ -611,7 +618,7 @@ function getdirections_direction_form($form, &$form_state, $fromto='', $loc='', 
       '#type' => 'button',
       '#value' => t('Next'),
       '#weight' => 18,
-      '#attributes' => array( 'onClick' => 'Drupal.nextbtn(); return false;'),
+      '#attributes' => array( 'onClick' => 'Drupal.getdirections.nextbtn(); return false;'),
     );
   }
   $form['submit'] = array(
@@ -666,7 +673,7 @@ function getdirections_defaults() {
     );
   }
   else {
-    if (GETDIRECTIONS_USE_GMAP && module_exists('gmap')) {
+    if (module_exists('gmap')) {
       $defaults = gmap_defaults();
       $defaults['api_version'] =  GMAP_API_VERSION;
       $defaults['from_width'] = 20;
@@ -760,14 +767,14 @@ function getdirections_misc_defaults() {
  *   Returns the themed map and form
  */
 function getdirections_setlocation($direction, $nid, $width='', $height='') {
-  if (GETDIRECTIONS_USE_LOCATION && module_exists('location')) {
+  if (module_exists('location')) {
     $vid = getdirections_get_vid($nid);
     $location = location_load_locations($vid);
     if (count($location)) {
       $country = $location[0]['country'];
       $latlon = $location[0]['latitude'] . ',' . $location[0]['longitude'];
       // sanity check
-      if (! getdirections_latlon_load($latlon)) {
+      if (! getdirections_latlon_check($latlon)) {
         watchdog('getdirections', 'Lat, Lon failed for node id !nid', array('!nid' => $nid), WATCHDOG_WARNING);
         $latlon = getdirections_load_latlon_defaults();
       }
@@ -791,13 +798,13 @@ function getdirections_setlocation($direction, $nid, $width='', $height='') {
  *   Returns the themed map and form
  */
 function getdirections_user_setlocation($direction, $uid, $width='', $height='') {
-  if (GETDIRECTIONS_USE_LOCATION && module_exists('location') && $uid) {
+  if (module_exists('location') && $uid) {
     $location = location_load_locations($uid, 'uid');
     if (count($location)) {
       $country = $location[0]['country'];
       $latlon = $location[0]['latitude'] . ',' . $location[0]['longitude'];
       // sanity check
-      if (! getdirections_latlon_load($latlon)) {
+      if (! getdirections_latlon_check($latlon)) {
         watchdog('getdirections', 'Lat, Lon failed for user id !uid', array('!uid' => $uid), WATCHDOG_WARNING);
         $latlon = getdirections_load_latlon_defaults();
       }
@@ -821,14 +828,14 @@ function getdirections_user_setlocation($direction, $uid, $width='', $height='')
  *   Returns the themed map
  */
 function getdirections_setlocations($fromnid, $tonid, $width='', $height='') {
-  if (GETDIRECTIONS_USE_LOCATION && module_exists('location')) {
+  if (module_exists('location')) {
     // From
     $fromvid = getdirections_get_vid($fromnid);
     $fromlocation = location_load_locations($fromvid);
     if (count($fromlocation)) {
       $fromlatlon = $fromlocation[0]['latitude'] . ',' . $fromlocation[0]['longitude'];
       // sanity check
-      if (! getdirections_latlon_load($fromlatlon)) {
+      if (! getdirections_latlon_check($fromlatlon)) {
         watchdog('getdirections', 'Lat, Lon failed for node id !nid', array('!nid' => $fromnid), WATCHDOG_WARNING);
         $fromlatlon = getdirections_load_latlon_defaults();
       }
@@ -843,7 +850,7 @@ function getdirections_setlocations($fromnid, $tonid, $width='', $height='') {
       if (count($tolocation)) {
         $tolatlon = $tolocation[0]['latitude'] . ',' . $tolocation[0]['longitude'];
         // sanity check
-        if (! getdirections_latlon_load($tolatlon)) {
+        if (! getdirections_latlon_check($tolatlon)) {
           watchdog('getdirections', 'Lat, Lon failed for node id !nid', array('!nid' => $tonid), WATCHDOG_WARNING);
           $tolatlon = getdirections_load_latlon_defaults();
         }
@@ -870,13 +877,13 @@ function getdirections_setlocations($fromnid, $tonid, $width='', $height='') {
  *   Returns the themed map
  */
 function getdirections_user_setlocations($fromuid, $touid, $width='', $height='') {
-  if (GETDIRECTIONS_USE_LOCATION && module_exists('location') && is_numeric($fromuid) && is_numeric($touid)) {
+  if (module_exists('location') && is_numeric($fromuid) && is_numeric($touid)) {
     // From
     $fromlocation = location_load_locations($fromuid, 'uid');
     if (count($fromlocation)) {
       $fromlatlon = $fromlocation[0]['latitude'] . ',' . $fromlocation[0]['longitude'];
       // sanity check
-      if (! getdirections_latlon_load($fromlatlon)) {
+      if (! getdirections_latlon_check($fromlatlon)) {
         watchdog('getdirections', 'Lat, Lon failed for user id !nid', array('!nid' => $fromuid), WATCHDOG_WARNING);
         $fromlatlon = getdirections_load_latlon_defaults();
       }
@@ -890,7 +897,7 @@ function getdirections_user_setlocations($fromuid, $touid, $width='', $height=''
       if (count($tolocation)) {
         $tolatlon = $tolocation[0]['latitude'] . ',' . $tolocation[0]['longitude'];
         // sanity check
-        if (! getdirections_latlon_load($tolatlon)) {
+        if (! getdirections_latlon_check($tolatlon)) {
           watchdog('getdirections', 'Lat, Lon failed for user id !nid', array('!nid' => $touid), WATCHDOG_WARNING);
           $tolatlon = getdirections_load_latlon_defaults();
         }
@@ -915,7 +922,7 @@ function getdirections_user_setlocations($fromuid, $touid, $width='', $height=''
  *   Returns the themed map
  */
 function getdirections_setlocations_via($nids, $width='', $height='') {
-  if (GETDIRECTIONS_USE_LOCATION && module_exists('location')) {
+  if (module_exists('location')) {
     $arrnids = explode(',', $nids);
     foreach ($arrnids AS $key => $nid) {
 
@@ -934,7 +941,7 @@ function getdirections_setlocations_via($nids, $width='', $height='') {
       $locs[] = implode(', ', $loc);
       $latlon = $location[0]['latitude'] . ',' . $location[0]['longitude'];
       // sanity check
-      if (! getdirections_latlon_load($latlon)) {
+      if (! getdirections_latlon_check($latlon)) {
         watchdog('getdirections', 'Lat, Lon failed for node id !nid', array('!nid' => $nid), WATCHDOG_WARNING);
         continue;
       }
@@ -956,14 +963,14 @@ function getdirections_setlocations_via($nids, $width='', $height='') {
  *   Returns the themed map
  */
 function getdirections_n2u_setlocation($nid, $uid, $width='', $height='') {
-  if (GETDIRECTIONS_USE_LOCATION && module_exists('location')) {
+  if (module_exists('location')) {
     // From
     $vid = getdirections_get_vid($nid);
     $fromlocation = location_load_locations($vid);
     if (count($fromlocation)) {
       $fromlatlon = $fromlocation[0]['latitude'] . ',' . $fromlocation[0]['longitude'];
       // sanity check
-      if (! getdirections_latlon_load($fromlatlon)) {
+      if (! getdirections_latlon_check($fromlatlon)) {
         watchdog('getdirections', 'Lat, Lon failed for node id !nid', array('!nid' => $nid), WATCHDOG_WARNING);
         $fromlatlon = getdirections_load_latlon_defaults();
       }
@@ -977,7 +984,7 @@ function getdirections_n2u_setlocation($nid, $uid, $width='', $height='') {
       if (count($tolocation)) {
         $tolatlon = $tolocation[0]['latitude'] . ',' . $tolocation[0]['longitude'];
         // sanity check
-        if (! getdirections_latlon_load($tolatlon)) {
+        if (! getdirections_latlon_check($tolatlon)) {
           watchdog('getdirections', 'Lat, Lon failed for user id !nid', array('!nid' => $uid), WATCHDOG_WARNING);
           $tolatlon = getdirections_load_latlon_defaults();
         }
@@ -1004,13 +1011,13 @@ function getdirections_n2u_setlocation($nid, $uid, $width='', $height='') {
  *   Returns the themed map
  */
 function getdirections_u2n_setlocation($uid, $nid, $width='', $height='') {
-  if (GETDIRECTIONS_USE_LOCATION && module_exists('location')) {
+  if (module_exists('location')) {
     // From
     $fromlocation = location_load_locations($uid, 'uid');
     if (count($fromlocation)) {
       $fromlatlon = $fromlocation[0]['latitude'] . ',' . $fromlocation[0]['longitude'];
       // sanity check
-      if (! getdirections_latlon_load($fromlatlon)) {
+      if (! getdirections_latlon_check($fromlatlon)) {
         watchdog('getdirections', 'Lat, Lon failed for user id !nid', array('!nid' => $uid), WATCHDOG_WARNING);
         $fromlatlon = getdirections_load_latlon_defaults();
       }
@@ -1025,7 +1032,7 @@ function getdirections_u2n_setlocation($uid, $nid, $width='', $height='') {
       if (count($tolocation)) {
         $tolatlon = $tolocation[0]['latitude'] . ',' . $tolocation[0]['longitude'];
       // sanity check
-        if (! getdirections_latlon_load($tolatlon)) {
+        if (! getdirections_latlon_check($tolatlon)) {
           watchdog('getdirections', 'Lat, Lon failed for node id !nid', array('!nid' => $nid), WATCHDOG_WARNING);
           $tolatlon = getdirections_load_latlon_defaults();
         }
@@ -1050,7 +1057,7 @@ function getdirections_u2n_setlocation($uid, $nid, $width='', $height='') {
  *   Returns the themed map
  */
 function getdirections_user_setlocations_via($uids, $width='', $height='') {
-  if (GETDIRECTIONS_USE_LOCATION && module_exists('location')) {
+  if (module_exists('location')) {
     $arruids = explode(',', $uids);
     foreach ($arruids AS $key => $uid) {
       if ($key > GETDIRECTIONS_WAYPOINTS_MAX && $key < count($arruids)) {
@@ -1067,7 +1074,7 @@ function getdirections_user_setlocations_via($uids, $width='', $height='') {
       $locs[] = implode(', ', $loc);
       $latlon = $location[0]['latitude'] . ',' . $location[0]['longitude'];
       // sanity check
-      if (! getdirections_latlon_load($latlon)) {
+      if (! getdirections_latlon_check($latlon)) {
         watchdog('getdirections', 'Lat, Lon failed for user id !nid', array('!nid' => $uid), WATCHDOG_WARNING);
         continue;
       }
@@ -1094,7 +1101,7 @@ function getdirections_latlon($direction, $latlon, $locs='', $width='', $height=
   $country = '';
   $nid = 0;
   $type = 'other';
-  if (! getdirections_latlon_load($latlon)) {
+  if (! getdirections_latlon_check($latlon)) {
     watchdog('getdirections', 'Lat, Lon failed for user id !uid', array('!uid' => $uid), WATCHDOG_WARNING);
     $latlon = getdirections_load_latlon_defaults();
   }
@@ -1113,13 +1120,13 @@ function getdirections_latlon($direction, $latlon, $locs='', $width='', $height=
  *   Returns the themed map and form
  */
 function getdirections_setlocation_id($direction, $lid, $width='', $height='') {
-  if (GETDIRECTIONS_USE_LOCATION && module_exists('location')) {
+  if (module_exists('location')) {
     $location = location_load_location($lid);
     if (count($location)) {
       $country = $location['country'];
       $latlon = $location['latitude'] . ',' . $location['longitude'];
       // sanity check
-      if (! getdirections_latlon_load($latlon)) {
+      if (! getdirections_latlon_check($latlon)) {
         watchdog('getdirections', 'Lat, Lon failed for location id !lid', array('!lid' => $lid), WATCHDOG_WARNING);
         $latlon = getdirections_load_latlon_defaults();
       }
@@ -1177,7 +1184,7 @@ function getdirections_setup_map($defaults, $misc_defaults) {
   }
   else {
     // v2 googlemaps API
-    if (GETDIRECTIONS_USE_GMAP && module_exists('gmap')) {
+    if (module_exists('gmap')) {
       $query = array(
         'file' => 'api',
         'v' => ($defaults['api_version'] ? $defaults['api_version'] : GMAP_API_VERSION),
@@ -1254,9 +1261,7 @@ function _getdirections_loadaddress($location) {
  *   Returns status.
  */
 function getdirections_user_check($uid) {
-  $query = db_select('users', 'u');
-  $query->fields('u', array('status'));
-  $query->condition('u.uid', $uid);
+  $query = db_select('users', 'u')->fields('u', array('status'))->condition('u.uid', $uid);
   $row = $query->execute()->fetchAssoc();
   return (isset($row['status']) && $row['status'] ? TRUE : FALSE);
 }
@@ -1270,28 +1275,22 @@ function getdirections_user_check($uid) {
  *   Returns vid.
  */
 function getdirections_get_vid($nid) {
-  $query = db_select('node', 'n');
-  $query->fields('n', array('vid'));
-  $query->condition('n.nid', $nid);
+  $query = db_select('node', 'n')->fields('n', array('vid'))->condition('n.nid', $nid);
   $row = $query->execute()->fetchAssoc();
   return (isset($row['vid']) && $row['vid'] ? $row['vid'] : FALSE);
 }
 
 function getdirections_get_nid_from_lid($lid) {
-  if (GETDIRECTIONS_USE_LOCATION && module_exists('location') && $lid) {
-    $query = db_select('location_instance', 'i');
-    $query->fields('i', array('nid'));
-    $query->condition('i.lid', $lid);
+  if (module_exists('location') && $lid) {
+    $query = db_select('location_instance', 'i')->fields('i', array('nid'))->condition('i.lid', $lid);
     $row = $query->execute()->fetchAssoc();
     return (isset($row['nid']) && $row['nid'] ? $row['nid'] : FALSE);
   }
 }
 
 function getdirections_get_lid_title($lid) {
-  if (GETDIRECTIONS_USE_LOCATION && module_exists('location') && $lid) {
-    $query = db_select('location', 'l');
-    $query->fields('l', array('name'));
-    $query->condition('l.lid', $lid);
+  if (module_exists('location') && $lid) {
+    $query = db_select('location', 'l')->fields('l', array('name'))->condition('l.lid', $lid);
     $row = $query->execute()->fetchAssoc();
     return (isset($row['name']) && $row['name'] ? $row['name'] : FALSE);
   }
@@ -1316,6 +1315,24 @@ function getdirections_check() {
     return FALSE;
   }
   return TRUE;
+}
+
+/**
+ * Function to check a lat,lon string
+ *
+ * @param string $latlon
+ *
+ * @return
+ *   Returns true or false
+ */
+function getdirections_latlon_check($latlon) {
+  if (! empty($latlon) && preg_match("/[0-9.\-],[0-9.\-]/", $latlon)) {
+    $ll = explode(',', $latlon);
+    if (isset($ll[0]) && is_numeric($ll[0]) && $ll[0] <> 0 && isset($ll[1]) && is_numeric($ll[1]) && $ll[1] <> 0) {
+      return $latlon;
+    }
+  }
+  return FALSE;
 }
 
 // for colorbox and suchlike

@@ -25,7 +25,7 @@ function getdirections_settings_form() {
     '#return_value' => 1,
   );
   if (! variable_get('getdirections_use_v3', 0)) {
-    if (GETDIRECTIONS_USE_GMAP && module_exists('gmap')) {
+    if (module_exists('gmap')) {
       $gmap_key = gmap_get_key();
     }
     else {
@@ -171,7 +171,7 @@ function getdirections_settings_form() {
     '#default_value' => $getdirections_defaults['mtc'],
   );
   if (! variable_get('getdirections_use_v3', 0)) {
-    if (GETDIRECTIONS_USE_GMAP && module_exists('gmap')) {
+    if (module_exists('gmap')) {
       // layers
       $baselayers = array();
       foreach (module_implements('gmap') as $module) {
@@ -408,7 +408,7 @@ function getdirections_settings_form() {
     );
   }
 
-  if (GETDIRECTIONS_USE_LOCATION && module_exists('location')) {
+  if (module_exists('location')) {
     // return link
     $form['getdirections_returnlink'] = array(
       '#type' => 'fieldset',
@@ -432,6 +432,7 @@ function getdirections_settings_form() {
     $form['getdirections_returnlink']['page_link'] = array(
       '#type' => 'textfield',
       '#title' => t('Text of page return link'),
+      '#description' => t('Use %t to insert the page title'),
       '#default_value' => $getdirections_returnlink['page_link'],
       '#size' => 30,
       // need this to get validation to work
@@ -449,6 +450,7 @@ function getdirections_settings_form() {
     $form['getdirections_returnlink']['user_link'] = array(
       '#type' => 'textfield',
       '#title' => t('Text of user return link'),
+      '#description' => t('Use %n to insert the user name'),
       '#default_value' => $getdirections_returnlink['user_link'],
       '#size' => 30,
       // need this to get validation to work
@@ -506,7 +508,7 @@ function getdirections_settings_form() {
     '#tree' => TRUE,
   );
   $getdirections_misc = getdirections_misc_defaults();
-  if (GETDIRECTIONS_USE_LOCATION && module_exists('location')) {
+  if (module_exists('location')) {
     $form['getdirections_misc']['keep_title'] = array(
       '#type' => 'checkbox',
       '#title' => t('Show original title'),
@@ -595,13 +597,13 @@ function getdirections_settings_validate($form, &$form_state) {
     if ( empty($form_state['values']['getdirections_returnlink']['page_link'])) {
       form_set_error('getdirections_returnlink][page_link', t('Text of return link cannot be empty'));
     }
-    $form_state['values']['getdirections_returnlink']['page_link'] = check_plain($form_state['values']['getdirections_returnlink']['page_link']);
+    #$form_state['values']['getdirections_returnlink']['page_link'] = check_plain($form_state['values']['getdirections_returnlink']['page_link']);
   }
   if (isset($form_state['values']['getdirections_returnlink']['user_link'])) {
     if ( empty($form_state['values']['getdirections_returnlink']['user_link'])) {
       form_set_error('getdirections_returnlink][user_link', t('Text of return link cannot be empty'));
     }
-    $form_state['values']['getdirections_returnlink']['user_link'] = check_plain($form_state['values']['getdirections_returnlink']['user_link']);
+    #$form_state['values']['getdirections_returnlink']['user_link'] = check_plain($form_state['values']['getdirections_returnlink']['user_link']);
   }
 
   if (! variable_get('getdirections_use_v3', 0) && ! $form_state['values']['getdirections_use_v3'] && empty($form_state['values']['getdirections_api_key'])) {

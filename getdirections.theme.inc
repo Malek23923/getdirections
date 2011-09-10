@@ -65,16 +65,34 @@ function theme_getdirections_show($variables) {
     'user_link' => t('Return to page'),
   ));
   if ($getdirections_returnlink['page_enable'] && $nid > 0 && $type == 'node') {
-    $output .= '<div class="getdirections_returnlink">' . l($getdirections_returnlink['page_link'], 'node/' . $nid) . '</div>';
+    $node = node_load($nid);
+    $linktext = $getdirections_returnlink['page_link'];
+    if ( preg_match("/%t/", $linktext)) {
+      $linktext = preg_replace("/%t/", $node->title, $linktext);
+    }
+    $l = l($linktext, 'node/' . $node->nid);
+    $output .= '<div class="getdirections_returnlink">'. $l .'</div>';
   }
   elseif ($getdirections_returnlink['user_enable'] && $nid > 0 && $type == 'user') {
-    $output .= '<div class="getdirections_returnlink">' . l($getdirections_returnlink['page_link'], 'user/' . $nid) . '</div>';
+    $account = user_load($nid);
+    $linktext = $getdirections_returnlink['user_link'];
+    if ( preg_match("/%n/", $linktext)) {
+      $linktext = preg_replace("/%n/", $account->name, $linktext);
+    }
+    $l = l($linktext, 'user/' . $account->uid);
+    $output .= '<div class="getlocations_returnlink">' . $l . '</div>';
   }
   elseif ($getdirections_returnlink['page_enable'] && $nid > 0 && $type == 'location') {
     // $nid is actually lid
     $id = getdirections_get_nid_from_lid($nid);
     if ($id) {
-      $output .= '<div class="getdirections_returnlink">'. l($getdirections_returnlink['page_link'], 'node/' . $id) .'</div>';
+      $node = node_load($id);
+      $linktext = $getdirections_returnlink['page_link'];
+      if ( preg_match("/%t/", $linktext)) {
+        $linktext = preg_replace("/%t/", $node->title, $linktext);
+      }
+      $l = l($linktext, 'node/' . $node->nid);
+      $output .= '<div class="getdirections_returnlink">'. $l .'</div>';
     }
   }
   $output .= $form;
@@ -209,10 +227,8 @@ function theme_getdirections_show_locations_via($variables) {
 
 function theme_getdirections_direction_form($variables) {
   $form = $variables['form'];
-  $output = '';
-  $getdirections_defaults = getdirections_defaults();
-
   // if you want to do fancy things with the form, do it here ;-)
+  $getdirections_defaults = getdirections_defaults();
   if (isset($form['mto'])) {
     $form['mto']['#prefix'] = '<div class="container-inline getdirections_display">';
     $form['mto']['#suffix'] = '</div>';

@@ -8,6 +8,7 @@
  * this is for googlemaps API version 2
 */
 (function ($) {
+  Drupal.getdirections = {};
 
   // errorcodes
   var reasons = [];
@@ -137,7 +138,7 @@
 
   }
 
-  Drupal.mygetDirections = function() {
+  Drupal.getdirections.mygetDirections = function() {
     // collect form info from the DOM
     var from = $("input[name=from]").val();
     if ($("#edit-country-from").val()) {
@@ -151,7 +152,7 @@
     gdir.load(s, {locale: mylocale});
   }
 
-  Drupal.toggleTraffic = function() {
+  Drupal.getdirections.toggleTraffic = function() {
     if (traffictoggleState == 1) {
       map.removeOverlay(trafficInfo);
       traffictoggleState = 0;
@@ -162,7 +163,7 @@
     }
   }
 
-  Drupal.toggleFromto = function() {
+  Drupal.getdirections.toggleFromto = function() {
     var from = $("#edit-from").val();
     var countryfrom = false;
     if ($("#edit-country-from").val()) {

@@ -9,6 +9,7 @@
  * with adaptations from econym.org.uk
 */
 (function ($) {
+  Drupal.getdirections = {};
 
   var geocoder;
   var bounds;
@@ -94,7 +95,7 @@
   }
 
 // from the form
-  Drupal.mygetDirections = function() {
+  Drupal.getDirections.mygetDirections = function() {
     var from;
     var to;
     var i;
@@ -627,11 +628,11 @@
 
   } // end initialise
 
-  Drupal.nextbtn = function() {
+  Drupal.getdirections.nextbtn = function() {
     return;
   }
 
-  Drupal.toggleTraffic = function() {
+  Drupal.getdirections.toggleTraffic = function() {
     if (traffictoggleState == 1) {
       trafficInfo.setMap();
       traffictoggleState = 0;
@@ -642,7 +643,7 @@
     }
   }
 
-  Drupal.toggleBicycle = function() {
+  Drupal.getdirections.toggleBicycle = function() {
     if (bicycletoggleState == 1) {
       bicycleInfo.setMap();
       bicycletoggleState = 0;
@@ -653,7 +654,7 @@
     }
   }
 
-  Drupal.togglePanoramio = function() {
+  Drupal.getdirections.togglePanoramio = function() {
     if (panoramiotoggleState == 1) {
       panoramioLayer.setMap();
       panoramiotoggleState = 0;

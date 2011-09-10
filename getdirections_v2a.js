@@ -9,6 +9,7 @@
  * with adaptations from econym.org.uk
 */
 (function ($) {
+  Drupal.getdirections = {};
 
   // errorcodes
   var reasons = [];
@@ -48,7 +49,7 @@
   var viaIconUrl = "http://labs.google.com/ridefinder/images/mm_20_";
 
   // functions
-  Drupal.mygetDirections = function() {
+  Drupal.getdirections.mygetDirections = function() {
     var from;
     var to;
     var s;
@@ -81,7 +82,7 @@
 
   // without location module
   function setDirectionsfromto(fromAddress, toAddress) {
-    mygetDirections();
+    Drupal.getdirections.mygetDirections();
   }
 
   function setDirectionsvia(lls, locale) {
@@ -428,11 +429,11 @@
 
   } // end initialise
 
-  Drupal.nextbtn = function() {
+  Drupal.getdirections.nextbtn = function() {
     return;
   }
 
-  Drupal.toggleTraffic = function() {
+  Drupal.getdirections.toggleTraffic = function() {
     if (traffictoggleState == 1) {
       map.removeOverlay(trafficInfo);
       traffictoggleState = 0;

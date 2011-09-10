@@ -8,6 +8,7 @@
  * this is for googlemaps API version 3
 */
 (function ($) {
+  Drupal.getdirections = {};
 
   var dirservice;
   var dirrenderer;
@@ -102,7 +103,7 @@
   }
 
   // from the form
-  Drupal.mygetDirections = function() {
+  Drupal.getdirections.mygetDirections = function() {
 
     // collect form info from the DOM
     var from = $("input[name=from]").val();
@@ -397,7 +398,7 @@
     }
   } // end initialise
 
-  Drupal.toggleTraffic = function() {
+  Drupal.getdirections.toggleTraffic = function() {
     if (traffictoggleState == 1) {
       trafficInfo.setMap();
       traffictoggleState = 0;
@@ -408,7 +409,7 @@
     }
   }
 
-  Drupal.toggleBicycle = function() {
+  Drupal.getdirections.toggleBicycle = function() {
     if (bicycletoggleState == 1) {
       bicycleInfo.setMap();
       bicycletoggleState = 0;
@@ -418,7 +419,7 @@
       bicycletoggleState = 1;
     }
   }
-  Drupal.togglePanoramio = function() {
+  Drupal.getdirections.togglePanoramio = function() {
     if (panoramiotoggleState == 1) {
       panoramioLayer.setMap();
       panoramiotoggleState = 0;
@@ -429,7 +430,7 @@
     }
   }
 
-  Drupal.toggleFromto = function() {
+  Drupal.getdirections.toggleFromto = function() {
     var from = $("#edit-from").val();
     var countryfrom = false;
     if ($("#edit-country-from").val()) {
