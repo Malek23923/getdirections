@@ -95,7 +95,7 @@
   }
 
 // from the form
-  Drupal.getDirections.mygetDirections = function() {
+  Drupal.getdirections.mygetDirections = function() {
     var from;
     var to;
     var i;
