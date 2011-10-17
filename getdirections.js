@@ -9,6 +9,9 @@
 (function ($) {
   Drupal.behaviors.getdirections = function() {
     // check that colorbox is loaded
+//    if (!$.isFunction($.colorbox)) {
+//      return;
+//    }
     if ((typeof($("a[rel='getdirectionsbox']").colorbox) == 'function') && Drupal.settings.getdirections_colorbox.enable == 1) {
       $("a[rel='getdirectionsbox']").colorbox({
         iframe:true,

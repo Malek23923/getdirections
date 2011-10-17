@@ -71,7 +71,7 @@
     if (googlebar) {
       mapOptions = {
         googleBarOptions : {
-          style : "new",
+          style : "new"
         }
       }
     }
