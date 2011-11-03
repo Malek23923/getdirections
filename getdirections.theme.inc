@@ -71,7 +71,7 @@ function theme_getdirections_show($variables) {
       $linktext = preg_replace("/%t/", $node->title, $linktext);
     }
     $l = l($linktext, 'node/' . $node->nid);
-    $output .= '<div class="getdirections_returnlink">'. $l .'</div>';
+    $output .= '<div class="getdirections_returnlink">' . $l . '</div>';
   }
   elseif ($getdirections_returnlink['user_enable'] && $nid > 0 && $type == 'user') {
     $account = user_load($nid);
@@ -92,7 +92,7 @@ function theme_getdirections_show($variables) {
         $linktext = preg_replace("/%t/", $node->title, $linktext);
       }
       $l = l($linktext, 'node/' . $node->nid);
-      $output .= '<div class="getdirections_returnlink">'. $l .'</div>';
+      $output .= '<div class="getdirections_returnlink">' . $l . '</div>';
     }
   }
   $output .= $form;

@@ -1158,7 +1158,7 @@ function getdirections_setup_map($defaults, $misc_defaults) {
     if ($defaults['advanced_autocomplete']) {
       $libraries[] = 'places';
     }
-    if($misc_defaults['panoramio_show']) {
+    if ($misc_defaults['panoramio_show']) {
       $libraries[] = 'panoramio';
     }
     // more libraries here
