@@ -176,3 +176,18 @@ to
 What this does is rearrange the table so that it produces two rows with one datacell each instead of one row with two datacells.
 
 Make sure you flush the theme registry when you have made the changes, the devel and admin_menu modules are helpful for this.
+
+Blocks.
+Here is a simple way to crete a block with a form and map in it. Ensure you have php filter enabled and add
+<?php
+if (arg(0) == 'node') {
+  $nid = arg(1);
+  if (is_numeric($nid) && $nid > 0) {
+    echo getdirections_setlocation('to', $nid);
+  }
+}
+?>
+This will only show on node view.
+
+see http://drupal.org/node/880332
+

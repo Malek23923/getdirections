@@ -1,9 +1,22 @@
-commit 40139b0
+commit 3b248e3
+Author: hutch <hutch@midwales.net>
+Date:   Thu Nov 3 10:31:40 2011 +0000
+
+    improved maptype dropdown in js and admin
+
+README.txt
+getdirections.admin.inc
+getdirections_v3.js
+getdirections_v3a.js
+getdirections_v3b.js
+
+commit 25b67a7
 Author: hutch <hutch@midwales.net>
 Date:   Mon Oct 17 21:53:03 2011 +0100
 
     fixed trailing comma bug
 
+CHANGELOG.txt
 getdirections.css
 getdirections.js
 getdirections_v2.js

@@ -207,16 +207,23 @@ function getdirections_settings_form() {
     }
   }
   else {
+    $options = array();
+    $layers = array(
+      'Map' => t('Standard street map'),
+      'Satellite' => t('Standard satellite map'),
+      'Hybrid' => t('Hybrid satellite map'),
+      'Physical' => t('Terrain map'),
+    );
+    foreach ($layers AS $key => $layer) {
+      if ($getdirections_defaults['baselayers'][$key]) {
+        $options[$key] = $layer;
+      }
+    }
     $form['getdirections_default']['maptype'] = array(
       '#type' => 'select',
       '#title' => t('Default map type'),
       '#default_value' => $getdirections_defaults['maptype'],
-      '#options' => array(
-        'Map' => t('Standard street map'),
-        'Satellite' => t('Standard satellite map'),
-        'Hybrid' => t('Hybrid satellite map'),
-        'Physical' => t('Terrain map'),
-      ),
+      '#options' => $options,
     );
     $form['getdirections_default']['baselayers']['Map'] = array(
       '#type' => 'checkbox',
@@ -596,6 +603,22 @@ function getdirections_settings_validate($form, &$form_state) {
 
   if (! variable_get('getdirections_use_v3', 0) && ! $form_state['values']['getdirections_use_v3'] && empty($form_state['values']['getdirections_api_key'])) {
     form_set_error('getdirections_api_key', t('API key is required for version 2 of the Googlemaps API'));
+  }
+
+  if ($form_state['values']['getdirections_use_v3']) {
+    $list = array('Map', 'Satellite', 'Hybrid', 'Physical');
+    $found = 0;
+    foreach ($list AS $maptype) {
+      if ($form_state['values']['getdirections_default']['maptype'] == $maptype && $form_state['values']['getdirections_default']['baselayers'][$maptype] ) {
+        $found = 1;
+        break;
+      }
+    }
+    if (! $found) {
+      // force a setting
+      $form_state['values']['getdirections_default']['maptype'] = 'Map';
+      $form_state['values']['getdirections_default']['baselayers']['Map'] = 1;
+    }
   }
 }
 
