@@ -488,7 +488,7 @@ function getdirections_direction_form($form_state, $fromto='', $loc='', $country
     if ($location && ! $getdirections_defaults['advanced_autocomplete']) {
       $form['country_from'] = $countries;
       $form['country_from']['#weight'] = $from_country_weight;
-     $from_desc = t('Enter the address, postcode and/or city from where you want to start your journey.');
+      $from_desc = t('Enter the address, postcode and/or city from where you want to start your journey.');
     }
     $form['from'] = array(
       '#type' => 'textfield',
@@ -1149,7 +1149,7 @@ function getdirections_setup_map($defaults, $misc_defaults) {
     if ($defaults['advanced_autocomplete']) {
       $libraries[] = 'places';
     }
-    if($misc_defaults['panoramio_show']) {
+    if ($misc_defaults['panoramio_show']) {
       $libraries[] = 'panoramio';
     }
     // more libraries here
@@ -1271,7 +1271,7 @@ function getdirections_get_vid($nid) {
 
 function getdirections_get_nid_from_lid($lid) {
   if (module_exists('location') && $lid) {
-    $result = db_query('SELECT nid FROM location_instance WHERE lid=%d',  array($lid));
+    $result = db_query('SELECT nid FROM {location_instance} WHERE lid=%d',  array($lid));
     $row = db_fetch_array($result);
     return (isset($row['nid']) && $row['nid'] ? $row['nid'] : FALSE);
   }
@@ -1279,7 +1279,7 @@ function getdirections_get_nid_from_lid($lid) {
 
 function getdirections_get_lid_title($lid) {
   if (module_exists('location') && $lid) {
-    $result = db_query('SELECT name FROM location WHERE lid=%d', array($lid));
+    $result = db_query('SELECT name FROM {location} WHERE lid=%d', array($lid));
     $row = db_fetch_array($result);
     return (isset($row['name']) && $row['name'] ? $row['name'] : FALSE);
   }

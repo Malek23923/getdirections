@@ -563,7 +563,7 @@ function getdirections_settings_form() {
       '#return_value' => 1,
     );
   }
-  if(! $getdirections_defaults['use_advanced']) {
+  if (! $getdirections_defaults['use_advanced']) {
     $form['getdirections_misc']['switchfromto'] = array(
       '#type' => 'checkbox',
       '#title' => t('Enable From/To Switch'),
@@ -588,17 +588,13 @@ function getdirections_settings_validate($form, &$form_state) {
   if ( ! is_numeric($form_state['values']['getdirections_default']['from_width']) || $form_state['values']['getdirections_default']['from_width'] < 1) {
     form_set_error('getdirections_default][from_width', t('Width of From box must be a positive number'));
   }
-
   if ($form_state['values']['getdirections_returnlink']['page_enable'] && empty($form_state['values']['getdirections_returnlink']['page_link'])) {
     form_set_error('getdirections_returnlink][page_link', t('Text of return link cannot be empty'));
   }
-  #$form_state['values']['getdirections_returnlink']['page_link'] = check_plain($form_state['values']['getdirections_returnlink']['page_link']);
-
   if (module_exists('location_user')) {
     if ($form_state['values']['getdirections_returnlink']['user_enable'] && empty($form_state['values']['getdirections_returnlink']['user_link'])) {
       form_set_error('getdirections_returnlink][user_link', t('Text of return link cannot be empty'));
     }
-    #$form_state['values']['getdirections_returnlink']['user_link'] = check_plain($form_state['values']['getdirections_returnlink']['user_link']);
   }
 
   if (! variable_get('getdirections_use_v3', 0) && ! $form_state['values']['getdirections_use_v3'] && empty($form_state['values']['getdirections_api_key'])) {

@@ -297,7 +297,7 @@ function theme_getdirections_direction_form($form) {
 
 function template_preprocess_getdirections_box(&$variables) {
 
-  if(module_exists('admin_menu')) {
+  if (module_exists('admin_menu')) {
     admin_menu_suppress();
   }
   drupal_add_js(GETDIRECTIONS_PATH .'/getdirections_box.js');

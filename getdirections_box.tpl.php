@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @file getdirections_box.tpl.php
+ * @file
  * Template file for colorbox implementation
  */
 
