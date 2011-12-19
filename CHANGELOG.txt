@@ -1,9 +1,27 @@
-commit 6e192f9
+commit b46b0bc
+Author: hutch <hutch@midwales.net>
+Date:   Mon Dec 19 12:51:05 2011 +0000
+
+    fixed translation issue 1376052
+
+getdirections.module
+
+commit 25e0c71
+Author: hutch <hutch@midwales.net>
+Date:   Thu Nov 3 22:07:51 2011 +0000
+
+    coder review
+
+getdirections.module
+getdirections.theme.inc
+
+commit 4c3dbb2
 Author: hutch <hutch@midwales.net>
 Date:   Thu Nov 3 10:45:09 2011 +0000
 
     improved maptype dropdown in js and admin
 
+CHANGELOG.txt
 README.txt
 getdirections.admin.inc
 getdirections_v3.js
