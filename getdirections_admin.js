@@ -55,6 +55,36 @@
         }
       });
 
+      if ($("#edit-getdirections-returnlink-term-enable").attr('checked')) {
+        $("#wrap-term-link").show();
+      }
+      else {
+        $("#wrap-term-link").hide();
+      }
+      $("#edit-getdirections-returnlink-term-enable").change(function() {
+        if ($("#edit-getdirections-returnlink-term-enable").attr('checked')) {
+          $("#wrap-term-link").show();
+        }
+        else {
+          $("#wrap-term-link").hide();
+        }
+      });
+
+      if ($("#edit-getdirections-returnlink-comment-enable").attr('checked')) {
+        $("#wrap-comment-link").show();
+      }
+      else {
+        $("#wrap-comment-link").hide();
+      }
+      $("#edit-getdirections-returnlink-comment-enable").change(function() {
+        if ($("#edit-getdirections-returnlink-comment-enable").attr('checked')) {
+          $("#wrap-comment-link").show();
+        }
+        else {
+          $("#wrap-comment-link").hide();
+        }
+      });
+
       if ($("#edit-getdirections-colorbox-enable").attr('checked')) {
         $("#wrap-getdirections-colorbox").show();
       }

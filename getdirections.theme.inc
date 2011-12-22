@@ -63,24 +63,34 @@ function theme_getdirections_show($variables) {
     'page_link' => t('Return to page'),
     'user_enable' => 0,
     'user_link' => t('Return to page'),
+    'term_enable' => 0,
+    'term_link' => t('Return to page'),
+    'comment_enable' => 0,
+    'comment_link' => t('Return to page'),
   ));
+  $returnlink = FALSE;
   if ($getdirections_returnlink['page_enable'] && $nid > 0 && $type == 'node') {
     $node = node_load($nid);
-    $linktext = $getdirections_returnlink['page_link'];
-    if ( preg_match("/%t/", $linktext)) {
-      $linktext = preg_replace("/%t/", $node->title, $linktext);
+    if ($node) {
+      $linktext = $getdirections_returnlink['page_link'];
+      if ( preg_match("/%t/", $linktext)) {
+        $linktext = preg_replace("/%t/", $node->title, $linktext);
+      }
+      $l = l($linktext, 'node/' . $node->nid);
+      $returnlink = '<div class="getdirections_returnlink">' . $l . '</div>';
     }
-    $l = l($linktext, 'node/' . $node->nid);
-    $output .= '<div class="getdirections_returnlink">' . $l . '</div>';
   }
   elseif ($getdirections_returnlink['user_enable'] && $nid > 0 && $type == 'user') {
+    // $nid is actually uid
     $account = user_load($nid);
-    $linktext = $getdirections_returnlink['user_link'];
-    if ( preg_match("/%n/", $linktext)) {
-      $linktext = preg_replace("/%n/", $account->name, $linktext);
+    if ($account) {
+      $linktext = $getdirections_returnlink['user_link'];
+      if ( preg_match("/%n/", $linktext)) {
+        $linktext = preg_replace("/%n/", $account->name, $linktext);
+      }
+      $l = l($linktext, 'user/' . $account->uid);
+      $returnlink = '<div class="getdirections_returnlink">' . $l . '</div>';
     }
-    $l = l($linktext, 'user/' . $account->uid);
-    $output .= '<div class="getlocations_returnlink">' . $l . '</div>';
   }
   elseif ($getdirections_returnlink['page_enable'] && $nid > 0 && $type == 'location') {
     // $nid is actually lid
@@ -92,9 +102,38 @@ function theme_getdirections_show($variables) {
         $linktext = preg_replace("/%t/", $node->title, $linktext);
       }
       $l = l($linktext, 'node/' . $node->nid);
-      $output .= '<div class="getdirections_returnlink">' . $l . '</div>';
+      $returnlink = '<div class="getdirections_returnlink">' . $l . '</div>';
     }
   }
+  elseif ($getdirections_returnlink['term_enable'] && $nid > 0 && $type == 'term') {
+    // $nid is actually tid
+    $term = taxonomy_term_load($nid);
+    if ($term) {
+      $linktext = $getdirections_returnlink['term_link'];
+      if ( preg_match("/%n/", $linktext)) {
+        $linktext = preg_replace("/%n/", $term->name, $linktext);
+      }
+      $l = l($linktext, 'taxonomy/term/' . $term->tid);
+      $returnlink = '<div class="getdirections_returnlink">' . $l . '</div>';
+    }
+  }
+  elseif ($getdirections_returnlink['comment_enable'] && $nid > 0 && $type == 'comment') {
+    // $nid is actually cid
+    $comment = comment_load($nid);
+    if ($comment) {
+      $linktext = $getdirections_returnlink['comment_link'];
+      if ( preg_match("/%n/", $linktext)) {
+        $linktext = preg_replace("/%n/", $comment->subject, $linktext);
+      }
+      $l = l($linktext, 'comment/' . $comment->cid);
+      $returnlink = '<div class="getdirections_returnlink">' . $l . '</div>';
+    }
+  }
+
+  if ($returnlink) {
+    $output .= $returnlink;
+  }
+
   $output .= $form;
 
   $getdirections_defaults = getdirections_defaults();
@@ -252,14 +291,14 @@ function theme_getdirections_direction_form($variables) {
       $form['country_from']['#prefix'] = '<div id="getdirections_start"><div class="container-inline getdirections_display">';
       $form['country_from']['#suffix'] = '</div>';
     }
-    if (isset($form['from']) && $form['from']['#type'] == 'textfield' && module_exists('location') && ! $getdirections_defaults['advanced_autocomplete']) {
+    if (isset($form['from']) && $form['from']['#type'] == 'textfield' && (module_exists('location') || module_exists('getlocations_fields')) && ! $getdirections_defaults['advanced_autocomplete']) {
       $form['from']['#suffix'] = '</div>';
     }
     if (isset($form['country_to'])) {
       $form['country_to']['#prefix'] = '<div id="getdirections_end"><div class="container-inline getdirections_display">';
       $form['country_to']['#suffix'] = '</div>';
     }
-    if (isset($form['to']) && $form['to']['#type'] == 'textfield' && module_exists('location') && ! $getdirections_defaults['advanced_autocomplete']) {
+    if (isset($form['to']) && $form['to']['#type'] == 'textfield' && (module_exists('location') || module_exists('getlocations_fields')) && ! $getdirections_defaults['advanced_autocomplete']) {
       $form['to']['#suffix'] = '</div>';
     }
   }
