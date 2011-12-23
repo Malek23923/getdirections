@@ -433,7 +433,7 @@ function getdirections_settings_form() {
     // This will store all the defaults in one variable.
     '#tree' => TRUE,
   );
-  $getdirections_returnlink = variable_get('getdirections_returnlink', array(
+  $getdirections_returnlink_default = array(
     'page_enable' => 0,
     'page_link' => t('Return to page'),
     'user_enable' => 0,
@@ -442,11 +442,12 @@ function getdirections_settings_form() {
     'term_link' => t('Return to page'),
     'comment_enable' => 0,
     'comment_link' => t('Return to page'),
-  ));
+  );
+  $getdirections_returnlink = variable_get('getdirections_returnlink', $getdirections_returnlink_default);
   $form['getdirections_returnlink']['page_enable'] = array(
     '#type' => 'checkbox',
     '#title' => t('Enable Page Return Link'),
-    '#default_value' =>  $getdirections_returnlink['page_enable'],
+    '#default_value' => (isset($getdirections_returnlink['page_enable']) ? $getdirections_returnlink['page_enable'] : $getdirections_returnlink_default['page_enable']),
     '#return_value' => 1,
   );
   $form['getdirections_returnlink']['page_link'] = array(
@@ -454,6 +455,7 @@ function getdirections_settings_form() {
     '#title' => t('Text of page return link'),
     '#description' => t('Use %t to insert the page title'),
     '#default_value' => $getdirections_returnlink['page_link'],
+    '#default_value' => (isset($getdirections_returnlink['page_link']) ? $getdirections_returnlink['page_link'] : $getdirections_returnlink_default['page_link']),
     '#size' => 30,
     // need this to get validation to work
     '#parents' => array('getdirections_returnlink', 'page_link'),
@@ -464,14 +466,14 @@ function getdirections_settings_form() {
   $form['getdirections_returnlink']['user_enable'] = array(
     '#type' => 'checkbox',
     '#title' => t('Enable User Return Link'),
-    '#default_value' =>  $getdirections_returnlink['user_enable'],
+    '#default_value' => (isset($getdirections_returnlink['user_enable']) ? $getdirections_returnlink['user_enable'] : $getdirections_returnlink_default['user_enable']),
     '#return_value' => 1,
   );
   $form['getdirections_returnlink']['user_link'] = array(
     '#type' => 'textfield',
     '#title' => t('Text of user return link'),
     '#description' => t('Use %n to insert the user name'),
-    '#default_value' => $getdirections_returnlink['user_link'],
+    '#default_value' => (isset($getdirections_returnlink['user_link']) ? $getdirections_returnlink['user_link'] : $getdirections_returnlink_default['user_link']),
     '#size' => 30,
     // need this to get validation to work
     '#parents' => array('getdirections_returnlink', 'user_link'),
@@ -484,14 +486,14 @@ function getdirections_settings_form() {
       $form['getdirections_returnlink']['term_enable'] = array(
         '#type' => 'checkbox',
         '#title' => t('Enable Term Return Link'),
-        '#default_value' =>  $getdirections_returnlink['term_enable'],
+        '#default_value' => (isset($getdirections_returnlink['term_enable']) ? $getdirections_returnlink['term_enable'] : $getdirections_returnlink_default['term_enable']),
         '#return_value' => 1,
       );
       $form['getdirections_returnlink']['term_link'] = array(
         '#type' => 'textfield',
         '#title' => t('Text of Term return link'),
         '#description' => t('Use %n to insert the term name'),
-        '#default_value' => $getdirections_returnlink['term_link'],
+        '#default_value' => (isset($getdirections_returnlink['term_link']) ? $getdirections_returnlink['term_link'] : $getdirections_returnlink_default['term_link']),
         '#size' => 30,
         // need this to get validation to work
         '#parents' => array('getdirections_returnlink', 'term_link'),
@@ -504,13 +506,14 @@ function getdirections_settings_form() {
         '#type' => 'checkbox',
         '#title' => t('Enable Comment Return Link'),
         '#default_value' =>  $getdirections_returnlink['comment_enable'],
+        '#default_value' => (isset($getdirections_returnlink['comment_enable']) ? $getdirections_returnlink['comment_enable'] : $getdirections_returnlink_default['comment_enable']),
         '#return_value' => 1,
       );
       $form['getdirections_returnlink']['comment_link'] = array(
         '#type' => 'textfield',
         '#title' => t('Text of Comment return link'),
         '#description' => t('Use %n to insert the term name'),
-        '#default_value' => $getdirections_returnlink['comment_link'],
+        '#default_value' => (isset($getdirections_returnlink['comment_link']) ? $getdirections_returnlink['comment_link'] : $getdirections_returnlink_default['comment_link']),
         '#size' => 30,
         // need this to get validation to work
         '#parents' => array('getdirections_returnlink', 'comment_link'),
@@ -667,6 +670,11 @@ function getdirections_settings_validate($form, &$form_state) {
   if (isset($form_state['values']['getdirections_returnlink']['term_link'])) {
     if ( empty($form_state['values']['getdirections_returnlink']['term_link'])) {
       form_set_error('getdirections_returnlink][term_link', t('Text of return link cannot be empty'));
+    }
+  }
+  if (isset($form_state['values']['getdirections_returnlink']['comment_link'])) {
+    if ( empty($form_state['values']['getdirections_returnlink']['comment_link'])) {
+      form_set_error('getdirections_returnlink][comment_link', t('Text of return link cannot be empty'));
     }
   }
 

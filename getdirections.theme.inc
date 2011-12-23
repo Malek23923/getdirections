@@ -58,7 +58,7 @@ function theme_getdirections_show($variables) {
   $nid = $variables['nid'];
   $type =  $variables['type'];
   $output = '';
-  $getdirections_returnlink = variable_get('getdirections_returnlink', array(
+  $getdirections_returnlink_default = array(
     'page_enable' => 0,
     'page_link' => t('Return to page'),
     'user_enable' => 0,
@@ -67,9 +67,10 @@ function theme_getdirections_show($variables) {
     'term_link' => t('Return to page'),
     'comment_enable' => 0,
     'comment_link' => t('Return to page'),
-  ));
+  );
+  $getdirections_returnlink = variable_get('getdirections_returnlink', $getdirections_returnlink_default);
   $returnlink = FALSE;
-  if ($getdirections_returnlink['page_enable'] && $nid > 0 && $type == 'node') {
+  if (isset($getdirections_returnlink['page_enable']) && $getdirections_returnlink['page_enable'] && $nid > 0 && $type == 'node') {
     $node = node_load($nid);
     if ($node) {
       $linktext = $getdirections_returnlink['page_link'];
@@ -80,7 +81,7 @@ function theme_getdirections_show($variables) {
       $returnlink = '<div class="getdirections_returnlink">' . $l . '</div>';
     }
   }
-  elseif ($getdirections_returnlink['user_enable'] && $nid > 0 && $type == 'user') {
+  elseif (isset($getdirections_returnlink['user_enable']) && $getdirections_returnlink['user_enable'] && $nid > 0 && $type == 'user') {
     // $nid is actually uid
     $account = user_load($nid);
     if ($account) {
@@ -92,7 +93,7 @@ function theme_getdirections_show($variables) {
       $returnlink = '<div class="getdirections_returnlink">' . $l . '</div>';
     }
   }
-  elseif ($getdirections_returnlink['page_enable'] && $nid > 0 && $type == 'location') {
+  elseif (isset($getdirections_returnlink['page_enable']) && $getdirections_returnlink['page_enable'] && $nid > 0 && $type == 'location') {
     // $nid is actually lid
     $id = getdirections_get_nid_from_lid($nid);
     if ($id) {
@@ -105,7 +106,7 @@ function theme_getdirections_show($variables) {
       $returnlink = '<div class="getdirections_returnlink">' . $l . '</div>';
     }
   }
-  elseif ($getdirections_returnlink['term_enable'] && $nid > 0 && $type == 'term') {
+  elseif (isset($getdirections_returnlink['term_enable']) && $getdirections_returnlink['term_enable'] && $nid > 0 && $type == 'term') {
     // $nid is actually tid
     $term = taxonomy_term_load($nid);
     if ($term) {
@@ -117,7 +118,7 @@ function theme_getdirections_show($variables) {
       $returnlink = '<div class="getdirections_returnlink">' . $l . '</div>';
     }
   }
-  elseif ($getdirections_returnlink['comment_enable'] && $nid > 0 && $type == 'comment') {
+  elseif (isset($getdirections_returnlink['comment_enable']) && $getdirections_returnlink['comment_enable'] && $nid > 0 && $type == 'comment') {
     // $nid is actually cid
     $comment = comment_load($nid);
     if ($comment) {
