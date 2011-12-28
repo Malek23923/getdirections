@@ -259,42 +259,12 @@ function getdirections_direction($direction='', $location='', $country='', $latl
   if (! getdirections_check()) {
     return t('You need to !c first.', array('!c' => l('configure Getdirections', 'admin/config/services/getdirections')));
   }
-  global $language;
+
   $getdirections_defaults = getdirections_defaults();
   $getdirections_misc = getdirections_misc_defaults();
   getdirections_setup_map($getdirections_defaults, $getdirections_misc);
-  $lla = explode(',', $getdirections_defaults['latlong']);
-  $getdirections_settings = array(
-    'lat' => $lla[0],
-    'lng' => $lla[1],
-    'zoom' => $getdirections_defaults['zoom'],
-    'maptype' => $getdirections_defaults['maptype'],
-    'controltype' => $getdirections_defaults['controltype'],
-    'mtc' => $getdirections_defaults['mtc'],
-    'baselayers' => $getdirections_defaults['baselayers'],
-    'scale' => $getdirections_defaults['behavior']['scale'],
-    'overview' => $getdirections_defaults['behavior']['overview'],
-    'googlebar' => $getdirections_defaults['behavior']['googlebar'],
-    'mylocale' => $language->language,
-    'waypoints' => intval($getdirections_defaults['waypoints']),
-    'waypoint_color' => $getdirections_defaults['waypoint_color'],
-    'show_distance' => ($getdirections_misc['show_distance'] ? t('Total distance') : ''),
-    'trafficinfo' => $getdirections_misc['trafficinfo'],
-    'bicycleinfo' => $getdirections_misc['bicycleinfo'],
-    'switchfromto' => $getdirections_misc['switchfromto'],
-    'show_duration' => ($getdirections_misc['show_duration'] ? t('Total duration') : ''),
-  );
-  if (variable_get('getdirections_use_v3', 0)) {
-    $getdirections_settings['scrollwheel'] = $getdirections_defaults['behavior']['scrollwheel'];
-    $getdirections_settings['draggable'] = $getdirections_defaults['behavior']['draggable'];
-    $getdirections_settings['unitsystem'] = $getdirections_defaults['unitsystem'];
-    $getdirections_settings['overview_opened'] = $getdirections_defaults['behavior']['overview_opened'];
-    $getdirections_settings['streetview_show'] = $getdirections_defaults['streetview_show'];
-    $getdirections_settings['pancontrol'] = $getdirections_defaults['pancontrol'];
-    $getdirections_settings['advanced_autocomplete'] = $getdirections_defaults['advanced_autocomplete'];
-    $getdirections_settings['panoramio_show'] = $getdirections_misc['panoramio_show'];
-  }
-
+  $getdirections_settings = getdirections_get_settings($getdirections_defaults, $getdirections_misc);
+  $getdirections_settings['switchfromto'] = $getdirections_misc['switchfromto'];
   drupal_add_js(array('getdirections' => $getdirections_settings), 'setting');
 
   if ($getdirections_misc['keep_title'] && $id && $direction) {
@@ -351,43 +321,15 @@ function getdirections_locations($fromlocs, $fromlatlon, $tolocs, $tolatlon, $wi
   if (! getdirections_check()) {
     return t('You need to !c first.', array('!c' => l('configure Getdirections', 'admin/config/services/getdirections')));
   }
-  global $language;
+
   $getdirections_defaults = getdirections_defaults();
   $getdirections_misc = getdirections_misc_defaults();
   getdirections_setup_map($getdirections_defaults, $getdirections_misc);
-  $lla = explode(',', $getdirections_defaults['latlong']);
-  $getdirections_settings = array(
-    'lat' => $lla[0],
-    'lng' => $lla[1],
-    'zoom' => $getdirections_defaults['zoom'],
-    'maptype' => $getdirections_defaults['maptype'],
-    'controltype' => $getdirections_defaults['controltype'],
-    'mtc' => $getdirections_defaults['mtc'],
-    'baselayers' => $getdirections_defaults['baselayers'],
-    'scale' => $getdirections_defaults['behavior']['scale'],
-    'overview' => $getdirections_defaults['behavior']['overview'],
-    'googlebar' => $getdirections_defaults['behavior']['googlebar'],
-    'fromlatlon' => $fromlatlon,
-    'tolatlon' => $tolatlon,
-    'mylocale' => $language->language,
-    'waypoints' => intval($getdirections_defaults['waypoints']),
-    'waypoint_color' => $getdirections_defaults['waypoint_color'],
-    'show_distance' => ($getdirections_misc['show_distance'] ? t('Total distance') : ''),
-    'trafficinfo' => $getdirections_misc['trafficinfo'],
-    'bicycleinfo' => $getdirections_misc['bicycleinfo'],
-    'show_duration' => ($getdirections_misc['show_duration'] ? t('Total duration') : ''),
-  );
-  if (variable_get('getdirections_use_v3', 0)) {
-    $getdirections_settings['scrollwheel'] = $getdirections_defaults['behavior']['scrollwheel'];
-    $getdirections_settings['draggable'] = $getdirections_defaults['behavior']['draggable'];
-    $getdirections_settings['unitsystem'] = $getdirections_defaults['unitsystem'];
-    $getdirections_settings['overview_opened'] = $getdirections_defaults['behavior']['overview_opened'];
-    $getdirections_settings['streetview_show'] = $getdirections_defaults['streetview_show'];
-    $getdirections_settings['pancontrol'] = $getdirections_defaults['pancontrol'];
-    $getdirections_settings['advanced_autocomplete'] = $getdirections_defaults['advanced_autocomplete'];
-    $getdirections_settings['panoramio_show'] = $getdirections_misc['panoramio_show'];
-  }
+  $getdirections_settings = getdirections_get_settings($getdirections_defaults, $getdirections_misc);
+  $getdirections_settings['fromlatlon'] = $fromlatlon;
+  $getdirections_settings['tolatlon'] = $tolatlon;
   drupal_add_js(array('getdirections' => $getdirections_settings), 'setting');
+
   if (empty($width)) {
     $width = $getdirections_defaults['width'];
   }
@@ -411,12 +353,27 @@ function getdirections_locations_via($locs, $latlons, $width='', $height='') {
   if (! getdirections_check()) {
     return t('You need to !c first.', array('!c' => l('configure Getdirections', 'admin/config/services/getdirections')));
   }
-  global $language;
+
   $getdirections_defaults = getdirections_defaults();
   $getdirections_misc = getdirections_misc_defaults();
   getdirections_setup_map($getdirections_defaults, $getdirections_misc);
+  $getdirections_settings = getdirections_get_settings($getdirections_defaults, $getdirections_misc);
+  $getdirections_settings['latlons'] = implode('|', $latlons);
+  drupal_add_js(array('getdirections' => $getdirections_settings), 'setting');
+
+  if (empty($width)) {
+    $width = $getdirections_defaults['width'];
+  }
+  if (empty($height)) {
+    $height = $getdirections_defaults['height'];
+  }
+  return theme('getdirections_show_locations_via', array('width' => $width, 'height' => $height, 'locs' => $locs));
+}
+
+function getdirections_get_settings($getdirections_defaults, $getdirections_misc) {
+  global $language;
   $lla = explode(',', $getdirections_defaults['latlong']);
-  $getdirections_settings = array(
+  $settings = array(
     'lat' => $lla[0],
     'lng' => $lla[1],
     'zoom' => $getdirections_defaults['zoom'],
@@ -427,7 +384,6 @@ function getdirections_locations_via($locs, $latlons, $width='', $height='') {
     'scale' => $getdirections_defaults['behavior']['scale'],
     'overview' => $getdirections_defaults['behavior']['overview'],
     'googlebar' => $getdirections_defaults['behavior']['googlebar'],
-    'latlons' => implode('|', $latlons),
     'mylocale' => $language->language,
     'waypoints' => intval($getdirections_defaults['waypoints']),
     'waypoint_color' => $getdirections_defaults['waypoint_color'],
@@ -437,23 +393,17 @@ function getdirections_locations_via($locs, $latlons, $width='', $height='') {
     'show_duration' => ($getdirections_misc['show_duration'] ? t('Total duration') : ''),
   );
   if (variable_get('getdirections_use_v3', 0)) {
-    $getdirections_settings['scrollwheel'] = $getdirections_defaults['behavior']['scrollwheel'];
-    $getdirections_settings['draggable'] = $getdirections_defaults['behavior']['draggable'];
-    $getdirections_settings['unitsystem'] = $getdirections_defaults['unitsystem'];
-    $getdirections_settings['overview_opened'] = $getdirections_defaults['behavior']['overview_opened'];
-    $getdirections_settings['streetview_show'] = $getdirections_defaults['streetview_show'];
-    $getdirections_settings['pancontrol'] = $getdirections_defaults['pancontrol'];
-    $getdirections_settings['advanced_autocomplete'] = $getdirections_defaults['advanced_autocomplete'];
-    $getdirections_settings['panoramio_show'] = $getdirections_misc['panoramio_show'];
+    $settings['scrollwheel'] = $getdirections_defaults['behavior']['scrollwheel'];
+    $settings['draggable'] = $getdirections_defaults['behavior']['draggable'];
+    $settings['unitsystem'] = $getdirections_defaults['unitsystem'];
+    $settings['overview_opened'] = $getdirections_defaults['behavior']['overview_opened'];
+    $settings['streetview_show'] = $getdirections_defaults['streetview_show'];
+    $settings['pancontrol'] = $getdirections_defaults['pancontrol'];
+    $settings['advanced_autocomplete'] = $getdirections_defaults['advanced_autocomplete'];
+    $settings['panoramio_show'] = $getdirections_misc['panoramio_show'];
   }
-  drupal_add_js(array('getdirections' => $getdirections_settings), 'setting');
-  if (empty($width)) {
-    $width = $getdirections_defaults['width'];
-  }
-  if (empty($height)) {
-    $height = $getdirections_defaults['height'];
-  }
-  return theme('getdirections_show_locations_via', array('width' => $width, 'height' => $height, 'locs' => $locs));
+
+  return $settings;
 }
 
 /**
