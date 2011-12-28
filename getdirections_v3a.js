@@ -720,7 +720,7 @@
 
     // minding textfields
     if (Drupal.settings.getdirections.advanced_autocomplete) {
-      if ($("input.form-text#edit-from")) {
+      if ($("#edit-from").is("input.form-text")) {
         var input_from = document.getElementById('edit-from');
         var ac_from = new google.maps.places.Autocomplete(input_from);
         google.maps.event.addListener(ac_from, 'place_changed', function() {
@@ -729,7 +729,7 @@
           showAddress();
         });
       }
-      if ($("input.form-text#edit-to")) {
+      if ($("#edit-to").is("input.form-text")) {
         var input_to = document.getElementById('edit-to');
         var ac_to = new google.maps.places.Autocomplete(input_to);
         google.maps.event.addListener(ac_to, 'place_changed', function() {
