@@ -1,9 +1,43 @@
-commit d4db835
+commit 9cc5d04
+Author: hutch <hutch@midwales.net>
+Date:   Mon Jan 2 10:06:55 2012 +0000
+
+    fixed bug in getdirections_direction_form
+
+getdirections.module
+
+commit 5af6a05
+Author: hutch <hutch@midwales.net>
+Date:   Sat Dec 31 09:52:51 2011 +0000
+
+    added hook_enable
+
+getdirections.install
+
+commit 07a7f41
+Author: hutch <hutch@midwales.net>
+Date:   Wed Dec 28 18:47:00 2011 +0000
+
+    improved jquery input detection for places autocomplete
+
+getdirections_v3a.js
+getdirections_v3b.js
+
+commit 2f1610b
+Author: hutch <hutch@midwales.net>
+Date:   Wed Dec 28 11:18:58 2011 +0000
+
+    rationalised settings collection
+
+getdirections.module
+
+commit bd2d393
 Author: hutch <hutch@midwales.net>
 Date:   Fri Dec 23 22:20:21 2011 +0000
 
     some notice avoidance
 
+CHANGELOG.txt
 getdirections.admin.inc
 getdirections.theme.inc
 

@@ -525,7 +525,7 @@ function getdirections_direction_form($form, &$form_state, $fromto='', $loc='', 
     if ($getdirections_defaults['advanced_autocomplete']) {
       $to_desc = t('Start typing the address of your destination, then select from the dropdown menu.');
     }
-    if ($location && ! $getdirections_defaults['advanced_autocomplete']) {
+    if (($islocation || $isgetlocations_fields) && ! $getdirections_defaults['advanced_autocomplete']) {
       $form['country_to'] = $countries;
       $form['country_to']['#weight'] = $to_country_weight;
       $to_desc = t('Enter the address, postcode and/or city of your journey destination.');
