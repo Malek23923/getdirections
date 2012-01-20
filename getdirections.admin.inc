@@ -411,6 +411,11 @@ function getdirections_settings_form() {
     );
   }
 
+  $form['getdirections_default']['use_https'] = array(
+    '#type' => 'value',
+    '#value' =>  $getdirections_defaults['use_https'],
+  );
+
   if (module_exists('location')) {
     // return link
     $form['getdirections_returnlink'] = array(
@@ -617,4 +622,3 @@ function getdirections_settings_validate($form, &$form_state) {
     }
   }
 }
-

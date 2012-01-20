@@ -662,6 +662,7 @@ function getdirections_defaults() {
       );
     }
   }
+  $defaults['use_https'] = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 1 : 0);
   $getdirections_defaults = variable_get('getdirections_default', array());
   // array_merge deletes things in $defaults that are not in $getdirections_defaults ;-/
   // roll my own
@@ -1114,8 +1115,12 @@ function getdirections_setup_map($defaults, $misc_defaults) {
     if (count($libraries)) {
       $query['libraries'] = implode(',', $libraries);
     }
+    $scheme = 'http';
+    if ($defaults['use_https']) {
+      $scheme = 'https';
+    }
 
-    $head = '<script src="'. url('http://maps.google.com/maps/api/js', array('query' => $query)) .'" type="text/javascript"></script>';
+    $head = '<script src="'. url($scheme . '://maps.google.com/maps/api/js', array('query' => $query)) .'" type="text/javascript"></script>';
     if ($defaults['use_advanced']) {
       if ($defaults['advanced_alternate']) {
         $js = GETDIRECTIONS_PATH .'/getdirections_v3b.js';
@@ -1146,7 +1151,11 @@ function getdirections_setup_map($defaults, $misc_defaults) {
         'hl' => $language->language,
       );
     }
-    $head = '<script src="'. url('http://maps.google.com/maps', array('query' => $query)) .'" type="text/javascript"></script>';
+    $scheme = 'http://maps.google.com/maps';
+    if ($defaults['use_https']) {
+      $scheme = 'https://maps-api-ssl.google.com/maps';
+    }
+    $head = '<script src="'. url($scheme, array('query' => $query)) .'" type="text/javascript"></script>';
     if ($defaults['use_advanced']) {
       $js = GETDIRECTIONS_PATH .'/getdirections_v2a.js';
     }

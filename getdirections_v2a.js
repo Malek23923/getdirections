@@ -46,7 +46,8 @@
   var startpoint = 0;
   var endpoint = 1;
   var viaIconColor = '';
-  var viaIconUrl = "http://labs.google.com/ridefinder/images/mm_20_";
+  var scheme = 'http';
+  var viaIconUrl = scheme + "://labs.google.com/ridefinder/images/mm_20_";
 
   // functions
   Drupal.getdirections.mygetDirections = function() {
@@ -287,6 +288,10 @@
     var latlons = (Drupal.settings.getdirections.latlons ? Drupal.settings.getdirections.latlons : '');
     // color of 'via' icon, can be black brown green purple yellow blue gray orange red white
     viaIconColor = (Drupal.settings.getdirections.waypoint_color ? Drupal.settings.getdirections.waypoint_color : 'white');
+    if (Drupal.settings.getdirections.use_https) {
+      scheme = 'https';
+      viaIconUrl = scheme + "://labs.google.com/ridefinder/images/mm_20_";
+    }
 
     waypoints = (Drupal.settings.getdirections.waypoints ? Drupal.settings.getdirections.waypoints : 0);
     if (waypoints) {

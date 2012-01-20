@@ -1,9 +1,40 @@
-commit bd0f6a8
+commit 3d8a5dc
+Author: hutch <hutch@midwales.net>
+Date:   Fri Jan 20 13:25:11 2012 +0000
+
+    added https support
+
+getdirections.admin.inc
+getdirections.module
+getdirections_v2a.js
+getdirections_v3.js
+getdirections_v3a.js
+getdirections_v3b.js
+
+commit 3d6757e
+Author: hutch <hutch@midwales.net>
+Date:   Wed Dec 28 18:46:15 2011 +0000
+
+    improved jquery input detection for places autocomplete
+
+getdirections_v3a.js
+getdirections_v3b.js
+
+commit 98963a6
+Author: hutch <hutch@midwales.net>
+Date:   Wed Dec 28 13:26:05 2011 +0000
+
+    rationalised settings collection
+
+getdirections.module
+
+commit 5ff700b
 Author: hutch <hutch@midwales.net>
 Date:   Mon Dec 19 12:48:42 2011 +0000
 
     fixed translation issue 1376052
 
+CHANGELOG.txt
 getdirections.module
 
 commit 1f39df0
