@@ -38,9 +38,10 @@
   var dirrenderer;
   var dirresult;
   var unitsys;
-  var startIconUrl = "http://www.google.com/mapfiles/dd-start.png";
-  var endIconUrl = "http://www.google.com/mapfiles/dd-end.png";
-  var shadowIconUrl = "http://www.google.com/mapfiles/shadow50.png"
+  var scheme = 'http';
+  var startIconUrl = scheme + "://www.google.com/mapfiles/dd-start.png";
+  var endIconUrl = scheme + "://www.google.com/mapfiles/dd-end.png";
+  var shadowIconUrl = scheme + "://www.google.com/mapfiles/shadow50.png"
   var oldDirections = [];
   var currentDirections = null;
 
@@ -444,9 +445,14 @@
     var baselayers = (Drupal.settings.getdirections.baselayers ? Drupal.settings.getdirections.baselayers : '');
     var fromlatlon = (Drupal.settings.getdirections.fromlatlon ? Drupal.settings.getdirections.fromlatlon : '');
     var tolatlon = (Drupal.settings.getdirections.tolatlon ? Drupal.settings.getdirections.tolatlon : '');
-
-      donemarkers[startpoint] = false;
-      donemarkers[endpoint] = false;
+    if (Drupal.settings.getdirections.use_https) {
+      scheme = 'https';
+      startIconUrl = scheme + "://www.google.com/mapfiles/dd-start.png";
+      endIconUrl = scheme + "://www.google.com/mapfiles/dd-end.png";
+      shadowIconUrl = scheme + "://www.google.com/mapfiles/shadow50.png"
+    }
+    donemarkers[startpoint] = false;
+    donemarkers[endpoint] = false;
 
     // menu type
     var mtc = Drupal.settings.getdirections.mtc;

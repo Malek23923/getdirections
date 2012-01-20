@@ -425,6 +425,11 @@ function getdirections_settings_form() {
     );
   }
 
+  $form['getdirections_default']['use_https'] = array(
+    '#type' => 'value',
+    '#value' =>  $getdirections_defaults['use_https'],
+  );
+
   // return link
   $form['getdirections_returnlink'] = array(
     '#type' => 'fieldset',
@@ -702,4 +707,3 @@ function getdirections_settings_validate($form, &$form_state) {
     }
   }
 }
-

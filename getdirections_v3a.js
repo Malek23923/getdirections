@@ -39,11 +39,12 @@
   var dirservice;
   var dirrenderer;
   var unitsys;
-  var startIconUrl = "http://www.google.com/mapfiles/dd-start.png";
-  var pauseIconUrl = "http://www.google.com/mapfiles/dd-pause.png";
-  var endIconUrl = "http://www.google.com/mapfiles/dd-end.png";
-  var shadowIconUrl = "http://www.google.com/mapfiles/shadow50.png"
-  var viaIconUrl = "http://labs.google.com/ridefinder/images/mm_20_";
+  var scheme = 'http';
+  var startIconUrl = scheme + "://www.google.com/mapfiles/dd-start.png";
+  var endIconUrl = scheme + "://www.google.com/mapfiles/dd-end.png";
+  var shadowIconUrl = scheme + "://www.google.com/mapfiles/shadow50.png"
+  var pauseIconUrl = scheme + "://www.google.com/mapfiles/dd-pause.png";
+  var viaIconUrl = scheme + "://labs.google.com/ridefinder/images/mm_20_";
   var viaIconColor = '';
 
   // error codes
@@ -517,6 +518,14 @@
     // pipe delim
     var latlons = (Drupal.settings.getdirections.latlons ? Drupal.settings.getdirections.latlons : '');
     viaIconColor = (Drupal.settings.getdirections.waypoint_color ? Drupal.settings.getdirections.waypoint_color : 'white');
+    if (Drupal.settings.getdirections.use_https) {
+      scheme = 'https';
+      startIconUrl = scheme + "://www.google.com/mapfiles/dd-start.png";
+      endIconUrl = scheme + "://www.google.com/mapfiles/dd-end.png";
+      shadowIconUrl = scheme + "://www.google.com/mapfiles/shadow50.png"
+      pauseIconUrl = scheme + "://www.google.com/mapfiles/dd-pause.png";
+      viaIconUrl = scheme + "://labs.google.com/ridefinder/images/mm_20_";
+    }
 
     waypoints = (Drupal.settings.getdirections.waypoints ? Drupal.settings.getdirections.waypoints : 0);
     if (waypoints) {

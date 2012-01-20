@@ -1,9 +1,23 @@
-commit 9cc5d04
+commit 7d7f7e1
+Author: hutch <hutch@midwales.net>
+Date:   Fri Jan 20 12:00:21 2012 +0000
+
+    added https support
+
+getdirections.admin.inc
+getdirections.module
+getdirections_v2a.js
+getdirections_v3.js
+getdirections_v3a.js
+getdirections_v3b.js
+
+commit ba09afc
 Author: hutch <hutch@midwales.net>
 Date:   Mon Jan 2 10:06:55 2012 +0000
 
     fixed bug in getdirections_direction_form
 
+CHANGELOG.txt
 getdirections.module
 
 commit 5af6a05

@@ -15,10 +15,10 @@
   var unitsys;
   var llpatt = /[0-9.\-],[0-9.\-]/;
   var map;
-  var startIconUrl = "http://www.google.com/mapfiles/dd-start.png";
-  var endIconUrl = "http://www.google.com/mapfiles/dd-end.png";
-  var shadowIconUrl = "http://www.google.com/mapfiles/shadow50.png"
-
+  var scheme = 'http';
+  var startIconUrl = scheme + "://www.google.com/mapfiles/dd-start.png";
+  var endIconUrl = scheme + "://www.google.com/mapfiles/dd-end.png";
+  var shadowIconUrl = scheme + "://www.google.com/mapfiles/shadow50.png"
   var tomarker;
   var frommarker;
   var trafficInfo;
@@ -265,6 +265,12 @@
 
     // pipe delim
     var latlons = (Drupal.settings.getdirections.latlons ? Drupal.settings.getdirections.latlons : '');
+    if (Drupal.settings.getdirections.use_https) {
+      scheme = 'https';
+      startIconUrl = scheme + "://www.google.com/mapfiles/dd-start.png";
+      endIconUrl = scheme + "://www.google.com/mapfiles/dd-end.png";
+      shadowIconUrl = scheme + "://www.google.com/mapfiles/shadow50.png"
+    }
 
     // menu type
     var mtc = Drupal.settings.getdirections.mtc;
