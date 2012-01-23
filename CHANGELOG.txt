@@ -1,9 +1,18 @@
-commit 7d7f7e1
+commit adfa8fb
+Author: hutch <hutch@midwales.net>
+Date:   Mon Jan 23 22:04:55 2012 +0000
+
+    added latlon to gettdirections_box
+
+getdirections.module
+
+commit 5ddbc85
 Author: hutch <hutch@midwales.net>
 Date:   Fri Jan 20 12:00:21 2012 +0000
 
     added https support
 
+CHANGELOG.txt
 getdirections.admin.inc
 getdirections.module
 getdirections_v2a.js
