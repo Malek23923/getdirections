@@ -1330,6 +1330,9 @@ function getdirections_direction_box() {
   elseif ($a1 == 'location_u2n' && is_numeric($a2) && is_numeric($a3)) {
     $content = getdirections_n2u_setlocation($a2, $a3);
   }
+  elseif ($a1 == 'latlon' && ($a2 == 'from' || $a2 == 'to')) {
+    $content = getdirections_latlon($a2, $a3);
+  }
   else {
     $content = getdirections_direction();
   }
