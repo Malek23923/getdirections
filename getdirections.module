@@ -1097,11 +1097,15 @@ function getdirections_setup_map($defaults, $misc_defaults) {
   global $language;
 
   if (variable_get('getdirections_use_v3', 0)) {
-   // v3 googlemaps API
-    $query = array(
-      'sensor' => 'false',
-      'language' => $language->language,
-    );
+    // v3 googlemaps API
+    $key = variable_get('getdirections_api3_key', '');
+    $query = array();
+    if (! empty($key)) {
+      $query['key'] = $key;
+    }
+    $query['sensor'] = 'false';
+    $query['language'] = $language->language;
+
     $libraries = array();
     if ($defaults['advanced_autocomplete']) {
       $libraries[] = 'places';
@@ -1119,8 +1123,11 @@ function getdirections_setup_map($defaults, $misc_defaults) {
     if ($defaults['use_https']) {
       $scheme = 'https';
     }
-
-    $head = '<script src="'. url($scheme . '://maps.google.com/maps/api/js', array('query' => $query)) .'" type="text/javascript"></script>';
+    $gmapdomain = "maps.google.com/maps/api/js";
+    if (! empty($key)) {
+      $gmapdomain = "maps.googleapis.com/maps/api/js";
+    }
+    $head = '<script src="'. url($scheme . '://' . $gmapdomain, array('query' => $query)) .'" type="text/javascript"></script>';
     if ($defaults['use_advanced']) {
       if ($defaults['advanced_alternate']) {
         $js = GETDIRECTIONS_PATH .'/getdirections_v3b.js';

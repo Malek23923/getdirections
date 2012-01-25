@@ -55,6 +55,27 @@ function getdirections_settings_form() {
       );
     }
   }
+  else {
+    // google api3 key
+    $apikey = variable_get('getdirections_api3_key', '');
+    $form['api3'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('Google API key'),
+      '#description' => t('This key is currently not required by Google.'),
+      '#collapsible' => TRUE,
+      #'#collapsed' => ($apikey ? TRUE : FALSE),
+      '#collapsed' => TRUE,
+    );
+    $form['api3']['getdirections_api3_key'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Your Google maps API Version 3 key'),
+      '#default_value' => $apikey,
+      '#description' => t('For more information about this key see this !u', array('!u' => l('page on google', 'http://code.google.com/apis/maps/documentation/javascript/tutorial.html#api_key', array('attributes' => array('target'=>'_blank'))))),
+      '#size' => 95,
+      '#required' => FALSE,
+    );
+
+  }
 
   $form['getdirections_default'] = array(
     '#type' => 'fieldset',
