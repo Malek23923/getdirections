@@ -1220,11 +1220,16 @@ function getdirections_setup_map($defaults, $misc_defaults) {
   global $language;
 
   if (variable_get('getdirections_use_v3', 0)) {
-   // v3 googlemaps API
-    $query = array(
-      'sensor' => 'false',
-      'language' => $language->language,
-    );
+
+    // v3 googlemaps API
+    $key = variable_get('getdirections_api3_key', '');
+    $query = array();
+    if (! empty($key)) {
+      $query['key'] = $key;
+    }
+    $query['sensor'] = 'false';
+    $query['language'] = $language->language;
+
     $libraries = array();
     if ($defaults['advanced_autocomplete']) {
       $libraries[] = 'places';
@@ -1242,7 +1247,12 @@ function getdirections_setup_map($defaults, $misc_defaults) {
     if ($defaults['use_https']) {
       $scheme = 'https';
     }
-    $gmaplink = url($scheme . '://maps.google.com/maps/api/js', array('query' => $query));
+
+    $gmapdomain = "maps.google.com/maps/api/js";
+    if (! empty($key)) {
+      $gmapdomain = "maps.googleapis.com/maps/api/js";
+    }
+    $gmaplink = url($scheme . '://' . $gmapdomain, array('query' => $query));
 
     if ($defaults['use_advanced']) {
       if ($defaults['advanced_alternate']) {
