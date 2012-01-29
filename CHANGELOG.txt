@@ -1,9 +1,27 @@
-commit adfa8fb
+commit 07cee0a
+Author: hutch <hutch@midwales.net>
+Date:   Sun Jan 29 09:58:46 2012 +0000
+
+    fixed bugs in getdirections_box
+
+getdirections.module
+
+commit e62b66d
+Author: hutch <hutch@midwales.net>
+Date:   Wed Jan 25 17:09:51 2012 +0000
+
+    added api3 key option
+
+getdirections.admin.inc
+getdirections.module
+
+commit 4b75e44
 Author: hutch <hutch@midwales.net>
 Date:   Mon Jan 23 22:04:55 2012 +0000
 
     added latlon to gettdirections_box
 
+CHANGELOG.txt
 getdirections.module
 
 commit 5ddbc85
