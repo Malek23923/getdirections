@@ -1,9 +1,19 @@
-commit 07cee0a
+commit 1c376a6
+Author: hutch <hutch@midwales.net>
+Date:   Mon Feb 20 11:39:16 2012 +0000
+
+    fixed getlocations compat bug
+
+getdirections.admin.inc
+getdirections.module
+
+commit 2460b26
 Author: hutch <hutch@midwales.net>
 Date:   Sun Jan 29 09:58:46 2012 +0000
 
     fixed bugs in getdirections_box
 
+CHANGELOG.txt
 getdirections.module
 
 commit e62b66d

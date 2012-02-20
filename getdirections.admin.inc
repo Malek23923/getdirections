@@ -527,7 +527,7 @@ function getdirections_settings_form() {
         '#suffix' => '</div>',
       );
     }
-    if (getlocations_check_comment()) {
+    if (getlocations_check_entity_type('comment')) {
       $form['getdirections_returnlink']['comment_enable'] = array(
         '#type' => 'checkbox',
         '#title' => t('Enable Comment Return Link'),

@@ -161,7 +161,7 @@ function getdirections_menu() {
         'type' => MENU_CALLBACK,
       );
     }
-    if (getlocations_check_comment()) {
+    if (getlocations_check_entity_type('comment')) {
       // comment
       $items['getdirections/location_comment/%getdirections_fromto/%getdirections_id'] = array(
         'title' => 'Get directions',
