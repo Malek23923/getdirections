@@ -1,9 +1,18 @@
-commit 4aa5175
+commit c3f983f
+Author: hutch <hutch@midwales.net>
+Date:   Fri Mar 2 21:27:28 2012 +0000
+
+    improved link in views
+
+getdirections.views_default.inc
+
+commit 4de55ec
 Author: hutch <hutch@midwales.net>
 Date:   Sun Jan 29 09:58:09 2012 +0000
 
     fixed bugs in getdirections_box
 
+CHANGELOG.txt
 getdirections.module
 
 commit 2543bae
