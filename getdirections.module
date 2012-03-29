@@ -240,7 +240,7 @@ function getdirections_direction($direction='', $location='', $country='', $latl
     }
     if ($type == 'node') {
       $node = node_load(array('nid' => $id ));
-      drupal_set_title(t('Get directions @d @t', array('@d' => $direction_translated, '@t' => $node->title)));
+      drupal_set_title(t('Get directions @d !t', array('@d' => $direction_translated, '!t' => $node->title)));
     }
     elseif ($type == 'user') {
       $account = user_load(array('uid' => $id ));
@@ -733,6 +733,7 @@ function getdirections_setlocation($direction, $nid, $width='', $height='') {
       return $content;
     }
   }
+  return getdirections_direction();
 }
 
 /**
@@ -763,6 +764,7 @@ function getdirections_user_setlocation($direction, $uid, $width='', $height='')
       return $content;
     }
   }
+  return getdirections_direction();
 }
 
 /**
@@ -812,6 +814,7 @@ function getdirections_setlocations($fromnid, $tonid, $width='', $height='') {
       }
     }
   }
+  return getdirections_direction();
 }
 
 /**
@@ -859,6 +862,7 @@ function getdirections_user_setlocations($fromuid, $touid, $width='', $height=''
       }
     }
   }
+  return getdirections_direction();
 }
 
 /**
@@ -897,6 +901,7 @@ function getdirections_setlocations_via($nids, $width='', $height='') {
     $content = getdirections_locations_via($locs, $latlons, $width, $height);
     return $content;
   }
+  return getdirections_direction();
 }
 
 /**
@@ -945,6 +950,7 @@ function getdirections_n2u_setlocation($nid, $uid, $width='', $height='') {
       }
     }
   }
+  return getdirections_direction();
 }
 
 /**
@@ -993,6 +999,7 @@ function getdirections_u2n_setlocation($uid, $nid, $width='', $height='') {
       }
     }
   }
+  return getdirections_direction();
 }
 
 /**
@@ -1030,6 +1037,7 @@ function getdirections_user_setlocations_via($uids, $width='', $height='') {
     $content = getdirections_locations_via($locs, $latlons, $width, $height);
     return $content;
   }
+  return getdirections_direction();
 }
 
 /**
@@ -1084,6 +1092,7 @@ function getdirections_setlocation_id($direction, $lid, $width='', $height='') {
       return $content;
     }
   }
+  return getdirections_direction();
 }
 
 /**
