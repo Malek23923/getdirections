@@ -783,6 +783,7 @@ function getdirections_setlocation($direction, $nid, $width='', $height='') {
       return $content;
     }
   }
+  return getdirections_direction();
 }
 
 /**
@@ -814,6 +815,7 @@ function getdirections_user_setlocation($direction, $uid, $width='', $height='')
       return $content;
     }
   }
+  return getdirections_direction();
 }
 
 /**
@@ -864,6 +866,7 @@ function getdirections_setlocations($fromnid, $tonid, $width='', $height='') {
       }
     }
   }
+  return getdirections_direction();
 }
 
 /**
@@ -912,6 +915,7 @@ function getdirections_user_setlocations($fromuid, $touid, $width='', $height=''
       }
     }
   }
+  return getdirections_direction();
 }
 
 /**
@@ -1002,6 +1006,7 @@ function getdirections_n2u_setlocation($nid, $uid, $width='', $height='') {
       }
     }
   }
+  return getdirections_direction();
 }
 
 /**
@@ -1050,6 +1055,7 @@ function getdirections_u2n_setlocation($uid, $nid, $width='', $height='') {
       }
     }
   }
+  return getdirections_direction();
 }
 
 /**
@@ -1144,6 +1150,7 @@ function getdirections_setlocation_id($direction, $lid, $width='', $height='') {
       return $content;
     }
   }
+  return getdirections_direction();
 }
 
 /**
@@ -1176,6 +1183,7 @@ function getdirections_term_setlocation($direction, $tid, $width='', $height='')
       return $content;
     }
   }
+  return getdirections_direction();
 }
 
 /**
@@ -1207,6 +1215,7 @@ function getdirections_comment_setlocation($direction, $cid, $width='', $height=
       return $content;
     }
   }
+  return getdirections_direction();
 }
 
 /**

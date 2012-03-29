@@ -1,9 +1,18 @@
-commit 02a9571
+commit 223bf3d
+Author: hutch <hutch@midwales.net>
+Date:   Thu Mar 29 10:08:17 2012 +0100
+
+    added nicer return in case of malformations
+
+getdirections.module
+
+commit 53ead7a
 Author: hutch <hutch@midwales.net>
 Date:   Fri Mar 2 21:30:42 2012 +0000
 
     improved links in views
 
+CHANGELOG.txt
 getdirections.views_default.inc
 
 commit d4848cc
