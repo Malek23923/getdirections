@@ -1,9 +1,19 @@
-commit f96d164
+commit a4314dd
+Author: hutch <hutch@midwales.net>
+Date:   Sat Mar 31 21:09:50 2012 +0100
+
+    themed address string
+
+getdirections.module
+getdirections.theme.inc
+
+commit 7138084
 Author: hutch <hutch@midwales.net>
 Date:   Thu Mar 29 10:06:53 2012 +0100
 
     added nicer return in case of malformations
 
+CHANGELOG.txt
 getdirections.module
 
 commit 9419e83

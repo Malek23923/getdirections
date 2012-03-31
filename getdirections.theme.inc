@@ -44,6 +44,12 @@ function getdirections_theme() {
       'arguments' => array('content' => NULL),
       'template' => 'getdirections_box',
     ),
+    'getdirections_loadaddress' => array(
+      'arguments' => array(
+        'location' => array(),
+        'addcountry' => FALSE,
+      ),
+    ),
   );
 }
 
@@ -339,4 +345,35 @@ function template_preprocess_getdirections_box(&$variables) {
 
 }
 
+function theme_getdirections_loadaddress($location, $addcountry) {
+
+  $loc = array();
+  if (isset($location['name']) && $location['name']) {
+    $loc[] = $location['name'];
+  }
+  if (isset($location['street']) && $location['street']) {
+    $loc[] = $location['street'];
+  }
+  if (isset($location['additional']) && $location['additional']) {
+    $loc[] = $location['additional'];
+  }
+  if (isset($location['city']) && $location['city']) {
+    $loc[] = $location['city'];
+  }
+  if (isset($location['province_name']) && $location['province_name']) {
+    $loc[] = $location['province_name'];
+  }
+  if (isset($location['postal_code']) && $location['postal_code']) {
+    $loc[] = $location['postal_code'];
+  }
+  if ($addcountry) {
+    if (isset($location['country']) && $location['country']) {
+      $loc[] = drupal_strtoupper($location['country']);
+    }
+  }
+
+  $output = implode(', ', $loc);
+  return $output;
+
+}
 
