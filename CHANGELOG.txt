@@ -1,9 +1,18 @@
-commit 22ac409
+commit 6a610b0
+Author: hutch <hutch@midwales.net>
+Date:   Thu Apr 19 23:29:42 2012 +0100
+
+    fixed strict warning #1540158 in render().
+
+getdirections.module
+
+commit 96b8e44
 Author: hutch <hutch@midwales.net>
 Date:   Sat Mar 31 20:29:50 2012 +0100
 
     themed address string
 
+CHANGELOG.txt
 getdirections.module
 getdirections.theme.inc
 
