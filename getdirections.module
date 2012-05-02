@@ -1061,6 +1061,7 @@ function getdirections_setlocation_id($direction, $lid, $width='', $height='') {
  */
 function getdirections_setup_map($defaults, $misc_defaults) {
   global $language;
+  $getdirections_paths = getdirections_paths_get();
 
   if (variable_get('getdirections_use_v3', 0)) {
     // v3 googlemaps API
@@ -1096,14 +1097,14 @@ function getdirections_setup_map($defaults, $misc_defaults) {
     $head = '<script src="'. url($scheme . '://' . $gmapdomain, array('query' => $query)) .'" type="text/javascript"></script>';
     if ($defaults['use_advanced']) {
       if ($defaults['advanced_alternate']) {
-        $js = GETDIRECTIONS_PATH .'/getdirections_v3b.js';
+        $js = $getdirections_paths['getdirections_v3b_path'];
       }
       else {
-        $js = GETDIRECTIONS_PATH .'/getdirections_v3a.js';
+        $js = $getdirections_paths['getdirections_v3a_path'];
       }
     }
     else {
-      $js = GETDIRECTIONS_PATH .'/getdirections_v3.js';
+      $js = $getdirections_paths['getdirections_v3_path'];
     }
   }
   else {
@@ -1130,10 +1131,10 @@ function getdirections_setup_map($defaults, $misc_defaults) {
     }
     $head = '<script src="'. url($scheme, array('query' => $query)) .'" type="text/javascript"></script>';
     if ($defaults['use_advanced']) {
-      $js = GETDIRECTIONS_PATH .'/getdirections_v2a.js';
+      $js = $getdirections_paths['getdirections_v2a_path'];
     }
     else {
-      $js = GETDIRECTIONS_PATH .'/getdirections_v2.js';
+      $js = $getdirections_paths['getdirections_v2_path'];
     }
   }
   drupal_set_html_head($head);
@@ -1300,4 +1301,15 @@ function getdirections_direction_box() {
   $output = theme('getdirections_box', $content);
   print $output;
   exit;
+}
+
+function getdirections_paths_get() {
+  $getdirections_paths = variable_get('getdirections_paths', array(
+    'getdirections_v2_path' => GETDIRECTIONS_PATH . '/getdirections_v2.js',
+    'getdirections_v2a_path' => GETDIRECTIONS_PATH . '/getdirections_v2a.js',
+    'getdirections_v3_path' => GETDIRECTIONS_PATH . '/getdirections_v3.js',
+    'getdirections_v3a_path' => GETDIRECTIONS_PATH . '/getdirections_v3a.js',
+    'getdirections_v3b_path' => GETDIRECTIONS_PATH . '/getdirections_v3b.js',
+  ));
+  return $getdirections_paths;
 }

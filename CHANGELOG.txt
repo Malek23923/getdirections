@@ -1,9 +1,19 @@
-commit a4314dd
+commit 35e6752
+Author: hutch <hutch@midwales.net>
+Date:   Wed May 2 07:56:39 2012 +0100
+
+    added javascript paths
+
+getdirections.admin.inc
+getdirections.module
+
+commit 9cafc0b
 Author: hutch <hutch@midwales.net>
 Date:   Sat Mar 31 21:09:50 2012 +0100
 
     themed address string
 
+CHANGELOG.txt
 getdirections.module
 getdirections.theme.inc
 
