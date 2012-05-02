@@ -670,6 +670,53 @@ function getdirections_settings_form() {
     $form['getdirections_misc']['switchfromto'] = array('#type' => 'value', '#value' => $getdirections_misc['switchfromto']);
   }
 
+  // getdirections_paths
+  $getdirections_paths = getdirections_paths_get();
+  $form['getdirections_paths'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Javascript paths'),
+    '#description' => t('For advanced users who want to supply their own javascript.'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+    // This will store all the defaults in one variable.
+    '#tree' => TRUE,
+  );
+  $form['getdirections_paths']['getdirections_v2_path'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Path to getdirections v2 javascript file'),
+    '#default_value' => $getdirections_paths['getdirections_v2_path'],
+    '#size' => 60,
+    '#description' => t('Where the getdirections v2 javascript file is located.')
+  );
+  $form['getdirections_paths']['getdirections_v2a_path'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Path to getdirections v2 advanced javascript file'),
+    '#default_value' => $getdirections_paths['getdirections_v2a_path'],
+    '#size' => 60,
+    '#description' => t('Where the getdirections v2 advanced javascript file is located.')
+  );
+  $form['getdirections_paths']['getdirections_v3_path'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Path to getdirections v3 javascript file'),
+    '#default_value' => $getdirections_paths['getdirections_v3_path'],
+    '#size' => 60,
+    '#description' => t('Where the getdirections v3 javascript file is located.')
+  );
+  $form['getdirections_paths']['getdirections_v3a_path'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Path to getdirections v3 advanced javascript file'),
+    '#default_value' => $getdirections_paths['getdirections_v3a_path'],
+    '#size' => 60,
+    '#description' => t('Where the getdirections v3 advanced javascript file is located.')
+  );
+  $form['getdirections_paths']['getdirections_v3b_path'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Path to getdirections v3 alternate javascript file'),
+    '#default_value' => $getdirections_paths['getdirections_v3b_path'],
+    '#size' => 60,
+    '#description' => t('Where the getdirections v3 alternate javascript file is located.')
+  );
+
   $form['#validate'][] = 'getdirections_settings_validate';
 
   return system_settings_form($form);
