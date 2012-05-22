@@ -1,9 +1,18 @@
-commit 35e6752
+commit a8ef1cd
+Author: hutch <hutch@midwales.net>
+Date:   Tue May 22 16:48:34 2012 +0100
+
+    fixed getlocations_colorbox in init
+
+getdirections.module
+
+commit 3bdbe19
 Author: hutch <hutch@midwales.net>
 Date:   Wed May 2 07:56:39 2012 +0100
 
     added javascript paths
 
+CHANGELOG.txt
 getdirections.admin.inc
 getdirections.module
 

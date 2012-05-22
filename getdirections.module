@@ -34,12 +34,9 @@ function getdirections_init() {
       'height' => 600,
     ));
     $settings = array('getdirections_colorbox' => $getdirections_colorbox);
+    drupal_add_js($settings, 'setting');
+    drupal_add_js(GETDIRECTIONS_PATH .'/getdirections.js');
   }
-  else {
-    $settings = array('getdirections_colorbox' => array('enable' => 0));
-  }
-  drupal_add_js($settings, 'setting');
-  drupal_add_js(GETDIRECTIONS_PATH .'/getdirections.js');
 }
 
 /**
