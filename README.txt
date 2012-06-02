@@ -62,6 +62,11 @@ and vice-versa
 getdirections/location_n2u/99/66
 Where 66 is is user id, 99 is node id
 
+You can build a map by supplying latitude/longitude pairs delimited with a '|'
+eg getdirections/latlons/nn,nn|nn,nn|nn,nn
+where nn,nn is a latitude/longitude pair.
+A maximum of 8 pairs is permitted by Google unless you have a commercial license.
+
 If you have the Colorbox module installed and enabled in Get Directions
 you can place any of the above paths in a colorbox iframe by replacing
 'getdirections' with 'getdirections_box'.
