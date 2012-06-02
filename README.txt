@@ -1,4 +1,4 @@
-getdirections module for Drupal 6.x
+getdirections module for Drupal 7.x
 
 If you have any questions or suggestions please contact me at
 http://drupal.org/user/52366 or use the Getdirections issue queue.
@@ -22,8 +22,8 @@ use its configuration as a starting point.
 Also remember to go to Administer > User management > Permissions and
 set up permissions according to your needs.
 
-If you have the location module installed you can make use of any nodes
-containing location information.
+If you have the location or getlocations_fields module installed you can
+make use of any nodes containing location information.
 
 For instance, if you want to "preload" the getdirections form with information
 about the destination use a URL in this format:
@@ -45,8 +45,8 @@ getdirections/locations/1/99
 Where '1' is the starting point node id and 99 is the destination node id
 (note the 's' in locations)
 
-If you are using the location_user module you can make
-a link to a user's location with the user id:
+If you are using the location_user or getlocations_fields module you can
+make a link to a user's location with the user id:
 getdirections/location_user/to/66
 
 Same goes for 'from'
@@ -61,6 +61,11 @@ Where 66 is is user id, 99 is node id
 and vice-versa
 getdirections/location_n2u/99/66
 Where 66 is is user id, 99 is node id
+
+You can build a map by supplying latitude/longitude pairs delimited with a '|'
+eg getdirections/latlons/nn,nn|nn,nn|nn,nn
+where nn,nn is a latitude/longitude pair.
+A maximum of 8 pairs is permitted by Google unless you have a commercial license.
 
 If you have the Colorbox module installed and enabled in Get Directions
 you can place any of the above paths in a colorbox iframe by replacing
