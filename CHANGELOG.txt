@@ -1,9 +1,26 @@
-commit 6d74619
+commit 3a9ef91
+Author: hutch <hutch@midwales.net>
+Date:   Sat Jun 2 16:07:02 2012 +0100
+
+    added getdirections_latlons function
+
+getdirections.module
+
+commit b8c1bc0
+Author: hutch <hutch@midwales.net>
+Date:   Sat Jun 2 16:06:24 2012 +0100
+
+    updated README
+
+README.txt
+
+commit a9465b4
 Author: hutch <hutch@midwales.net>
 Date:   Tue May 22 16:50:27 2012 +0100
 
     fixed getlocations_colorbox in init
 
+CHANGELOG.txt
 getdirections.module
 
 commit deced3f

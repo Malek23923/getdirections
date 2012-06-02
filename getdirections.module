@@ -139,6 +139,13 @@ function getdirections_menu() {
     'page arguments' => array(2, 3, 4),
     'type' => MENU_CALLBACK,
   );
+  $items['getdirections/latlons/%'] = array(
+    'title' => 'Get directions',
+    'access arguments' => array('access gmap getdirections'),
+    'page callback' => 'getdirections_latlons',
+    'page arguments' => array(2),
+    'type' => MENU_CALLBACK,
+  );
   $items['getdirections/location_id/%getdirections_fromto/%getdirections_id'] = array(
     'title' => 'Get directions',
     'access callback' => 'getdirections_access_location',
@@ -934,6 +941,24 @@ function getdirections_setlocations_via($nids, $width='', $height='') {
   $content = getdirections_locations_via($locs, $latlons, $width, $height);
   return $content;
 
+}
+
+function getdirections_latlons($lls, $width='', $height='') {
+  $latlons = array();
+  $locs = array();
+  $arrlls = explode('|', $lls);
+  foreach ($arrlls AS $key => $ll) {
+    if ($key > GETDIRECTIONS_WAYPOINTS_MAX && $key < count($arrlls)) {
+      continue;
+    }
+    if (! getdirections_latlon_check($ll)) {
+      watchdog('getdirections', 'Lat, Lon failed for !ll', array('!ll' => $ll), WATCHDOG_WARNING);
+      continue;
+    }
+    $latlons[] = $ll;
+  }
+  $content = getdirections_locations_via($locs, $latlons, $width, $height);
+  return $content;
 }
 
 /**
