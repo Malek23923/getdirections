@@ -74,7 +74,7 @@
         googleBarOptions : {
           style : "new"
         }
-      }
+      };
     }
 
     map = new GMap2(document.getElementById("getdirections_map_canvas"), mapOptions);

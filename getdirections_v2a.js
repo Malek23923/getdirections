@@ -311,7 +311,7 @@
         googleBarOptions : {
           style : "new"
         }
-      }
+      };
     }
 
     // make map

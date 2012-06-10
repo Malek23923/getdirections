@@ -42,7 +42,7 @@
   var scheme = 'http';
   var startIconUrl = scheme + "://www.google.com/mapfiles/dd-start.png";
   var endIconUrl = scheme + "://www.google.com/mapfiles/dd-end.png";
-  var shadowIconUrl = scheme + "://www.google.com/mapfiles/shadow50.png"
+  var shadowIconUrl = scheme + "://www.google.com/mapfiles/shadow50.png";
   var pauseIconUrl = scheme + "://www.google.com/mapfiles/dd-pause.png";
   var viaIconUrl = scheme + "://labs.google.com/ridefinder/images/mm_20_";
   var viaIconColor = '';
@@ -139,7 +139,7 @@
     // disable to and from boxes
     $("#edit-from").attr('disabled', true);
     $("#edit-to").attr('disabled', true);
-  }
+  };
 
   // convert lat,lon into LatLng object
   function makell(ll) {
@@ -269,7 +269,7 @@
       // days
       days = 0;
       while (hours >= 24) {
-        hours = hours - 24
+        hours = hours - 24;
         days++;
       }
       duration = '';
@@ -522,7 +522,7 @@
       scheme = 'https';
       startIconUrl = scheme + "://www.google.com/mapfiles/dd-start.png";
       endIconUrl = scheme + "://www.google.com/mapfiles/dd-end.png";
-      shadowIconUrl = scheme + "://www.google.com/mapfiles/shadow50.png"
+      shadowIconUrl = scheme + "://www.google.com/mapfiles/shadow50.png";
       pauseIconUrl = scheme + "://www.google.com/mapfiles/dd-pause.png";
       viaIconUrl = scheme + "://labs.google.com/ridefinder/images/mm_20_";
     }
@@ -759,7 +759,7 @@
 
   Drupal.getdirections.nextbtn = function() {
     return;
-  }
+  };
 
   Drupal.getdirections.toggleTraffic = function() {
     if (traffictoggleState == 1) {
@@ -770,7 +770,7 @@
       trafficInfo.setMap(map);
       traffictoggleState = 1;
     }
-  }
+  };
 
   Drupal.getdirections.toggleBicycle = function() {
     if (bicycletoggleState == 1) {
@@ -781,7 +781,7 @@
       bicycleInfo.setMap(map);
       bicycletoggleState = 1;
     }
-  }
+  };
   Drupal.getdirections.togglePanoramio = function() {
     if (panoramiotoggleState == 1) {
       panoramioLayer.setMap();
@@ -791,7 +791,7 @@
       panoramioLayer.setMap(map);
       panoramiotoggleState = 1;
     }
-  }
+  };
 
   // gogogo
   Drupal.behaviors.getdirections = {
@@ -800,4 +800,4 @@
     }
   };
 
-})(jQuery);
+}(jQuery));

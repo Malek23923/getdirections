@@ -1,9 +1,33 @@
-commit 3a9ef91
+commit c31b641
+Author: hutch <hutch@midwales.net>
+Date:   Sun Jun 10 20:16:44 2012 +0100
+
+    ran jslint, added minified versions
+
+getdirections_v2.js
+getdirections_v2a.js
+getdirections_v3.js
+getdirections_v3.min.js
+getdirections_v3a.js
+getdirections_v3a.min.js
+getdirections_v3b.js
+getdirections_v3b.min.js
+
+commit c2d0722
+Author: hutch <hutch@midwales.net>
+Date:   Sun Jun 10 20:15:34 2012 +0100
+
+    fixed advanced check in directions form
+
+getdirections.module
+
+commit d09e96d
 Author: hutch <hutch@midwales.net>
 Date:   Sat Jun 2 16:07:02 2012 +0100
 
     added getdirections_latlons function
 
+CHANGELOG.txt
 getdirections.module
 
 commit b8c1bc0
