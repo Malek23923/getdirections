@@ -484,7 +484,7 @@ function getdirections_direction_form($form, &$form_state, $fromto='', $loc='', 
   }
   else {
     $from_desc = t('Enter the address, postcode and/or city and country from where you want to start your journey.');
-    if ($getdirections_defaults['advanced_autocomplete']) {
+    if ( getdirections_is_advanced() && $getdirections_defaults['advanced_autocomplete']) {
       $from_desc = t('Start typing the address of your starting point, then select from the dropdown menu.');
     }
     if ( ($islocation || $isgetlocations_fields) && ! $getdirections_defaults['advanced_autocomplete']) {
@@ -525,7 +525,7 @@ function getdirections_direction_form($form, &$form_state, $fromto='', $loc='', 
   }
   else {
     $to_desc = t('Enter the address, postcode and/or city and country of your journey destination.');
-    if ($getdirections_defaults['advanced_autocomplete']) {
+    if ( getdirections_is_advanced() && $getdirections_defaults['advanced_autocomplete']) {
       $to_desc = t('Start typing the address of your destination, then select from the dropdown menu.');
     }
     if (($islocation || $isgetlocations_fields) && ! $getdirections_defaults['advanced_autocomplete']) {
