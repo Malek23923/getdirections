@@ -509,6 +509,7 @@ function getdirections_direction_form($form_state, $fromto='', $loc='', $country
           'driving' => t('Driving'),
           'walking' => t('Walking'),
           'bicycling' => t('Bicycling'),
+          'transit' => t('Public transport'),
         ),
         '#default_value' => 'driving',
         '#weight' => 6,

@@ -1,9 +1,21 @@
-commit 866cc58
+commit 40efe58
+Author: hutch <hutch@midwales.net>
+Date:   Thu Jul 5 16:44:19 2012 +0100
+
+    added transit feature
+
+getdirections.module
+getdirections_v3.js
+getdirections_v3a.js
+getdirections_v3b.js
+
+commit 26f62d4
 Author: hutch <hutch@midwales.net>
 Date:   Sat Jun 2 16:31:11 2012 +0100
 
     added getdirections_latlons function
 
+CHANGELOG.txt
 getdirections.module
 
 commit df1c242
