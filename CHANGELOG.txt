@@ -1,9 +1,24 @@
-commit c31b641
+commit 24b874a
+Author: hutch <hutch@midwales.net>
+Date:   Thu Jul 5 16:23:21 2012 +0100
+
+    added transit feature
+
+getdirections.module
+getdirections_v3.js
+getdirections_v3.min.js
+getdirections_v3a.js
+getdirections_v3a.min.js
+getdirections_v3b.js
+getdirections_v3b.min.js
+
+commit b11b26b
 Author: hutch <hutch@midwales.net>
 Date:   Sun Jun 10 20:16:44 2012 +0100
 
     ran jslint, added minified versions
 
+CHANGELOG.txt
 getdirections_v2.js
 getdirections_v2a.js
 getdirections_v3.js

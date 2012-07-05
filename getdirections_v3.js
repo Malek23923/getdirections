@@ -76,6 +76,7 @@
     var trmode;
     if (tmode == 'walking') { trmode = google.maps.DirectionsTravelMode.WALKING; }
     else if (tmode == 'bicycling') { trmode = google.maps.DirectionsTravelMode.BICYCLING; }
+    else if (tmode == 'transit') { trmode = google.maps.DirectionsTravelMode.TRANSIT; }
     else { trmode = google.maps.DirectionsTravelMode.DRIVING; }
     request.travelMode = trmode;
 
