@@ -737,6 +737,9 @@
       if ($("#edit-from").is("input.form-text")) {
         var input_from = document.getElementById('edit-from');
         var ac_from = new google.maps.places.Autocomplete(input_from);
+        if (Drupal.settings.getdirections.advanced_autocomplete_bias) {
+          ac_from.bindTo('bounds', map);
+        }
         google.maps.event.addListener(ac_from, 'place_changed', function() {
           var place_from = ac_from.getPlace();
           $("#edit-from").val(place_from.formatted_address);
@@ -746,6 +749,9 @@
       if ($("#edit-to").is("input.form-text")) {
         var input_to = document.getElementById('edit-to');
         var ac_to = new google.maps.places.Autocomplete(input_to);
+        if (Drupal.settings.getdirections.advanced_autocomplete_bias) {
+          ac_to.bindTo('bounds', map);
+        }
         google.maps.event.addListener(ac_to, 'place_changed', function() {
           var place_to = ac_to.getPlace();
           $("#edit-to").val(place_to.formatted_address);

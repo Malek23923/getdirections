@@ -404,6 +404,7 @@ function getdirections_get_settings($getdirections_defaults, $getdirections_misc
     $settings['streetview_show'] = $getdirections_defaults['streetview_show'];
     $settings['pancontrol'] = $getdirections_defaults['pancontrol'];
     $settings['advanced_autocomplete'] = $getdirections_defaults['advanced_autocomplete'];
+    $settings['advanced_autocomplete_bias'] = $getdirections_defaults['advanced_autocomplete_bias'];
     $settings['panoramio_show'] = $getdirections_misc['panoramio_show'];
     $settings['bicycleinfo'] = $getdirections_misc['bicycleinfo'];
     $settings['transitinfo'] = $getdirections_misc['transitinfo'];
@@ -680,6 +681,7 @@ function getdirections_defaults() {
       'waypoint_color' => 'white',
       'advanced_alternate' => 0,
       'advanced_autocomplete' => 0,
+      'advanced_autocomplete_bias' => 0,
     );
   }
   else {

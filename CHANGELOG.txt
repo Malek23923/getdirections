@@ -1,9 +1,40 @@
-commit 24b874a
+commit dd0b5dd
+Author: hutch <hutch@midwales.net>
+Date:   Wed Jul 11 23:50:46 2012 +0100
+
+    added viewport bias feature
+
+getdirections.admin.inc
+getdirections.module
+getdirections_v3a.js
+getdirections_v3a.min.js
+getdirections_v3b.js
+getdirections_v3b.min.js
+
+commit c8b7ff2
+Author: hutch <hutch@midwales.net>
+Date:   Wed Jul 11 21:52:20 2012 +0100
+
+    added transit layer
+
+getdirections.admin.inc
+getdirections.css
+getdirections.module
+getdirections.theme.inc
+getdirections_v3.js
+getdirections_v3.min.js
+getdirections_v3a.js
+getdirections_v3a.min.js
+getdirections_v3b.js
+getdirections_v3b.min.js
+
+commit 9cf1e4f
 Author: hutch <hutch@midwales.net>
 Date:   Thu Jul 5 16:23:21 2012 +0100
 
     added transit feature
 
+CHANGELOG.txt
 getdirections.module
 getdirections_v3.js
 getdirections_v3.min.js
