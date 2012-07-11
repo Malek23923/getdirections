@@ -16,8 +16,10 @@
   var map;
   var trafficInfo;
   var bicycleInfo;
+  var transitInfo;
   var traffictoggleState = 1;
   var bicycletoggleState = 1;
+  var transittoggleState = 1;
 
   var panoramioLayer;
   var panoramiotoggleState = 1;
@@ -514,6 +516,11 @@
       bicycleInfo = new google.maps.BicyclingLayer();
       bicycleInfo.setMap(map);
     }
+    if (Drupal.settings.getdirections.transitinfo) {
+      transitInfo = new google.maps.TransitLayer();
+      transitInfo.setMap(map);
+    }
+
     if (Drupal.settings.getdirections.panoramio_show) {
       panoramioLayer = new google.maps.panoramio.PanoramioLayer();
       panoramioLayer.setMap(map);
@@ -669,6 +676,17 @@
     else {
       bicycleInfo.setMap(map);
       bicycletoggleState = 1;
+    }
+  };
+
+  Drupal.getdirections.toggleTransit = function() {
+    if (transittoggleState == 1) {
+      transitInfo.setMap();
+      transittoggleState = 0;
+    }
+    else {
+      transitInfo.setMap(map);
+      transittoggleState = 1;
     }
   };
 

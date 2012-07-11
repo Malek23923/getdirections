@@ -394,7 +394,6 @@ function getdirections_get_settings($getdirections_defaults, $getdirections_misc
     'waypoint_color' => $getdirections_defaults['waypoint_color'],
     'show_distance' => ($getdirections_misc['show_distance'] ? t('Total distance') : ''),
     'trafficinfo' => $getdirections_misc['trafficinfo'],
-    'bicycleinfo' => $getdirections_misc['bicycleinfo'],
     'show_duration' => ($getdirections_misc['show_duration'] ? t('Total duration') : ''),
   );
   if (variable_get('getdirections_use_v3', 0)) {
@@ -406,6 +405,8 @@ function getdirections_get_settings($getdirections_defaults, $getdirections_misc
     $settings['pancontrol'] = $getdirections_defaults['pancontrol'];
     $settings['advanced_autocomplete'] = $getdirections_defaults['advanced_autocomplete'];
     $settings['panoramio_show'] = $getdirections_misc['panoramio_show'];
+    $settings['bicycleinfo'] = $getdirections_misc['bicycleinfo'];
+    $settings['transitinfo'] = $getdirections_misc['transitinfo'];
   }
   $settings['use_https'] = $getdirections_defaults['use_https'];
   return $settings;
@@ -589,11 +590,20 @@ function getdirections_direction_form($form, &$form_state, $fromto='', $loc='', 
         '#attributes' => array( 'onClick' => 'Drupal.getdirections.toggleBicycle(); return false;', 'title' => t('Limited Availability')),
       );
     }
+    if ($getdirections_misc['transitinfo']) {
+      $form['transitinfo'] = array(
+        '#type' => 'button',
+        '#value' => t('Toggle Public transport'),
+        '#weight' => 14,
+        '#attributes' => array( 'onClick' => 'Drupal.getdirections.toggleTransit(); return false;', 'title' => t('Limited Availability')),
+      );
+    }
+
     if ($getdirections_misc['panoramio_show']) {
       $form['panoramio'] = array(
         '#type' => 'button',
         '#value' => t('Toggle Panoramio'),
-        '#weight' => 14,
+        '#weight' => 16,
         '#attributes' => array( 'onClick' => 'Drupal.getdirections.togglePanoramio(); return false;'),
       );
     }
@@ -602,7 +612,7 @@ function getdirections_direction_form($form, &$form_state, $fromto='', $loc='', 
     $form['switchfromto'] = array(
       '#type' => 'button',
       '#value' => t('Switch From/To'),
-      '#weight' => 16,
+      '#weight' => 18,
       '#attributes' => array( 'onClick' => 'Drupal.getdirections.toggleFromto(); return false;'),
     );
   }
@@ -611,14 +621,14 @@ function getdirections_direction_form($form, &$form_state, $fromto='', $loc='', 
     $form['next'] = array(
       '#type' => 'button',
       '#value' => t('Next'),
-      '#weight' => 18,
+      '#weight' => 20,
       '#attributes' => array( 'onClick' => 'Drupal.getdirections.nextbtn(); return false;'),
     );
   }
   $form['submit'] = array(
     '#type' => 'submit',
     '#value' => t('Get Directions'),
-    '#weight' => 20,
+    '#weight' => 22,
   );
   return $form;
 }
@@ -753,6 +763,7 @@ function getdirections_misc_defaults() {
     'switchfromto' => 0,
     'show_duration' => 0,
     'panoramio_show' => 0,
+    'transitinfo' => 0,
   ));
   return $getdirections_misc;
 }
