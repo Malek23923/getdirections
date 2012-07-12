@@ -23,8 +23,10 @@
   var frommarker;
   var trafficInfo;
   var bicycleInfo;
+  var transitInfo;
   var traffictoggleState = 1;
   var bicycletoggleState = 1;
+  var transittoggleState = 1;
 
   var panoramioLayer;
   var panoramiotoggleState = 1;
@@ -332,6 +334,10 @@
       bicycleInfo = new google.maps.BicyclingLayer();
       bicycleInfo.setMap(map);
     }
+    if (Drupal.settings.getdirections.transitinfo) {
+      transitInfo = new google.maps.TransitLayer();
+      transitInfo.setMap(map);
+    }
     if (Drupal.settings.getdirections.panoramio_show) {
       panoramioLayer = new google.maps.panoramio.PanoramioLayer();
       panoramioLayer.setMap(map);
@@ -425,7 +431,7 @@
       trafficInfo.setMap(map);
       traffictoggleState = 1;
     }
-  }
+  };
 
   Drupal.getdirections.toggleBicycle = function() {
     if (bicycletoggleState == 1) {
@@ -436,7 +442,8 @@
       bicycleInfo.setMap(map);
       bicycletoggleState = 1;
     }
-  }
+  };
+
   Drupal.getdirections.togglePanoramio = function() {
     if (panoramiotoggleState == 1) {
       panoramioLayer.setMap();
@@ -446,7 +453,7 @@
       panoramioLayer.setMap(map);
       panoramiotoggleState = 1;
     }
-  }
+  };
 
   Drupal.getdirections.toggleFromto = function() {
 
@@ -468,7 +475,7 @@
     if (countryto) {
       $("#edit-country-from").val(countryto);
     }
-  }
+  };
 
 // gogogo
 Drupal.behaviors.getdirections = function() {

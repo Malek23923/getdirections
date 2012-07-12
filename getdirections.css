@@ -41,6 +41,9 @@ tbody, thead {
 #getdirections_bicycleinfo {
   margin-bottom: 8px;
 }
+#getdirections_transitinfo {
+  margin-bottom: 8px;
+}
 #getdirections_panoramio {
   margin-bottom: 8px;
 }

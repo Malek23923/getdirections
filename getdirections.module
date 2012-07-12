@@ -353,7 +353,6 @@ function getdirections_get_settings($getdirections_defaults, $getdirections_misc
     'waypoint_color' => $getdirections_defaults['waypoint_color'],
     'show_distance' => ($getdirections_misc['show_distance'] ? t('Total distance') : ''),
     'trafficinfo' => $getdirections_misc['trafficinfo'],
-    'bicycleinfo' => $getdirections_misc['bicycleinfo'],
     'show_duration' => ($getdirections_misc['show_duration'] ? t('Total duration') : ''),
   );
   if (variable_get('getdirections_use_v3', 0)) {
@@ -365,6 +364,8 @@ function getdirections_get_settings($getdirections_defaults, $getdirections_misc
     $settings['pancontrol'] = $getdirections_defaults['pancontrol'];
     $settings['advanced_autocomplete'] = $getdirections_defaults['advanced_autocomplete'];
     $settings['panoramio_show'] = $getdirections_misc['panoramio_show'];
+    $settings['bicycleinfo'] = $getdirections_misc['bicycleinfo'];
+    $settings['transitinfo'] = $getdirections_misc['transitinfo'];
   }
 
   return $settings;
@@ -546,6 +547,14 @@ function getdirections_direction_form($form_state, $fromto='', $loc='', $country
         '#attributes' => array( 'onClick' => 'Drupal.getdirections.toggleBicycle(); return false;', 'title' => t('Limited Availability')),
       );
     }
+    if ($getdirections_misc['transitinfo']) {
+      $form['transitinfo'] = array(
+        '#type' => 'button',
+        '#value' => t('Toggle Public transport'),
+        '#weight' => 14,
+        '#attributes' => array( 'onClick' => 'Drupal.getdirections.toggleTransit(); return false;', 'title' => t('Limited Availability')),
+      );
+    }
     if ($getdirections_misc['panoramio_show']) {
       $form['panoramio'] = array(
         '#type' => 'button',
@@ -703,6 +712,7 @@ function getdirections_misc_defaults() {
     'switchfromto' => 0,
     'show_duration' => 0,
     'panoramio_show' => 0,
+    'transitinfo' => 0,
   ));
   return $getdirections_misc;
 }

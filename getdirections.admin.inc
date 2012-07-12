@@ -581,12 +581,33 @@ function getdirections_settings_form() {
       '#description' => t('Google bicycling layer, limited availability.'),
       '#return_value' => 1,
     );
+    $form['getdirections_misc']['transitinfo'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Enable Public transport information'),
+      '#default_value' =>  $getdirections_misc['transitinfo'],
+      '#description' => t('Google transit layer, limited availability.'),
+      '#return_value' => 1,
+    );
     $form['getdirections_misc']['panoramio_show'] = array(
       '#type' => 'checkbox',
       '#title' => t('Enable Panoramio'),
       '#default_value' =>  $getdirections_misc['panoramio_show'],
       '#description' => t('Google panoramio picture links.'),
       '#return_value' => 1,
+    );
+  }
+  else {
+    $form['getdirections_misc']['bicycleinfo'] = array(
+      '#type' => 'value',
+      '#value' => 0,
+    );
+    $form['getdirections_misc']['transitinfo'] = array(
+      '#type' => 'value',
+      '#value' => 0,
+    );
+    $form['getdirections_misc']['panoramio_show'] = array(
+      '#type' => 'value',
+      '#value' => 0,
     );
   }
   if (! $getdirections_defaults['use_advanced']) {
