@@ -428,6 +428,13 @@ function getdirections_settings_form() {
       '#description' => t('An alternative method for collecting starting point and destination.'),
       '#default_value' => ($getdirections_defaults['advanced_autocomplete'] ? $getdirections_defaults['advanced_autocomplete'] : 0),
       '#return_value' => 1,
+    );
+    $form['getdirections_default']['advanced_autocomplete_bias'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Enable Viewport bias'),
+      '#description' => t('Bias the Google Autocomplete results to the area on the map.'),
+      '#default_value' => ($getdirections_defaults['advanced_autocomplete_bias'] ? $getdirections_defaults['advanced_autocomplete_bias'] : 0),
+      '#return_value' => 1,
       '#suffix' => '</div>',
     );
   }
