@@ -194,7 +194,7 @@
 
     if (waypts) {
       request.waypoints = waypts;
-      request.optimizeWaypoints = true;
+      request.optimizeWaypoints = (Drupal.settings.getdirections.waypoints_optimise > 0 ? true : false);
     }
 
     return request;
@@ -336,6 +336,7 @@
           $("#getdirections_end").hide();
           $("#getdirections_btn").hide();
           $("#getdirections_help").hide();
+          $("#autocomplete_via_wrapper").hide();
         }
       }
       if (state == 1) {
@@ -360,6 +361,7 @@
         $("#getdirections_nextbtn").hide();
         if (waypoints) {
           $("#getdirections_help").show();
+          $("#autocomplete_via_wrapper").show();
         }
       }
     } // end handleState
@@ -443,13 +445,43 @@
     }
 
     function dovias() {
-      for (var i = 1; i < endpoint; i++) {
-        var lat = (path[startpoint].lat()*(endpoint-i) + path[endpoint].lat()*i)/endpoint;
-        var lng = (path[startpoint].lng()*(endpoint-i) + path[endpoint].lng()*i)/endpoint;
-        var p = new google.maps.LatLng(lat,lng);
+      for (i = 1; i < endpoint; i++) {
+        lat = (path[startpoint].lat()*(endpoint-i) + path[endpoint].lat()*i)/endpoint;
+        lng = (path[startpoint].lng()*(endpoint-i) + path[endpoint].lng()*i)/endpoint;
+        p = new google.maps.LatLng(lat,lng);
         createMarker(p, i, 'via');
         path[i] = p;
+
+        if (Drupal.settings.getdirections.advanced_autocomplete_via) {
+          if ($("#edit-via-autocomplete-" + i).is("input.form-text")) {
+            auto = new google.maps.places.Autocomplete(document.getElementById('edit-via-autocomplete-' + i));
+            if (Drupal.settings.getdirections.advanced_autocomplete_bias) {
+              auto.bindTo('bounds', map);
+            }
+            do_listen(i, auto);
+          }
+        }
       }
+    }
+
+    function do_listen(num, a) {
+      google.maps.event.addListener(a, 'place_changed', function() {
+        pl = a.getPlace();
+        adrs = pl.formatted_address;
+        $("#edit-via-autocomplete-" + num).val(adrs);
+        geocoder.geocode({address: adrs}, function (results, status) {
+          if (status == google.maps.GeocoderStatus.OK) {
+            // get the point
+            p = results[0].geometry.location;
+            if (p) {
+              gmarkers[num].setPosition(p);
+              path[num] = p;
+              active[num] = true;
+              swapMarkers(num);
+            }
+          }
+        });
+      });
     }
 
     function setendbounds() {

@@ -156,6 +156,9 @@ function theme_getdirections_show($variables) {
   if (getdirections_is_advanced()) {
     if ($getdirections_defaults['waypoints'] > 0 && ! $getdirections_defaults['advanced_alternate'] ) {
       $help = t('Drag <img src="http://labs.google.com/ridefinder/images/mm_20_!c.png"> to activate a waypoint', array('!c' => $getdirections_defaults['waypoint_color']));
+      if ($getdirections_defaults['advanced_autocomplete'] && $getdirections_defaults['advanced_autocomplete_via'] ) {
+        $help .= ' ' . t('or use the Autocomplete boxes');
+      }
     }
     elseif ($getdirections_defaults['advanced_alternate']) {
       $help = t('You can drag the route to change it');
@@ -307,6 +310,23 @@ function theme_getdirections_direction_form($variables) {
     }
     if (isset($form['to']) && $form['to']['#type'] == 'textfield' && (module_exists('location') || module_exists('getlocations_fields')) && ! $getdirections_defaults['advanced_autocomplete']) {
       $form['to']['#suffix'] = '</div>';
+    }
+
+    if ($getdirections_defaults['advanced_autocomplete'] && $getdirections_defaults['waypoints'] > 0 && $getdirections_defaults['advanced_autocomplete_via'] ) {
+      for ($ct = 1; $ct <= $getdirections_defaults['waypoints']; $ct++) {
+      if ($ct == 1) {
+          $form['via_autocomplete_' . $ct]['#prefix'] = '<div id="autocomplete_via_wrapper"><div class="container-inline getdirections_display">';
+          $form['via_autocomplete_' . $ct]['#suffix'] = '</div>';
+        }
+        elseif ($ct == $getdirections_defaults['waypoints']) {
+          $form['via_autocomplete_' . $ct]['#prefix'] = '<div class="container-inline getdirections_display">';
+          $form['via_autocomplete_' . $ct]['#suffix'] = '</div></div>';
+        }
+        else {
+          $form['via_autocomplete_' . $ct]['#prefix'] = '<div class="container-inline getdirections_display">';
+          $form['via_autocomplete_' . $ct]['#suffix'] = '</div>';
+        }
+      }
     }
   }
   else {
