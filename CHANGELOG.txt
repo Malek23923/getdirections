@@ -1,9 +1,22 @@
-commit 4c12838
+commit 2ec9652
+Author: hutch <hutch@midwales.net>
+Date:   Sat Jul 14 10:16:50 2012 +0100
+
+    added waypoints autocomplete
+
+getdirections.admin.inc
+getdirections.module
+getdirections.theme.inc
+getdirections_v3a.js
+getdirections_v3b.js
+
+commit 1aeacbd
 Author: hutch <hutch@midwales.net>
 Date:   Thu Jul 12 09:09:51 2012 +0100
 
     added viewport bias
 
+CHANGELOG.txt
 getdirections.admin.inc
 getdirections.module
 getdirections_v3a.js

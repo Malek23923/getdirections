@@ -107,18 +107,19 @@ function theme_getdirections_show($form, $width, $height, $nid, $type) {
   if ($getdirections_misc['show_duration']) {
     $output .= '<div id="getdirections_show_duration"></div>';
   }
-  // help
   $help = '';
   if (getdirections_is_advanced()) {
     if ($getdirections_defaults['waypoints'] > 0 && ! $getdirections_defaults['advanced_alternate'] ) {
       $help = t('Drag <img src="http://labs.google.com/ridefinder/images/mm_20_!c.png"> to activate a waypoint', array('!c' => $getdirections_defaults['waypoint_color']));
+      if ($getdirections_defaults['advanced_autocomplete'] && $getdirections_defaults['advanced_autocomplete_via'] ) {
+        $help .= ' ' . t('or use the Autocomplete boxes');
+      }
     }
     elseif ($getdirections_defaults['advanced_alternate']) {
       $help = t('You can drag the route to change it');
     }
   }
   $output .= '<div id="getdirections_help">'. $help .'</div>';
-  // build a table
   $header = array();
   $rows[] = array(
     array(
@@ -128,14 +129,13 @@ function theme_getdirections_show($form, $width, $height, $nid, $type) {
       'class' => 'getdirections-map',
     ),
     array(
-      'data' => ($getdirections_defaults['advanced_alternate'] ? '<button id="getdirections-undo" onclick="getdirectionsundo()">' . t('Undo') . '</button>' : '') .'<div id="getdirections_directions"></div>',
+      'data' => ($getdirections_defaults['advanced_alternate'] ? '<button id="getdirections-undo" onclick="Drupal.getdirectionsundo()">' . t('Undo') . '</button>' : '') .'<div id="getdirections_directions"></div>',
       'valign' => 'top' ,
       'align' => 'left',
       'class' => 'getdirections-list',
     ),
   );
   $output .= '<div class="getdirections">'. theme('table', $header, $rows) .'</div>';
-
   return $output;
 }
 
@@ -258,6 +258,23 @@ function theme_getdirections_direction_form($form) {
     if (isset($form['to']) && $form['to']['#type'] == 'textfield' && module_exists('location') && ! $getdirections_defaults['advanced_autocomplete']) {
       $form['to']['#suffix'] = '</div>';
     }
+
+    if ($getdirections_defaults['advanced_autocomplete'] && $getdirections_defaults['waypoints'] > 0 && $getdirections_defaults['advanced_autocomplete_via'] ) {
+      for ($ct = 1; $ct <= $getdirections_defaults['waypoints']; $ct++) {
+      if ($ct == 1) {
+          $form['via_autocomplete_' . $ct]['#prefix'] = '<div id="autocomplete_via_wrapper"><div class="container-inline getdirections_display">';
+          $form['via_autocomplete_' . $ct]['#suffix'] = '</div>';
+        }
+        elseif ($ct == $getdirections_defaults['waypoints']) {
+          $form['via_autocomplete_' . $ct]['#prefix'] = '<div class="container-inline getdirections_display">';
+          $form['via_autocomplete_' . $ct]['#suffix'] = '</div></div>';
+        }
+        else {
+          $form['via_autocomplete_' . $ct]['#prefix'] = '<div class="container-inline getdirections_display">';
+          $form['via_autocomplete_' . $ct]['#suffix'] = '</div>';
+        }
+      }
+    }
   }
   else {
     if (isset($form['country_from'])) {
@@ -283,6 +300,7 @@ function theme_getdirections_direction_form($form) {
     $form['transitinfo']['#prefix'] = '<div id="getdirections_transitinfo">';
     $form['transitinfo']['#suffix'] = '</div>';
   }
+
   if (isset($form['panoramio'])) {
     $form['panoramio']['#prefix'] = '<div id="getdirections_panoramio">';
     $form['panoramio']['#suffix'] = '</div>';

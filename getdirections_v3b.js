@@ -11,11 +11,9 @@
 (function ($) {
   Drupal.getdirections = {};
 
-
   var geocoder;
   var bounds;
   var map;
-  var distance = '';
   var trafficInfo;
   var bicycleInfo;
   var transitInfo;
@@ -45,7 +43,7 @@
   var scheme = 'http';
   var startIconUrl = scheme + "://www.google.com/mapfiles/dd-start.png";
   var endIconUrl = scheme + "://www.google.com/mapfiles/dd-end.png";
-  var shadowIconUrl = scheme + "://www.google.com/mapfiles/shadow50.png"
+  var shadowIconUrl = scheme + "://www.google.com/mapfiles/shadow50.png";
   var oldDirections = [];
   var currentDirections = null;
 
@@ -137,8 +135,7 @@
     // disable to and from boxes
     $("#edit-from").attr('disabled', true);
     $("#edit-to").attr('disabled', true);
-
-  }
+  };
 
   // convert lat,lon into LatLng object
   function makell(ll) {
@@ -233,7 +230,7 @@
       // days
       days = 0;
       while (hours >= 24) {
-        hours = hours - 24
+        hours = hours - 24;
         days++;
       }
       duration = '';
@@ -255,13 +252,13 @@
     }
   }
 
-  function getdirectionsundo() {
+  Drupal.getdirectionsundo = function() {
     currentDirections = null;
     dirrenderer.setDirections(oldDirections.pop());
     if (! oldDirections.length) {
       setUndoDisabled(true);
     }
-  }
+  };
 
   function setUndoDisabled(value) {
     $("#getdirections-undo").attr('disabled', value);
@@ -273,7 +270,7 @@
       var e;
       var point;
       if (! todone) {
-        e = $("#edit-to").val();
+        e = $("input[name=to]").val();
         if (e && e.match(llpatt)) {
           arr = e.split(",");
           point = new google.maps.LatLng(arr[0], arr[1]);
@@ -287,7 +284,7 @@
       }
 
       if (! fromdone) {
-        e = $("#edit-from").val();
+        e = $("input[name=from]").val();
         if (e && e.match(llpatt)) {
           arr = e.split(",");
           point = new google.maps.LatLng(arr[0], arr[1]);
@@ -399,14 +396,14 @@
     function showAddress() {
       var s;
       if (state == 0) {
-        s = $("#edit-from").val();
+        s = $("input[name=from]").val();
         if ($("#edit-country-from").val()) {
           s += ', ' + $("#edit-country-from").val();
         }
         addresses[startpoint] = s;
       }
       if (state == 1) {
-        s = $("#edit-to").val();
+        s = $("input[name=to]").val();
         if ($("#edit-country-to").val()) {
           s += ', ' + $("#edit-country-to").val();
         }
@@ -455,9 +452,8 @@
       scheme = 'https';
       startIconUrl = scheme + "://www.google.com/mapfiles/dd-start.png";
       endIconUrl = scheme + "://www.google.com/mapfiles/dd-end.png";
-      shadowIconUrl = scheme + "://www.google.com/mapfiles/shadow50.png"
+      shadowIconUrl = scheme + "://www.google.com/mapfiles/shadow50.png";
     }
-
     donemarkers[startpoint] = false;
     donemarkers[endpoint] = false;
 
@@ -524,6 +520,7 @@
       transitInfo = new google.maps.TransitLayer();
       transitInfo.setMap(map);
     }
+
     if (Drupal.settings.getdirections.panoramio_show) {
       panoramioLayer = new google.maps.panoramio.PanoramioLayer();
       panoramioLayer.setMap(map);
@@ -601,7 +598,7 @@
     handleState();
 
     // any initial markers?
-    var vf =  $("#edit-from").val();
+    var vf =  $("input[name=from]").val();
     if (vf && vf.match(llpatt)) {
       // we have lat,lon
       vf = makell(vf);
@@ -610,7 +607,7 @@
         map.setCenter(vf);
       }
     }
-    var vt =  $("#edit-to").val();
+    var vt =  $("input[name=to]").val();
     if (vt && vt.match(llpatt)) {
       // we have lat,lon
       vt = makell(vt);
@@ -715,4 +712,5 @@
     initialize();
   };
 
-})(jQuery);
+}(jQuery));
+

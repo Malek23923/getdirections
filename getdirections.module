@@ -364,11 +364,12 @@ function getdirections_get_settings($getdirections_defaults, $getdirections_misc
     $settings['pancontrol'] = $getdirections_defaults['pancontrol'];
     $settings['advanced_autocomplete'] = $getdirections_defaults['advanced_autocomplete'];
     $settings['advanced_autocomplete_bias'] = $getdirections_defaults['advanced_autocomplete_bias'];
+    $settings['advanced_autocomplete_via'] = $getdirections_defaults['advanced_autocomplete_via'];
     $settings['panoramio_show'] = $getdirections_misc['panoramio_show'];
     $settings['bicycleinfo'] = $getdirections_misc['bicycleinfo'];
     $settings['transitinfo'] = $getdirections_misc['transitinfo'];
   }
-
+  $settings['use_https'] = $getdirections_defaults['use_https'];
   return $settings;
 }
 
@@ -388,6 +389,7 @@ function getdirections_get_settings($getdirections_defaults, $getdirections_misc
  */
 function getdirections_direction_form($form_state, $fromto='', $loc='', $country='', $latlon='') {
   $getdirections_defaults = getdirections_defaults();
+
   $location = module_exists('location');
   if ($location && ! $getdirections_defaults['advanced_autocomplete']) {
     $countries = array(
@@ -443,7 +445,7 @@ function getdirections_direction_form($form_state, $fromto='', $loc='', $country
   }
   else {
     $from_desc = t('Enter the address, postcode and/or city and country from where you want to start your journey.');
-    if ($getdirections_defaults['advanced_autocomplete']) {
+    if ( getdirections_is_advanced() && $getdirections_defaults['advanced_autocomplete']) {
       $from_desc = t('Start typing the address of your starting point, then select from the dropdown menu.');
     }
     if ($location && ! $getdirections_defaults['advanced_autocomplete']) {
@@ -484,7 +486,7 @@ function getdirections_direction_form($form_state, $fromto='', $loc='', $country
   }
   else {
     $to_desc = t('Enter the address, postcode and/or city and country of your journey destination.');
-    if ($getdirections_defaults['advanced_autocomplete']) {
+    if ( getdirections_is_advanced() && $getdirections_defaults['advanced_autocomplete']) {
       $to_desc = t('Start typing the address of your destination, then select from the dropdown menu.');
     }
     if ($location && ! $getdirections_defaults['advanced_autocomplete']) {
@@ -501,7 +503,7 @@ function getdirections_direction_form($form_state, $fromto='', $loc='', $country
       '#weight' => $to_weight,
     );
   }
-
+  $wt = 6;
   if (variable_get('getdirections_use_v3', 0)) {
     if ($getdirections_defaults['travelmode_show']) {
       $form['travelmode'] = array(
@@ -514,8 +516,9 @@ function getdirections_direction_form($form_state, $fromto='', $loc='', $country
           'transit' => t('Public transport'),
         ),
         '#default_value' => 'driving',
-        '#weight' => 6,
+        '#weight' => $wt,
       );
+      $wt = $wt + 2;
     }
     if ($getdirections_defaults['travelextras_show']) {
       $form['travelextras'] = array(
@@ -526,66 +529,86 @@ function getdirections_direction_form($form_state, $fromto='', $loc='', $country
           'avoidtolls' => t('Avoid Tolls'),
           'altroute' => t('Alternative routes'),
         ),
-        '#weight' => 8,
+        '#weight' => $wt,
       );
+      $wt = $wt + 2;
     }
   }
+
+  if (getdirections_is_advanced() && $getdirections_defaults['advanced_autocomplete'] && $getdirections_defaults['waypoints'] > 0 && $getdirections_defaults['advanced_autocomplete_via']) {
+    for ($ct = 1; $ct <= $getdirections_defaults['waypoints']; $ct++) {
+      $form['via_autocomplete_' . $ct] = array(
+        '#type' => 'textfield',
+        '#title' => t('Via !c', array('!c' => $ct)),
+        '#size' => $getdirections_defaults['advanced_autocomplete_via_width'],
+        '#weight' => $wt,
+      );
+      $wt = $wt + 2;
+    }
+  }
+
   $getdirections_misc = getdirections_misc_defaults();
   if ($getdirections_misc['trafficinfo']) {
     $form['trafficinfo'] = array(
       '#type' => 'button',
       '#value' => t('Toggle traffic info'),
-      '#weight' => 10,
+      '#weight' => $wt,
       '#attributes' => array( 'onClick' => 'Drupal.getdirections.toggleTraffic(); return false;', 'title' => t('Limited Availability')),
     );
+    $wt = $wt + 2;
   }
   if (variable_get('getdirections_use_v3', 0)) {
     if ($getdirections_misc['bicycleinfo']) {
       $form['bicycleinfo'] = array(
         '#type' => 'button',
         '#value' => t('Toggle bicycling info'),
-        '#weight' => 12,
+        '#weight' => $wt,
         '#attributes' => array( 'onClick' => 'Drupal.getdirections.toggleBicycle(); return false;', 'title' => t('Limited Availability')),
       );
+      $wt = $wt + 2;
     }
     if ($getdirections_misc['transitinfo']) {
       $form['transitinfo'] = array(
         '#type' => 'button',
         '#value' => t('Toggle Public transport'),
-        '#weight' => 14,
+        '#weight' => $wt,
         '#attributes' => array( 'onClick' => 'Drupal.getdirections.toggleTransit(); return false;', 'title' => t('Limited Availability')),
       );
+      $wt = $wt + 2;
     }
     if ($getdirections_misc['panoramio_show']) {
       $form['panoramio'] = array(
         '#type' => 'button',
         '#value' => t('Toggle Panoramio'),
-        '#weight' => 14,
+        '#weight' => $wt,
         '#attributes' => array( 'onClick' => 'Drupal.getdirections.togglePanoramio(); return false;'),
       );
+      $wt = $wt + 2;
     }
   }
   if ($getdirections_misc['switchfromto'] && ! $fromto && ! getdirections_is_advanced()) {
     $form['switchfromto'] = array(
       '#type' => 'button',
       '#value' => t('Switch From/To'),
-      '#weight' => 16,
+      '#weight' => $wt,
       '#attributes' => array( 'onClick' => 'Drupal.getdirections.toggleFromto(); return false;'),
     );
+    $wt = $wt + 2;
   }
 
   if (getdirections_is_advanced()) {
     $form['next'] = array(
       '#type' => 'button',
       '#value' => t('Next'),
-      '#weight' => 18,
+      '#weight' => $wt,
       '#attributes' => array( 'onClick' => 'Drupal.getdirections.nextbtn(); return false;'),
     );
+    $wt = $wt + 2;
   }
   $form['submit'] = array(
     '#type' => 'submit',
     '#value' => t('Get Directions'),
-    '#weight' => 20,
+    '#weight' => $wt,
   );
   return $form;
 }
@@ -631,6 +654,8 @@ function getdirections_defaults() {
       'advanced_alternate' => 0,
       'advanced_autocomplete' => 0,
       'advanced_autocomplete_bias' => 0,
+      'advanced_autocomplete_via' => 0,
+      'advanced_autocomplete_via_width' => 20,
     );
   }
   else {
@@ -644,6 +669,9 @@ function getdirections_defaults() {
       $defaults['waypoint_color'] = 'white';
       $defaults['advanced_alternate'] = 0;
       $defaults['advanced_autocomplete'] = 0;
+      $defaults['advanced_autocomplete_bias'] = 0;
+      $defaults['advanced_autocomplete_via'] = 0;
+      $defaults['advanced_autocomplete_via_width'] = 20;
     }
     else {
       $defaults = array(
@@ -673,6 +701,9 @@ function getdirections_defaults() {
         'waypoint_color' => 'white',
         'advanced_alternate' => 0,
         'advanced_autocomplete' => 0,
+        'advanced_autocomplete_bias' => 0,
+        'advanced_autocomplete_via' => 0,
+        'advanced_autocomplete_via_width' => 20,
       );
     }
   }

@@ -11,11 +11,9 @@
 (function ($) {
   Drupal.getdirections = {};
 
-
   var geocoder;
   var bounds;
   var map;
-  var distance = '';
   var trafficInfo;
   var bicycleInfo;
   var transitInfo;
@@ -42,12 +40,11 @@
 
   var dirservice;
   var dirrenderer;
-  var dirresult;
   var unitsys;
   var scheme = 'http';
   var startIconUrl = scheme + "://www.google.com/mapfiles/dd-start.png";
   var endIconUrl = scheme + "://www.google.com/mapfiles/dd-end.png";
-  var shadowIconUrl = scheme + "://www.google.com/mapfiles/shadow50.png"
+  var shadowIconUrl = scheme + "://www.google.com/mapfiles/shadow50.png";
   var pauseIconUrl = scheme + "://www.google.com/mapfiles/dd-pause.png";
   var viaIconUrl = scheme + "://labs.google.com/ridefinder/images/mm_20_";
   var viaIconColor = '';
@@ -104,6 +101,7 @@
 
   // from the form
   Drupal.getdirections.mygetDirections = function () {
+
     var from;
     var to;
     var i;
@@ -143,7 +141,7 @@
     // disable to and from boxes
     $("#edit-from").attr('disabled', true);
     $("#edit-to").attr('disabled', true);
-  }
+  };
 
   // convert lat,lon into LatLng object
   function makell(ll) {
@@ -196,7 +194,7 @@
 
     if (waypts) {
       request.waypoints = waypts;
-      request.optimizeWaypoints = true;
+      request.optimizeWaypoints = (Drupal.settings.getdirections.waypoints_optimise > 0 ? true : false);
     }
 
     return request;
@@ -274,7 +272,7 @@
       // days
       days = 0;
       while (hours >= 24) {
-        hours = hours - 24
+        hours = hours - 24;
         days++;
       }
       duration = '';
@@ -302,7 +300,7 @@
       var e;
       var point;
       if (! todone) {
-        e = $("#edit-to").val();
+        e = $("input[name=to]").val();
         if (e && e.match(llpatt)) {
           arr = e.split(",");
           point = new google.maps.LatLng(arr[0], arr[1]);
@@ -316,7 +314,7 @@
       }
 
       if (! fromdone) {
-        e = $("#edit-from").val();
+        e = $("input[name=from]").val();
         if (e && e.match(llpatt)) {
           arr = e.split(",");
           point = new google.maps.LatLng(arr[0], arr[1]);
@@ -338,6 +336,7 @@
           $("#getdirections_end").hide();
           $("#getdirections_btn").hide();
           $("#getdirections_help").hide();
+          $("#autocomplete_via_wrapper").hide();
         }
       }
       if (state == 1) {
@@ -362,6 +361,7 @@
         $("#getdirections_nextbtn").hide();
         if (waypoints) {
           $("#getdirections_help").show();
+          $("#autocomplete_via_wrapper").show();
         }
       }
     } // end handleState
@@ -445,13 +445,43 @@
     }
 
     function dovias() {
-      for (var i = 1; i < endpoint; i++) {
-        var lat = (path[startpoint].lat()*(endpoint-i) + path[endpoint].lat()*i)/endpoint;
-        var lng = (path[startpoint].lng()*(endpoint-i) + path[endpoint].lng()*i)/endpoint;
-        var p = new google.maps.LatLng(lat,lng);
+      for (i = 1; i < endpoint; i++) {
+        lat = (path[startpoint].lat()*(endpoint-i) + path[endpoint].lat()*i)/endpoint;
+        lng = (path[startpoint].lng()*(endpoint-i) + path[endpoint].lng()*i)/endpoint;
+        p = new google.maps.LatLng(lat,lng);
         createMarker(p, i, 'via');
         path[i] = p;
+
+        if (Drupal.settings.getdirections.advanced_autocomplete_via) {
+          if ($("#edit-via-autocomplete-" + i).is("input.form-text")) {
+            auto = new google.maps.places.Autocomplete(document.getElementById('edit-via-autocomplete-' + i));
+            if (Drupal.settings.getdirections.advanced_autocomplete_bias) {
+              auto.bindTo('bounds', map);
+            }
+            do_listen(i, auto);
+          }
+        }
       }
+    }
+
+    function do_listen(num, a) {
+      google.maps.event.addListener(a, 'place_changed', function() {
+        pl = a.getPlace();
+        adrs = pl.formatted_address;
+        $("#edit-via-autocomplete-" + num).val(adrs);
+        geocoder.geocode({address: adrs}, function (results, status) {
+          if (status == google.maps.GeocoderStatus.OK) {
+            // get the point
+            p = results[0].geometry.location;
+            if (p) {
+              gmarkers[num].setPosition(p);
+              path[num] = p;
+              active[num] = true;
+              swapMarkers(num);
+            }
+          }
+        });
+      });
     }
 
     function setendbounds() {
@@ -464,14 +494,14 @@
     function showAddress() {
       var s;
       if (state == 0) {
-        s = $("#edit-from").val();
+        s = $("input[name=from]").val();
         if ($("#edit-country-from").val()) {
           s += ', ' + $("#edit-country-from").val();
         }
         addresses[startpoint] = s;
       }
       if (state == 1) {
-        s = $("#edit-to").val();
+        s = $("input[name=to]").val();
         if ($("#edit-country-to").val()) {
           s += ', ' + $("#edit-country-to").val();
         }
@@ -527,7 +557,7 @@
       scheme = 'https';
       startIconUrl = scheme + "://www.google.com/mapfiles/dd-start.png";
       endIconUrl = scheme + "://www.google.com/mapfiles/dd-end.png";
-      shadowIconUrl = scheme + "://www.google.com/mapfiles/shadow50.png"
+      shadowIconUrl = scheme + "://www.google.com/mapfiles/shadow50.png";
       pauseIconUrl = scheme + "://www.google.com/mapfiles/dd-pause.png";
       viaIconUrl = scheme + "://labs.google.com/ridefinder/images/mm_20_";
     }
@@ -707,7 +737,7 @@
     handleState();
 
     // any initial markers?
-    var vf =  $("#edit-from").val();
+    var vf =  $("input[name=from]").val();
     if (vf && vf.match(llpatt)) {
       // we have lat,lon
       vf = makell(vf);
@@ -716,7 +746,7 @@
         map.setCenter(vf);
       }
     }
-    var vt =  $("#edit-to").val();
+    var vt =  $("input[name=to]").val();
     if (vt && vt.match(llpatt)) {
       // we have lat,lon
       vt = makell(vt);

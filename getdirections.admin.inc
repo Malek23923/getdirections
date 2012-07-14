@@ -313,6 +313,10 @@ function getdirections_settings_form() {
     );
   }
   else {
+    $form['getdirections_default']['behavior']['googlebar'] = array(
+      '#type' => 'value',
+      '#value' => 0,
+    );
     $form['getdirections_default']['behavior']['overview_opened'] = array(
       '#type' => 'checkbox',
       '#title' => t('Overview map state'),
@@ -393,7 +397,30 @@ function getdirections_settings_form() {
     '#options' => $waypoints_opts,
     '#prefix' => '<div id="wrap-waypoints">',
   );
-
+  $form['getdirections_default']['advanced_autocomplete_via'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Waypoints Autocomplete'),
+    '#description' => t('Provides Autocomplete box for waypoints. Requires "Use Google Autocomplete" to be enabled.'),
+    '#default_value' => ($getdirections_defaults['advanced_autocomplete_via'] ? $getdirections_defaults['advanced_autocomplete_via'] : 0),
+    '#return_value' => 1,
+  );
+  $form['getdirections_default']['advanced_autocomplete_via_width'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Width of Waypoints box'),
+    '#default_value' => ($getdirections_defaults['advanced_autocomplete_via_width'] ? $getdirections_defaults['advanced_autocomplete_via_width'] : 20),
+    '#size' => 5,
+    '#description' => t("The width of the Waypoints Autocomplete box."),
+    '#required' => TRUE,
+    // need this to get validation to work
+    '#parents' => array('getdirections_default', 'advanced_autocomplete_via_width'),
+  );
+  $form['getdirections_default']['waypoints_optimise'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Optimise Waypoints'),
+    '#description' => t("Re-orders the waypoints to minimize overall cost of the route."),
+    '#default_value' => ($getdirections_defaults['waypoints_optimise'] ? $getdirections_defaults['waypoints_optimise'] : 0),
+    '#return_value' => 1,
+  );
   $form['getdirections_default']['waypoint_color'] = array(
     '#type' => 'select',
     '#title' => t('Color of waypoint markers'),
@@ -706,7 +733,11 @@ function getdirections_settings_validate($form, &$form_state) {
     $list = array('Map', 'Satellite', 'Hybrid', 'Physical');
     $found = 0;
     foreach ($list AS $maptype) {
-      if ($form_state['values']['getdirections_default']['maptype'] == $maptype && $form_state['values']['getdirections_default']['baselayers'][$maptype] ) {
+      if (isset($form_state['values']['getdirections_default']['maptype'])
+        && $form_state['values']['getdirections_default']['maptype'] == $maptype
+        && isset($form_state['values']['getdirections_default']['baselayers'][$maptype])
+        && $form_state['values']['getdirections_default']['baselayers'][$maptype]
+        ) {
         $found = 1;
         break;
       }
