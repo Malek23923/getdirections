@@ -535,7 +535,7 @@ function getdirections_direction_form($form_state, $fromto='', $loc='', $country
     }
   }
 
-  if (getdirections_is_advanced() && $getdirections_defaults['advanced_autocomplete'] && $getdirections_defaults['waypoints'] > 0 && $getdirections_defaults['advanced_autocomplete_via']) {
+  if (getdirections_is_advanced() && $getdirections_defaults['advanced_autocomplete'] && $getdirections_defaults['waypoints'] > 0 && $getdirections_defaults['advanced_autocomplete_via'] && ! $getdirections_defaults['advanced_alternate'] ) {
     for ($ct = 1; $ct <= $getdirections_defaults['waypoints']; $ct++) {
       $form['via_autocomplete_' . $ct] = array(
         '#type' => 'textfield',
