@@ -312,7 +312,7 @@ function theme_getdirections_direction_form($variables) {
       $form['to']['#suffix'] = '</div>';
     }
 
-    if ($getdirections_defaults['advanced_autocomplete'] && $getdirections_defaults['waypoints'] > 0 && $getdirections_defaults['advanced_autocomplete_via'] ) {
+    if ($getdirections_defaults['advanced_autocomplete'] && $getdirections_defaults['waypoints'] > 0 && $getdirections_defaults['advanced_autocomplete_via'] && ! $getdirections_defaults['advanced_alternate'] ) {
       for ($ct = 1; $ct <= $getdirections_defaults['waypoints']; $ct++) {
       if ($ct == 1) {
           $form['via_autocomplete_' . $ct]['#prefix'] = '<div id="autocomplete_via_wrapper"><div class="container-inline getdirections_display">';

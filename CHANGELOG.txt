@@ -1,9 +1,19 @@
-commit 4e2207e
+commit 2edad01
+Author: hutch <hutch@midwales.net>
+Date:   Sat Jul 14 14:08:09 2012 +0100
+
+    fixed bug in waypoints feature
+
+getdirections.module
+getdirections.theme.inc
+
+commit 09761a0
 Author: hutch <hutch@midwales.net>
 Date:   Fri Jul 13 21:50:46 2012 +0100
 
     added waypoints autocomplete
 
+CHANGELOG.txt
 getdirections.admin.inc
 getdirections.module
 getdirections.theme.inc
