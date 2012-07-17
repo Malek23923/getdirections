@@ -99,6 +99,22 @@
           $("#wrap-getdirections-colorbox").hide();
         }
       });
+
+      if ($("#edit-getdirections-default-travelmode-show").attr('checked')) {
+        $("#getdirections_transit_dates_wrapper").show();
+      }
+      else {
+        $("#getdirections_transit_dates_wrapper").hide();
+      }
+      $("#edit-getdirections-default-travelmode-show").change(function() {
+        if ($("#edit-getdirections-default-travelmode-show").attr('checked')) {
+          $("#getdirections_transit_dates_wrapper").show();
+        }
+        else {
+          $("#getdirections_transit_dates_wrapper").hide();
+        }
+      });
+
     }
   }
-  })(jQuery);
+})(jQuery);

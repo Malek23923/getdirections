@@ -184,6 +184,14 @@ function getdirections_menu() {
     'type' => MENU_CALLBACK,
   );
 
+  if (module_exists('date_popup')) {
+    $items['getdirections/getdirections_get_datestamp'] = array(
+      'access arguments' => array('access gmap getdirections'),
+      'page callback' => 'getdirections_get_datestamp',
+      'type' => MENU_CALLBACK,
+    );
+  }
+
   return $items;
 }
 
@@ -410,6 +418,7 @@ function getdirections_get_settings($getdirections_defaults, $getdirections_misc
     $settings['bicycleinfo'] = $getdirections_misc['bicycleinfo'];
     $settings['transitinfo'] = $getdirections_misc['transitinfo'];
     $settings['waypoints_optimise'] = intval($getdirections_defaults['waypoints_optimise']);
+    $settings['transit_date_format'] = $getdirections_defaults['transit_date_format'];
   }
   $settings['use_https'] = $getdirections_defaults['use_https'];
   return $settings;
@@ -562,6 +571,36 @@ function getdirections_direction_form($form, &$form_state, $fromto='', $loc='', 
         '#weight' => $wt,
       );
       $wt = $wt + 2;
+      if (module_exists('date_popup')) {
+        $form['transit_date_select'] = array(
+          '#type' => 'select',
+          '#title' => t('Date select'),
+          '#options' => array(
+            'depart' => t('Departure time'),
+            'arrive' => t('Arrival time'),
+          ),
+          '#default_value' => 'depart',
+          '#prefix' => '<div id="getdirections_transit_dates_wrapper">',
+          '#weight' => $wt,
+        );
+        $wt = $wt + 2;
+        if ($getdirections_defaults['transit_date_format'] == 'int') {
+          $fmt = 'j/n/Y H:i';
+        }
+        else {
+          $fmt = 'n/j/Y H:i';
+        }
+        $form['transit_dates'] = array(
+          '#type' => 'date_popup',
+          '#default_value' => '',
+          '#date_year_range' => '-0:+1',
+          '#date_format' => $fmt,
+          '#mindate' => "+0",
+          '#suffix' => '</div>',
+          '#weight' => $wt,
+        );
+        $wt = $wt + 2;
+      }
     }
     if ($getdirections_defaults['travelextras_show']) {
       $form['travelextras'] = array(
@@ -697,6 +736,8 @@ function getdirections_defaults() {
       'from_width' => 20,
       'to_width' => 20,
       'travelmode_show' => 0,
+      'transit_dates' => 0,
+      'transit_date_format' => 'int',
       'travelextras_show' => 0,
       'streetview_show' => 0,
       'use_advanced' => 0,
@@ -1582,4 +1623,12 @@ function getdirections_paths_get() {
     'getdirections_v3b_path' => GETDIRECTIONS_PATH . '/getdirections_v3b.js',
   ));
   return $getdirections_paths;
+}
+
+function getdirections_get_datestamp() {
+  $d = $_GET['d'];
+  $t = $_GET['t'];
+  $date = $d . ' ' . $t;
+  $time = strtotime($date);
+  drupal_json_output(array('content' => ($time * 1000)));
 }

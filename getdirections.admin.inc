@@ -361,6 +361,29 @@ function getdirections_settings_form() {
       '#default_value' =>  $getdirections_defaults['travelmode_show'],
       '#return_value' => 1,
     );
+    if (module_exists('date_popup')) {
+      $form['getdirections_default']['transit_dates'] = array(
+        '#type' => 'checkbox',
+        '#title' => t('Show Public transport Dates'),
+        '#description' => t('When "Public transport" has been selected as travel mode, allow user to enter a date and time.'),
+        '#default_value' =>  $getdirections_defaults['transit_dates'],
+        '#return_value' => 1,
+        '#prefix' => '<div id="getdirections_transit_dates_wrapper">',
+      );
+      $form['getdirections_default']['transit_date_format'] = array(
+        '#type' => 'select',
+        '#title' => t('Date format'),
+        '#default_value' =>  $getdirections_defaults['transit_date_format'],
+        '#options' => array(
+          'int' => t('International Format'),
+          'usa' => t('American Format')
+        ),
+        '#suffix' => '</div>'
+      );
+    }
+    else {
+      $form['getdirections_default']['transit_dates'] = array('#type' => 'value', '#value' => 0);
+    }
     $form['getdirections_default']['travelextras_show'] = array(
       '#type' => 'checkbox',
       '#title' => t('Show travel extras'),
