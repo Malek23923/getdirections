@@ -173,7 +173,39 @@
     var tmode = $("#edit-travelmode").val();
     if (tmode == 'walking') { trmode = google.maps.DirectionsTravelMode.WALKING; }
     else if (tmode == 'bicycling') { trmode = google.maps.DirectionsTravelMode.BICYCLING; }
-    else if (tmode == 'transit') { trmode = google.maps.DirectionsTravelMode.TRANSIT; }
+    else if (tmode == 'transit') {
+      trmode = google.maps.DirectionsTravelMode.TRANSIT;
+      // transit dates
+      if ($("#edit-transit-date-select").is('select')) {
+        d = $("#edit-transit-dates-datepicker-popup-0").val();
+        t = $("#edit-transit-dates-timeEntry-popup-1").val();
+        if (d && t) {
+          if (Drupal.settings.getdirections.transit_date_format == 'int') {
+            d1 = d.split(' ');
+            dmy = d1[0];
+            d2 = dmy.split('/');
+            d3 = d2[1] +'/' + d2[0] + '/' + d2[2];
+            s = d3 + ' ' + t;
+          }
+          else {
+            s = d + ' ' + t;
+          }
+          dp = Date.parse(s);
+          tstamp = new Date(dp);
+          date_dir = $("#edit-transit-date-select").val();
+          tropts = '';
+          if (date_dir == 'arrive') {
+            tropts = {arrivalTime: tstamp};
+          }
+          else if (date_dir == 'depart') {
+            tropts = {departureTime: tstamp};
+          }
+          if (tropts) {
+            request.transitOptions = tropts;
+          }
+        }
+      }
+    }
     else { trmode = google.maps.DirectionsTravelMode.DRIVING; }
     request.travelMode = trmode;
 
@@ -797,6 +829,24 @@
       });
       $("#edit-to").change( function() {
         showAddress();
+      });
+    }
+
+    // transit dates
+    if ($("#edit-travelmode").is('select') && $("#edit-transit-date-select").is('select')) {
+      if ( $("#edit-travelmode").val() == 'transit') {
+        $("#getdirections_transit_dates_wrapper").show();
+      }
+      else {
+        $("#getdirections_transit_dates_wrapper").hide();
+      }
+      $("#edit-travelmode").change( function() {
+        if ( $("#edit-travelmode").val() == 'transit') {
+          $("#getdirections_transit_dates_wrapper").show();
+        }
+        else {
+          $("#getdirections_transit_dates_wrapper").hide();
+        }
       });
     }
 

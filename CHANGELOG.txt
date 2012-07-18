@@ -1,9 +1,23 @@
-commit 3a6e161
+commit 64e6ebf
+Author: hutch <hutch@midwales.net>
+Date:   Wed Jul 18 09:47:37 2012 +0100
+
+    added transit dates feature
+
+getdirections.admin.inc
+getdirections.module
+getdirections_admin.js
+getdirections_v3.js
+getdirections_v3a.js
+getdirections_v3b.js
+
+commit f8e292c
 Author: hutch <hutch@midwales.net>
 Date:   Sat Jul 14 14:06:34 2012 +0100
 
     fixed bug in waypoints feature
 
+CHANGELOG.txt
 getdirections.module
 getdirections.theme.inc
 
