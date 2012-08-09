@@ -686,6 +686,16 @@ function getdirections_settings_form() {
     '#return_value' => 1,
   );
   if (variable_get('getdirections_use_v3', 0)) {
+    $form['getdirections_misc']['trafficinfo']['#suffix'] = '<div id="wrap-getdirections-trafficinfo">';
+    $form['getdirections_misc']['trafficinfo_state'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Activate Traffic information'),
+      '#default_value' =>  $getdirections_misc['trafficinfo_state'],
+      '#description' => t('Activate Traffic layer when map is first displayed'),
+      '#return_value' => 1,
+    );
+    $form['getdirections_misc']['trafficinfo_state']['#suffix'] = '</div>';
+
     $form['getdirections_misc']['bicycleinfo'] = array(
       '#type' => 'checkbox',
       '#title' => t('Enable Bicycling information'),
@@ -693,6 +703,16 @@ function getdirections_settings_form() {
       '#description' => t('Google bicycling layer, limited availability.'),
       '#return_value' => 1,
     );
+    $form['getdirections_misc']['bicycleinfo']['#suffix'] = '<div id="wrap-getdirections-bicycleinfo">';
+    $form['getdirections_misc']['bicycleinfo_state'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Activate Bicycling information'),
+      '#default_value' =>  $getdirections_misc['bicycleinfo_state'],
+      '#description' => t('Activate Bicycling layer when map is first displayed'),
+      '#return_value' => 1,
+    );
+    $form['getdirections_misc']['bicycleinfo_state']['#suffix'] = '</div>';
+
     $form['getdirections_misc']['transitinfo'] = array(
       '#type' => 'checkbox',
       '#title' => t('Enable Public transport information'),
@@ -700,6 +720,16 @@ function getdirections_settings_form() {
       '#description' => t('Google transit layer, limited availability.'),
       '#return_value' => 1,
     );
+    $form['getdirections_misc']['transitinfo']['#suffix'] = '<div id="wrap-getdirections-transitinfo">';
+    $form['getdirections_misc']['transitinfo_state'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Activate Transit information'),
+      '#default_value' =>  $getdirections_misc['transitinfo_state'],
+      '#description' => t('Activate Transit layer when map is first displayed'),
+      '#return_value' => 1,
+    );
+    $form['getdirections_misc']['transitinfo_state']['#suffix'] = '</div>';
+
     $form['getdirections_misc']['panoramio_show'] = array(
       '#type' => 'checkbox',
       '#title' => t('Enable Panoramio'),
@@ -707,20 +737,25 @@ function getdirections_settings_form() {
       '#description' => t('Google panoramio picture links.'),
       '#return_value' => 1,
     );
+    $form['getdirections_misc']['panoramio_show']['#suffix'] = '<div id="wrap-getdirections-panoramio">';
+    $form['getdirections_misc']['panoramio_state'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Activate Panoramio'),
+      '#default_value' =>  $getdirections_misc['panoramio_state'],
+      '#description' => t('Activate Panoramio layer when map is first displayed'),
+      '#return_value' => 1,
+    );
+    $form['getdirections_misc']['panoramio_state']['#suffix'] = '</div>';
+
   }
   else {
-    $form['getdirections_misc']['bicycleinfo'] = array(
-      '#type' => 'value',
-      '#value' => 0,
-    );
-    $form['getdirections_misc']['transitinfo'] = array(
-      '#type' => 'value',
-      '#value' => 0,
-    );
-    $form['getdirections_misc']['panoramio_show'] = array(
-      '#type' => 'value',
-      '#value' => 0,
-    );
+    $form['getdirections_misc']['bicycleinfo'] = array('#type' => 'value', '#value' => 0,);
+    $form['getdirections_misc']['bicycleinfo_state'] = array('#type' => 'value', '#value' => 0,);
+    $form['getdirections_misc']['transitinfo'] = array('#type' => 'value', '#value' => 0,);
+    $form['getdirections_misc']['transitinfo_state'] = array('#type' => 'value', '#value' => 0,);
+    $form['getdirections_misc']['panoramio_show'] = array('#type' => 'value', '#value' => 0,);
+    $form['getdirections_misc']['panoramio_state'] = array('#type' => 'value', '#value' => 0,);
+    $form['getdirections_misc']['trafficinfo_state'] =  array('#type' => 'value', '#value' => 0,);
   }
   if (! $getdirections_defaults['use_advanced']) {
     $form['getdirections_misc']['switchfromto'] = array(

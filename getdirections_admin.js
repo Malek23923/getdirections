@@ -115,6 +115,74 @@
         }
       });
 
+      if ($("#edit-getdirections-misc-trafficinfo").is('input')) {
+        if ($("#edit-getdirections-misc-trafficinfo").attr('checked')) {
+          $("#wrap-getdirections-trafficinfo").show();
+        }
+        else {
+          $("#wrap-getdirections-trafficinfo").hide();
+        }
+        $("#edit-getdirections-misc-trafficinfo").change(function() {
+          if ($("#edit-getdirections-misc-trafficinfo").attr('checked')) {
+            $("#wrap-getdirections-trafficinfo").show();
+          }
+          else {
+            $("#wrap-getdirections-trafficinfo").hide();
+          }
+        });
+      }
+
+      if ($("#edit-getdirections-misc-bicycleinfo").is('input')) {
+        if ($("#edit-getdirections-misc-bicycleinfo").attr('checked')) {
+          $("#wrap-getdirections-bicycleinfo").show();
+        }
+        else {
+          $("#wrap-getdirections-bicycleinfo").hide();
+        }
+        $("#edit-getdirections-misc-bicycleinfo").change(function() {
+          if ($("#edit-getdirections-misc-bicycleinfo").attr('checked')) {
+            $("#wrap-getdirections-bicycleinfo").show();
+          }
+          else {
+            $("#wrap-getdirections-bicycleinfo").hide();
+          }
+        });
+      }
+
+      if ($("#edit-getdirections-misc-transitinfo").is('input')) {
+        if ($("#edit-getdirections-misc-transitinfo").attr('checked')) {
+          $("#wrap-getdirections-transitinfo").show();
+        }
+        else {
+          $("#wrap-getdirections-transitinfo").hide();
+        }
+        $("#edit-getdirections-misc-transitinfo").change(function() {
+          if ($("#edit-getdirections-misc-transitinfo").attr('checked')) {
+            $("#wrap-getdirections-transitinfo").show();
+          }
+          else {
+            $("#wrap-getdirections-transitinfo").hide();
+          }
+        });
+      }
+
+      if ($("#edit-getdirections-misc-panoramio-show").is('input')) {
+        if ($("#edit-getdirections-misc-panoramio-show").attr('checked')) {
+          $("#wrap-getdirections-panoramio").show();
+        }
+        else {
+          $("#wrap-getdirections-panoramio").hide();
+        }
+        $("#edit-getdirections-misc-panoramio-show").change(function() {
+          if ($("#edit-getdirections-misc-panoramio-show").attr('checked')) {
+            $("#wrap-getdirections-panoramio").show();
+          }
+          else {
+            $("#wrap-getdirections-panoramio").hide();
+          }
+        });
+      }
+
     }
   }
 })(jQuery);

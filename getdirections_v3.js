@@ -360,19 +360,48 @@
 
     if (Drupal.settings.getdirections.trafficinfo) {
       trafficInfo = new google.maps.TrafficLayer();
-      trafficInfo.setMap(map);
+      if (Drupal.settings.getdirections.trafficinfo_state > 0) {
+        trafficInfo.setMap(map);
+        traffictoggleState = 1;
+      }
+      else {
+        trafficInfo.setMap(null);
+        traffictoggleState = 0;
+      }
     }
     if (Drupal.settings.getdirections.bicycleinfo) {
       bicycleInfo = new google.maps.BicyclingLayer();
-      bicycleInfo.setMap(map);
+      if (Drupal.settings.getdirections.bicycleinfo_state > 0) {
+        bicycleInfo.setMap(map);
+        bicycletoggleState = 1;
+      }
+      else {
+        bicycleInfo.setMap(null);
+        bicycletoggleState = 0;
+      }
     }
     if (Drupal.settings.getdirections.transitinfo) {
       transitInfo = new google.maps.TransitLayer();
-      transitInfo.setMap(map);
+      if (Drupal.settings.getdirections.transitinfo_state > 0) {
+        transitInfo.setMap(map);
+        transittoggleState = 1;
+      }
+      else {
+        transitInfo.setMap(null);
+        transittoggleState = 0;
+      }
     }
+
     if (Drupal.settings.getdirections.panoramio_show) {
       panoramioLayer = new google.maps.panoramio.PanoramioLayer();
-      panoramioLayer.setMap(map);
+      if (Drupal.settings.getdirections.panoramio_state > 0) {
+        panoramioLayer.setMap(map);
+        panoramiotoggleState = 1;
+      }
+      else {
+        panoramioLayer.setMap(null);
+        panoramiotoggleState = 0;
+      }
     }
 
     // define some icons
@@ -475,7 +504,7 @@
 
   Drupal.getdirections.toggleTraffic = function() {
     if (traffictoggleState == 1) {
-      trafficInfo.setMap();
+      trafficInfo.setMap(null);
       traffictoggleState = 0;
     }
     else {
@@ -486,7 +515,7 @@
 
   Drupal.getdirections.toggleBicycle = function() {
     if (bicycletoggleState == 1) {
-      bicycleInfo.setMap();
+      bicycleInfo.setMap(null);
       bicycletoggleState = 0;
     }
     else {
@@ -496,7 +525,7 @@
   };
   Drupal.getdirections.toggleTransit = function() {
     if (transittoggleState == 1) {
-      transitInfo.setMap();
+      transitInfo.setMap(null);
       transittoggleState = 0;
     }
     else {
@@ -506,7 +535,7 @@
   };
   Drupal.getdirections.togglePanoramio = function() {
     if (panoramiotoggleState == 1) {
-      panoramioLayer.setMap();
+      panoramioLayer.setMap(null);
       panoramiotoggleState = 0;
     }
     else {
