@@ -1,9 +1,23 @@
-commit 64e6ebf
+commit d9c5a78
+Author: hutch <hutch@midwales.net>
+Date:   Thu Aug 9 21:02:38 2012 +0100
+
+    better buttons
+
+getdirections.admin.inc
+getdirections.module
+getdirections_admin.js
+getdirections_v3.js
+getdirections_v3a.js
+getdirections_v3b.js
+
+commit 1c70d0c
 Author: hutch <hutch@midwales.net>
 Date:   Wed Jul 18 09:47:37 2012 +0100
 
     added transit dates feature
 
+CHANGELOG.txt
 getdirections.admin.inc
 getdirections.module
 getdirections_admin.js

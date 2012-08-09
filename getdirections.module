@@ -366,8 +366,12 @@ function getdirections_get_settings($getdirections_defaults, $getdirections_misc
     $settings['advanced_autocomplete_bias'] = $getdirections_defaults['advanced_autocomplete_bias'];
     $settings['advanced_autocomplete_via'] = $getdirections_defaults['advanced_autocomplete_via'];
     $settings['panoramio_show'] = $getdirections_misc['panoramio_show'];
+    $settings['panoramio_state'] = $getdirections_misc['panoramio_state'];
     $settings['bicycleinfo'] = $getdirections_misc['bicycleinfo'];
+    $settings['bicycleinfo_state'] = $getdirections_misc['bicycleinfo_state'];
     $settings['transitinfo'] = $getdirections_misc['transitinfo'];
+    $settings['transitinfo_state'] = $getdirections_misc['transitinfo_state'];
+    $settings['trafficinfo_state'] = $getdirections_misc['trafficinfo_state'];
     $settings['waypoints_optimise'] = intval($getdirections_defaults['waypoints_optimise']);
     $settings['transit_date_format'] = $getdirections_defaults['transit_date_format'];
   }
@@ -774,14 +778,18 @@ function getdirections_defaults() {
 
 function getdirections_misc_defaults() {
   $getdirections_misc = variable_get('getdirections_misc', array(
-    'keep_title' => 0,
-    'show_distance' => 0,
-    'trafficinfo' => 0,
-    'bicycleinfo' => 0,
-    'switchfromto' => 0,
-    'show_duration' => 0,
-    'panoramio_show' => 0,
-    'transitinfo' => 0,
+    'keep_title'        => 0,
+    'show_distance'     => 0,
+    'trafficinfo'       => 0,
+    'trafficinfo_state' => 0,
+    'bicycleinfo'       => 0,
+    'bicycleinfo_state' => 0,
+    'switchfromto'      => 0,
+    'show_duration'     => 0,
+    'panoramio_show'    => 0,
+    'panoramio_state'   => 0,
+    'transitinfo'       => 0,
+    'transitinfo_state' => 0,
   ));
   return $getdirections_misc;
 }
