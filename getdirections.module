@@ -1364,6 +1364,7 @@ function getdirections_direction_box() {
   $a1 = FALSE;
   $a2 = FALSE;
   $a3 = FALSE;
+  $a4 = FALSE;
 
   if (arg(1)) {
     $a1 = arg(1);
@@ -1373,6 +1374,9 @@ function getdirections_direction_box() {
   }
   if (arg(3)) {
     $a3 = arg(3);
+  }
+  if (arg(4)) {
+    $a4 = arg(4);
   }
 
   if ($a1 == 'location' && ($a2 == 'from' || $a2 == 'to') && is_numeric($a3) ) {
@@ -1400,7 +1404,7 @@ function getdirections_direction_box() {
     $content = getdirections_u2n_setlocation($a2, $a3);
   }
   elseif ($a1 == 'latlon' && ($a2 == 'from' || $a2 == 'to')) {
-    $content = getdirections_latlon($a2, $a3);
+    $content = getdirections_latlon($a2, $a3, $a4);
   }
   elseif ($a1 == 'location_id' && ($a2 == 'from' || $a2 == 'to')) {
     $content = getdirections_setlocation_id($a2, $a3);
