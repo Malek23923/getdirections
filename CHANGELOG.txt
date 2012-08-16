@@ -1,9 +1,18 @@
-commit 4033a1e
+commit bf6a456
+Author: hutch <hutch@midwales.net>
+Date:   Thu Aug 16 16:38:16 2012 +0100
+
+    fixed bug in getdirections_direction_box
+
+getdirections.module
+
+commit 7f45a60
 Author: hutch <hutch@midwales.net>
 Date:   Thu Aug 9 21:03:24 2012 +0100
 
     better buttons
 
+CHANGELOG.txt
 getdirections.admin.inc
 getdirections.module
 getdirections_admin.js
