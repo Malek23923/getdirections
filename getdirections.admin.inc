@@ -678,6 +678,22 @@ function getdirections_settings_form() {
     '#default_value' =>  $getdirections_misc['show_duration'],
     '#return_value' => 1,
   );
+
+  if (variable_get('getdirections_use_v3', 0)) {
+    $form['getdirections_misc']['use_geolocation_button'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Provide Browser based geocoding option'),
+      '#default_value' =>  $getdirections_misc['use_geolocation_button'],
+      '#return_value' => 1,
+    );
+  }
+  else {
+    $form['getdirections_misc']['use_geolocation_button'] = array(
+      '#type' => 'value',
+      '#value' => 0
+    );
+  }
+
   $form['getdirections_misc']['trafficinfo'] = array(
     '#type' => 'checkbox',
     '#title' => t('Enable Traffic information'),
@@ -767,6 +783,28 @@ function getdirections_settings_form() {
   }
   else {
     $form['getdirections_misc']['switchfromto'] = array('#type' => 'value', '#value' => $getdirections_misc['switchfromto']);
+  }
+
+  if (variable_get('getdirections_use_v3', 0)) {
+    $form['getdirections_ua'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('User Agent detection'),
+      '#description' => t('For advanced users who want to edit the User Agent detection string.'),
+      '#collapsible' => TRUE,
+      '#collapsed' => TRUE,
+      // This will store all the defaults in one variable.
+      '#tree' => TRUE,
+    );
+    $getdirections_ua = getdirections_ua_get();
+    $form['getdirections_ua']['ua_string'] = array(
+      '#type' => 'textfield',
+      '#title' => t('User Agent detection'),
+      '#description' => t('User Agent detection is used to determine wether the browser is on a mobile device. Edit this regular expression with care.'),
+      '#size' => 60,
+      '#maxlength' => 255,
+      '#default_value' => $getdirections_ua['ua_string'],
+      '#required' => TRUE,
+    );
   }
 
   // getdirections_paths

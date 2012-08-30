@@ -1,9 +1,26 @@
-commit bf6a456
+commit 08169ab
+Author: hutch <hutch@midwales.net>
+Date:   Thu Aug 30 19:26:17 2012 +0100
+
+    added geolocation feature
+
+getdirections.admin.inc
+getdirections.module
+getdirections.theme.inc
+getdirections_v3.js
+getdirections_v3.min.js
+getdirections_v3a.js
+getdirections_v3a.min.js
+getdirections_v3b.js
+getdirections_v3b.min.js
+
+commit 3124433
 Author: hutch <hutch@midwales.net>
 Date:   Thu Aug 16 16:38:16 2012 +0100
 
     fixed bug in getdirections_direction_box
 
+CHANGELOG.txt
 getdirections.module
 
 commit 7f45a60

@@ -58,6 +58,29 @@
     return errstr;
   }
 
+  function getgeoerrcode(errcode) {
+    var errstr;
+    if (errcode == google.maps.GeocoderStatus.ERROR) {
+      errstr = Drupal.t("There was a problem contacting the Google servers.");
+    }
+    else if (errcode == google.maps.GeocoderStatus.INVALID_REQUEST) {
+      errstr = Drupal.t("This GeocoderRequest was invalid.");
+    }
+    else if (errcode == google.maps.GeocoderStatus.OVER_QUERY_LIMIT) {
+      errstr = Drupal.t("The webpage has gone over the requests limit in too short a period of time.");
+    }
+    else if (errcode == google.maps.GeocoderStatus.REQUEST_DENIED) {
+      errstr = Drupal.t("The webpage is not allowed to use the geocoder.");
+    }
+    else if (errcode == google.maps.GeocoderStatus.UNKNOWN_ERROR) {
+      errstr = Drupal.t("A geocoding request could not be processed due to a server error. The request may succeed if you try again.");
+    }
+    else if (errcode == google.maps.GeocoderStatus.ZERO_RESULTS) {
+      errstr = Drupal.t("No result was found for this GeocoderRequest.");
+    }
+    return errstr;
+  }
+
   function renderdirections(request) {
     dirservice.route(request, function(response, status) {
       if (status == google.maps.DirectionsStatus.OK) {
@@ -496,6 +519,55 @@
         }
         else {
           $("#getdirections_transit_dates_wrapper").hide();
+        }
+      });
+    }
+
+    // html5
+    if (navigator && navigator.geolocation) {
+      $("#getdirections_geolocation_button_from").click( function () {
+        doGeocode();
+        return false;
+      });
+    }
+
+    function doGeocode() {
+      var statusdiv = '#getdirections_geolocation_status_from';
+      var statusmsg = '';
+      $(statusdiv).html(statusmsg);
+      navigator.geolocation.getCurrentPosition(
+        function(position) {
+          lat = position.coords.latitude;
+          lng = position.coords.longitude;
+          point = new google.maps.LatLng(parseFloat(lat), parseFloat(lng));
+          if (point) {
+            doRGeocode(point);
+          }
+        },
+        function(error) {
+          statusmsg = Drupal.t("Sorry, I couldn't find your location using the browser") + ' ' + getdirectionserrcode(error.code) + ".";
+          $(statusdiv).html(statusmsg);
+        }, {maximumAge:10000}
+      );
+    }
+
+    // reverse geocoding
+    function doRGeocode(pt) {
+      var input_ll = {'latLng': pt};
+      // Create a Client Geocoder
+      var geocoder = new google.maps.Geocoder();
+      geocoder.geocode(input_ll, function (results, status) {
+        if (status == google.maps.GeocoderStatus.OK) {
+          if (results[0]) {
+            if ($("input[name=from]").val() == '') {
+              $("input[name=from]").val(results[0].formatted_address);
+            }
+          }
+        }
+        else {
+          var prm = {'!b': getgeoerrcode(status) };
+          var msg = Drupal.t('Geocode was not successful for the following reason: !b', prm);
+          alert(msg);
         }
       });
     }

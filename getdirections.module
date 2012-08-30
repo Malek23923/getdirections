@@ -421,6 +421,7 @@ function getdirections_get_settings($getdirections_defaults, $getdirections_misc
     $settings['transitinfo'] = $getdirections_misc['transitinfo'];
     $settings['transitinfo_state'] = $getdirections_misc['transitinfo_state'];
     $settings['trafficinfo_state'] = $getdirections_misc['trafficinfo_state'];
+    $settings['use_geolocation_button'] = $getdirections_misc['use_geolocation_button'];
     $settings['waypoints_optimise'] = intval($getdirections_defaults['waypoints_optimise']);
     $settings['transit_date_format'] = $getdirections_defaults['transit_date_format'];
   }
@@ -697,6 +698,7 @@ function getdirections_direction_form($form, &$form_state, $fromto='', $loc='', 
     '#value' => t('Get Directions'),
     '#weight' => $wt,
   );
+
   return $form;
 }
 
@@ -849,6 +851,7 @@ function getdirections_misc_defaults() {
     'panoramio_state'   => 0,
     'transitinfo'       => 0,
     'transitinfo_state' => 0,
+    'use_geolocation_button' => 0,
   ));
   return $getdirections_misc;
 }
@@ -1643,4 +1646,23 @@ function getdirections_get_datestamp() {
   $date = $d . ' ' . $t;
   $time = strtotime($date);
   drupal_json_output(array('content' => ($time * 1000)));
+}
+
+function getdirections_is_mobile() {
+return TRUE;
+
+  $getdirections_ua = getdirections_ua_get();
+  $str = "/" . $getdirections_ua['ua_string'] . "/i";
+  $is_mobile = FALSE;
+  $ua = $_SERVER['HTTP_USER_AGENT'];
+  if (preg_match($str, $ua)) {
+    $is_mobile = TRUE;
+  }
+  return $is_mobile;
+}
+
+function getdirections_ua_get() {
+  $default = array('ua_string' => "iphone|ipad|android|blackberry|blazer|bolt|symbian|mobile safari|fennec|gobrowser|iemobile|maemo browser|profile midp|minimo|kindle|opera mini|opera mobi|skyfire|teashark|uzardweb");
+  $getdirections_ua = variable_get('getdirections_ua', $default);
+  return $getdirections_ua;
 }

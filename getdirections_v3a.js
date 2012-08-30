@@ -99,7 +99,7 @@
     return errstr;
   }
 
-// from the form
+  // from the form
   Drupal.getdirections.mygetDirections = function() {
 
     var from;
@@ -542,7 +542,6 @@
       var r = {address: s};
       geocoder.geocode(r, function (results, status) {
         if (status == google.maps.GeocoderStatus.OK) {
-          // do stuff
           // get the point
           point = results[0].geometry.location;
           if (point) {
@@ -551,7 +550,6 @@
             }
             if (state == 0) {
               doStart(point);
-              //if (donemarkers[endpoint] == false) {
               if (! todone) {
                 map.panTo(point);
               }
@@ -562,7 +560,6 @@
         }
       });
     }
-
 
     var lat = parseFloat(Drupal.settings.getdirections.lat);
     var lng = parseFloat(Drupal.settings.getdirections.lng);
@@ -879,6 +876,36 @@
       });
     }
 
+    // html5
+    if (navigator && navigator.geolocation) {
+      $("#getdirections_geolocation_button_from").click( function () {
+        doGeocode();
+        return false;
+      });
+    }
+
+    function doGeocode() {
+      var statusdiv = '#getdirections_geolocation_status_from';
+      var statusmsg = '';
+      $(statusdiv).html(statusmsg);
+      navigator.geolocation.getCurrentPosition(
+        function(position) {
+          lat = position.coords.latitude;
+          lng = position.coords.longitude;
+          point = new google.maps.LatLng(parseFloat(lat), parseFloat(lng));
+          if (point && state == 0) {
+            doStart(point);
+            if (! todone) {
+              map.panTo(point);
+            }
+          }
+        },
+        function(error) {
+          statusmsg = Drupal.t("Sorry, I couldn't find your location using the browser") + ' ' + getdirectionserrcode(error.code) + ".";
+          $(statusdiv).html(statusmsg);
+        }, {maximumAge:10000}
+      );
+    }
   } // end initialise
 
   Drupal.getdirections.nextbtn = function() {

@@ -278,6 +278,7 @@ function theme_getdirections_direction_form($variables) {
   $form = $variables['form'];
   // if you want to do fancy things with the form, do it here ;-)
   $getdirections_defaults = getdirections_defaults();
+  $getdirections_misc = getdirections_misc_defaults();
   if (isset($form['mto'])) {
     $form['mto']['#prefix'] = '<div class="container-inline getdirections_display">';
     $form['mto']['#suffix'] = '</div>';
@@ -302,6 +303,12 @@ function theme_getdirections_direction_form($variables) {
       $form['country_from']['#suffix'] = '</div>';
     }
     if (isset($form['from']) && $form['from']['#type'] == 'textfield' && (module_exists('location') || module_exists('getlocations_fields')) && ! $getdirections_defaults['advanced_autocomplete']) {
+      // html5 geolocation
+      if ($getdirections_misc['use_geolocation_button'] && getdirections_is_mobile()) {
+        $geolocation_button = '<input type="submit" value="' . t('Find Location') . '" title="' . t('Get the latitude and longitude for this address from the browser') . '" id="getdirections_geolocation_button_from" class="form-submit" />';
+        $geolocation_button .= '<span id="getdirections_geolocation_status_from" ></span>';
+        $form['from']['#field_suffix'] = '&nbsp;&nbsp;&nbsp;' . $geolocation_button;
+      }
       $form['from']['#suffix'] = '</div>';
     }
     if (isset($form['country_to'])) {
@@ -311,7 +318,6 @@ function theme_getdirections_direction_form($variables) {
     if (isset($form['to']) && $form['to']['#type'] == 'textfield' && (module_exists('location') || module_exists('getlocations_fields')) && ! $getdirections_defaults['advanced_autocomplete']) {
       $form['to']['#suffix'] = '</div>';
     }
-
     if ($getdirections_defaults['advanced_autocomplete'] && $getdirections_defaults['waypoints'] > 0 && $getdirections_defaults['advanced_autocomplete_via'] && ! $getdirections_defaults['advanced_alternate'] ) {
       for ($ct = 1; $ct <= $getdirections_defaults['waypoints']; $ct++) {
       if ($ct == 1) {
@@ -339,6 +345,12 @@ function theme_getdirections_direction_form($variables) {
       $form['country_to']['#suffix'] = '</div>';
     }
     $desc = t('Fill in the form below.');
+    // html5 geolocation
+    if ($getdirections_misc['use_geolocation_button'] && getdirections_is_mobile()) {
+      $geolocation_button = '<input type="submit" value="' . t('Find Location') . '" title="' . t('Get the latitude and longitude for this address from the browser') . '" id="getdirections_geolocation_button_from" class="form-submit" />';
+      $geolocation_button .= '<span id="getdirections_geolocation_status_from" ></span>';
+      $form['from']['#field_suffix'] = '&nbsp;&nbsp;&nbsp;' . $geolocation_button;
+    }
   }
 
   if (isset($form['trafficinfo'])) {
