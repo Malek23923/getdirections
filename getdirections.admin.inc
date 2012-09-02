@@ -413,6 +413,19 @@ function getdirections_settings_form() {
     '#parents' => array('getdirections_default', 'to_width'),
   );
 
+  if (module_exists('location') || module_exists('getlocations_fields')) {
+    $form['getdirections_default']['use_country_dropdown'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Use Country dropdown'),
+      '#description' => t('Use a dropdown list of countries on the form.'),
+      '#default_value' => ($getdirections_defaults['use_country_dropdown'] ? $getdirections_defaults['use_country_dropdown'] : 0),
+      '#return_value' => 1,
+    );
+  }
+  else {
+    $form['getdirections_default']['use_country_dropdown'] = array('#type' => 'value', '#value' => 0);
+  }
+
   $form['getdirections_default']['use_advanced'] = array(
     '#type' => 'checkbox',
     '#title' => t('Use advanced features'),
@@ -680,18 +693,41 @@ function getdirections_settings_form() {
   );
 
   if (variable_get('getdirections_use_v3', 0)) {
-    $form['getdirections_misc']['use_geolocation_button'] = array(
+    $form['getdirections_misc']['geolocation_enable'] = array(
       '#type' => 'checkbox',
-      '#title' => t('Provide Browser based geocoding option'),
-      '#default_value' =>  $getdirections_misc['use_geolocation_button'],
+      '#title' => t('Enable geolocation options'),
+      '#default_value' =>  $getdirections_misc['geolocation_enable'],
       '#return_value' => 1,
+      '#description' => t('For use on mobile devices.'),
+    );
+
+    $form['getdirections_misc']['geolocation_mobile_check'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Enable check for mobiles'),
+      '#default_value' =>  $getdirections_misc['geolocation_mobile_check'],
+      '#return_value' => 1,
+      '#description' => t('Enable geolocation for mobile devices only.'),
+      '#prefix' => '<div id="wrap-getdirections-geolocation-options">',
+    );
+
+    $geo_opts = array(1 => t('Browser based geocoding'));
+    if (module_exists('smart_ip')) {
+      $geo_opts[2] = t('Smart IP based geocoding');
+    }
+    if (module_exists('ip_geoloc')) {
+      $geo_opts[3] = t('IP Geolocation based geocoding');
+    }
+    $form['getdirections_misc']['geolocation_option'] = array(
+      '#type' => 'radios',
+      '#title' => t('Geolocation option'),
+      '#default_value' => $getdirections_misc['geolocation_option'],
+      '#options' => $geo_opts,
+      '#suffix' => '</div>',
     );
   }
   else {
-    $form['getdirections_misc']['use_geolocation_button'] = array(
-      '#type' => 'value',
-      '#value' => 0
-    );
+    $form['getdirections_misc']['geolocation_enable'] = array('#type' => 'value', '#value' => 0);
+    $form['getdirections_misc']['geolocation_option'] = array('#type' => 'value', '#value' => 1);
   }
 
   $form['getdirections_misc']['trafficinfo'] = array(
@@ -890,6 +926,12 @@ function getdirections_settings_validate($form, &$form_state) {
 
   if (! variable_get('getdirections_use_v3', 0) && ! $form_state['values']['getdirections_use_v3'] && empty($form_state['values']['getdirections_api_key'])) {
     form_set_error('getdirections_api_key', t('API key is required for version 2 of the Googlemaps API'));
+  }
+
+  if ( isset($form_state['values']['use_advanced']) && ! $form_state['values']['use_advanced']) {
+    $form_state['values']['advanced_alternate'] = 0;
+    $form_state['values']['advanced_autocomplete'] = 0;
+    $form_state['values']['advanced_autocomplete_bias'] = 0;
   }
 
   if ($form_state['values']['getdirections_use_v3']) {

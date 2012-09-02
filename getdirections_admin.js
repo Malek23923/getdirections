@@ -183,6 +183,23 @@
         });
       }
 
+      if ($("#edit-getdirections-misc-geolocation-enable").is('input')) {
+        if ($("#edit-getdirections-misc-geolocation-enable").attr('checked')) {
+          $("#wrap-getdirections-geolocation-options").show();
+        }
+        else {
+          $("#wrap-getdirections-geolocation-options").hide();
+        }
+        $("#edit-getdirections-misc-geolocation-enable").change(function() {
+          if ($("#edit-getdirections-misc-geolocation-enable").attr('checked')) {
+            $("#wrap-getdirections-geolocation-options").show();
+          }
+          else {
+            $("#wrap-getdirections-geolocation-options").hide();
+          }
+        });
+      }
+
     }
   }
 })(jQuery);

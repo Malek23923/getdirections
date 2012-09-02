@@ -3,3 +3,4 @@ description = "Fetches Google map directions."
 core = 7.x
 php = 5
 configure = admin/config/services/getdirections
+package = Location

@@ -1,9 +1,30 @@
-commit 08169ab
+commit 10af4c0
+Author: hutch <hutch@midwales.net>
+Date:   Sun Sep 2 16:11:20 2012 +0100
+
+    improved geolocation, added smartip and ip_geoloc, added geofield and geolocations support
+
+getdirections.admin.inc
+getdirections.info
+getdirections.install
+getdirections.module
+getdirections.theme.inc
+getdirections.views_default.inc
+getdirections_admin.js
+getdirections_v3.js
+getdirections_v3.min.js
+getdirections_v3a.js
+getdirections_v3a.min.js
+getdirections_v3b.js
+getdirections_v3b.min.js
+
+commit 0855887
 Author: hutch <hutch@midwales.net>
 Date:   Thu Aug 30 19:26:17 2012 +0100
 
     added geolocation feature
 
+CHANGELOG.txt
 getdirections.admin.inc
 getdirections.module
 getdirections.theme.inc

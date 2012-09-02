@@ -523,12 +523,102 @@
       });
     }
 
-    // html5
-    if (navigator && navigator.geolocation) {
-      $("#getdirections_geolocation_button_from").click( function () {
-        doGeocode();
-        return false;
-      });
+    if (Drupal.settings.getdirections.geolocation_enable) {
+      if (Drupal.settings.getdirections.geolocation_option == '1') {
+        // html5
+        if (navigator && navigator.geolocation) {
+          $("#getdirections_geolocation_button_from").click( function () {
+            doGeocode();
+            return false;
+          });
+        }
+      }
+      else if (Drupal.settings.getdirections.geolocation_option == '2') {
+        // smart_ip
+        $("#getdirections_geolocation_button_from").click( function () {
+          $.get(Drupal.settings.basePath + "getdirections/smart_ip", {}, function (loc) {
+            if (loc) {
+              lat = loc.latitude;
+              lng = loc.longitude;
+              if (lat && lng) {
+                point = new google.maps.LatLng(parseFloat(lat), parseFloat(lng));
+                doStart(point);
+                if (! todone) {
+                  map.panTo(point);
+                }
+                var adrs = '';
+                var adrsarr = [];
+                if (loc.route) {
+                  adrsarr.push(loc.route);
+                }
+                if (loc.sublocality) {
+                  adrsarr.push(loc.sublocality);
+                }
+                if (loc.locality) {
+                  adrsarr.push(loc.locality);
+                }
+                if (loc.city) {
+                  adrsarr.push(loc.city);
+                }
+                else if (loc.postal_town) {
+                  adrsarr.push(loc.postal_town);
+                }
+                if (loc.region) {
+                  adrsarr.push(loc.region);
+                }
+                if (loc.zip && loc.zip != '-') {
+                  adrsarr.push(loc.zip);
+                }
+                else if (loc.postal_code_prefix) {
+                  adrsarr.push(loc.postal_code_prefix);
+                }
+                if (loc.country) {
+                  adrsarr.push(loc.country);
+                }
+                else if (loc.country_code) {
+                  if (loc.country_code == 'UK') {
+                    cc = 'GB';
+                  }
+                  else {
+                    cc = loc.country_code;
+                  }
+                  adrsarr.push(cc);
+                }
+                adrs = adrsarr.join(', ');
+                if ($("input[name=from]").val() == '') {
+                  $("input[name=from]").val(adrs);
+                }
+              }
+            }
+          });
+          return false;
+        });
+      }
+      else if (Drupal.settings.getdirections.geolocation_option == '3') {
+        $("#getdirections_geolocation_button_from").click( function () {
+          $.get(Drupal.settings.basePath + "getdirections/ip_geoloc", {}, function (loc) {
+            if (loc) {
+              lat = loc.latitude;
+              lng = loc.longitude;
+              if (lat && lng) {
+                point = new google.maps.LatLng(parseFloat(lat), parseFloat(lng));
+                doStart(point);
+                if (! todone) {
+                  map.panTo(point);
+                }
+                var adrs = '';
+                if (loc.formatted_address) {
+                  adrs = loc.formatted_address;
+                }
+                if ($("input[name=from]").val() == '') {
+                  $("input[name=from]").val(adrs);
+                }
+              }
+            }
+          });
+          return false;
+        });
+      }
     }
 
     function doGeocode() {

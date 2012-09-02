@@ -14,6 +14,10 @@ function getdirections_uninstall() {
   variable_del('getdirections_use_v3');
   variable_del('getdirections_misc');
   variable_del('getdirections_returnlink');
+  variable_del('getdirections_api3_key');
+  variable_del('getdirections_colorbox');
+  variable_del('getdirections_paths');
+  variable_del('getdirections_ua');
 }
 
 /**

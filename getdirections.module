@@ -192,6 +192,21 @@ function getdirections_menu() {
     );
   }
 
+  if (module_exists('smart_ip')) {
+    $items['getdirections/smart_ip'] = array(
+      'page callback' => 'getdirections_smart_ip',
+      'access arguments' => array('access content'),
+      'type' => MENU_CALLBACK,
+    );
+  }
+  if (module_exists('ip_geoloc')) {
+    $items['getdirections/ip_geoloc'] = array(
+      'page callback' => 'getdirections_ip_geoloc',
+      'access arguments' => array('access content'),
+      'type' => MENU_CALLBACK,
+    );
+  }
+
   return $items;
 }
 
@@ -236,19 +251,19 @@ function getdirections_latlon_load($arg) {
  * menu access functions
  */
 function getdirections_access_location() {
-
   if (user_access('access gmap getdirections')) {
-    if (module_exists('location_node') || module_exists('location_cck') || module_exists('getlocations_fields')) {
+    if (getdirections_get_current_supported_module()) {
       return TRUE;
     }
   }
   return FALSE;
 }
 
-
 function getdirections_access_user_location() {
-  if ((module_exists('location') || module_exists('getlocations_fields')) && user_access('access user getdirections')) {
-    return TRUE;
+  if (user_access('access user getdirections')) {
+    if (getdirections_get_current_supported_module()) {
+      return TRUE;
+    }
   }
   return FALSE;
 }
@@ -421,7 +436,8 @@ function getdirections_get_settings($getdirections_defaults, $getdirections_misc
     $settings['transitinfo'] = $getdirections_misc['transitinfo'];
     $settings['transitinfo_state'] = $getdirections_misc['transitinfo_state'];
     $settings['trafficinfo_state'] = $getdirections_misc['trafficinfo_state'];
-    $settings['use_geolocation_button'] = $getdirections_misc['use_geolocation_button'];
+    $settings['geolocation_enable'] = $getdirections_misc['geolocation_enable'];
+    $settings['geolocation_option'] = $getdirections_misc['geolocation_option'];
     $settings['waypoints_optimise'] = intval($getdirections_defaults['waypoints_optimise']);
     $settings['transit_date_format'] = $getdirections_defaults['transit_date_format'];
   }
@@ -448,7 +464,7 @@ function getdirections_direction_form($form, &$form_state, $fromto='', $loc='', 
 
   $islocation = module_exists('location');
   $isgetlocations_fields = module_exists('getlocations_fields');
-  if (($islocation || $isgetlocations_fields) && ! $getdirections_defaults['advanced_autocomplete']) {
+  if ($getdirections_defaults['use_country_dropdown'] && ($islocation || $isgetlocations_fields) && ! $getdirections_defaults['advanced_autocomplete']) {
     $countries = array(
       '#type' => 'select',
       '#title' => t('Country'),
@@ -505,7 +521,7 @@ function getdirections_direction_form($form, &$form_state, $fromto='', $loc='', 
     if ( getdirections_is_advanced() && $getdirections_defaults['advanced_autocomplete']) {
       $from_desc = t('Start typing the address of your starting point, then select from the dropdown menu.');
     }
-    if ( ($islocation || $isgetlocations_fields) && ! $getdirections_defaults['advanced_autocomplete']) {
+    if ($getdirections_defaults['use_country_dropdown'] && ($islocation || $isgetlocations_fields) && ! $getdirections_defaults['advanced_autocomplete']) {
       $form['country_from'] = $countries;
       $form['country_from']['#weight'] = $from_country_weight;
       $from_desc = t('Enter the address, postcode and/or city from where you want to start your journey.');
@@ -546,7 +562,7 @@ function getdirections_direction_form($form, &$form_state, $fromto='', $loc='', 
     if ( getdirections_is_advanced() && $getdirections_defaults['advanced_autocomplete']) {
       $to_desc = t('Start typing the address of your destination, then select from the dropdown menu.');
     }
-    if (($islocation || $isgetlocations_fields) && ! $getdirections_defaults['advanced_autocomplete']) {
+    if ($getdirections_defaults['use_country_dropdown'] && ($islocation || $isgetlocations_fields) && ! $getdirections_defaults['advanced_autocomplete']) {
       $form['country_to'] = $countries;
       $form['country_to']['#weight'] = $to_country_weight;
       $to_desc = t('Enter the address, postcode and/or city of your journey destination.');
@@ -747,6 +763,7 @@ function getdirections_defaults() {
       'travelextras_show' => 0,
       'streetview_show' => 0,
       'use_advanced' => 0,
+      'use_country_dropdown' => 1,
       'waypoints' => 0,
       'waypoint_color' => 'white',
       'waypoints_optimise' => 0,
@@ -851,7 +868,9 @@ function getdirections_misc_defaults() {
     'panoramio_state'   => 0,
     'transitinfo'       => 0,
     'transitinfo_state' => 0,
-    'use_geolocation_button' => 0,
+    'geolocation_enable' => 0,
+    'geolocation_option' => 1,
+    'geolocation_mobile_check' => 1,
   ));
   return $getdirections_misc;
 }
@@ -1435,9 +1454,21 @@ function getdirections_user_check($uid) {
  *   Returns vid.
  */
 function getdirections_get_vid($nid) {
-  $query = db_select('node', 'n')->fields('n', array('vid'))->condition('n.nid', $nid);
-  $row = $query->execute()->fetchAssoc();
-  return (isset($row['vid']) && $row['vid'] ? $row['vid'] : FALSE);
+  if (is_numeric($nid) && $nid ) {
+    $query = db_select('node', 'n')->fields('n', array('vid'))->condition('n.nid', $nid);
+    $row = $query->execute()->fetchAssoc();
+    return (isset($row['vid']) && $row['vid'] ? $row['vid'] : FALSE);
+  }
+  return FALSE;
+}
+
+function getdirections_get_nid($vid) {
+  if (is_numeric($vid) && $vid ) {
+    $query = db_select('node', 'n')->fields('n', array('nid'))->condition('n.vid', $vid);
+    $row = $query->execute()->fetchAssoc();
+    return (isset($row['nid']) && $row['nid'] ? $row['nid'] : FALSE);
+  }
+  return FALSE;
 }
 
 function getdirections_get_nid_from_lid($lid) {
@@ -1604,6 +1635,12 @@ function getdirections_load_locations($id, $key = 'vid') {
   elseif (module_exists('location')) {
     $locations = location_load_locations($id, $key);
   }
+  elseif ( module_exists('geofield')) {
+    $locations = getdirections_other_load_locations($id, $key, 'geofield');
+  }
+  elseif (module_exists('geolocation')) {
+    $locations = getdirections_other_load_locations($id, $key, 'geolocation');
+  }
   return $locations;
 }
 
@@ -1615,18 +1652,204 @@ function getdirections_load_location($lid) {
   elseif (module_exists('location')) {
     $location = location_load_location($lid);
   }
-  if ($location) {
-    if ($nid = getlocations_get_nid_from_lid($lid)) {
-      $typemarkers = getlocations_get_markertypes('node');
-      $type = getlocations_get_nodetype($nid);
-      $location['marker'] = $typemarkers[$type];
-    }
-    elseif ($uid = getlocations_get_uid_from_lid($lid)) {
-      $getlocations_defaults = getlocations_defaults();
-      $location['marker'] = $getlocations_defaults['user_map_marker'];
+  return $location;
+}
+
+function getdirections_other_load_locations($id, $key = 'vid', $module = '') {
+  global $language;
+
+  $locations = array();
+  if (empty($module)) {
+    return $locations;
+  }
+
+  if ($key == 'nid') {
+    $entity_type = 'node';
+    $obj = node_load($id);
+    $location_name = $obj->title;
+  }
+  elseif ($key == 'vid') {
+    $entity_type = 'node';
+    $obj = node_load(NULL, $id);
+    $location_name = $obj->title;
+  }
+  elseif ($key == 'uid') {
+    $entity_type = 'user';
+    $obj = user_load($id);
+    $location_name = $obj->name;
+  }
+  elseif ($key == 'tid') {
+    $entity_type = 'taxonomy_term';
+    $obj = taxonomy_term_load($id);
+    $location_name = $obj->name;
+  }
+  elseif ($key == 'cid') {
+    $entity_type = 'comment';
+    $obj = comment_load($id);
+    $location_name = $obj->subject;
+  }
+  // get the field_xxx names
+  $objfields = array();
+  foreach ($obj AS $k => $therest) {
+    if (preg_match("/^field_/", $k)) {
+      $objfields[] = $k;
     }
   }
-  return $location;
+  if (empty($objfields)) {
+    return $locations;
+  }
+
+  // find a geofield
+  if ($module == 'geofield') {
+    $type = 'geofield';
+    $geofields = getdirections_other_get_fieldname($type, $module, $entity_type);
+    if (! empty($geofields)) {
+      $geofield = '';
+      foreach ($objfields AS $field) {
+        if (in_array($field, $geofields)) {
+          $geofield = $field;
+        }
+      }
+      if ( empty($geofield)) {
+        return $locations;
+      }
+    }
+    // got one
+    $geo = $obj->$geofield;
+    $geo_keys = array_keys($geo);
+    foreach ($geo_keys AS $lang) {
+      if ($lang == $language->language || (isset($obj->language) && $lang == $obj->language) || $lang == 'und') {
+        $ct = 0;
+        foreach ($geo[$lang] AS $g) {
+          $locations[$ct]['latitude']  = $g['lat'];
+          $locations[$ct]['longitude'] = $g['lon'];
+          $locations[$ct][$key] = $id;
+          if ($key == 'vid') {
+            $locations[$ct]['nid'] = getdirections_get_nid($id);
+          }
+          $locations[$ct]['key'] = $key;
+          $ct++;
+        }
+      }
+    }
+
+
+  }
+  elseif ($module == 'geolocation') {
+    $type = 'geolocation_latlng';
+    $geolocationfields = getdirections_other_get_fieldname($type, $module, $entity_type);
+    if (! empty($geolocationfields)) {
+      $geolocationfield = '';
+      foreach ($objfields AS $field) {
+        // test for geolocationfields
+        if (in_array($field, $geolocationfields)) {
+          $geolocationfield = $field;
+        }
+      }
+      if (empty($geolocationfield)) {
+        return $locations;
+      }
+      // got one
+      $geo = $obj->$geolocationfield;
+      $geo_keys = array_keys($geo);
+      foreach ($geo_keys AS $lang) {
+        if ($lang == $language->language || (isset($obj->language) && $lang == $obj->language) || $lang == 'und') {
+          $ct = 0;
+          foreach ($geo[$lang] AS $g) {
+            $locations[$ct]['latitude']  = $g['lat'];
+            $locations[$ct]['longitude'] = $g['lng'];
+            $locations[$ct][$key] = $id;
+            if ($key == 'vid') {
+              $locations[$ct]['nid'] = getdirections_get_nid($id);
+            }
+            $locations[$ct]['key'] = $key;
+            $locations[$ct]['name'] = $location_name;
+            $ct++;
+          }
+        }
+      }
+    }
+  }
+
+  // addressfield
+  if (module_exists('addressfield')) {
+    // find an addressfield
+    $type = 'addressfield';
+    $addressfields = getdirections_other_get_fieldname($type, 'addressfield', $entity_type);
+    if (! empty($addressfields)) {
+      foreach ($objfields AS $field) {
+        if (in_array($field, $addressfields)) {
+          $addressfield = $field;
+        }
+      }
+      if (empty($addressfield)) {
+        return $locations;
+      }
+      // got one
+      $addr = $obj->$addressfield;
+      $addr_keys = array_keys($addr);
+      foreach ($addr_keys AS $lang) {
+        if ($lang == $language->language || (isset($obj->language) && $lang == $obj->language) || $lang == 'und') {
+          $ct = 0;
+          foreach ($addr[$lang] AS $a) {
+            $locations[$ct]['name'] = $a['organisation_name'];
+            $locations[$ct]['street'] = $a['thoroughfare'];
+            $additional = array();
+            if ($a['premise']) {
+              $additional[] = $a['premise'];
+            }
+            if ($a['sub_premise']) {
+              $additional[] = $a['sub_premise'];
+            }
+            $locations[$ct]['additional'] = (count($additional) ? implode(", ", $additional) : '');
+            $city = array();
+            if ($a['dependent_locality']) {
+              $city[] = $a['dependent_locality'];
+            }
+            if ($a['locality']) {
+              $city[] = $a['locality'];
+            }
+            $locations[$ct]['city'] = (count($city) ? implode(", ", $city) : '');
+            $admin_area = array();
+            if ($a['sub_administrative_area']) {
+              $admin_area[] = $a['sub_administrative_area'];
+            }
+            if ($a['administrative_area']) {
+              $admin_area[] = $a['administrative_area'];
+            }
+            $locations[$ct]['province_name'] = (count($admin_area) ? implode(", ", $admin_area) :'');
+            $locations[$ct]['postal_code'] = drupal_strtoupper($a['postal_code']);
+            $locations[$ct]['country_name'] = $a['country_name'];
+            $locations[$ct]['country'] = $a['country'];
+            $ct++;
+          }
+        }
+      }
+    }
+  }
+
+  return $locations;
+}
+
+function getdirections_other_get_fieldname($type, $module, $entity_type = '') {
+
+  $query = db_select('field_config', 'fc');
+  $query->fields('fc', array('field_name'));
+  $query->join('field_config_instance', 'i', 'fc.id = i.field_id');
+  $query->condition('fc.module', $module);
+  $query->condition('fc.type', $type);
+  $query->condition('fc.active', 1);
+  $query->condition('fc.storage_active', 1);
+  if (! empty($entity_type)) {
+    $query->condition('i.entity_type', $entity_type);
+  }
+  $rows = $query->execute();
+  $field_names = array();
+  foreach ($rows AS $row) {
+    $field_names[] = $row->field_name;
+  }
+  return $field_names;
+
 }
 
 function getdirections_paths_get() {
@@ -1649,8 +1872,11 @@ function getdirections_get_datestamp() {
 }
 
 function getdirections_is_mobile() {
-return TRUE;
 
+  $getdirections_misc_defaults = getdirections_misc_defaults();
+  if (! $getdirections_misc_defaults['geolocation_mobile_check']) {
+    return TRUE;
+  }
   $getdirections_ua = getdirections_ua_get();
   $str = "/" . $getdirections_ua['ua_string'] . "/i";
   $is_mobile = FALSE;
@@ -1666,3 +1892,60 @@ function getdirections_ua_get() {
   $getdirections_ua = variable_get('getdirections_ua', $default);
   return $getdirections_ua;
 }
+
+/**
+ * @return
+ *   Returns location array
+ *
+ */
+function getdirections_smart_ip() {
+  if (module_exists('smart_ip')) {
+    global $user;
+    $location = FALSE;
+    if ($user->uid > 0 && isset($user->data['geoip_location'])) {
+      $location = $user->data['geoip_location'];
+    }
+    elseif (isset($_SESSION['smart_ip']['location'])) {
+      $location = $_SESSION['smart_ip']['location'];
+    }
+    drupal_json_output($location);
+  }
+  exit;
+}
+
+/**
+ * @return
+ *   Returns location array
+ *
+ */
+function getdirections_ip_geoloc() {
+  if (module_exists('ip_geoloc')) {
+    $location = FALSE;
+    if (isset($_SESSION['ip_geoloc']['location'])) {
+      $location = $_SESSION['ip_geoloc']['location'];
+    }
+    drupal_json_output($location);
+  }
+  exit;
+}
+
+function getdirections_supported_modules() {
+  return array(
+    'getlocations_fields',
+    'geofield',
+    'geolocation',
+    'location_node',
+    'location_cck',
+  );
+}
+
+function getdirections_get_current_supported_module() {
+  $modules = getdirections_supported_modules();
+  foreach ($modules AS $module) {
+    if (module_exists($module)) {
+      return $module;
+    }
+  }
+  return FALSE;
+}
+
