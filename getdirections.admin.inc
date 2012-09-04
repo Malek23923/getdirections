@@ -728,6 +728,7 @@ function getdirections_settings_form() {
   else {
     $form['getdirections_misc']['geolocation_enable'] = array('#type' => 'value', '#value' => 0);
     $form['getdirections_misc']['geolocation_option'] = array('#type' => 'value', '#value' => 1);
+    $form['getdirections_misc']['geolocation_mobile_check'] = array('#type' => 'value', '#value' => 1);
   }
 
   $form['getdirections_misc']['trafficinfo'] = array(
