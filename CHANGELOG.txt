@@ -1,9 +1,27 @@
-commit 10af4c0
+commit 5080ac1
+Author: hutch <hutch@midwales.net>
+Date:   Thu Sep 13 00:25:51 2012 +0100
+
+    fixed object with curly brackets
+
+getdirections.module
+
+commit cecc3b3
+Author: hutch <hutch@midwales.net>
+Date:   Tue Sep 4 13:42:51 2012 +0100
+
+    some notice avoidance
+
+getdirections.admin.inc
+getdirections.module
+
+commit 771487e
 Author: hutch <hutch@midwales.net>
 Date:   Sun Sep 2 16:11:20 2012 +0100
 
     improved geolocation, added smartip and ip_geoloc, added geofield and geolocations support
 
+CHANGELOG.txt
 getdirections.admin.inc
 getdirections.info
 getdirections.install

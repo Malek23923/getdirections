@@ -1715,7 +1715,7 @@ function getdirections_other_load_locations($id, $key = 'vid', $module = '') {
       }
     }
     // got one
-    $geo = $obj->$geofield;
+    $geo = $obj->{$geofield};
     $geo_keys = array_keys($geo);
     foreach ($geo_keys AS $lang) {
       if ($lang == $language->language || (isset($obj->language) && $lang == $obj->language) || $lang == 'und') {
@@ -1750,7 +1750,7 @@ function getdirections_other_load_locations($id, $key = 'vid', $module = '') {
         return $locations;
       }
       // got one
-      $geo = $obj->$geolocationfield;
+      $geo = $obj->{$geolocationfield};
       $geo_keys = array_keys($geo);
       foreach ($geo_keys AS $lang) {
         if ($lang == $language->language || (isset($obj->language) && $lang == $obj->language) || $lang == 'und') {
@@ -1786,7 +1786,7 @@ function getdirections_other_load_locations($id, $key = 'vid', $module = '') {
         return $locations;
       }
       // got one
-      $addr = $obj->$addressfield;
+      $addr = $obj->{$addressfield};
       $addr_keys = array_keys($addr);
       foreach ($addr_keys AS $lang) {
         if ($lang == $language->language || (isset($obj->language) && $lang == $obj->language) || $lang == 'und') {
