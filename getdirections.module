@@ -1180,12 +1180,12 @@ function getdirections_user_setlocations_via($uids, $width='', $height='') {
     if (! is_numeric($uid) || ! $uid) {
       continue;
     }
-    $location = getdirections_load_locations($uid, 'uid');
-    if (! count($location)) {
+    $locations = getdirections_load_locations($uid, 'uid');
+    if (! count($locations)) {
       continue;
     }
-    $locs = _getdirections_loadaddress($location[0]);
-    $latlon = $location[0]['latitude'] . ',' . $location[0]['longitude'];
+    $locs = _getdirections_loadaddress($locations[0]);
+    $latlon = $locations[0]['latitude'] . ',' . $locations[0]['longitude'];
     // sanity check
     if (! getdirections_latlon_check($latlon)) {
       watchdog('getdirections', 'Lat, Lon failed for user id !nid', array('!nid' => $uid), WATCHDOG_WARNING);
@@ -1236,7 +1236,7 @@ function getdirections_setlocation_id($direction, $lid, $width='', $height='') {
   if (is_numeric($lid) && $lid) {
     $location = getdirections_load_location($lid);
     if (count($location)) {
-      $country = $location['country'];
+      $country = (isset($location['country']) ? $location['country'] : '');
       $latlon = $location['latitude'] . ',' . $location['longitude'];
       // sanity check
       if (! getdirections_latlon_check($latlon)) {
@@ -1264,10 +1264,10 @@ function getdirections_setlocation_id($direction, $lid, $width='', $height='') {
  */
 function getdirections_term_setlocation($direction, $tid, $width='', $height='') {
   if (is_numeric($tid) && $tid) {
-    $location = getdirections_load_locations($tid, 'tid');
-    if (count($location)) {
-      $country = $location[0]['country'];
-      $latlon = $location[0]['latitude'] . ',' . $location[0]['longitude'];
+    $locations = getdirections_load_locations($tid, 'tid');
+    if (count($locations)) {
+      $country = (isset($locations[0]['country']) ? $locations[0]['country'] : '');
+      $latlon = $locations[0]['latitude'] . ',' . $locations[0]['longitude'];
       // sanity check
       if (! getdirections_latlon_check($latlon)) {
         watchdog('getdirections', 'Lat, Lon failed for term id !tid', array('!tid' => $tid), WATCHDOG_WARNING);
@@ -1296,10 +1296,10 @@ function getdirections_term_setlocation($direction, $tid, $width='', $height='')
  */
 function getdirections_comment_setlocation($direction, $cid, $width='', $height='') {
   if (is_numeric($cid) && $cid) {
-    $location = getdirections_load_locations($cid, 'cid');
-    if (count($location)) {
-      $country = $location[0]['country'];
-      $latlon = $location[0]['latitude'] . ',' . $location[0]['longitude'];
+    $locations = getdirections_load_locations($cid, 'cid');
+    if (count($locations)) {
+      $country = (isset($locations[0]['country']) ? $locations[0]['country'] : '');
+      $latlon = $locations[0]['latitude'] . ',' . $locations[0]['longitude'];
       // sanity check
       if (! getdirections_latlon_check($latlon)) {
         watchdog('getdirections', 'Lat, Lon failed for comment id !cid', array('!cid' => $cid), WATCHDOG_WARNING);

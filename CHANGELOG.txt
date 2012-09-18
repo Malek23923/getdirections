@@ -1,9 +1,18 @@
-commit b7c466e
+commit 9f5bfc7
+Author: hutch <hutch@midwales.net>
+Date:   Tue Sep 18 09:34:58 2012 +0100
+
+    added check for country
+
+getdirections.module
+
+commit 3bee5bc
 Author: hutch <hutch@midwales.net>
 Date:   Tue Sep 18 08:33:55 2012 +0100
 
     fixed div bug in theme
 
+CHANGELOG.txt
 getdirections.theme.inc
 
 commit 233668f
