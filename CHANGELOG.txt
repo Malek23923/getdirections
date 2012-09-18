@@ -1,9 +1,18 @@
-commit 5080ac1
+commit b7c466e
+Author: hutch <hutch@midwales.net>
+Date:   Tue Sep 18 08:33:55 2012 +0100
+
+    fixed div bug in theme
+
+getdirections.theme.inc
+
+commit 233668f
 Author: hutch <hutch@midwales.net>
 Date:   Thu Sep 13 00:25:51 2012 +0100
 
     fixed object with curly brackets
 
+CHANGELOG.txt
 getdirections.module
 
 commit cecc3b3

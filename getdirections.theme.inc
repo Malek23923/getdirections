@@ -328,6 +328,7 @@ function theme_getdirections_direction_form($variables) {
       && $form['from']['#type'] == 'textfield'
       && (module_exists('location') || module_exists('getlocations_fields'))
       && ! $getdirections_defaults['advanced_autocomplete']
+      && isset($form['country_from'])
     ) {
       $form['from']['#suffix'] = '</div>';
     }
@@ -339,6 +340,7 @@ function theme_getdirections_direction_form($variables) {
       && $form['to']['#type'] == 'textfield'
       && (module_exists('location') || module_exists('getlocations_fields'))
       && ! $getdirections_defaults['advanced_autocomplete']
+      && isset($form['country_to'])
     ) {
       $form['to']['#suffix'] = '</div>';
     }
