@@ -1,9 +1,18 @@
-commit 9f5bfc7
+commit 4debf5e
+Author: hutch <hutch@midwales.net>
+Date:   Tue Sep 18 15:40:28 2012 +0100
+
+    improved README
+
+README.txt
+
+commit 9623cdb
 Author: hutch <hutch@midwales.net>
 Date:   Tue Sep 18 09:34:58 2012 +0100
 
     added check for country
 
+CHANGELOG.txt
 getdirections.module
 
 commit 3bee5bc
