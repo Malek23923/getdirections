@@ -809,7 +809,7 @@ function getdirections_setlocation($direction, $nid, $width='', $height='') {
     $vid = getdirections_get_vid($nid);
     $location = location_load_locations($vid);
     if (count($location)) {
-      $country = $location[0]['country'];
+      $country = (isset($location[0]['country']) $location[0]['country'] ? : '');
       $latlon = $location[0]['latitude'] .','. $location[0]['longitude'];
       // sanity check
       if (! getdirections_latlon_check($latlon)) {
@@ -840,7 +840,7 @@ function getdirections_user_setlocation($direction, $uid, $width='', $height='')
   if (module_exists('location') && $uid) {
     $location = location_load_locations($uid, 'uid');
     if (count($location)) {
-      $country = $location[0]['country'];
+      $country = (isset($location[0]['country']) $location[0]['country'] ? : '');
       $latlon = $location[0]['latitude'] .','. $location[0]['longitude'];
       // sanity check
       if (! getdirections_latlon_check($latlon)) {
@@ -1147,7 +1147,7 @@ function getdirections_setlocation_id($direction, $lid, $width='', $height='') {
   if (module_exists('location')) {
     $location = location_load_location($lid);
     if (count($location)) {
-      $country = $location['country'];
+      $country = (isset($location['country']) $location['country'] ? : '');
       $latlon = $location['latitude'] .','. $location['longitude'];
       // sanity check
       if (! getdirections_latlon_check($latlon)) {
