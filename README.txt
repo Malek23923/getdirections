@@ -84,6 +84,20 @@ event handlers in your theme's javascript.
 'getdirections_box' has it's own template, getdirections_box.tpl.php which can be
 copied over to your theme's folder and tweaked there.
 
+If you install
+http://drupal.org/project/menu_attributes
+you can get colorbox links into the menu system.
+for instance, you can put
+getdirections_box?width=700&height=600&iframe=true
+in the path and
+colorbox-load
+in the class textfield
+or if you have colorbox enabled in Get Directions:
+getdirections_box
+in the path and
+getdirectionsbox
+in the Relationship textfield.
+
 ------------------
 Get Directions API
 These functions are for use in other modules.
