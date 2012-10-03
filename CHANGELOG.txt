@@ -1,9 +1,20 @@
-commit 4debf5e
+commit 64d6f4d
+Author: hutch <hutch@midwales.net>
+Date:   Wed Oct 3 08:36:25 2012 +0100
+
+    removed disable in non advanced mode, fixed country dropdown default
+
+getdirections.module
+getdirections_v3.js
+getdirections_v3.min.js
+
+commit 765f0d5
 Author: hutch <hutch@midwales.net>
 Date:   Tue Sep 18 15:40:28 2012 +0100
 
     improved README
 
+CHANGELOG.txt
 README.txt
 
 commit 9623cdb

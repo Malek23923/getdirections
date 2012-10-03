@@ -194,9 +194,6 @@
     var request = getRequest(from, to, '');
     renderdirections(request);
 
-    // disable to and from boxes
-    $("#edit-from").attr('disabled', true);
-    $("#edit-to").attr('disabled', true);
   };
 
   function makell(ll) {

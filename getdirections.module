@@ -465,11 +465,12 @@ function getdirections_direction_form($form, &$form_state, $fromto='', $loc='', 
   $islocation = module_exists('location');
   $isgetlocations_fields = module_exists('getlocations_fields');
   if ($getdirections_defaults['use_country_dropdown'] && ($islocation || $isgetlocations_fields) && ! $getdirections_defaults['advanced_autocomplete']) {
+    $default_country = ($islocation ? variable_get('location_default_country', '') : variable_get('site_default_country', ''));
     $countries = array(
       '#type' => 'select',
       '#title' => t('Country'),
       '#options' => array_merge(array('' => t('Please select')), ($islocation ? _location_supported_countries() : getlocations_fields_get_countries_list())),
-      '#default_value' => variable_get('location_default_country', ''),
+      '#default_value' => $default_country,
     );
   }
   $setdirections = "Drupal.getdirections.mygetDirections(); return false;";
