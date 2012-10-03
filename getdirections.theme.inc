@@ -299,19 +299,19 @@ function theme_getdirections_direction_form($variables) {
     if ($getdirections_misc['geolocation_enable'] && getdirections_is_mobile()) {
       if ($getdirections_misc['geolocation_option'] == 1) {
         // html5 geolocation
-        $geolocation_button = '<input type="submit" value="' . t('Find Location') . '" title="' . t('Get the latitude and longitude for your current position from the browser') . '" id="getdirections_geolocation_button_from" class="form-submit" />';
+        $geolocation_button = '<input type="button" value="' . t('Find Location') . '" title="' . t('Get the latitude and longitude for your current position from the browser') . '" id="getdirections_geolocation_button_from" class="form-submit" />';
         $geolocation_button .= '<span id="getdirections_geolocation_status_from" ></span>';
         $form['from']['#field_suffix'] = '&nbsp;&nbsp;&nbsp;' . $geolocation_button;
       }
       elseif ($getdirections_misc['geolocation_option'] == 2 && module_exists('smart_ip')) {
         // smart ip
-        $geolocation_button = '<input type="submit" value="' . t('Locate by Smart IP') . '" title="' . t('Get the latitude and longitude for your current position from Smart IP') . '" id="getdirections_geolocation_button_from" class="form-submit" />';
+        $geolocation_button = '<input type="button" value="' . t('Locate by Smart IP') . '" title="' . t('Get the latitude and longitude for your current position from Smart IP') . '" id="getdirections_geolocation_button_from" class="form-submit" />';
         $geolocation_button .= '<span id="getdirections_geolocation_status_from" ></span>';
         $form['from']['#field_suffix'] = '&nbsp;&nbsp;&nbsp;' . $geolocation_button;
       }
       elseif ($getdirections_misc['geolocation_option'] == 3 && module_exists('ip_geoloc')) {
         // ip_geoloc
-        $geolocation_button = '<input type="submit" value="' . t('Locate by IP Geolocation') . '" title="' . t('Get the latitude and longitude for your current position from IP Geolocation') . '" id="getdirections_geolocation_button_from" class="form-submit" />';
+        $geolocation_button = '<input type="button" value="' . t('Locate by IP Geolocation') . '" title="' . t('Get the latitude and longitude for your current position from IP Geolocation') . '" id="getdirections_geolocation_button_from" class="form-submit" />';
         $geolocation_button .= '<span id="getdirections_geolocation_status_from" ></span>';
         $form['from']['#field_suffix'] = '&nbsp;&nbsp;&nbsp;' . $geolocation_button;
       }

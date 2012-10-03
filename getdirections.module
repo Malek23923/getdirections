@@ -654,9 +654,8 @@ function getdirections_direction_form($form, &$form_state, $fromto='', $loc='', 
   $getdirections_misc = getdirections_misc_defaults();
   if ($getdirections_misc['trafficinfo']) {
     $form['trafficinfo'] = array(
-      '#type' => 'button',
-      '#value' => t('Toggle traffic info'),
-      '#attributes' => array( 'onClick' => 'Drupal.getdirections.toggleTraffic(); return false;', 'title' => t('Limited Availability')),
+      '#type' => 'markup',
+      '#markup' => '<input type="button" onclick="Drupal.getdirections.toggleTraffic();" title="Limited Availability" id="edit-trafficinfo" name="op" value="Toggle traffic info">',
       '#weight' => $wt,
     );
     $wt = $wt + 2;
@@ -664,18 +663,16 @@ function getdirections_direction_form($form, &$form_state, $fromto='', $loc='', 
   if (variable_get('getdirections_use_v3', 0)) {
     if ($getdirections_misc['bicycleinfo']) {
       $form['bicycleinfo'] = array(
-        '#type' => 'button',
-        '#value' => t('Toggle bicycling info'),
-        '#attributes' => array( 'onClick' => 'Drupal.getdirections.toggleBicycle(); return false;', 'title' => t('Limited Availability')),
+        '#type' => 'markup',
+        '#markup' => '<input type="button" onclick="Drupal.getdirections.toggleBicycle();" title="Limited Availability" id="edit-bicycleinfo" name="op" value="Toggle bicycling info">',
         '#weight' => $wt,
       );
       $wt = $wt + 2;
     }
     if ($getdirections_misc['transitinfo']) {
       $form['transitinfo'] = array(
-        '#type' => 'button',
-        '#value' => t('Toggle Public transport'),
-        '#attributes' => array( 'onClick' => 'Drupal.getdirections.toggleTransit(); return false;', 'title' => t('Limited Availability')),
+        '#type' => 'markup',
+        '#markup' => '<input type="button" onclick="Drupal.getdirections.toggleTransit();" title="Limited Availability" id="edit-transitinfo" name="op" value="Toggle Public transport">',
         '#weight' => $wt,
       );
       $wt = $wt + 2;
@@ -683,9 +680,8 @@ function getdirections_direction_form($form, &$form_state, $fromto='', $loc='', 
 
     if ($getdirections_misc['panoramio_show']) {
       $form['panoramio'] = array(
-        '#type' => 'button',
-        '#value' => t('Toggle Panoramio'),
-        '#attributes' => array( 'onClick' => 'Drupal.getdirections.togglePanoramio(); return false;'),
+        '#type' => 'markup',
+        '#markup' => '<input type="button" onclick="Drupal.getdirections.togglePanoramio();" id="edit-panoramio" name="op" value="Toggle Panoramio">',
         '#weight' => $wt,
       );
       $wt = $wt + 2;
@@ -693,9 +689,8 @@ function getdirections_direction_form($form, &$form_state, $fromto='', $loc='', 
   }
   if ($getdirections_misc['switchfromto'] && ! $fromto && ! getdirections_is_advanced()) {
     $form['switchfromto'] = array(
-      '#type' => 'button',
-      '#value' => t('Switch From/To'),
-      '#attributes' => array( 'onClick' => 'Drupal.getdirections.toggleFromto(); return false;'),
+      '#type' => 'markup',
+      '#markup' => '<input type="button" onclick="Drupal.getdirections.toggleFromto();" id="edit-switchfromto" name="op" value="Switch From/To">',
       '#weight' => $wt,
     );
     $wt = $wt + 2;
@@ -705,7 +700,7 @@ function getdirections_direction_form($form, &$form_state, $fromto='', $loc='', 
     $form['next'] = array(
       '#type' => 'button',
       '#value' => t('Next'),
-      '#attributes' => array( 'onClick' => 'Drupal.getdirections.nextbtn(); return false;'),
+      '#attributes' => array('onclick' => 'Drupal.getdirections.nextbtn(); return false;'),
       '#weight' => $wt,
     );
     $wt = $wt + 2;
