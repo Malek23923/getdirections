@@ -1,9 +1,25 @@
-commit a460c77
+commit 03a48de
+Author: hutch <hutch@midwales.net>
+Date:   Thu Oct 11 14:14:00 2012 +0100
+
+    added new feature map background color
+
+getdirections.admin.inc
+getdirections.module
+getdirections_v3.js
+getdirections_v3.min.js
+getdirections_v3a.js
+getdirections_v3a.min.js
+getdirections_v3b.js
+getdirections_v3b.min.js
+
+commit 0ef60c8
 Author: hutch <hutch@midwales.net>
 Date:   Wed Oct 3 09:23:21 2012 +0100
 
     fixed enter bug #1801672
 
+CHANGELOG.txt
 getdirections.module
 getdirections.theme.inc
 

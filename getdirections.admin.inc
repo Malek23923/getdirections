@@ -391,6 +391,14 @@ function getdirections_settings_form() {
       '#default_value' =>  $getdirections_defaults['travelextras_show'],
       '#return_value' => 1,
     );
+    $form['getdirections_default']['map_backgroundcolor'] = array(
+      '#type' => 'textfield',
+      '#title' =>  t('Map background color'),
+      '#default_value' => $getdirections_defaults['map_backgroundcolor'],
+      '#description' => t('Can be a color name or HTML hex, eg #FF0000. Leave empty for the default color.'),
+      '#size' => 10,
+    );
+
   }
   $form['getdirections_default']['from_width'] = array(
     '#type' => 'textfield',

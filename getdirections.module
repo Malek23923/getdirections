@@ -440,6 +440,7 @@ function getdirections_get_settings($getdirections_defaults, $getdirections_misc
     $settings['geolocation_option'] = $getdirections_misc['geolocation_option'];
     $settings['waypoints_optimise'] = intval($getdirections_defaults['waypoints_optimise']);
     $settings['transit_date_format'] = $getdirections_defaults['transit_date_format'];
+    $settings['map_backgroundcolor'] = $getdirections_defaults['map_backgroundcolor'];
   }
   $settings['use_https'] = $getdirections_defaults['use_https'];
   return $settings;
@@ -768,6 +769,7 @@ function getdirections_defaults() {
       'advanced_autocomplete_bias' => 0,
       'advanced_autocomplete_via' => 0,
       'advanced_autocomplete_via_width' => 20,
+      'map_backgroundcolor' => '',
     );
   }
   else {
@@ -1944,4 +1946,3 @@ function getdirections_get_current_supported_module() {
   }
   return FALSE;
 }
-
