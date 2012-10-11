@@ -1,9 +1,22 @@
-commit 3bed747
+commit 72cd329
+Author: hutch <hutch@midwales.net>
+Date:   Thu Oct 11 13:19:41 2012 +0100
+
+    added new feature map background color
+
+getdirections.admin.inc
+getdirections.module
+getdirections_v3.js
+getdirections_v3a.js
+getdirections_v3b.js
+
+commit e497195
 Author: hutch <hutch@midwales.net>
 Date:   Wed Sep 19 09:16:28 2012 +0100
 
     fixed typos in getdirections module
 
+CHANGELOG.txt
 getdirections.module
 
 commit bf7d1a7

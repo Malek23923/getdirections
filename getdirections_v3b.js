@@ -478,6 +478,7 @@
     unitsys = Drupal.settings.getdirections.unitsystem;
     var maptype = (Drupal.settings.getdirections.maptype ? Drupal.settings.getdirections.maptype : '');
     var baselayers = (Drupal.settings.getdirections.baselayers ? Drupal.settings.getdirections.baselayers : '');
+    var map_backgroundcolor = Drupal.settings.getdirections.map_backgroundcolor;
     var fromlatlon = (Drupal.settings.getdirections.fromlatlon ? Drupal.settings.getdirections.fromlatlon : '');
     var tolatlon = (Drupal.settings.getdirections.tolatlon ? Drupal.settings.getdirections.tolatlon : '');
     if (Drupal.settings.getdirections.use_https) {
@@ -538,6 +539,10 @@
       scaleControl: (scale ? true : false),
       scaleControlOptions: {style: google.maps.ScaleControlStyle.DEFAULT}
     };
+    if (map_backgroundcolor) {
+      mapOpts.backgroundColor = map_backgroundcolor;
+    }
+
     map = new google.maps.Map(document.getElementById("getdirections_map_canvas"), mapOpts);
 
     if (Drupal.settings.getdirections.trafficinfo) {
@@ -792,4 +797,3 @@
   };
 
 }(jQuery));
-
