@@ -263,6 +263,9 @@ function getdirections_direction($direction='', $location='', $country='', $latl
   if (empty($height)) {
     $height = $getdirections_defaults['height'];
   }
+  // remove brackets if any
+  $latlon = preg_replace("/^\(|\)$/", '', $latlon);
+
   $form = drupal_get_form('getdirections_direction_form', $direction, $location, $country, $latlon);
   return theme('getdirections_show', $form, $width, $height, $id, $type);
 }
@@ -290,7 +293,10 @@ function getdirections_locations($fromlocs, $fromlatlon, $tolocs, $tolatlon, $wi
   $getdirections_misc = getdirections_misc_defaults();
   getdirections_setup_map($getdirections_defaults, $getdirections_misc);
   $getdirections_settings = getdirections_get_settings($getdirections_defaults, $getdirections_misc);
+  // remove brackets if any
+  $fromlatlon = preg_replace("/^\(|\)$/", '', $fromlatlon);
   $getdirections_settings['fromlatlon'] = $fromlatlon;
+  $tolatlon = preg_replace("/^\(|\)$/", '', $tolatlon);
   $getdirections_settings['tolatlon'] = $tolatlon;
 
   drupal_add_js(array('getdirections' => $getdirections_settings), 'setting');
