@@ -1,9 +1,18 @@
-commit 03a48de
+commit 5f23f20
+Author: hutch <hutch@midwales.net>
+Date:   Fri Oct 12 23:43:35 2012 +0100
+
+    added bracket removal regex
+
+getdirections.module
+
+commit 3c97d2b
 Author: hutch <hutch@midwales.net>
 Date:   Thu Oct 11 14:14:00 2012 +0100
 
     added new feature map background color
 
+CHANGELOG.txt
 getdirections.admin.inc
 getdirections.module
 getdirections_v3.js
