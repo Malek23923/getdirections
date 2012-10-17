@@ -1,9 +1,27 @@
-commit 5f23f20
+commit 89016d1
+Author: hutch <hutch@midwales.net>
+Date:   Wed Oct 17 23:45:40 2012 +0100
+
+    fixed bugs in module support
+
+getdirections.api.inc
+getdirections.module
+
+commit def9dec
+Author: hutch <hutch@midwales.net>
+Date:   Wed Oct 17 23:44:59 2012 +0100
+
+    simplified html header and doctype
+
+getdirections_box.tpl.php
+
+commit 0c1fb24
 Author: hutch <hutch@midwales.net>
 Date:   Fri Oct 12 23:43:35 2012 +0100
 
     added bracket removal regex
 
+CHANGELOG.txt
 getdirections.module
 
 commit 3c97d2b

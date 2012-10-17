@@ -1634,16 +1634,17 @@ function getdirections_direction_box() {
 
 function getdirections_load_locations($id, $key = 'vid') {
   $locations = '';
-  if (module_exists('getlocations_fields')) {
+  $module = getdirections_get_current_supported_module();
+  if ($module == 'getlocations_fields') {
     $locations = getlocations_fields_load_locations($id, $key);
   }
-  elseif (module_exists('location')) {
+  elseif ($module == 'location_node' || $module == 'location_cck' ) {
     $locations = location_load_locations($id, $key);
   }
-  elseif ( module_exists('geofield')) {
+  elseif ($module == 'geofield') {
     $locations = getdirections_other_load_locations($id, $key, 'geofield');
   }
-  elseif (module_exists('geolocation')) {
+  elseif ($module  == 'geolocation') {
     $locations = getdirections_other_load_locations($id, $key, 'geolocation');
   }
   return $locations;
