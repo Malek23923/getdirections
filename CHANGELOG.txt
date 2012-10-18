@@ -1,9 +1,18 @@
-commit 89016d1
+commit b3e3152
+Author: hutch <hutch@midwales.net>
+Date:   Thu Oct 18 10:43:56 2012 +0100
+
+    fixed latlons in box, notice avoidance for country_name
+
+getdirections.module
+
+commit 439394c
 Author: hutch <hutch@midwales.net>
 Date:   Wed Oct 17 23:45:40 2012 +0100
 
     fixed bugs in module support
 
+CHANGELOG.txt
 getdirections.api.inc
 getdirections.module
 

@@ -1613,6 +1613,9 @@ function getdirections_direction_box() {
   elseif ($a1 == 'latlon' && ($a2 == 'from' || $a2 == 'to')) {
     $content = getdirections_latlon($a2, $a3, $a4);
   }
+  elseif ($a1 == 'latlons' && $a2) {
+    $content = getdirections_latlons($a2);
+  }
   elseif ($a1 == 'location_id' && ($a2 == 'from' || $a2 == 'to')) {
     $content = getdirections_setlocation_id($a2, $a3);
   }
@@ -1825,7 +1828,7 @@ function getdirections_other_load_locations($id, $key = 'vid', $module = '') {
             }
             $locations[$ct]['province_name'] = (count($admin_area) ? implode(", ", $admin_area) :'');
             $locations[$ct]['postal_code'] = drupal_strtoupper($a['postal_code']);
-            $locations[$ct]['country_name'] = $a['country_name'];
+            $locations[$ct]['country_name'] = (isset($a['country_name']) ? $a['country_name'] : $a['country']);
             $locations[$ct]['country'] = $a['country'];
             $ct++;
           }
