@@ -1,9 +1,18 @@
-commit b3e3152
+commit 1972ccb
+Author: hutch <hutch@midwales.net>
+Date:   Thu Nov 8 14:50:06 2012 +0000
+
+    added missing defaults 'use_country_dropdown' in google v2
+
+getdirections.module
+
+commit 3404724
 Author: hutch <hutch@midwales.net>
 Date:   Thu Oct 18 10:43:56 2012 +0100
 
     fixed latlons in box, notice avoidance for country_name
 
+CHANGELOG.txt
 getdirections.module
 
 commit 439394c

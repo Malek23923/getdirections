@@ -830,6 +830,7 @@ function getdirections_defaults() {
       );
     }
   }
+  $defaults['use_country_dropdown'] = 1;
   $defaults['use_https'] = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 1 : 0);
   $getdirections_defaults = variable_get('getdirections_default', array());
   // array_merge deletes things in $defaults that are not in $getdirections_defaults ;-/
