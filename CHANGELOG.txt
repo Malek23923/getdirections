@@ -1,9 +1,18 @@
-commit a5bd2eb
+commit 16a93c0
+Author: hutch <hutch@midwales.net>
+Date:   Mon Dec 3 21:32:29 2012 +0000
+
+    improved getdirections_box template file
+
+getdirections_box.tpl.php
+
+commit 5ea116f
 Author: hutch <hutch@midwales.net>
 Date:   Fri Oct 12 23:37:57 2012 +0100
 
     added bracket removal regex
 
+CHANGELOG.txt
 getdirections.module
 
 commit 1a86a74
