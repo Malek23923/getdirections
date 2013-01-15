@@ -1,9 +1,18 @@
-commit 1972ccb
+commit 37c3f72
+Author: hutch <hutch@midwales.net>
+Date:   Tue Jan 15 20:50:53 2013 +0000
+
+    fixed bug in issue 1889504
+
+getdirections.module
+
+commit a367f54
 Author: hutch <hutch@midwales.net>
 Date:   Thu Nov 8 14:50:06 2012 +0000
 
     added missing defaults 'use_country_dropdown' in google v2
 
+CHANGELOG.txt
 getdirections.module
 
 commit 3404724
