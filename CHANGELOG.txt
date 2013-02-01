@@ -1,9 +1,19 @@
-commit 37c3f72
+commit 3639478
+Author: hutch <hutch@midwales.net>
+Date:   Fri Feb 1 11:47:01 2013 +0000
+
+    moved theme functions into module file
+
+getdirections.module
+getdirections.theme.inc
+
+commit c6c1302
 Author: hutch <hutch@midwales.net>
 Date:   Tue Jan 15 20:50:53 2013 +0000
 
     fixed bug in issue 1889504
 
+CHANGELOG.txt
 getdirections.module
 
 commit a367f54
