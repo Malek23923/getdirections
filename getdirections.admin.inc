@@ -224,6 +224,7 @@ function getdirections_settings_form() {
         '#default_value' => $getdirections_defaults['maptype'],
         '#options' => $options,
       );
+
       foreach ($baselayers as $name => $layers) {
         foreach ($layers as $key => $layer) {
           $form['getdirections_default']['baselayers'][$key] = array(
@@ -256,13 +257,20 @@ function getdirections_settings_form() {
       '#default_value' => $getdirections_defaults['maptype'],
       '#options' => $options,
     );
+
+    $form['getdirections_default']['baselayers'] =  array(
+      '#type' => 'fieldset',
+      '#title' => t('Enable map types'),
+      '#description' => t('Select which maps you want to be available.'),
+      '#collapsible' => TRUE,
+      '#collapsed' => FALSE,
+    );
     $form['getdirections_default']['baselayers']['Map'] = array(
       '#type' => 'checkbox',
       '#title' => t('Standard street map'),
       '#description' => t('The standard default street map.'),
       '#default_value' => $getdirections_defaults['baselayers']['Map'],
       '#return_value' => 1,
-      '#prefix' => '<fieldset><legend>' . t('Enable map types') . '</legend>',
     );
     $form['getdirections_default']['baselayers']['Satellite'] = array(
       '#type' => 'checkbox',
@@ -284,8 +292,8 @@ function getdirections_settings_form() {
       '#description' => t('Map with physical data (terrain, vegetation.)'),
       '#default_value' => $getdirections_defaults['baselayers']['Physical'],
       '#return_value' => 1,
-      '#suffix' => '</fieldset>',
     );
+
     $form['getdirections_default']['unitsystem'] = array(
       '#type' => 'select',
       '#title' => t('Default distance units'),
