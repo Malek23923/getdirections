@@ -1513,10 +1513,10 @@ function getdirections_get_lid_title($lid) {
   if ($lid) {
     $query = FALSE;
     if (module_exists('getlocations_fields')) {
-      $query = db_select('getlocations_fields_entities', 'i')->fields('i', array('name'))->condition('i.glid', $lid);
+      $query = db_select('getlocations_fields', 'i')->fields('i', array('name'))->condition('i.glid', $lid);
     }
     elseif (module_exists('location')) {
-      $query = db_select('location_instance', 'i')->fields('i', array('name'))->condition('i.lid', $lid);
+      $query = db_select('location', 'i')->fields('i', array('name'))->condition('i.lid', $lid);
     }
     if ($query) {
       $row = $query->execute()->fetchAssoc();
