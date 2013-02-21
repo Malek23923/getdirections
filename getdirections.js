@@ -7,7 +7,7 @@
  * jquery stuff
 */
 (function ($) {
-  Drupal.behaviors.getdirections = {
+  Drupal.behaviors.getdirections_colorbox = {
     attach: function() {
       // check that colorbox is loaded
       if (!$.isFunction($.colorbox)) {

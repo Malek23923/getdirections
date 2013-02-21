@@ -1,9 +1,18 @@
-commit bb63f30
+commit c9a9d15
+Author: hutch <hutch@midwales.net>
+Date:   Thu Feb 21 22:25:25 2013 +0000
+
+    fixed colorbox bug
+
+getdirections.js
+
+commit 0225b2d
 Author: hutch <hutch@midwales.net>
 Date:   Thu Feb 21 16:38:20 2013 +0000
 
     fixed bug in getdirections_get_lid_title()
 
+CHANGELOG.txt
 getdirections.module
 
 commit 6088ca6
