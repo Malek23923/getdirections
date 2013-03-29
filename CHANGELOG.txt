@@ -1,9 +1,26 @@
-commit c9a9d15
+commit 1475e08
+Author: hutch <hutch@midwales.net>
+Date:   Fri Mar 29 21:10:24 2013 +0000
+
+    better https
+
+getdirections.module
+
+commit 281fcf7
+Author: hutch <hutch@midwales.net>
+Date:   Fri Mar 29 21:09:24 2013 +0000
+
+    added to README
+
+README.txt
+
+commit 8af2af1
 Author: hutch <hutch@midwales.net>
 Date:   Thu Feb 21 22:25:25 2013 +0000
 
     fixed colorbox bug
 
+CHANGELOG.txt
 getdirections.js
 
 commit 0225b2d
