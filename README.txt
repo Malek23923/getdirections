@@ -203,3 +203,19 @@ if (arg(0) == 'node') {
 This will only show on node view.
 
 see http://drupal.org/node/880332
+
+Adding a map directly into a block:
+See http://drupal.org/node/1376392#comment-7135346
+
+Create a custom block. Use the php filter for the content. Then paste this into your block content:
+
+<?php
+$n = arg(0);
+if ($n == 'node') {
+  $nid = arg(1);
+  $map = getdirections_setlocation('to', $nid);
+  echo $map;
+}
+?>
+
+
