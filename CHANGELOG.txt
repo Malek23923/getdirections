@@ -1,9 +1,81 @@
-commit c9a9d15
+commit a753054
+Author: hutch <hutch@midwales.net>
+Date:   Mon Apr 1 23:07:53 2013 +0100
+
+    clean up
+
+modules/getdirections_fields/getdirections_fields.module
+
+commit 981fcea
+Author: hutch <hutch@midwales.net>
+Date:   Mon Apr 1 18:42:57 2013 +0100
+
+    better layer buttons
+
+getdirections.module
+
+commit e73949e
+Author: hutch <hutch@midwales.net>
+Date:   Mon Apr 1 18:21:39 2013 +0100
+
+    added new and mods
+
+getdirections.admin.inc
+getdirections.info
+getdirections.install
+getdirections.module
+js/getdirections.js
+js/getdirections_admin.js
+js/getdirections_box.js
+js/getdirections_v3.js
+js/getdirections_v3a.js
+js/getdirections_v3b.js
+modules/getdirections_fields/README.txt
+modules/getdirections_fields/getdirections_fields.info
+modules/getdirections_fields/getdirections_fields.install
+modules/getdirections_fields/getdirections_fields.module
+
+commit 1c58642
+Author: hutch <hutch@midwales.net>
+Date:   Mon Apr 1 18:13:52 2013 +0100
+
+    removed unwanted files
+
+getdirections.js
+getdirections_admin.js
+getdirections_box.js
+getdirections_v2.js
+getdirections_v2a.js
+getdirections_v3.js
+getdirections_v3.min.js
+getdirections_v3a.js
+getdirections_v3a.min.js
+getdirections_v3b.js
+getdirections_v3b.min.js
+
+commit 1475e08
+Author: hutch <hutch@midwales.net>
+Date:   Fri Mar 29 21:10:24 2013 +0000
+
+    better https
+
+getdirections.module
+
+commit 281fcf7
+Author: hutch <hutch@midwales.net>
+Date:   Fri Mar 29 21:09:24 2013 +0000
+
+    added to README
+
+README.txt
+
+commit 8af2af1
 Author: hutch <hutch@midwales.net>
 Date:   Thu Feb 21 22:25:25 2013 +0000
 
     fixed colorbox bug
 
+CHANGELOG.txt
 getdirections.js
 
 commit 0225b2d

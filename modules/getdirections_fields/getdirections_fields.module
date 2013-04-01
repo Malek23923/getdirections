@@ -617,9 +617,7 @@ function theme_getdirections_fields_show($variables) {
   $height = $settings['default']['height'];
 
   $output = '';
-  $output .= "\n<!-- form start -->\n";
   $output .= $form;
-  $output .= "\n<!-- form end -->\n";
 
   if ($getdirections_misc['show_distance']) {
     $output .= '<div id="getdirections_show_distance_' . $mapid . '"></div>';
