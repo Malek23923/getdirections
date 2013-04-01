@@ -1,0 +1,6 @@
+name = Get Directions Fields
+description = "Provides Field module integration for Getdirections."
+core = 7.x
+php = 5
+package = Fields
+dependencies[] = getdirections

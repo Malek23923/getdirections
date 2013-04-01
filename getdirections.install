@@ -11,7 +11,6 @@
 function getdirections_uninstall() {
   variable_del('getdirections_default');
   variable_del('getdirections_api_key');
-  variable_del('getdirections_use_v3');
   variable_del('getdirections_misc');
   variable_del('getdirections_returnlink');
   variable_del('getdirections_api3_key');
@@ -33,5 +32,10 @@ function getdirections_update_6000() {
   $g3 = variable_get('use_v3', 0);
   variable_set('getdirections_use_v3', $g3);
   variable_del('use_v3');
+  return array();
+}
+
+function getdirections_update_7000() {
+  variable_del('getdirections_use_v3');
   return array();
 }
