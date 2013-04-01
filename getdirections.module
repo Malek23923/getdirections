@@ -3284,23 +3284,23 @@ function theme_getdirections_direction_form($variables) {
   $buttons = array();
   $output_buttons = '';
   if ($getdirections_misc['trafficinfo']) {
-    $buttons[] = '<input type="button" value="' . t('Toggle traffic info') . '" title="' . t('Limited Availability') . '" id="getdirections_toggleTraffic_' . $mapid . '" class="form-submit" />';
+    $buttons[] = '<input type="button" value="' . t('Traffic Info !t', array('!t' => ($getdirections_misc['trafficinfo_state'] ? t('Off') : t('On')))) . '" title="' . t('Limited Availability') . '" id="getdirections_toggleTraffic_' . $mapid . '" class="form-submit" />';
   }
   if ($getdirections_misc['bicycleinfo']) {
-    $buttons[] = '<input type="button" value="' . t('Toggle bicycle info') . '" title="' . t('Limited Availability') . '" id="getdirections_toggleBicycle_' . $mapid . '" class="form-submit" />';
+    $buttons[] = '<input type="button" value="' . t('Bicycle Info !t', array('!t' => ($getdirections_misc['bicycleinfo_state'] ? t('Off') : t('On')))) . '" title="' . t('Limited Availability') . '" id="getdirections_toggleBicycle_' . $mapid . '" class="form-submit" />';
   }
   if ($getdirections_misc['transitinfo']) {
-    $buttons[] = '<input type="button" value="' . t('Toggle transit info') . '" title="' . t('Limited Availability') . '" id="getdirections_toggleTransit_' . $mapid . '" class="form-submit" />';
+    $buttons[] = '<input type="button" value="' . t('Transit Info !t', array('!t' => ($getdirections_misc['transitinfo_state'] ? t('Off') : t('On')))) . '" title="' . t('Limited Availability') . '" id="getdirections_toggleTransit_' . $mapid . '" class="form-submit" />';
   }
   if ($getdirections_misc['panoramio_use'] && $getdirections_misc['panoramio_show']) {
-    $buttons[] = '<input type="button" value="' . t('Toggle panoramio') . '" id="getdirections_togglePanoramio_' . $mapid . '" class="form-submit" />';
+    $buttons[] = '<input type="button" value="' . t('Panoramio !t', array('!t' => ($getdirections_misc['panoramio_state'] ? t('Off') : t('On')))) . '" id="getdirections_togglePanoramio_' . $mapid . '" class="form-submit" />';
   }
   if ($getdirections_misc['weather_use']) {
     if ($getdirections_misc['weather_use'] && $getdirections_misc['weather_show']) {
-      $buttons[] = '<input type="button" value="' . t('Toggle weather') . '" id="getdirections_toggleWeather_' . $mapid . '" class="form-submit" />';
+      $buttons[] = '<input type="button" value="' . t('Weather !t', array('!t' => ($getdirections_misc['weather_state'] ? t('Off') : t('On')))) . '" id="getdirections_toggleWeather_' . $mapid . '" class="form-submit" />';
      }
     if ($getdirections_misc['weather_cloud']) {
-      $buttons[] = '<input type="button" value="' . t('Toggle clouds') . '" id="getdirections_toggleCloud_' . $mapid . '" class="form-submit" />';
+      $buttons[] = '<input type="button" value="' . t('Clouds !t', array('!t' => ($getdirections_misc['weather_cloud_state'] ? t('Off') : t('On')))) . '" id="getdirections_toggleCloud_' . $mapid . '" class="form-submit" />';
     }
   }
   if (count($buttons)) {
