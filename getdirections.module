@@ -533,7 +533,9 @@ function getdirections_get_settings($getdirections_defaults, $getdirections_misc
     'weather_info'               => $getdirections_misc['weather_info'],
     'switchfromto'               => $getdirections_misc['switchfromto'],
     'use_https'                  => $getdirections_defaults['use_https'],
-    'mylocale' => $language->language,
+    'mylocale'                   => $language->language,
+    'smartip_callback_url'       => url("getdirections/smart_ip"),
+    'ip_geoloc_callback_url'     => url("getdirections/ip_geoloc"),
   );
 
   return $settings;

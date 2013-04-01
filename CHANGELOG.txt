@@ -1,9 +1,21 @@
-commit a753054
+commit da1d533
+Author: hutch <hutch@midwales.net>
+Date:   Tue Apr 2 00:00:35 2013 +0100
+
+    added some callback urls
+
+getdirections.module
+js/getdirections_v3.js
+js/getdirections_v3a.js
+js/getdirections_v3b.js
+
+commit d64bed8
 Author: hutch <hutch@midwales.net>
 Date:   Mon Apr 1 23:07:53 2013 +0100
 
     clean up
 
+CHANGELOG.txt
 modules/getdirections_fields/getdirections_fields.module
 
 commit 981fcea

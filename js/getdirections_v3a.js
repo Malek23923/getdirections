@@ -978,7 +978,7 @@
           else if (settings.geolocation_option == '2') {
             // smart_ip
             $("#getdirections_geolocation_button_from_" + key).click( function () {
-              $.get(Drupal.settings.basePath + "getdirections/smart_ip", {}, function (loc) {
+              $.get(settings.smartip_callback_url, {}, function (loc) {
                 if (loc) {
                   lat = loc.latitude;
                   lng = loc.longitude;
@@ -1040,7 +1040,7 @@
           }
           else if (settings.geolocation_option == '3') {
             $("#getdirections_geolocation_button_from_" + key).click( function () {
-              $.get(Drupal.settings.basePath + "getdirections/ip_geoloc", {}, function (loc) {
+              $.get(settings.ip_geoloc_callback_url, {}, function (loc) {
                 if (loc) {
                   lat = loc.latitude;
                   lng = loc.longitude;
