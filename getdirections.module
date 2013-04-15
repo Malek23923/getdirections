@@ -1778,6 +1778,11 @@ function getdirections_other_load_locations($id, $key = 'vid', $module = '') {
     }
   }
 
+  // sanity check
+  if (empty($locations)) {
+    return $locations;
+  }
+
   // addressfield
   if (module_exists('addressfield')) {
     // find an addressfield
@@ -1799,7 +1804,9 @@ function getdirections_other_load_locations($id, $key = 'vid', $module = '') {
         if ($lang == $language->language || (isset($obj->language) && $lang == $obj->language) || $lang == 'und') {
           $ct = 0;
           foreach ($addr[$lang] AS $a) {
-            $locations[$ct] += getdirections_addressfield_convert($a);
+            if (isset($locations[$ct])) {
+              $locations[$ct] += getdirections_addressfield_convert($a);
+            }
             $ct++;
           }
         }
