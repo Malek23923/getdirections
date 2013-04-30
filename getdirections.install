@@ -39,3 +39,14 @@ function getdirections_update_7000() {
   variable_del('getdirections_use_v3');
   return array();
 }
+
+function getdirections_update_7001() {
+  $path = drupal_get_path('module', 'getdirections');
+  variable_set('getdirections_paths', array(
+    'getdirections_v3_path' => $path . '/js/getdirections_v3.js',
+    'getdirections_v3a_path' => $path . '/js/getdirections_v3a.js',
+    'getdirections_v3b_path' => $path . '/js/getdirections_v3b.js',
+  ));
+
+  return array();
+}

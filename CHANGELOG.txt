@@ -1,9 +1,18 @@
-commit 5edb451
+commit 76453aa
+Author: hutch <hutch@midwales.net>
+Date:   Tue Apr 30 19:02:58 2013 +0100
+
+    added variable_set for js paths
+
+getdirections.install
+
+commit d2fcf2e
 Author: hutch <hutch@midwales.net>
 Date:   Tue Apr 30 11:47:53 2013 +0100
 
     fixed language bug in  getdirections_fields.module
 
+CHANGELOG.txt
 modules/getdirections_fields/getdirections_fields.module
 
 commit 6f7ad2c
