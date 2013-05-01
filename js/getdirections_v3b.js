@@ -16,6 +16,404 @@
   function getdirections_init() {
     // each map has its own settings
     $.each(Drupal.settings.getdirections, function(key, settings) {
+
+      // functions
+      function handleState() {
+
+        var e;
+        var point;
+        if (! todone) {
+          e = $("input[name=to_" + key + "]").val();
+          if (e && e.match(llpatt)) {
+            arr = e.split(",");
+            point = new google.maps.LatLng(arr[0], arr[1]);
+            createMarker(point, endpoint, 'end');
+            path[key][endpoint] = point;
+            if (donemarkers[key][startpoint] == false) {
+              getdirections_map[key].panTo(path[key][endpoint]);
+            }
+            todone = true;
+          }
+        }
+
+        if (! fromdone) {
+          e = $("input[name=from_" + key + "]").val();
+          if (e && e.match(llpatt)) {
+            arr = e.split(",");
+            point = new google.maps.LatLng(arr[0], arr[1]);
+            createMarker(point, startpoint, 'start');
+            path[key][startpoint] = point;
+            if (donemarkers[key][endpoint] == false) {
+              getdirections_map[key].panTo(path[key][startpoint]);
+            }
+            fromdone = true;
+          }
+        }
+
+        if (state == 0) {
+          if (fromdone) {
+            state = 1;
+          }
+          else {
+            $("#getdirections_start_" + key).show();
+            $("#getdirections_end_" + key).hide();
+            $("#getdirections_btn_" + key).hide();
+            $("#getdirections_help_" + key).hide();
+            $("#getdirections-undo-" + key).hide();
+          }
+        }
+        if (state == 1) {
+          if (todone) {
+            state = 2;
+          }
+          else {
+            $("#getdirections_start_" + key).hide();
+            $("#getdirections_end_" + key).show();
+            $("#getdirections_btn_" + key).hide();
+            $("#getdirections_help_" + key).hide();
+            $("#getdirections-undo-" + key).hide();
+          }
+        }
+        if (state == 2) {
+          if (todone) {
+            setendbounds();
+          }
+          $("#getdirections_start_" + key).hide();
+          $("#getdirections_end_" + key).hide();
+          $("#getdirections_btn_" + key).show();
+          $("#getdirections_help_" + key).show();
+        }
+      } // end handleState
+
+      // t is type eg start, end
+      function createMarker(point, i, t) {
+        // stop these from being recreated
+        if ( (t == 'start' && donemarkers[key][startpoint] == true) || (t == 'end' && donemarkers[key][endpoint] == true)) {
+          return;
+        }
+
+        var marker;
+        marker = new google.maps.Marker({
+          position: point,
+          map: getdirections_map[key],
+          title: (t == 'start' ? 'From' : 'To'),
+          icon:  (t == 'start' ? icon1  : icon3),
+          shadow: shadow1,
+          shape: shape1,
+          draggable: true
+        });
+
+        gmarkers[key][i] = marker;
+        google.maps.event.addListener(marker, "dragend", function() {
+          path[key][i] = marker.getPosition();
+          getdirections_map[key].panTo(path[key][i]);
+          addresses[key][i] = "";
+        });
+
+        marker.setMap(getdirections_map[key]);
+
+        // mark as done
+        if (t == 'start') {
+          donemarkers[key][startpoint] = true;
+        }
+        else if (t == 'end') {
+          donemarkers[key][endpoint] = true;
+        }
+      } // end createMarker
+
+      function doStart(point) {
+        createMarker(point, startpoint, 'start');
+        path[key][startpoint] = point;
+        state = 1;
+        handleState();
+      }
+
+      function doEnd(point) {
+        createMarker(point, endpoint, 'end');
+        path[key][endpoint] = point;
+        state = 2;
+        handleState();
+        setendbounds();
+      }
+
+      function setendbounds() {
+        bounds[key].extend(path[key][startpoint]);
+        bounds[key].extend(path[key][endpoint]);
+        getdirections_map[key].fitBounds(bounds[key]);
+      }
+
+      // Geocoding
+      function showAddress() {
+        var s;
+        if (state == 0) {
+          if ($("#edit-from-" + key2).is('input')) {
+            s = $("#edit-from-" + key2).val();
+            if ($("#edit-country-from-" + key2).val()) {
+              s += ', ' + $("#edit-country-from-" + key2).val();
+            }
+          }
+          addresses[key][startpoint] = s;
+        }
+        if (state == 1) {
+          if ($("#edit-to-" + key2).is('input')) {
+            s = $("#edit-to-" + key2).val();
+            if ($("#edit-country-to-" + key2).val()) {
+              s += ', ' + $("#edit-country-to-" + key2).val();
+            }
+          }
+          addresses[key][endpoint] = s;
+        }
+        var r = {address: s};
+        geocoder = new google.maps.Geocoder();
+        geocoder.geocode(r, function (results, status) {
+          if (status == google.maps.GeocoderStatus.OK) {
+            // get the point
+            point = results[0].geometry.location;
+            if (point) {
+              if (state == 1) {
+                doEnd(point);
+              }
+              if (state == 0) {
+                doStart(point);
+                if (! todone) {
+                  getdirections_map[key].panTo(point);
+                }
+              }
+            }
+          } else {
+              alert(Drupal.t('Geocode for @address was not successful for the following reason: @reason', {'@address':s, '@reason':Drupal.getdirections.getgeoerrcode(status)}));
+          }
+        });
+      }
+
+      function doGeocode() {
+        var statusdiv = '#getdirections_geolocation_status_from_' + key;
+        var statusmsg = '';
+        $(statusdiv).html(statusmsg);
+        navigator.geolocation.getCurrentPosition(
+          function(position) {
+            lat = position.coords.latitude;
+            lng = position.coords.longitude;
+            point = new google.maps.LatLng(parseFloat(lat), parseFloat(lng));
+            if (point && state == 0) {
+              doStart(point);
+              if (! todone) {
+                getdirections_map[key].panTo(point);
+              }
+              doRGeocode(point);
+            }
+          },
+          function(error) {
+            statusmsg = Drupal.t("Sorry, I couldn't find your location using the browser") + ' ' + Drupal.getdirections.getdirectionserrcode(error.code) + ".";
+            $(statusdiv).html(statusmsg);
+          }, {maximumAge:10000}
+        );
+      }
+      // reverse geocoding
+      function doRGeocode(pt) {
+        var input_ll = {'latLng': pt};
+        // Create a Client Geocoder
+        var geocoder = new google.maps.Geocoder();
+        geocoder.geocode(input_ll, function (results, status) {
+          if (status == google.maps.GeocoderStatus.OK) {
+            if (results[0]) {
+              if ($("#edit-from-" + key2).is('input')) {
+                $("#edit-from-" + key2).val(results[0].formatted_address);
+              }
+            }
+          }
+          else {
+            var prm = {'!b': Drupal.getdirections.getgeoerrcode(status) };
+            var msg = Drupal.t('Geocode was not successful for the following reason: !b', prm);
+            alert(msg);
+          }
+        });
+      }
+
+      // Total distance and duration
+      function computeTotals(result) {
+        var meters = 0;
+        var seconds = 0;
+        var myroute = result.routes[0];
+        for (i = 0; i < myroute.legs.length; i++) {
+          meters += myroute.legs[i].distance.value;
+          seconds += myroute.legs[i].duration.value;
+        }
+
+        if (settings.show_distance) {
+          distance = meters * 0.001;
+          if (unitsys == 'imperial') {
+            distance = distance * 0.6214;
+            distance = distance.toFixed(2) + ' ' + Drupal.t('Miles');
+          }
+          else {
+            distance = distance.toFixed(2) + ' ' + Drupal.t('Kilometers');
+          }
+          $("#getdirections_show_distance_" + key).html(settings.show_distance + ': ' + distance);
+        }
+
+        if (settings.show_duration) {
+          mins = seconds * 0.016666667;
+          minutes = mins.toFixed(0);
+          // hours
+          hours = 0;
+          while (minutes >= 60 ) {
+            minutes = minutes - 60;
+            hours++;
+          }
+          // days
+          days = 0;
+          while (hours >= 24) {
+            hours = hours - 24;
+            days++;
+          }
+          duration = '';
+          if (days > 0) {
+            duration += Drupal.formatPlural(days, '1 day', '@count days') + ' ';
+          }
+          if (hours > 0) {
+            //duration += hours + ' ' + (hours > 1 ? 'hours' : 'hour') + ' ';
+            duration += Drupal.formatPlural(hours, '1 hour', '@count hours') + ' ';
+         }
+          if (minutes > 0) {
+            //duration += minutes + ' ' + (minutes > 1 ? 'minutes' : 'minute');
+            duration += Drupal.formatPlural(minutes, '1 minute', '@count minutes');
+         }
+          if (seconds < 60) {
+            duration = Drupal.t('About 1 minute');
+          }
+          $("#getdirections_show_duration_" + key).html(settings.show_duration + ': ' + duration );
+        }
+      }
+
+      // convert lat,lon into LatLng object
+      function makell(ll) {
+        if (ll.match(llpatt)) {
+          var arr = ll.split(",");
+          var d = new google.maps.LatLng(parseFloat(arr[0]), parseFloat(arr[1]));
+          return d;
+        }
+        return false;
+      }
+
+      function renderdirections(request) {
+        dirservice.route(request, function(response, status) {
+          if (status == google.maps.DirectionsStatus.OK) {
+            dirrenderer.setDirections(response);
+          } else {
+            alert(Drupal.t('Error') + ': ' + Drupal.getdirections.getdirectionserrcode(status));
+          }
+        });
+      }
+
+      function getRequest(fromAddress, toAddress, waypts) {
+        var trmode;
+        var request = {
+          origin: fromAddress,
+          destination: toAddress
+        };
+
+        var tmode = $("#edit-travelmode-" + key2).val();
+        if (tmode == 'walking') { trmode = google.maps.DirectionsTravelMode.WALKING; }
+        else if (tmode == 'bicycling') { trmode = google.maps.DirectionsTravelMode.BICYCLING; }
+        else if (tmode == 'transit') {
+          trmode = google.maps.DirectionsTravelMode.TRANSIT;
+          // transit dates
+          if ($("#edit-transit-date-select-" + key2).is('select')) {
+            d = $("#edit-transit-dates-" + key2 +"-datepicker-popup-0").val();
+            t = $("#edit-transit-dates-" + key2 + "-timeEntry-popup-1").val();
+            if (d && t) {
+              if (settings.transit_date_format == 'int') {
+                d1 = d.split(' ');
+                dmy = d1[0];
+                d2 = dmy.split('/');
+                d3 = d2[1] +'/' + d2[0] + '/' + d2[2];
+                s = d3 + ' ' + t;
+              }
+              else {
+                s = d + ' ' + t;
+              }
+              dp = Date.parse(s);
+              tstamp = new Date(dp);
+              date_dir = $("#edit-transit-date-select-" + key2).val();
+              tropts = '';
+              if (date_dir == 'arrive') {
+                tropts = {arrivalTime: tstamp};
+              }
+              else if (date_dir == 'depart') {
+                tropts = {departureTime: tstamp};
+              }
+              if (tropts) {
+                request.transitOptions = tropts;
+              }
+            }
+          }
+        }
+        else { trmode = google.maps.DirectionsTravelMode.DRIVING; }
+        request.travelMode = trmode;
+
+        if (unitsys == 'imperial') { request.unitSystem = google.maps.DirectionsUnitSystem.IMPERIAL; }
+        else { request.unitSystem = google.maps.DirectionsUnitSystem.METRIC; }
+
+        var avoidh = false;
+        if ($("#edit-travelextras-avoidhighways-" + key2).attr('checked')) { avoidh = true; }
+        request.avoidHighways = avoidh;
+
+        var avoidt = false;
+        if ($("#edit-travelextras-avoidtolls-" + key2).attr('checked')) { avoidt = true; }
+        request.avoidTolls = avoidt;
+
+        var routealt = false;
+        if ($("#edit-travelextras-altroute-" + key2).attr('checked')) { routealt = true; }
+        request.provideRouteAlternatives = routealt;
+
+        if (waypts) {
+          request.waypoints = waypts;
+          request.optimizeWaypoints = true;
+        }
+
+        return request;
+      } // end getRequest
+
+      // with waypoints
+      function setDirectionsvia(lls) {
+        var arr = lls.split('|');
+        var len = arr.length;
+        var wp = 0;
+        var waypts = [];
+        var from;
+        var to;
+        var via;
+        for (var i = 0; i < len; i++) {
+          if (i == 0) {
+            from = makell(arr[i]);
+          }
+          else if (i == len-1) {
+            to = makell(arr[i]);
+          }
+          else {
+            wp++;
+            if (wp < 24) {
+              via = makell(arr[i]);
+              waypts.push({
+                location: via,
+                stopover: true
+              });
+            }
+          }
+        }
+        var request = getRequest(from, to, waypts);
+        renderdirections(request);
+      }
+
+      function setDirectionsfromto(fromlatlon, tolatlon) {
+        var from = makell(fromlatlon);
+        var to = makell(tolatlon);
+        var request = getRequest(from, to, '');
+        renderdirections(request);
+      }
+      // end functions
+
       // is there really a map?
       if ($("#getdirections_map_canvas_" + key).is('div')) {
 
@@ -80,403 +478,6 @@
         donemarkers[key][startpoint] = false;
         donemarkers[key][endpoint] = false;
 
-        // functions
-        function handleState() {
-
-          var e;
-          var point;
-          if (! todone) {
-            e = $("input[name=to_" + key + "]").val();
-            if (e && e.match(llpatt)) {
-              arr = e.split(",");
-              point = new google.maps.LatLng(arr[0], arr[1]);
-              createMarker(point, endpoint, 'end');
-              path[key][endpoint] = point;
-              if (donemarkers[key][startpoint] == false) {
-                getdirections_map[key].panTo(path[key][endpoint]);
-              }
-              todone = true;
-            }
-          }
-
-          if (! fromdone) {
-            e = $("input[name=from_" + key + "]").val();
-            if (e && e.match(llpatt)) {
-              arr = e.split(",");
-              point = new google.maps.LatLng(arr[0], arr[1]);
-              createMarker(point, startpoint, 'start');
-              path[key][startpoint] = point;
-              if (donemarkers[key][endpoint] == false) {
-                getdirections_map[key].panTo(path[key][startpoint]);
-              }
-              fromdone = true;
-            }
-          }
-
-          if (state == 0) {
-            if (fromdone) {
-              state = 1;
-            }
-            else {
-              $("#getdirections_start_" + key).show();
-              $("#getdirections_end_" + key).hide();
-              $("#getdirections_btn_" + key).hide();
-              $("#getdirections_help_" + key).hide();
-              $("#getdirections-undo-" + key).hide();
-            }
-          }
-          if (state == 1) {
-            if (todone) {
-              state = 2;
-            }
-            else {
-              $("#getdirections_start_" + key).hide();
-              $("#getdirections_end_" + key).show();
-              $("#getdirections_btn_" + key).hide();
-              $("#getdirections_help_" + key).hide();
-              $("#getdirections-undo-" + key).hide();
-            }
-          }
-          if (state == 2) {
-            if (todone) {
-              setendbounds();
-            }
-            $("#getdirections_start_" + key).hide();
-            $("#getdirections_end_" + key).hide();
-            $("#getdirections_btn_" + key).show();
-            $("#getdirections_help_" + key).show();
-          }
-        } // end handleState
-
-        // t is type eg start, end
-        function createMarker(point, i, t) {
-          // stop these from being recreated
-          if ( (t == 'start' && donemarkers[key][startpoint] == true) || (t == 'end' && donemarkers[key][endpoint] == true)) {
-            return;
-          }
-
-          var marker;
-          marker = new google.maps.Marker({
-            position: point,
-            map: getdirections_map[key],
-            title: (t == 'start' ? 'From' : 'To'),
-            icon:  (t == 'start' ? icon1  : icon3),
-            shadow: shadow1,
-            shape: shape1,
-            draggable: true
-          });
-
-          gmarkers[key][i] = marker;
-          google.maps.event.addListener(marker, "dragend", function() {
-            path[key][i] = marker.getPosition();
-            getdirections_map[key].panTo(path[key][i]);
-            addresses[key][i] = "";
-          });
-
-          marker.setMap(getdirections_map[key]);
-
-          // mark as done
-          if (t == 'start') {
-            donemarkers[key][startpoint] = true;
-          }
-          else if (t == 'end') {
-            donemarkers[key][endpoint] = true;
-          }
-        } // end createMarker
-
-        function doStart(point) {
-          createMarker(point, startpoint, 'start');
-          path[key][startpoint] = point;
-          state = 1;
-          handleState();
-        }
-
-        function doEnd(point) {
-          createMarker(point, endpoint, 'end');
-          path[key][endpoint] = point;
-          state = 2;
-          handleState();
-          setendbounds();
-        }
-
-        function setendbounds() {
-          bounds[key].extend(path[key][startpoint]);
-          bounds[key].extend(path[key][endpoint]);
-          getdirections_map[key].fitBounds(bounds[key]);
-        }
-
-        // Geocoding
-        function showAddress() {
-          var s;
-          if (state == 0) {
-            if ($("#edit-from-" + key2).is('input')) {
-              s = $("#edit-from-" + key2).val();
-              if ($("#edit-country-from-" + key2).val()) {
-                s += ', ' + $("#edit-country-from-" + key2).val();
-              }
-            }
-            addresses[key][startpoint] = s;
-          }
-          if (state == 1) {
-            if ($("#edit-to-" + key2).is('input')) {
-              s = $("#edit-to-" + key2).val();
-              if ($("#edit-country-to-" + key2).val()) {
-                s += ', ' + $("#edit-country-to-" + key2).val();
-              }
-            }
-            addresses[key][endpoint] = s;
-          }
-          var r = {address: s};
-          geocoder = new google.maps.Geocoder();
-          geocoder.geocode(r, function (results, status) {
-            if (status == google.maps.GeocoderStatus.OK) {
-              // get the point
-              point = results[0].geometry.location;
-              if (point) {
-                if (state == 1) {
-                  doEnd(point);
-                }
-                if (state == 0) {
-                  doStart(point);
-                  if (! todone) {
-                    getdirections_map[key].panTo(point);
-                  }
-                }
-              }
-            } else {
-                alert(Drupal.t('Geocode for @address was not successful for the following reason: @reason', {'@address':s, '@reason':Drupal.getdirections.getgeoerrcode(status)}));
-            }
-          });
-        }
-
-        function doGeocode() {
-          var statusdiv = '#getdirections_geolocation_status_from_' + key;
-          var statusmsg = '';
-          $(statusdiv).html(statusmsg);
-          navigator.geolocation.getCurrentPosition(
-            function(position) {
-              lat = position.coords.latitude;
-              lng = position.coords.longitude;
-              point = new google.maps.LatLng(parseFloat(lat), parseFloat(lng));
-              if (point && state == 0) {
-                doStart(point);
-                if (! todone) {
-                  getdirections_map[key].panTo(point);
-                }
-                doRGeocode(point);
-              }
-            },
-            function(error) {
-              statusmsg = Drupal.t("Sorry, I couldn't find your location using the browser") + ' ' + Drupal.getdirections.getdirectionserrcode(error.code) + ".";
-              $(statusdiv).html(statusmsg);
-            }, {maximumAge:10000}
-          );
-        }
-        // reverse geocoding
-        function doRGeocode(pt) {
-          var input_ll = {'latLng': pt};
-          // Create a Client Geocoder
-          var geocoder = new google.maps.Geocoder();
-          geocoder.geocode(input_ll, function (results, status) {
-            if (status == google.maps.GeocoderStatus.OK) {
-              if (results[0]) {
-                if ($("#edit-from-" + key2).is('input')) {
-                  $("#edit-from-" + key2).val(results[0].formatted_address);
-                }
-              }
-            }
-            else {
-              var prm = {'!b': Drupal.getdirections.getgeoerrcode(status) };
-              var msg = Drupal.t('Geocode was not successful for the following reason: !b', prm);
-              alert(msg);
-            }
-          });
-        }
-
-        // Total distance and duration
-        function computeTotals(result) {
-          var meters = 0;
-          var seconds = 0;
-          var myroute = result.routes[0];
-          for (i = 0; i < myroute.legs.length; i++) {
-            meters += myroute.legs[i].distance.value;
-            seconds += myroute.legs[i].duration.value;
-          }
-
-          if (settings.show_distance) {
-            distance = meters * 0.001;
-            if (unitsys == 'imperial') {
-              distance = distance * 0.6214;
-              distance = distance.toFixed(2) + ' ' + Drupal.t('Miles');
-            }
-            else {
-              distance = distance.toFixed(2) + ' ' + Drupal.t('Kilometers');
-            }
-            $("#getdirections_show_distance_" + key).html(settings.show_distance + ': ' + distance);
-          }
-
-          if (settings.show_duration) {
-            mins = seconds * 0.016666667;
-            minutes = mins.toFixed(0);
-            // hours
-            hours = 0;
-            while (minutes >= 60 ) {
-              minutes = minutes - 60;
-              hours++;
-            }
-            // days
-            days = 0;
-            while (hours >= 24) {
-              hours = hours - 24;
-              days++;
-            }
-            duration = '';
-            if (days > 0) {
-              duration += Drupal.formatPlural(days, '1 day', '@count days') + ' ';
-            }
-            if (hours > 0) {
-              //duration += hours + ' ' + (hours > 1 ? 'hours' : 'hour') + ' ';
-              duration += Drupal.formatPlural(hours, '1 hour', '@count hours') + ' ';
-           }
-            if (minutes > 0) {
-              //duration += minutes + ' ' + (minutes > 1 ? 'minutes' : 'minute');
-              duration += Drupal.formatPlural(minutes, '1 minute', '@count minutes');
-           }
-            if (seconds < 60) {
-              duration = Drupal.t('About 1 minute');
-            }
-            $("#getdirections_show_duration_" + key).html(settings.show_duration + ': ' + duration );
-          }
-        }
-
-        // convert lat,lon into LatLng object
-        function makell(ll) {
-          if (ll.match(llpatt)) {
-            var arr = ll.split(",");
-            var d = new google.maps.LatLng(parseFloat(arr[0]), parseFloat(arr[1]));
-            return d;
-          }
-          return false;
-        }
-
-        function renderdirections(request) {
-          dirservice.route(request, function(response, status) {
-            if (status == google.maps.DirectionsStatus.OK) {
-              dirrenderer.setDirections(response);
-            } else {
-              alert(Drupal.t('Error') + ': ' + Drupal.getdirections.getdirectionserrcode(status));
-            }
-          });
-        }
-
-        function getRequest(fromAddress, toAddress, waypts) {
-          var trmode;
-          var request = {
-            origin: fromAddress,
-            destination: toAddress
-          };
-
-          var tmode = $("#edit-travelmode-" + key2).val();
-          if (tmode == 'walking') { trmode = google.maps.DirectionsTravelMode.WALKING; }
-          else if (tmode == 'bicycling') { trmode = google.maps.DirectionsTravelMode.BICYCLING; }
-          else if (tmode == 'transit') {
-            trmode = google.maps.DirectionsTravelMode.TRANSIT;
-            // transit dates
-            if ($("#edit-transit-date-select-" + key2).is('select')) {
-              d = $("#edit-transit-dates-" + key2 +"-datepicker-popup-0").val();
-              t = $("#edit-transit-dates-" + key2 + "-timeEntry-popup-1").val();
-              if (d && t) {
-                if (settings.transit_date_format == 'int') {
-                  d1 = d.split(' ');
-                  dmy = d1[0];
-                  d2 = dmy.split('/');
-                  d3 = d2[1] +'/' + d2[0] + '/' + d2[2];
-                  s = d3 + ' ' + t;
-                }
-                else {
-                  s = d + ' ' + t;
-                }
-                dp = Date.parse(s);
-                tstamp = new Date(dp);
-                date_dir = $("#edit-transit-date-select-" + key2).val();
-                tropts = '';
-                if (date_dir == 'arrive') {
-                  tropts = {arrivalTime: tstamp};
-                }
-                else if (date_dir == 'depart') {
-                  tropts = {departureTime: tstamp};
-                }
-                if (tropts) {
-                  request.transitOptions = tropts;
-                }
-              }
-            }
-          }
-          else { trmode = google.maps.DirectionsTravelMode.DRIVING; }
-          request.travelMode = trmode;
-
-          if (unitsys == 'imperial') { request.unitSystem = google.maps.DirectionsUnitSystem.IMPERIAL; }
-          else { request.unitSystem = google.maps.DirectionsUnitSystem.METRIC; }
-
-          var avoidh = false;
-          if ($("#edit-travelextras-avoidhighways-" + key2).attr('checked')) { avoidh = true; }
-          request.avoidHighways = avoidh;
-
-          var avoidt = false;
-          if ($("#edit-travelextras-avoidtolls-" + key2).attr('checked')) { avoidt = true; }
-          request.avoidTolls = avoidt;
-
-          var routealt = false;
-          if ($("#edit-travelextras-altroute-" + key2).attr('checked')) { routealt = true; }
-          request.provideRouteAlternatives = routealt;
-
-          if (waypts) {
-            request.waypoints = waypts;
-            request.optimizeWaypoints = true;
-          }
-
-          return request;
-        } // end getRequest
-
-        // with waypoints
-        function setDirectionsvia(lls) {
-          var arr = lls.split('|');
-          var len = arr.length;
-          var wp = 0;
-          var waypts = [];
-          var from;
-          var to;
-          var via;
-          for (var i = 0; i < len; i++) {
-            if (i == 0) {
-              from = makell(arr[i]);
-            }
-            else if (i == len-1) {
-              to = makell(arr[i]);
-            }
-            else {
-              wp++;
-              if (wp < 24) {
-                via = makell(arr[i]);
-                waypts.push({
-                  location: via,
-                  stopover: true
-                });
-              }
-            }
-          }
-          var request = getRequest(from, to, waypts);
-          renderdirections(request);
-        }
-
-        function setDirectionsfromto(fromlatlon, tolatlon) {
-          var from = makell(fromlatlon);
-          var to = makell(tolatlon);
-          var request = getRequest(from, to, '');
-          renderdirections(request);
-        }
-
-        // end functions
 
         // menu type
         var mtc = settings.mtc;

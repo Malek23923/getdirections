@@ -15,6 +15,232 @@
   function getdirections_init() {
     // each map has its own settings
     $.each(Drupal.settings.getdirections, function(key, settings) {
+
+      // functions
+      function renderdirections(request) {
+        dirservice.route(request, function(response, status) {
+          if (status == google.maps.DirectionsStatus.OK) {
+            dirrenderer.setDirections(response);
+          } else {
+            alert(Drupal.t('Error') + ': ' + Drupal.getdirections.getdirectionserrcode(status));
+          }
+        });
+      }
+
+      function getRequest(fromAddress, toAddress, waypts) {
+        var trmode;
+        var request = {
+          origin: fromAddress,
+          destination: toAddress
+        };
+
+        var tmode = $("#edit-travelmode-" + key2).val();
+        if (tmode == 'walking') { trmode = google.maps.DirectionsTravelMode.WALKING; }
+        else if (tmode == 'bicycling') { trmode = google.maps.DirectionsTravelMode.BICYCLING; }
+        else if (tmode == 'transit') {
+          trmode = google.maps.DirectionsTravelMode.TRANSIT;
+          // transit dates
+          if ($("#edit-transit-date-select-" + key2).is('select')) {
+            d = $("#edit-transit-dates-" + key2 +"-datepicker-popup-0").val();
+            t = $("#edit-transit-dates-" + key2 + "-timeEntry-popup-1").val();
+            if (d && t) {
+              if (settings.transit_date_format == 'int') {
+                d1 = d.split(' ');
+                dmy = d1[0];
+                d2 = dmy.split('/');
+                d3 = d2[1] +'/' + d2[0] + '/' + d2[2];
+                s = d3 + ' ' + t;
+              }
+              else {
+                s = d + ' ' + t;
+              }
+              dp = Date.parse(s);
+              tstamp = new Date(dp);
+              date_dir = $("#edit-transit-date-select-" + key2).val();
+              tropts = '';
+              if (date_dir == 'arrive') {
+                tropts = {arrivalTime: tstamp};
+              }
+              else if (date_dir == 'depart') {
+                tropts = {departureTime: tstamp};
+              }
+              if (tropts) {
+                request.transitOptions = tropts;
+              }
+            }
+          }
+        }
+        else { trmode = google.maps.DirectionsTravelMode.DRIVING; }
+        request.travelMode = trmode;
+
+        if (unitsys == 'imperial') { request.unitSystem = google.maps.DirectionsUnitSystem.IMPERIAL; }
+        else { request.unitSystem = google.maps.DirectionsUnitSystem.METRIC; }
+
+        var avoidh = false;
+        if ($("#edit-travelextras-avoidhighways-" + key2).attr('checked')) { avoidh = true; }
+        request.avoidHighways = avoidh;
+
+        var avoidt = false;
+        if ($("#edit-travelextras-avoidtolls-" + key2).attr('checked')) { avoidt = true; }
+        request.avoidTolls = avoidt;
+
+        var routealt = false;
+        if ($("#edit-travelextras-altroute-" + key2).attr('checked')) { routealt = true; }
+        request.provideRouteAlternatives = routealt;
+
+        if (waypts) {
+          request.waypoints = waypts;
+          request.optimizeWaypoints = true;
+        }
+
+        return request;
+      } // end getRequest
+
+      function makell(ll) {
+        if (ll.match(llpatt)) {
+          var arr = ll.split(",");
+          var d = new google.maps.LatLng(parseFloat(arr[0]), parseFloat(arr[1]));
+          return d;
+        }
+        return false;
+      }
+
+      // with waypoints
+      function setDirectionsvia(lls) {
+        var arr = lls.split('|');
+        var len = arr.length;
+        var wp = 0;
+        var waypts = [];
+        var from;
+        var to;
+        var via;
+        for (var i = 0; i < len; i++) {
+          if (i == 0) {
+            from = makell(arr[i]);
+          }
+          else if (i == len-1) {
+            to = makell(arr[i]);
+          }
+          else {
+            wp++;
+            if (wp < 24) {
+              via = makell(arr[i]);
+              waypts.push({
+                location: via,
+                stopover: true
+              });
+            }
+          }
+        }
+        var request = getRequest(from, to, waypts);
+        renderdirections(request);
+      }
+
+      function setDirectionsfromto(fromlatlon, tolatlon) {
+        var from = makell(fromlatlon);
+        var to = makell(tolatlon);
+        var request = getRequest(from, to, '');
+        renderdirections(request);
+      }
+
+      function doGeocode() {
+        var statusdiv = '#getdirections_geolocation_status_from';
+        var statusmsg = '';
+        $(statusdiv).html(statusmsg);
+        navigator.geolocation.getCurrentPosition(
+          function(position) {
+            lat = position.coords.latitude;
+            lng = position.coords.longitude;
+            point = new google.maps.LatLng(parseFloat(lat), parseFloat(lng));
+            if (point) {
+              doRGeocode(point);
+            }
+          },
+          function(error) {
+            statusmsg = Drupal.t("Sorry, I couldn't find your location using the browser") + ' ' + Drupal.getdirections.getdirectionserrcode(error.code) + ".";
+            $(statusdiv).html(statusmsg);
+          }, {maximumAge:10000}
+        );
+      }
+
+      // reverse geocoding
+      function doRGeocode(pt) {
+        var input_ll = {'latLng': pt};
+        // Create a Client Geocoder
+        var geocoder = new google.maps.Geocoder();
+        geocoder.geocode(input_ll, function (results, status) {
+          if (status == google.maps.GeocoderStatus.OK) {
+            if (results[0]) {
+              if ($("#edit-from-" + key2).is('input')) {
+                $("#edit-from-" + key2).val(results[0].formatted_address);
+              }
+            }
+          }
+          else {
+            var prm = {'!b': Drupal.getdirections.getgeoerrcode(status) };
+            var msg = Drupal.t('Geocode was not successful for the following reason: !b', prm);
+            alert(msg);
+          }
+        });
+      }
+
+      // Total distance and duration
+      function computeTotals(result) {
+        var meters = 0;
+        var seconds = 0;
+        var myroute = result.routes[0];
+        for (i = 0; i < myroute.legs.length; i++) {
+          meters += myroute.legs[i].distance.value;
+          seconds += myroute.legs[i].duration.value;
+        }
+
+        if (settings.show_distance) {
+          distance = meters * 0.001;
+          if (unitsys == 'imperial') {
+            distance = distance * 0.6214;
+            distance = distance.toFixed(2) + ' ' + Drupal.t('Miles');
+          }
+          else {
+            distance = distance.toFixed(2) + ' ' + Drupal.t('Kilometers');
+          }
+          $("#getdirections_show_distance_" + key).html(settings.show_distance + ': ' + distance);
+        }
+
+        if (settings.show_duration) {
+          mins = seconds * 0.016666667;
+          minutes = mins.toFixed(0);
+          // hours
+          hours = 0;
+          while (minutes >= 60 ) {
+            minutes = minutes - 60;
+            hours++;
+          }
+          // days
+          days = 0;
+          while (hours >= 24) {
+            hours = hours - 24;
+            days++;
+          }
+          duration = '';
+          if (days > 0) {
+            duration += Drupal.formatPlural(days, '1 day', '@count days') + ' ';
+          }
+          if (hours > 0) {
+            //duration += hours + ' ' + (hours > 1 ? 'hours' : 'hour') + ' ';
+            duration += Drupal.formatPlural(hours, '1 hour', '@count hours') + ' ';
+         }
+          if (minutes > 0) {
+            //duration += minutes + ' ' + (minutes > 1 ? 'minutes' : 'minute');
+            duration += Drupal.formatPlural(minutes, '1 minute', '@count minutes');
+         }
+          if (seconds < 60) {
+            duration = Drupal.t('About 1 minute');
+          }
+          $("#getdirections_show_duration_" + key).html(settings.show_duration + ': ' + duration );
+        }
+      }
+      // end functions
+
       // is there really a map?
       if ( $("#getdirections_map_canvas_" + key).is('div') ) {
 
@@ -64,229 +290,6 @@
         // pipe delim
         var latlons = (settings.latlons ? settings.latlons : '');
 
-        // functions
-        function renderdirections(request) {
-          dirservice.route(request, function(response, status) {
-            if (status == google.maps.DirectionsStatus.OK) {
-              dirrenderer.setDirections(response);
-            } else {
-              alert(Drupal.t('Error') + ': ' + Drupal.getdirections.getdirectionserrcode(status));
-            }
-          });
-        }
-
-        function getRequest(fromAddress, toAddress, waypts) {
-          var trmode;
-          var request = {
-            origin: fromAddress,
-            destination: toAddress
-          };
-
-          var tmode = $("#edit-travelmode-" + key2).val();
-          if (tmode == 'walking') { trmode = google.maps.DirectionsTravelMode.WALKING; }
-          else if (tmode == 'bicycling') { trmode = google.maps.DirectionsTravelMode.BICYCLING; }
-          else if (tmode == 'transit') {
-            trmode = google.maps.DirectionsTravelMode.TRANSIT;
-            // transit dates
-            if ($("#edit-transit-date-select-" + key2).is('select')) {
-              d = $("#edit-transit-dates-" + key2 +"-datepicker-popup-0").val();
-              t = $("#edit-transit-dates-" + key2 + "-timeEntry-popup-1").val();
-              if (d && t) {
-                if (settings.transit_date_format == 'int') {
-                  d1 = d.split(' ');
-                  dmy = d1[0];
-                  d2 = dmy.split('/');
-                  d3 = d2[1] +'/' + d2[0] + '/' + d2[2];
-                  s = d3 + ' ' + t;
-                }
-                else {
-                  s = d + ' ' + t;
-                }
-                dp = Date.parse(s);
-                tstamp = new Date(dp);
-                date_dir = $("#edit-transit-date-select-" + key2).val();
-                tropts = '';
-                if (date_dir == 'arrive') {
-                  tropts = {arrivalTime: tstamp};
-                }
-                else if (date_dir == 'depart') {
-                  tropts = {departureTime: tstamp};
-                }
-                if (tropts) {
-                  request.transitOptions = tropts;
-                }
-              }
-            }
-          }
-          else { trmode = google.maps.DirectionsTravelMode.DRIVING; }
-          request.travelMode = trmode;
-
-          if (unitsys == 'imperial') { request.unitSystem = google.maps.DirectionsUnitSystem.IMPERIAL; }
-          else { request.unitSystem = google.maps.DirectionsUnitSystem.METRIC; }
-
-          var avoidh = false;
-          if ($("#edit-travelextras-avoidhighways-" + key2).attr('checked')) { avoidh = true; }
-          request.avoidHighways = avoidh;
-
-          var avoidt = false;
-          if ($("#edit-travelextras-avoidtolls-" + key2).attr('checked')) { avoidt = true; }
-          request.avoidTolls = avoidt;
-
-          var routealt = false;
-          if ($("#edit-travelextras-altroute-" + key2).attr('checked')) { routealt = true; }
-          request.provideRouteAlternatives = routealt;
-
-          if (waypts) {
-            request.waypoints = waypts;
-            request.optimizeWaypoints = true;
-          }
-
-          return request;
-        } // end getRequest
-
-        function makell(ll) {
-          if (ll.match(llpatt)) {
-            var arr = ll.split(",");
-            var d = new google.maps.LatLng(parseFloat(arr[0]), parseFloat(arr[1]));
-            return d;
-          }
-          return false;
-        }
-
-        // with waypoints
-        function setDirectionsvia(lls) {
-          var arr = lls.split('|');
-          var len = arr.length;
-          var wp = 0;
-          var waypts = [];
-          var from;
-          var to;
-          var via;
-          for (var i = 0; i < len; i++) {
-            if (i == 0) {
-              from = makell(arr[i]);
-            }
-            else if (i == len-1) {
-              to = makell(arr[i]);
-            }
-            else {
-              wp++;
-              if (wp < 24) {
-                via = makell(arr[i]);
-                waypts.push({
-                  location: via,
-                  stopover: true
-                });
-              }
-            }
-          }
-          var request = getRequest(from, to, waypts);
-          renderdirections(request);
-        }
-
-        function setDirectionsfromto(fromlatlon, tolatlon) {
-          var from = makell(fromlatlon);
-          var to = makell(tolatlon);
-          var request = getRequest(from, to, '');
-          renderdirections(request);
-        }
-
-        function doGeocode() {
-          var statusdiv = '#getdirections_geolocation_status_from';
-          var statusmsg = '';
-          $(statusdiv).html(statusmsg);
-          navigator.geolocation.getCurrentPosition(
-            function(position) {
-              lat = position.coords.latitude;
-              lng = position.coords.longitude;
-              point = new google.maps.LatLng(parseFloat(lat), parseFloat(lng));
-              if (point) {
-                doRGeocode(point);
-              }
-            },
-            function(error) {
-              statusmsg = Drupal.t("Sorry, I couldn't find your location using the browser") + ' ' + Drupal.getdirections.getdirectionserrcode(error.code) + ".";
-              $(statusdiv).html(statusmsg);
-            }, {maximumAge:10000}
-          );
-        }
-
-        // reverse geocoding
-        function doRGeocode(pt) {
-          var input_ll = {'latLng': pt};
-          // Create a Client Geocoder
-          var geocoder = new google.maps.Geocoder();
-          geocoder.geocode(input_ll, function (results, status) {
-            if (status == google.maps.GeocoderStatus.OK) {
-              if (results[0]) {
-                if ($("#edit-from-" + key2).is('input')) {
-                  $("#edit-from-" + key2).val(results[0].formatted_address);
-                }
-              }
-            }
-            else {
-              var prm = {'!b': Drupal.getdirections.getgeoerrcode(status) };
-              var msg = Drupal.t('Geocode was not successful for the following reason: !b', prm);
-              alert(msg);
-            }
-          });
-        }
-
-        // Total distance and duration
-        function computeTotals(result) {
-          var meters = 0;
-          var seconds = 0;
-          var myroute = result.routes[0];
-          for (i = 0; i < myroute.legs.length; i++) {
-            meters += myroute.legs[i].distance.value;
-            seconds += myroute.legs[i].duration.value;
-          }
-
-          if (settings.show_distance) {
-            distance = meters * 0.001;
-            if (unitsys == 'imperial') {
-              distance = distance * 0.6214;
-              distance = distance.toFixed(2) + ' ' + Drupal.t('Miles');
-            }
-            else {
-              distance = distance.toFixed(2) + ' ' + Drupal.t('Kilometers');
-            }
-            $("#getdirections_show_distance_" + key).html(settings.show_distance + ': ' + distance);
-          }
-
-          if (settings.show_duration) {
-            mins = seconds * 0.016666667;
-            minutes = mins.toFixed(0);
-            // hours
-            hours = 0;
-            while (minutes >= 60 ) {
-              minutes = minutes - 60;
-              hours++;
-            }
-            // days
-            days = 0;
-            while (hours >= 24) {
-              hours = hours - 24;
-              days++;
-            }
-            duration = '';
-            if (days > 0) {
-              duration += Drupal.formatPlural(days, '1 day', '@count days') + ' ';
-            }
-            if (hours > 0) {
-              //duration += hours + ' ' + (hours > 1 ? 'hours' : 'hour') + ' ';
-              duration += Drupal.formatPlural(hours, '1 hour', '@count hours') + ' ';
-           }
-            if (minutes > 0) {
-              //duration += minutes + ' ' + (minutes > 1 ? 'minutes' : 'minute');
-              duration += Drupal.formatPlural(minutes, '1 minute', '@count minutes');
-           }
-            if (seconds < 60) {
-              duration = Drupal.t('About 1 minute');
-            }
-            $("#getdirections_show_duration_" + key).html(settings.show_duration + ': ' + duration );
-          }
-        }
 
         // get directions button
         $("#edit-submit-" + key2).click( function () {
@@ -321,8 +324,6 @@
           renderdirections(request);
           return false;
         });
-
-         // end functions
 
         // menu type
         var mtc = settings.mtc;
