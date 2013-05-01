@@ -4,4 +4,4 @@ core = 7.x
 php = 5
 configure = admin/config/services/getdirections
 package = Location
-dependencies[] = entity
+;dependencies[] = entity
