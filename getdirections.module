@@ -3220,7 +3220,7 @@ function theme_getdirections_direction_form($variables) {
     $desc = t('Fill in the form below.<br />You can also click on the map and move the marker.');
     if (isset($form['country_from_' . $mapid])) {
       $desc = t('Select a country first, then type in a town.<br />You can also click on the map and move the marker.');
-      $form['country_from_' . $mapid]['#prefix'] = '<div id="getdirections_start"><div class="container-inline getdirections_display">';
+      $form['country_from_' . $mapid]['#prefix'] = '<div id="getdirections_start_' . $mapid . '"><div class="container-inline getdirections_display">';
       $form['country_from_' . $mapid]['#suffix'] = '</div>';
     }
     if (isset($form['from_' . $mapid])
@@ -3229,10 +3229,10 @@ function theme_getdirections_direction_form($variables) {
       && ! $getdirections_defaults['advanced_autocomplete']
       && isset($form['country_from_' . $mapid])
     ) {
-      $form['from_' . $mapid]['#suffix'] = '</div>';
+      $form['from_' . $mapid]['#suffix'] = '</div><div class="getdirections_start_info" id="getdirections_start_info_' . $mapid . '"></div>';
     }
     if (isset($form['country_to_' . $mapid])) {
-      $form['country_to_' . $mapid]['#prefix'] = '<div id="getdirections_end"><div class="container-inline getdirections_display">';
+      $form['country_to_' . $mapid]['#prefix'] = '<div id="getdirections_end_' . $mapid . '"><div class="container-inline getdirections_display">';
       $form['country_to_' . $mapid]['#suffix'] = '</div>';
     }
     if (isset($form['to_' . $mapid])
@@ -3241,7 +3241,7 @@ function theme_getdirections_direction_form($variables) {
       && ! $getdirections_defaults['advanced_autocomplete']
       && isset($form['country_to_' . $mapid])
     ) {
-      $form['to_' . $mapid]['#suffix'] = '</div>';
+      $form['to_' . $mapid]['#suffix'] = '</div><div class="getdirections_end_info" id="getdirections_end_info_' . $mapid . '"></div>';
     }
     if ($getdirections_defaults['advanced_autocomplete'] && $getdirections_defaults['waypoints'] > 0 && $getdirections_defaults['advanced_autocomplete_via'] && ! $getdirections_defaults['advanced_alternate'] ) {
       for ($ct = 1; $ct <= $getdirections_defaults['waypoints']; $ct++) {

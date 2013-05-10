@@ -70,8 +70,12 @@
             $("#getdirections_start_" + key).hide();
             $("#getdirections_end_" + key).show();
             $("#getdirections_btn_" + key).hide();
+            $("#getdirections_nextbtn_" + key).show();
             $("#getdirections_help_" + key).hide();
             $("#getdirections-undo-" + key).hide();
+            if (addresses[key][startpoint]) {
+              $("#getdirections_start_info_" + key).html('<b>' + Drupal.t('From') + '</b> ' + addresses[key][startpoint]);
+            }
           }
         }
         if (state == 2) {
@@ -81,7 +85,11 @@
           $("#getdirections_start_" + key).hide();
           $("#getdirections_end_" + key).hide();
           $("#getdirections_btn_" + key).show();
+          $("#getdirections_nextbtn_" + key).hide();
           $("#getdirections_help_" + key).show();
+          if (addresses[key][endpoint]) {
+            $("#getdirections_end_info_" + key).html('<b>' + Drupal.t('To') + '</b> ' + addresses[key][endpoint]);
+          }
         }
       } // end handleState
 
@@ -1013,6 +1021,10 @@
     }); // end each
 
   } // end init
+
+  Drupal.getdirections.nextbtn = function() {
+    return;
+  };
 
   // error codes
   Drupal.getdirections.getdirectionserrcode = function(errcode) {

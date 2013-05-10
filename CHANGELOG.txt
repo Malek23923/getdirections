@@ -1,9 +1,39 @@
-commit 76453aa
+commit 96c3411
+Author: hutch <hutch@midwales.net>
+Date:   Fri May 10 23:07:26 2013 +0100
+
+    fixed nextbtn, better info
+
+getdirections.css
+getdirections.module
+js/getdirections_v3a.js
+js/getdirections_v3b.js
+
+commit b470055
+Author: hutch <hutch@midwales.net>
+Date:   Wed May 1 16:50:22 2013 +0100
+
+    comply with js strict mode
+
+js/getdirections_v3.js
+js/getdirections_v3a.js
+js/getdirections_v3b.js
+
+commit 14284b3
+Author: hutch <hutch@midwales.net>
+Date:   Wed May 1 16:49:53 2013 +0100
+
+    removed dependency on entity module
+
+getdirections.info
+
+commit 8bb9ef1
 Author: hutch <hutch@midwales.net>
 Date:   Tue Apr 30 19:02:58 2013 +0100
 
     added variable_set for js paths
 
+CHANGELOG.txt
 getdirections.install
 
 commit d2fcf2e

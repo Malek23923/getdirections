@@ -61,3 +61,12 @@ tbody, thead {
 #getdirections_show_duration {
   margin-top: 8px;
 }
+
+.getdirections_start_info {
+  margin-bottom: 8px;
+
+}
+.getdirections_end_info {
+  margin-bottom: 8px;
+
+}
