@@ -858,10 +858,10 @@ function getdirections_defaults() {
     if (isset($getdirections_defaults['behavior']['draggable'])) {
       $getdirections_defaults['draggable'] = $getdirections_defaults['behavior']['draggable'];
     }
-     if (isset($getdirections_defaults['behavior']['overview'])) {
+    if (isset($getdirections_defaults['behavior']['overview'])) {
       $getdirections_defaults['overview'] = $getdirections_defaults['behavior']['overview'];
     }
-     if (isset($getdirections_defaults['behavior']['overview_opened'])) {
+    if (isset($getdirections_defaults['behavior']['overview_opened'])) {
       $getdirections_defaults['overview_opened'] = $getdirections_defaults['behavior']['overview_opened'];
     }
     unset($getdirections_defaults['behavior']);
@@ -2533,7 +2533,7 @@ function getdirections_misc_settings($defaults, $config = TRUE, $extras = TRUE) 
     );
   }
   else {
-    $form['getdirections_misc']['keep_title'] = array('#type' => 'value', '#value' => 0,);
+    $form['getdirections_misc']['keep_title'] = array('#type' => 'value', '#value' => 0);
   }
   $form['show_distance'] = array(
     '#type' => 'checkbox',
@@ -3307,7 +3307,7 @@ function theme_getdirections_direction_form($variables) {
   if ($getdirections_misc['weather_use']) {
     if ($getdirections_misc['weather_use'] && $getdirections_misc['weather_show']) {
       $buttons[] = '<input type="button" value="' . t('Weather !t', array('!t' => ($getdirections_misc['weather_state'] ? t('Off') : t('On')))) . '" id="getdirections_toggleWeather_' . $mapid . '" class="form-submit" />';
-     }
+    }
     if ($getdirections_misc['weather_cloud']) {
       $buttons[] = '<input type="button" value="' . t('Clouds !t', array('!t' => ($getdirections_misc['weather_cloud_state'] ? t('Off') : t('On')))) . '" id="getdirections_toggleCloud_' . $mapid . '" class="form-submit" />';
     }

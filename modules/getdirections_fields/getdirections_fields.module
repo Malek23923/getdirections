@@ -663,14 +663,15 @@ function theme_getdirections_fields_link($variables) {
   $entity_type = $variables['entity_type'];
   $entity_id   = $variables['entity_id'];
   $direction   = $variables['dir'];
+
+  $output = '';
   $direction_text = t('to');
   if ($direction == 'from') {
     $direction_text = t('from');
   }
-  $path = 'getdirections/' . $entity_type . '/' . $direction . '/' .  $entity_id;
-  $link = t('Get directions !t !l', array('!t' => $direction_text,'!l' => l($link_text, $path)));
+  $path = 'getdirections/' . $entity_type . '/' . $direction . '/' . $entity_id;
+  $link = t('Get directions !t !l', array('!t' => $direction_text, '!l' => l($link_text, $path)));
 
-  $output = '';
   $output .= '<div class="getdirections_link">' . $link . '</div>';
   return $output;
 

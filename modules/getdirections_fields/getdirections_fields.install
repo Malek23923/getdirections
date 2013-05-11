@@ -8,13 +8,15 @@
 
 /**
  * Implements hook_uninstall().
-  */
+ *
+ */
 function getdirections_fields_uninstall() {
 }
 
 /**
-  * Implements hook_enable()
-  */
+ * Implements hook_enable().
+ *
+ */
 function getdirections_fields_enable() {
 
   drupal_set_message(st('Thank you for installing Getdirections Fields.'), 'status');
