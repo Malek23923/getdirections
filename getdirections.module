@@ -1512,18 +1512,6 @@ function getdirections_get_lid_title($lid) {
  *
  *
  */
-function getdirections_is_advanced() {
-  $defaults = getdirections_defaults();
-  if ( isset($defaults['use_advanced']) && $defaults['use_advanced']) {
-    return TRUE;
-  }
-  return FALSE;
-}
-
-/**
- *
- *
- */
 function getdirections_load_latlon_defaults() {
   $getdirections_defaults = getdirections_defaults();
   return $getdirections_defaults['latlong'];
@@ -1915,8 +1903,8 @@ function getdirections_is_mobile() {
 }
 
 /**
- *
- *
+ * @return
+ *   Returns a string of mobile compatible user agents
  */
 function getdirections_ua_get() {
   $default = array('ua_string' => "iphone|ipad|android|blackberry|blazer|bolt|symbian|mobile safari|fennec|gobrowser|iemobile|maemo browser|profile midp|minimo|kindle|opera mini|opera mobi|skyfire|teashark|uzardweb");
@@ -1961,8 +1949,8 @@ function getdirections_ip_geoloc() {
 }
 
 /**
- *
- *
+ * @return
+ *   Returns an array of supported modules
  */
 function getdirections_supported_modules() {
   return array(
@@ -2373,7 +2361,7 @@ function getdirections_default_settings($defaults, $parent = 'getdirections_defa
 }
 
 /**
- *
+ * Configure returnlinks
  *
  */
 function getdirections_returnlink_settings($defaults) {
@@ -2480,7 +2468,7 @@ function getdirections_returnlink_settings($defaults) {
 }
 
 /**
- *
+ * Colorbox settings form
  *
  */
 function getdirections_colorbox_settings($defaults) {
@@ -2518,7 +2506,7 @@ function getdirections_colorbox_settings($defaults) {
 }
 
 /**
- *
+ * Miscellaneous settings form
  *
  */
 function getdirections_misc_settings($defaults, $config = TRUE, $extras = TRUE) {
@@ -2815,7 +2803,7 @@ function getdirections_misc_settings($defaults, $config = TRUE, $extras = TRUE) 
 }
 
 /**
- *
+ * Convert an addressfield
  *
  */
 function getdirections_addressfield_convert($address) {
@@ -2823,9 +2811,8 @@ function getdirections_addressfield_convert($address) {
   return $location;
 }
 
-// is an entity_type location enabled?
 /**
- *
+ * Check that an entity type is location enabled.
  *
  */
 function getdirections_check_entity_type($entity_type = '', $bundle = '') {
@@ -2854,7 +2841,7 @@ function getdirections_check_entity_type($entity_type = '', $bundle = '') {
 }
 
 /**
- *
+ * Return fieldable entities
  *
  */
 function getdirections_get_fieldable_entity_types() {
@@ -2869,7 +2856,7 @@ function getdirections_get_fieldable_entity_types() {
 }
 
 /**
- *
+ * Return fieldable entities
  *
  */
 function getdirections_get_enabled_entity_types() {
@@ -2884,7 +2871,7 @@ function getdirections_get_enabled_entity_types() {
 }
 
 /**
- *
+ * Provide an array of vocabularies.
  *
  */
 function getdirections_get_vocabularies() {
@@ -2904,7 +2891,7 @@ function getdirections_get_vocabularies() {
 }
 
 /**
- *
+ * Check that a taxonomy type is fieldable.
  *
  */
 function getdirections_check_vocabulary($machine_name) {
@@ -3034,7 +3021,7 @@ function theme_getdirections_show($variables) {
     $output .= '<div id="getdirections_show_duration_' . $mapid . '"></div>';
   }
   $help = '';
-  if (getdirections_is_advanced()) {
+  if ($getdirections_defaults['use_advanced']) {
     if ($getdirections_defaults['waypoints'] > 0 && ! $getdirections_defaults['advanced_alternate'] ) {
       $help = t('Drag <img src="http://labs.google.com/ridefinder/images/mm_20_!c.png"> to activate a waypoint', array('!c' => $getdirections_defaults['waypoint_color']));
       if ($getdirections_defaults['advanced_autocomplete'] && $getdirections_defaults['advanced_autocomplete_via'] ) {
@@ -3055,8 +3042,7 @@ function theme_getdirections_show($variables) {
       'class' => 'getdirections-map',
     ),
     array(
-      #'data' => (getdirections_is_advanced() && $getdirections_defaults['advanced_alternate'] ? '<button id="getdirections-undo-' . $mapid . '" onclick="Drupal.getdirectionsundo(' . $mapid . ')">' . t('Undo') . '</button>' : '') . '<div id="getdirections_directions_' . $mapid . '"></div>',
-      'data' => (getdirections_is_advanced() && $getdirections_defaults['advanced_alternate'] ? '<button id="getdirections-undo-' . $mapid . '">' . t('Undo') . '</button>' : '') . '<div id="getdirections_directions_' . $mapid . '"></div>',
+      'data' => ($getdirections_defaults['use_advanced'] && $getdirections_defaults['advanced_alternate'] ? '<button id="getdirections-undo-' . $mapid . '">' . t('Undo') . '</button>' : '') . '<div id="getdirections_directions_' . $mapid . '"></div>',
       'valign' => 'top' ,
       'align' => 'left',
       'class' => 'getdirections-list',
@@ -3133,10 +3119,10 @@ function theme_getdirections_show_locations_via($variables) {
 
   $getdirections_misc = getdirections_misc_defaults();
   if ($getdirections_misc['show_distance']) {
-    $output .= '<div id="getdirections_show_distance"></div>';
+    $output .= '<div id="getdirections_show_distance_' . $mapid . '"></div>';
   }
   if ($getdirections_misc['show_duration']) {
-    $output .= '<div id="getdirections_show_duration"></div>';
+    $output .= '<div id="getdirections_show_duration_' . $mapid . '"></div>';
   }
   $header = array();
 
@@ -3160,7 +3146,7 @@ function theme_getdirections_show_locations_via($variables) {
 
 
 /**
- *
+ * Themes the getdirections form.
  *
  */
 function theme_getdirections_direction_form($variables) {
@@ -3216,7 +3202,7 @@ function theme_getdirections_direction_form($variables) {
       }
     }
   }
-  if (getdirections_is_advanced()) {
+  if ($getdirections_defaults['use_advanced']) {
     $desc = t('Fill in the form below.<br />You can also click on the map and move the marker.');
     if (isset($form['country_from_' . $mapid])) {
       $desc = t('Select a country first, then type in a town.<br />You can also click on the map and move the marker.');
@@ -3322,7 +3308,7 @@ function theme_getdirections_direction_form($variables) {
 }
 
 /**
- *
+ * For use with colorbox.
  *
  */
 function template_preprocess_getdirections_box(&$variables) {
@@ -3367,7 +3353,7 @@ function template_preprocess_getdirections_box(&$variables) {
 }
 
 /**
- *
+ * Manipulates the address.
  *
  */
 function theme_getdirections_loadaddress($variables) {
@@ -3406,7 +3392,7 @@ function theme_getdirections_loadaddress($variables) {
 
 
 /**
- *
+ * Handles addressfield
  *
  */
 function theme_getdirections_addressfield_loadaddress($variables) {
@@ -3417,7 +3403,7 @@ function theme_getdirections_addressfield_loadaddress($variables) {
 }
 
 /**
- *
+ * Manipulates addressfield to make it compatible with $location
  *
  */
 function theme_getdirections_addressfield_convert($variables) {
