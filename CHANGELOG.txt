@@ -1,9 +1,26 @@
-commit 1475e08
+commit 56df997
+Author: hutch <hutch@midwales.net>
+Date:   Tue Jun 4 10:10:06 2013 +0100
+
+    added comment to info file
+
+getdirections.info
+
+commit 5449687
+Author: hutch <hutch@midwales.net>
+Date:   Mon Apr 15 09:20:49 2013 +0100
+
+    added some sanity checks to function getdirections_other_load_locations()
+
+getdirections.module
+
+commit 53637a2
 Author: hutch <hutch@midwales.net>
 Date:   Fri Mar 29 21:10:24 2013 +0000
 
     better https
 
+CHANGELOG.txt
 getdirections.module
 
 commit 281fcf7

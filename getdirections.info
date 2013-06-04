@@ -1,3 +1,4 @@
+; getdirections 7.x-2.x
 name = Get Directions
 description = "Fetches Google map directions."
 core = 7.x
