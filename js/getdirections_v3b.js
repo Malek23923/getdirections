@@ -424,9 +424,27 @@
       function updateCopyrights() {
         if(getdirections_map[key].getMapTypeId() == "OSM") {
           copyrightNode.innerHTML = "OSM map data @<a target=\"_blank\" href=\"http://www.openstreetmap.org/\"> OpenStreetMap</a>-contributors,<a target=\"_blank\" href=\"http://creativecommons.org/licenses/by-sa/2.0/legalcode\"> CC BY-SA</a>";
+          if (settings.trafficinfo) {
+            $("#getdirections_toggleTraffic_" + key).attr('disabled', true);
+          }
+          if (settings.bicycleinfo) {
+            $("#getdirections_toggleBicycle_" + key).attr('disabled', true);
+          }
+          if (settings.transitinfo) {
+            $("#getdirections_toggleTransit_" + key).attr('disabled', true);
+          }
         }
         else {
           copyrightNode.innerHTML = "";
+          if (settings.trafficinfo) {
+            $("#getdirections_toggleTraffic_" + key).attr('disabled', false);
+          }
+          if (settings.bicycleinfo) {
+            $("#getdirections_toggleBicycle_" + key).attr('disabled', false);
+          }
+          if (settings.transitinfo) {
+            $("#getdirections_toggleTransit_" + key).attr('disabled', false);
+          }
         }
       }
       // end functions
