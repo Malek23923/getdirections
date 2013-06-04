@@ -533,6 +533,7 @@ function getdirections_get_settings($getdirections_defaults, $getdirections_misc
     'weather_info'               => $getdirections_misc['weather_info'],
     'switchfromto'               => $getdirections_misc['switchfromto'],
     'use_https'                  => $getdirections_defaults['use_https'],
+    'visual_refresh'             => $getdirections_defaults['visual_refresh'],
     'mylocale'                   => $language->language,
     'smartip_callback_url'       => url("getdirections/smart_ip"),
     'ip_geoloc_callback_url'     => url("getdirections/ip_geoloc"),
@@ -845,6 +846,7 @@ function getdirections_defaults() {
     'advanced_autocomplete_via_width' => 20,
     'advanced_alternate'              => 0,
     'use_https'                       => ($is_https ? 1 : 0),
+    'visual_refresh'                  => 0,
   );
   $getdirections_defaults = variable_get('getdirections_default', array());
   // remove old stuff
@@ -2216,6 +2218,16 @@ function getdirections_default_settings($defaults, $parent = 'getdirections_defa
     $form['transit_dates'] = array('#type' => 'value', '#value' => 0);
     $form['transit_date_format'] = array('#type' => 'value', '#value' => 'int');
   }
+
+  // Enable the visual refresh feature
+  $form['visual_refresh'] =  array(
+    '#type' => 'checkbox',
+    '#title' => t('Google Visual Refresh'),
+    '#description' => t('Enable the Visual Refresh feature.'),
+    '#default_value' =>  $defaults['visual_refresh'],
+    '#return_value' => 1,
+  );
+
   $form['travelextras_show'] = array(
     '#type' => 'checkbox',
     '#title' => t('Show travel extras'),

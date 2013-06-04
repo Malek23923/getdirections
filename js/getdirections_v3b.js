@@ -479,6 +479,9 @@
         // pipe delim
         var latlons = (settings.latlons ? settings.latlons : '');
 
+        // Enable the visual refresh
+        google.maps.visualRefresh = (settings.visual_refresh ?  true : false);
+
         var startpoint = 0;
         var endpoint = 1;
         var donemarkers = [];

@@ -1,9 +1,50 @@
-commit 96c3411
+commit f617cf2
+Author: hutch <hutch@midwales.net>
+Date:   Tue Jun 4 16:18:48 2013 +0100
+
+    added visual refresh feature
+
+getdirections.module
+js/getdirections_v3.js
+js/getdirections_v3a.js
+js/getdirections_v3b.js
+
+commit de8924c
+Author: hutch <hutch@midwales.net>
+Date:   Tue Jun 4 16:18:00 2013 +0100
+
+    added comment to info file
+
+getdirections.info
+
+commit 8180929
+Author: hutch <hutch@midwales.net>
+Date:   Sat May 11 10:19:23 2013 +0100
+
+    more cleanup
+
+getdirections.css
+getdirections.module
+
+commit bb6dc13
+Author: hutch <hutch@midwales.net>
+Date:   Sat May 11 08:26:55 2013 +0100
+
+    Coder review fixes
+
+getdirections.admin.inc
+getdirections.install
+getdirections.module
+modules/getdirections_fields/getdirections_fields.install
+modules/getdirections_fields/getdirections_fields.module
+
+commit 84401a0
 Author: hutch <hutch@midwales.net>
 Date:   Fri May 10 23:07:26 2013 +0100
 
     fixed nextbtn, better info
 
+CHANGELOG.txt
 getdirections.css
 getdirections.module
 js/getdirections_v3a.js

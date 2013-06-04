@@ -290,6 +290,8 @@
         // pipe delim
         var latlons = (settings.latlons ? settings.latlons : '');
 
+        // Enable the visual refresh
+        google.maps.visualRefresh = (settings.visual_refresh ?  true : false);
 
         // get directions button
         $("#edit-submit-" + key2).click( function () {
