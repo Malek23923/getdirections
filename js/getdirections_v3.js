@@ -239,6 +239,15 @@
           $("#getdirections_show_duration_" + key).html(settings.show_duration + ': ' + duration );
         }
       }
+
+      function updateCopyrights() {
+        if(getdirections_map[key].getMapTypeId() == "OSM") {
+          copyrightNode.innerHTML = "OSM map data @<a target=\"_blank\" href=\"http://www.openstreetmap.org/\"> OpenStreetMap</a>-contributors,<a target=\"_blank\" href=\"http://creativecommons.org/licenses/by-sa/2.0/legalcode\"> CC BY-SA</a>";
+        }
+        else {
+          copyrightNode.innerHTML = "";
+        }
+      }
       // end functions
 
       // is there really a map?
@@ -280,6 +289,7 @@
         var map_backgroundcolor = settings.map_backgroundcolor;
         var fromlatlon = (settings.fromlatlon ? settings.fromlatlon : '');
         var tolatlon = (settings.tolatlon ? settings.tolatlon : '');
+        var useOpenStreetMap = false;
         var scheme = 'http';
         if (settings.use_https) {
           scheme = 'https';
@@ -348,6 +358,16 @@
           if (baselayers.Satellite) { maptypes.push(google.maps.MapTypeId.SATELLITE); }
           if (baselayers.Hybrid) { maptypes.push(google.maps.MapTypeId.HYBRID); }
           if (baselayers.Physical) { maptypes.push(google.maps.MapTypeId.TERRAIN); }
+          if (baselayers.OpenStreetMap) {
+            maptypes.push("OSM");
+            var copyrightNode = document.createElement('div');
+            copyrightNode.id = 'copyright-control';
+            copyrightNode.style.fontSize = '11px';
+            copyrightNode.style.fontFamily = 'Arial, sans-serif';
+            copyrightNode.style.margin = '0 2px 2px 0';
+            copyrightNode.style.whiteSpace = 'nowrap';
+            useOpenStreetMap = true;
+          }
         }
         else {
           maptype = google.maps.MapTypeId.ROADMAP;
@@ -379,6 +399,24 @@
         }
 
         getdirections_map[key] = new google.maps.Map(document.getElementById("getdirections_map_canvas_" + key), mapOpts);
+
+        // OpenStreetMap
+        if (useOpenStreetMap) {
+          var tle = Drupal.t("OpenStreetMap");
+          if (settings.mtc == 'menu') {
+            tle = Drupal.t("OSM map");
+          }
+          getdirections_map[key].mapTypes.set("OSM", new google.maps.ImageMapType({
+            getTileUrl: function(coord, zoom) {
+              return "http://tile.openstreetmap.org/" + zoom + "/" + coord.x + "/" + coord.y + ".png";
+            },
+            tileSize: new google.maps.Size(256, 256),
+            name: tle,
+            maxZoom: 18
+          }));
+          google.maps.event.addListener(getdirections_map[key], 'maptypeid_changed', updateCopyrights);
+          getdirections_map[key].controls[google.maps.ControlPosition.BOTTOM_RIGHT].push(copyrightNode);
+        }
 
         // TrafficLayer
         if (settings.trafficinfo) {

@@ -820,6 +820,7 @@ function getdirections_defaults() {
       'Satellite' => 1,
       'Hybrid'    => 1,
       'Physical'  => 1,
+      'OpenStreetMap' => 0,
     ),
     'unitsystem'                      => 'metric',
     'scale'                           => 0,
@@ -2085,6 +2086,7 @@ function getdirections_default_settings($defaults, $parent = 'getdirections_defa
     'Satellite' => t('Standard satellite map'),
     'Hybrid' => t('Hybrid satellite map'),
     'Physical' => t('Terrain map'),
+    'OpenStreetMap' => t('OpenStreet map'),
   );
   foreach ($layers AS $key => $layer) {
     if ($defaults['baselayers'][$key]) {
@@ -2131,6 +2133,13 @@ function getdirections_default_settings($defaults, $parent = 'getdirections_defa
     '#title' => t('Terrain map'),
     '#description' => t('Map with physical data (terrain, vegetation.)'),
     '#default_value' => $defaults['baselayers']['Physical'],
+    '#return_value' => 1,
+  );
+  $form['baselayers']['OpenStreetMap'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('OpenStreet map'),
+    '#description' => t('Map from the OpenStreetMap Foundation.'),
+    '#default_value' => $defaults['baselayers']['OpenStreetMap'],
     '#return_value' => 1,
   );
 
