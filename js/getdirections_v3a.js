@@ -1141,13 +1141,25 @@
             from = addresses[key][startpoint] + "@" + path[key][startpoint].toUrlValue(6);
           }
           else {
-            from = path[key][startpoint].toUrlValue(6);
+            var from_address = $("input[name=from_address_" + key +"]").val();
+            if (from_address) {
+              from = from_address + "@" + path[key][startpoint].toUrlValue(6);
+            }
+            else {
+              from = path[key][startpoint].toUrlValue(6);
+            }
           }
           if (addresses[key][endpoint]) {
             to = addresses[key][endpoint] + "@" + path[key][endpoint].toUrlValue(6);
           }
           else {
-            to = path[key][endpoint].toUrlValue(6);
+            var to_address = $("input[name=to_address_" + key +"]").val();
+            if (to_address) {
+              to = to_address + "@" + path[key][endpoint].toUrlValue(6);
+            }
+            else {
+              to = path[key][endpoint].toUrlValue(6);
+            }
           }
           for (i = waypoints; i > 0; i--) {
             if (active[key][i]) {

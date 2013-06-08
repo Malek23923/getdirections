@@ -1,9 +1,31 @@
-commit 148c39d
+commit 50720a6
+Author: hutch <hutch@midwales.net>
+Date:   Sat Jun 8 14:18:51 2013 +0100
+
+    improved accuracy of geocoding
+
+getdirections.module
+js/getdirections_v3.js
+js/getdirections_v3a.js
+js/getdirections_v3b.js
+
+commit 3c418fa
+Author: hutch <hutch@midwales.net>
+Date:   Tue Jun 4 23:14:00 2013 +0100
+
+    more improvements to openstreetmaps
+
+js/getdirections_v3.js
+js/getdirections_v3a.js
+js/getdirections_v3b.js
+
+commit b284321
 Author: hutch <hutch@midwales.net>
 Date:   Tue Jun 4 21:33:23 2013 +0100
 
     added openstreetmap
 
+CHANGELOG.txt
 getdirections.module
 js/getdirections_v3.js
 js/getdirections_v3a.js

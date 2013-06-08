@@ -329,18 +329,30 @@
             from += ', ' + $("#edit-country-from-" + key2).val();
           }
           else if (from.match(llpatt)) {
-            // we have lat,lon
-            var farr = from.split(",");
-            from = new google.maps.LatLng(farr[0], farr[1]);
+            var from_address = $("input[name=from_address_" + key +"]").val();
+            if (from_address) {
+              from = from_address + "@" + from;
+            }
+            else {
+              // we have lat,lon
+              var farr = from.split(",");
+              from = new google.maps.LatLng(farr[0], farr[1]);
+            }
           }
           var to = $("input[name=to_" + key + "]").val();
           if ($("#edit-country-to-" + key2).val()) {
             to += ', ' + $("#edit-country-to-" + key2).val();
           }
           else if (to.match(llpatt)) {
-            // we have lat,lon
-            var tarr = to.split(",");
-            to = new google.maps.LatLng(tarr[0], tarr[1]);
+            var to_address = $("input[name=to_address_" + key +"]").val();
+            if (to_address) {
+              to = to_address + "@" + to;
+            }
+            else {
+              // we have lat,lon
+              var tarr = to.split(",");
+              to = new google.maps.LatLng(tarr[0], tarr[1]);
+            }
           }
           // switch off markers
           if (tomarker && tomarker.getVisible() == true) {

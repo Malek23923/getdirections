@@ -630,6 +630,10 @@ function _getdirections_direction_form($defaults, $misc, $mapid, $fromto='', $lo
     }
     else {
       $mfrom = $loc;
+      $form['from_address_' . $mapid] = array(
+        '#type' => 'hidden',
+        '#value' => $loc,
+      );
     }
     $form['mfrom'] = array(
       '#type' => 'item',
@@ -671,6 +675,10 @@ function _getdirections_direction_form($defaults, $misc, $mapid, $fromto='', $lo
     }
     else {
       $mto = $loc;
+      $form['to_address_' . $mapid] = array(
+        '#type' => 'hidden',
+        '#value' => $loc,
+      );
     }
     $form['mto'] = array(
       '#type' => 'item',
@@ -3382,9 +3390,9 @@ function theme_getdirections_loadaddress($variables) {
   $addcountry = $variables['addcountry'];
 
   $loc = array();
-  if (isset($location['name']) && $location['name']) {
-    $loc[] = $location['name'];
-  }
+#  if (isset($location['name']) && $location['name']) {
+#    $loc[] = $location['name'];
+#  }
   if (isset($location['street']) && $location['street']) {
     $loc[] = $location['street'];
   }
