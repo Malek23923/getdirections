@@ -1,9 +1,20 @@
-commit 50720a6
+commit 7633970
+Author: hutch <hutch@midwales.net>
+Date:   Sat Jun 15 09:23:02 2013 +0100
+
+    changed getdirections_map to Drupal.getdirections_map
+
+js/getdirections_v3.js
+js/getdirections_v3a.js
+js/getdirections_v3b.js
+
+commit c29c915
 Author: hutch <hutch@midwales.net>
 Date:   Sat Jun 8 14:18:51 2013 +0100
 
     improved accuracy of geocoding
 
+CHANGELOG.txt
 getdirections.module
 js/getdirections_v3.js
 js/getdirections_v3a.js
