@@ -1142,7 +1142,7 @@
           }
           else {
             var from_address = $("input[name=from_address_" + key +"]").val();
-            if (from_address) {
+            if (from_address && from_address.match(/,/)) {
               from = from_address + "@" + path[key][startpoint].toUrlValue(6);
             }
             else {
@@ -1154,7 +1154,7 @@
           }
           else {
             var to_address = $("input[name=to_address_" + key +"]").val();
-            if (to_address) {
+            if (to_address && to_address.match(/,/)) {
               to = to_address + "@" + path[key][endpoint].toUrlValue(6);
             }
             else {
