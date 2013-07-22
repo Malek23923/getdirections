@@ -1,9 +1,18 @@
-commit 56df997
+commit d7ca10c
+Author: hutch <hutch@midwales.net>
+Date:   Tue Jul 23 00:01:56 2013 +0100
+
+    fixed theme_getdirections_addressfield_loadaddress
+
+getdirections.module
+
+commit 027104e
 Author: hutch <hutch@midwales.net>
 Date:   Tue Jun 4 10:10:06 2013 +0100
 
     added comment to info file
 
+CHANGELOG.txt
 getdirections.info
 
 commit 5449687
