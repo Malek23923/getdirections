@@ -1,9 +1,36 @@
-commit 7633970
+commit 28d14e6
+Author: hutch <hutch@midwales.net>
+Date:   Tue Jul 23 23:31:25 2013 +0100
+
+    fixed getdirections_box bug
+
+getdirections.module
+
+commit dcdce93
+Author: hutch <hutch@midwales.net>
+Date:   Tue Jul 23 00:02:25 2013 +0100
+
+    fixed theme_getdirections_addressfield_loadaddress
+
+getdirections.module
+
+commit 78a4bda
+Author: hutch <hutch@midwales.net>
+Date:   Mon Jun 17 22:28:59 2013 +0100
+
+    better to_address and from_address searching
+
+js/getdirections_v3.js
+js/getdirections_v3a.js
+js/getdirections_v3b.js
+
+commit 3f2499a
 Author: hutch <hutch@midwales.net>
 Date:   Sat Jun 15 09:23:02 2013 +0100
 
     changed getdirections_map to Drupal.getdirections_map
 
+CHANGELOG.txt
 js/getdirections_v3.js
 js/getdirections_v3a.js
 js/getdirections_v3b.js

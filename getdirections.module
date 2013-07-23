@@ -1621,6 +1621,12 @@ function getdirections_direction_box() {
   elseif ($a1 == 'location_comment' && ($a2 == 'from' || $a2 == 'to')) {
     $content = getdirections_comment_setlocation($a2, $a3);
   }
+  elseif ( getdirections_check_entity_type($a1) && ($a2 == 'from' || $a2 == 'to') && is_numeric($a3) ) {
+    $content = getdirections_entity_setlocation($a1, $a2, $a3);
+  }
+  elseif (getdirections_check_entity_type($a1) && is_numeric($a2) && getdirections_check_entity_type($a3) && is_numeric($a4)) {
+    $content = getdirections_entity_setlocations($a1, $a2, $a3, $a4);
+  }
   else {
     $content = getdirections_direction();
   }
