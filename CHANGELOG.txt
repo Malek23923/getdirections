@@ -1,9 +1,18 @@
-commit 28d14e6
+commit a8443a7
+Author: hutch <hutch@midwales.net>
+Date:   Wed Jul 24 18:15:14 2013 +0100
+
+    rearranged settings form
+
+getdirections.module
+
+commit 26f8c56
 Author: hutch <hutch@midwales.net>
 Date:   Tue Jul 23 23:31:25 2013 +0100
 
     fixed getdirections_box bug
 
+CHANGELOG.txt
 getdirections.module
 
 commit dcdce93

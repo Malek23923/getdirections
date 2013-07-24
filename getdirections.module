@@ -2210,6 +2210,14 @@ function getdirections_default_settings($defaults, $parent = 'getdirections_defa
     '#default_value' =>  $defaults['streetview_show'],
     '#return_value' => 1,
   );
+  // Enable the visual refresh feature
+  $form['visual_refresh'] =  array(
+    '#type' => 'checkbox',
+    '#title' => t('Google Visual Refresh'),
+    '#description' => t('Enable the Visual Refresh feature.'),
+    '#default_value' =>  $defaults['visual_refresh'],
+    '#return_value' => 1,
+  );
   $form['travelmode_show'] = array(
     '#type' => 'checkbox',
     '#title' => t('Show travel mode'),
@@ -2242,15 +2250,6 @@ function getdirections_default_settings($defaults, $parent = 'getdirections_defa
     $form['transit_date_format'] = array('#type' => 'value', '#value' => 'int');
   }
 
-  // Enable the visual refresh feature
-  $form['visual_refresh'] =  array(
-    '#type' => 'checkbox',
-    '#title' => t('Google Visual Refresh'),
-    '#description' => t('Enable the Visual Refresh feature.'),
-    '#default_value' =>  $defaults['visual_refresh'],
-    '#return_value' => 1,
-  );
-
   $form['travelextras_show'] = array(
     '#type' => 'checkbox',
     '#title' => t('Show travel extras'),
@@ -2258,6 +2257,7 @@ function getdirections_default_settings($defaults, $parent = 'getdirections_defa
     '#default_value' =>  $defaults['travelextras_show'],
     '#return_value' => 1,
   );
+
   $form['map_backgroundcolor'] = array(
     '#type' => 'textfield',
     '#title' =>  t('Map background color'),
