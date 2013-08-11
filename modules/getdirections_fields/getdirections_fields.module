@@ -494,20 +494,17 @@ function getdirections_fields_field_widget_form(&$form, &$form_state, $field, $i
           '#title' => t('Location Field'),
           '#options' => $fieldnames,
           '#description' => t('Field to take locative data from'),
+          '#default_value' => (isset($items[$delta]['locative_field_name']) ? $items[$delta]['locative_field_name'] : (isset($instance['default_value'][$delta]['locative_field_name']) ? $instance['default_value'][$delta]['locative_field_name'] : '')),
         );
-        if (isset($items[$delta]['locative_field_name'])) {
-          $element['locative_field_name']['#default_value'] = $items[$delta]['locative_field_name'];
-        }
+
         if (! empty($address_fieldnames)) {
           $element['address_field_name'] = array(
             '#type' => 'select',
             '#title' => t('Address Field'),
             '#options' => array('' => t('No address shown')) + $address_fieldnames,
             '#description' => t('Field to take address data from'),
+            '#default_value' => (isset($items[$delta]['address_field_name']) ? $items[$delta]['address_field_name'] : (isset($instance['default_value'][$delta]['address_field_name']) ? $instance['default_value'][$delta]['address_field_name'] : '')),
           );
-          if (isset($items[$delta]['address_field_name'])) {
-            $element['address_field_name']['#default_value'] = $items[$delta]['address_field_name'];
-          }
         }
         else {
           $element['address_field_name'] = array('#type' => 'value', '#value' => '');
