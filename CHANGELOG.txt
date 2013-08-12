@@ -1,9 +1,36 @@
-commit a8443a7
+commit ebdb724
+Author: hutch <hutch@midwales.net>
+Date:   Mon Aug 12 18:36:53 2013 +0100
+
+    added adjust_vars to paths
+
+getdirections.module
+
+commit 546311c
+Author: hutch <hutch@midwales.net>
+Date:   Mon Aug 12 13:53:04 2013 +0100
+
+    added preview map
+
+getdirections.admin.inc
+getdirections.module
+js/getdirections_preview.js
+
+commit dbd42b6
+Author: hutch <hutch@midwales.net>
+Date:   Sun Aug 11 08:19:55 2013 +0100
+
+    fixed default value bug in field module
+
+modules/getdirections_fields/getdirections_fields.module
+
+commit 8eec086
 Author: hutch <hutch@midwales.net>
 Date:   Wed Jul 24 18:15:14 2013 +0100
 
     rearranged settings form
 
+CHANGELOG.txt
 getdirections.module
 
 commit 26f8c56

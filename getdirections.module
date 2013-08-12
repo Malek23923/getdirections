@@ -1895,7 +1895,8 @@ function getdirections_paths_get($reset = FALSE) {
     return $defaults;
   }
   $getdirections_paths = variable_get('getdirections_paths', $defaults);
-  return $getdirections_paths;
+  $newdefaults = getdirections_adjust_vars($defaults, $getdirections_paths);
+  return $newdefaults;
 }
 
 /**
