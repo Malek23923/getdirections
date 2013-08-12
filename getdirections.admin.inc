@@ -36,6 +36,16 @@ function getdirections_settings_form() {
     '#required' => FALSE,
   );
 
+  // preview
+  $form['getdirections_preview'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Getdirections Preview'),
+    '#description' => t('A preview of the current map settings.<br />You can adjust the default Map center, Zoom and Default map type by changing the map.<br /> For all other changes use the form. Remember to Save configuration when you are done.'),
+    // This will store all the defaults in one variable.
+    '#tree' => FALSE,
+  );
+  $form['getdirections_preview']['preview_map'] = array('#markup' => '');
+
   // default settings
   $form['getdirections_default'] = array(
     '#type' => 'fieldset',
@@ -135,7 +145,24 @@ function getdirections_settings_form() {
     '#size' => 60,
     '#description' => t('Where the getdirections v3 alternate javascript file is located.')
   );
+  $form['getdirections_paths']['getdirections_preview_path'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Path to getdirections preview javascript file'),
+    '#default_value' => $getdirections_paths['getdirections_preview_path'],
+    '#size' => 60,
+    '#description' => t('Where the getdirections preview javascript file is located.')
+  );
 
+  $form['getdirections_paths']['reset'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Reset'),
+    '#description' => t('Reset the paths to the defaults.'),
+    '#default_value' => 0,
+    '#return_value' => 1,
+  );
+
+  unset($form['#theme']);
+  $form['#theme'] = 'getdirections_settings_form';
   $form['#validate'][] = 'getdirections_settings_validate';
 
   return system_settings_form($form);
@@ -192,6 +219,12 @@ function getdirections_settings_validate($form, &$form_state) {
     // force a setting
     $form_state['values']['getdirections_default']['maptype'] = 'Map';
     $form_state['values']['getdirections_default']['baselayers']['Map'] = 1;
+  }
+
+  $reset = $form_state['values']['getdirections_paths']['reset'];
+  unset($form_state['values']['getdirections_paths']['reset']);
+  if ($reset) {
+    $form_state['values']['getdirections_paths'] = getdirections_paths_get(TRUE);
   }
 
 }

@@ -1342,17 +1342,24 @@ function getdirections_setup_map($defaults, $misc_defaults) {
   }
   $gmaplink = url($scheme . '://' . $gmapdomain, array('query' => $query));
 
-  if ($defaults['use_advanced']) {
-    if ($defaults['advanced_alternate']) {
-      $js = $getdirections_paths['getdirections_v3b_path'];
-    }
-    else {
-      $js = $getdirections_paths['getdirections_v3a_path'];
-    }
+  if (isset($defaults['preview_map'])) {
+    $js = $getdirections_paths['getdirections_preview_path'];
   }
   else {
-    $js = $getdirections_paths['getdirections_v3_path'];
+    if ($defaults['use_advanced']) {
+      if ($defaults['advanced_alternate']) {
+        $js = $getdirections_paths['getdirections_v3b_path'];
+      }
+      else {
+        $js = $getdirections_paths['getdirections_v3a_path'];
+      }
+    }
+    else {
+      $js = $getdirections_paths['getdirections_v3_path'];
+    }
+
   }
+
 
   drupal_add_js($gmaplink, 'external');
   drupal_add_css(GETDIRECTIONS_PATH . '/getdirections.css');
@@ -1876,12 +1883,18 @@ function getdirections_get_fieldname($type, $module, $entity_type = '') {
  * @return array paths
  *
  */
-function getdirections_paths_get() {
-  $getdirections_paths = variable_get('getdirections_paths', array(
+function getdirections_paths_get($reset = FALSE) {
+
+  $defaults = array(
     'getdirections_v3_path' => GETDIRECTIONS_PATH . '/js/getdirections_v3.js',
     'getdirections_v3a_path' => GETDIRECTIONS_PATH . '/js/getdirections_v3a.js',
     'getdirections_v3b_path' => GETDIRECTIONS_PATH . '/js/getdirections_v3b.js',
-  ));
+    'getdirections_preview_path' => GETDIRECTIONS_PATH . '/js/getdirections_preview.js',
+  );
+  if ($reset) {
+    return $defaults;
+  }
+  $getdirections_paths = variable_get('getdirections_paths', $defaults);
   return $getdirections_paths;
 }
 
@@ -2996,6 +3009,9 @@ function getdirections_theme() {
         'address' => array(),
       ),
     ),
+    'getdirections_settings_form' => array(
+      'render element' => 'form',
+    ),
   );
 }
 
@@ -3496,4 +3512,65 @@ function theme_getdirections_addressfield_convert($variables) {
   }
   return $location;
 
+}
+
+function theme_getdirections_settings_form($variables) {
+
+  $form = $variables['form'];
+  $output = '';
+
+  $getdirections_defaults = getdirections_defaults();
+  $getdirections_misc = getdirections_misc_defaults();
+  $getdirections_defaults['preview_map'] = 1;
+  getdirections_setup_map($getdirections_defaults, $getdirections_misc);
+  $getdirections_settings = getdirections_get_settings($getdirections_defaults, $getdirections_misc);
+
+  $mapid = getdirections_get_key();
+  drupal_add_js(array('getdirections_preview' => array($mapid => $getdirections_settings)), 'setting');
+
+  if (empty($width)) {
+    $width = $getdirections_defaults['width'];
+  }
+  if (empty($height)) {
+    $height = $getdirections_defaults['height'];
+  }
+
+  $preview_map = '<div id="getdirections_preview_map_canvas_' . $mapid . '" style="width:' . $width . '; height:' . $height . ';" ></div>';
+
+  // buttons
+  $buttons = array();
+  $output_buttons = '';
+  if ($getdirections_misc['trafficinfo']) {
+    $buttons[] = '<input type="button" value="' . t('Traffic Info !t', array('!t' => ($getdirections_misc['trafficinfo_state'] ? t('Off') : t('On')))) . '" title="' . t('Limited Availability') . '" id="getdirections_toggleTraffic_' . $mapid . '" class="form-submit" />';
+  }
+  if ($getdirections_misc['bicycleinfo']) {
+    $buttons[] = '<input type="button" value="' . t('Bicycle Info !t', array('!t' => ($getdirections_misc['bicycleinfo_state'] ? t('Off') : t('On')))) . '" title="' . t('Limited Availability') . '" id="getdirections_toggleBicycle_' . $mapid . '" class="form-submit" />';
+  }
+  if ($getdirections_misc['transitinfo']) {
+    $buttons[] = '<input type="button" value="' . t('Transit Info !t', array('!t' => ($getdirections_misc['transitinfo_state'] ? t('Off') : t('On')))) . '" title="' . t('Limited Availability') . '" id="getdirections_toggleTransit_' . $mapid . '" class="form-submit" />';
+  }
+  if ($getdirections_misc['panoramio_use'] && $getdirections_misc['panoramio_show']) {
+    $buttons[] = '<input type="button" value="' . t('Panoramio !t', array('!t' => ($getdirections_misc['panoramio_state'] ? t('Off') : t('On')))) . '" id="getdirections_togglePanoramio_' . $mapid . '" class="form-submit" />';
+  }
+  if ($getdirections_misc['weather_use']) {
+    if ($getdirections_misc['weather_use'] && $getdirections_misc['weather_show']) {
+      $buttons[] = '<input type="button" value="' . t('Weather !t', array('!t' => ($getdirections_misc['weather_state'] ? t('Off') : t('On')))) . '" id="getdirections_toggleWeather_' . $mapid . '" class="form-submit" />';
+    }
+    if ($getdirections_misc['weather_cloud']) {
+      $buttons[] = '<input type="button" value="' . t('Clouds !t', array('!t' => ($getdirections_misc['weather_cloud_state'] ? t('Off') : t('On')))) . '" id="getdirections_toggleCloud_' . $mapid . '" class="form-submit" />';
+    }
+  }
+  if (count($buttons)) {
+    $output_buttons .= '<div class="getdirections_map_buttons container-inline">';
+    $output_buttons .= implode('&nbsp;', $buttons);
+    $output_buttons .= '</div>';
+  }
+  $preview_map .= $output_buttons;
+
+  $form['getdirections_preview']['preview_map']['#markup'] = '<div id="getdirections_preview_map">' . $preview_map . '</div>';
+
+
+  $output .= drupal_render_children($form);
+
+  return $output;
 }
