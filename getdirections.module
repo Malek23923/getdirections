@@ -2742,7 +2742,6 @@ function getdirections_misc_settings($defaults, $config = TRUE, $extras = TRUE) 
       '#description' => t('Activate Weather information when map is first displayed.'),
       '#return_value' => 1,
     );
-    $form['weather_state']['#suffix'] = '</div>';
 
     $form['weather_temp'] = array(
       '#type' => 'select',
@@ -2765,6 +2764,20 @@ function getdirections_misc_settings($defaults, $config = TRUE, $extras = TRUE) 
       '#options' => array(0 => ('Auto'),  1 => t('Black'), 2 => t('White')),
     );
 
+    $form['weather_clickable'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Enable clicking on maps'),
+      '#default_value' => $defaults['weather_clickable'],
+      '#return_value' => 1,
+    );
+    $form['weather_info'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Enable weather InfoWindows'),
+      '#default_value' => $defaults['weather_info'],
+      '#return_value' => 1,
+    );
+    $form['weather_info']['#suffix'] = '</div>';
+
     $form['weather_cloud'] = array(
       '#type' => 'checkbox',
       '#title' => t('Enable Cloud Layer'),
@@ -2781,21 +2794,9 @@ function getdirections_misc_settings($defaults, $config = TRUE, $extras = TRUE) 
       '#description' => t('Activate Cloud layer when map is first displayed.'),
       '#return_value' => 1,
     );
-    $form['weather_cloud_state']['#suffix'] = '</div>';
+    $form['weather_cloud_state']['#suffix'] = '</div></div>';
 
-    $form['weather_clickable'] = array(
-      '#type' => 'checkbox',
-      '#title' => t('Enable clicking on maps'),
-      '#default_value' => $defaults['weather_clickable'],
-      '#return_value' => 1,
-    );
-    $form['weather_info'] = array(
-      '#type' => 'checkbox',
-      '#title' => t('Enable weather InfoWindows'),
-      '#default_value' => $defaults['weather_info'],
-      '#return_value' => 1,
-    );
-    $form['weather_info']['#suffix'] = '</div>';
+
   }
   elseif ($defaults['weather_use']) {
     $form['weather_show'] = array(
@@ -2806,7 +2807,6 @@ function getdirections_misc_settings($defaults, $config = TRUE, $extras = TRUE) 
       '#return_value' => 1,
     );
     $form['weather_show']['#suffix'] = '<div id="wrap-getdirections-weather">';
-
     $form['weather_state'] = array(
       '#type' => 'checkbox',
       '#title' => t('Activate Weather information'),
@@ -2815,6 +2815,7 @@ function getdirections_misc_settings($defaults, $config = TRUE, $extras = TRUE) 
       '#return_value' => 1,
     );
     $form['weather_state']['#suffix'] = '</div>';
+
     $form['weather_cloud'] = array(
       '#type' => 'checkbox',
       '#title' => t('Enable Cloud Layer'),
@@ -2823,7 +2824,6 @@ function getdirections_misc_settings($defaults, $config = TRUE, $extras = TRUE) 
       '#return_value' => 1,
     );
     $form['weather_cloud']['#suffix'] = '<div id="wrap-getdirections-weather-cloud">';
-
     $form['weather_cloud_state'] = array(
       '#type' => 'checkbox',
       '#title' => t('Activate Cloud Layer'),
