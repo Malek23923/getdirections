@@ -1317,15 +1317,29 @@ function getdirections_setup_map($defaults, $misc_defaults) {
 
   $libraries = array();
   if ($defaults['advanced_autocomplete']) {
-    $libraries[] = 'places';
+    $libraries['places'] = 'places';
   }
   if ($misc_defaults['panoramio_use']) {
-    $libraries[] = 'panoramio';
+    $libraries['panoramio'] = 'panoramio';
   }
   if ($misc_defaults['weather_use']) {
-    $libraries[] = 'weather';
+    $libraries['weather'] = 'weather';
   }
   // more libraries here
+
+  // compat with getlocations
+  if (module_exists('getlocations')) {
+    $getlocations_defaults = getlocations_defaults();
+    if ($getlocations_defaults['places']) {
+      $libraries['places'] = 'places';
+    }
+    if ($getlocations_defaults['panoramio_use']) {
+      $libraries['panoramio'] = 'panoramio';
+    }
+    if ($getlocations_defaults['weather_use']) {
+      $libraries['weather'] = 'weather';
+    }
+  }
 
   // load libraries if any
   if (count($libraries)) {
