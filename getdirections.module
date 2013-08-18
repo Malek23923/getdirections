@@ -537,6 +537,8 @@ function getdirections_get_settings($getdirections_defaults, $getdirections_misc
     'mylocale'                   => $language->language,
     'smartip_callback_url'       => url("getdirections/smart_ip"),
     'ip_geoloc_callback_url'     => url("getdirections/ip_geoloc"),
+    'nokeyboard'                 => $getdirections_defaults['nokeyboard'],
+    'nodoubleclickzoom'          => $getdirections_defaults['nodoubleclickzoom'],
   );
 
   return $settings;
@@ -856,6 +858,8 @@ function getdirections_defaults() {
     'advanced_alternate'              => 0,
     'use_https'                       => ($is_https ? 1 : 0),
     'visual_refresh'                  => 0,
+    'nokeyboard'                      => 0,
+    'nodoubleclickzoom'               => 0,
   );
   $getdirections_defaults = variable_get('getdirections_default', array());
   // remove old stuff
@@ -2231,7 +2235,20 @@ function getdirections_default_settings($defaults, $parent = 'getdirections_defa
     '#default_value' =>  $defaults['draggable'],
     '#return_value' => 1,
   );
-
+  $form['nokeyboard'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Disable keyboard shortcuts'),
+    '#description' => t('Enabling this will disable keyboard shortcuts on the map.'),
+    '#default_value' =>  $defaults['nokeyboard'],
+    '#return_value' => 1,
+  );
+  $form['nodoubleclickzoom'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Disable Doubleclick zoom'),
+    '#description' => t('Enabling this will disable doubleclick zooming on the map.'),
+    '#default_value' =>  $defaults['nodoubleclickzoom'],
+    '#return_value' => 1,
+  );
   $form['streetview_show'] = array(
     '#type' => 'checkbox',
     '#title' => t('Show streetview button'),

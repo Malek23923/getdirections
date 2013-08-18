@@ -79,6 +79,8 @@
           if (settings.use_https) {
             scheme = 'https';
           }
+          var nokeyboard = (settings.nokeyboard ? true : false);
+          var nodoubleclickzoom = (settings.nodoubleclickzoom ? true : false);
           // Enable the visual refresh
           google.maps.visualRefresh = (settings.visual_refresh ?  true : false);
 
@@ -138,7 +140,9 @@
             overviewMapControlOptions: {opened: (overview_opened ? true : false)},
             streetViewControl: (streetview_show ? true : false),
             scaleControl: (scale ? true : false),
-            scaleControlOptions: {style: google.maps.ScaleControlStyle.DEFAULT}
+            scaleControlOptions: {style: google.maps.ScaleControlStyle.DEFAULT},
+            keyboardShortcuts: (nokeyboard ? false : true),
+            disableDoubleClickZoom: nodoubleclickzoom
           };
           if (map_backgroundcolor) {
             mapOpts.backgroundColor = map_backgroundcolor;
