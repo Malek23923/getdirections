@@ -1,9 +1,51 @@
-commit ebdb724
+commit cb30824
+Author: hutch <hutch@midwales.net>
+Date:   Mon Aug 19 12:56:58 2013 +0100
+
+    separating translation strings
+
+getdirections.admin.inc
+getdirections.module
+
+commit b12bab8
+Author: hutch <hutch@midwales.net>
+Date:   Sun Aug 18 17:15:01 2013 +0100
+
+    added nokeyboard and nodoubleclickzoom features
+
+getdirections.module
+js/getdirections_preview.js
+js/getdirections_v3.js
+js/getdirections_v3a.js
+js/getdirections_v3b.js
+
+commit 68aca4a
+Author: hutch <hutch@midwales.net>
+Date:   Sat Aug 17 15:19:16 2013 +0100
+
+    google libraries compat with getlocations
+
+getdirections.module
+
+commit 3922890
+Author: hutch <hutch@midwales.net>
+Date:   Fri Aug 16 15:34:42 2013 +0100
+
+    fixed weather bug
+
+getdirections.module
+js/getdirections_preview.js
+js/getdirections_v3.js
+js/getdirections_v3a.js
+js/getdirections_v3b.js
+
+commit 085bd7f
 Author: hutch <hutch@midwales.net>
 Date:   Mon Aug 12 18:36:53 2013 +0100
 
     added adjust_vars to paths
 
+CHANGELOG.txt
 getdirections.module
 
 commit 546311c

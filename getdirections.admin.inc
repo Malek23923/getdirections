@@ -40,7 +40,7 @@ function getdirections_settings_form() {
   $form['getdirections_preview'] = array(
     '#type' => 'fieldset',
     '#title' => t('Getdirections Preview'),
-    '#description' => t('A preview of the current map settings.<br />You can adjust the default Map center, Zoom and Default map type by changing the map.<br /> For all other changes use the form. Remember to Save configuration when you are done.'),
+    '#description' => t('A preview of the current map settings.') . '<br />' . t('You can adjust the default Map center, Zoom and Default map type by changing the map.') . '<br />' . t('For all other changes use the form. Remember to Save configuration when you are done.'),
     // This will store all the defaults in one variable.
     '#tree' => FALSE,
   );

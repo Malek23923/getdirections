@@ -3286,9 +3286,13 @@ function theme_getdirections_direction_form($variables) {
     }
   }
   if ($getdirections_defaults['use_advanced']) {
-    $desc = t('Fill in the form below.<br />You can also click on the map and move the marker.');
+    $desc = t('Fill in the form below.');
+    $desc .= '<br />';
+    $desc .= t('You can also click on the map and move the marker.');
     if (isset($form['country_from_' . $mapid])) {
-      $desc = t('Select a country first, then type in a town.<br />You can also click on the map and move the marker.');
+      $desc = t('Select a country first, then type in a town.');
+      $desc .= '<br />';
+      $desc .= t('You can also click on the map and move the marker.');
       $form['country_from_' . $mapid]['#prefix'] = '<div id="getdirections_start_' . $mapid . '"><div class="container-inline getdirections_display">';
       $form['country_from_' . $mapid]['#suffix'] = '</div>';
     }
