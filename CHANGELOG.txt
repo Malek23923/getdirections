@@ -1,9 +1,18 @@
-commit cb30824
+commit 30cc352
+Author: hutch <hutch@midwales.net>
+Date:   Mon Aug 26 11:14:06 2013 +0100
+
+    added better google places check
+
+getdirections.module
+
+commit 9c778e7
 Author: hutch <hutch@midwales.net>
 Date:   Mon Aug 19 12:56:58 2013 +0100
 
     separating translation strings
 
+CHANGELOG.txt
 getdirections.admin.inc
 getdirections.module
 

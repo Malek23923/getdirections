@@ -1334,7 +1334,12 @@ function getdirections_setup_map($defaults, $misc_defaults) {
   // compat with getlocations
   if (module_exists('getlocations')) {
     $getlocations_defaults = getlocations_defaults();
-    if ($getlocations_defaults['places']) {
+    if (function_exists('getlocations_places_check')) {
+      if (getlocations_places_check()) {
+        $libraries['places'] = 'places';
+      }
+    }
+    elseif ($getlocations_defaults['places']) {
       $libraries['places'] = 'places';
     }
     if ($getlocations_defaults['panoramio_use']) {
