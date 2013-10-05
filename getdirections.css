@@ -4,8 +4,6 @@
   padding: 2px;
 
 }
-#getdirections_map_canvas {
-}
 
 .getdirections {
   margin-top: 8px;
@@ -23,6 +21,10 @@
   text-align: center;
   background: #FFFFFF;
   vertical-align: top;
+}
+/* see issue #1577634 #6 */
+.getdirections-map img {
+  max-width: none !important;
 }
 
 .getdirections_display {

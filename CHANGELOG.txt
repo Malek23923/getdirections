@@ -1,9 +1,42 @@
-commit 30cc352
+commit be9c7b3
+Author: hutch <hutch@midwales.net>
+Date:   Sat Oct 5 09:56:01 2013 +0100
+
+    updated css
+
+getdirections.css
+
+commit b53432e
+Author: hutch <hutch@midwales.net>
+Date:   Sat Oct 5 09:55:40 2013 +0100
+
+    added descpription to menu item
+
+getdirections.module
+
+commit 2584861
+Author: hutch <hutch@midwales.net>
+Date:   Sat Oct 5 09:54:24 2013 +0100
+
+    removed some tokens
+
+getdirections.views_default.inc
+
+commit ba5c951
+Author: hutch <hutch@midwales.net>
+Date:   Sat Oct 5 09:53:03 2013 +0100
+
+    added theming example
+
+README.txt
+
+commit a3b5456
 Author: hutch <hutch@midwales.net>
 Date:   Mon Aug 26 11:14:06 2013 +0100
 
     added better google places check
 
+CHANGELOG.txt
 getdirections.module
 
 commit 9c778e7
