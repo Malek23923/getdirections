@@ -72,7 +72,7 @@ function getdirections_views_default_views() {
     $handler->display->display_options['fields']['nid']['alter']['external'] = 0;
     $handler->display->display_options['fields']['nid']['alter']['replace_spaces'] = 0;
     $handler->display->display_options['fields']['nid']['alter']['trim_whitespace'] = 1;
-    $handler->display->display_options['fields']['nid']['alter']['alt'] = 'Get directions to [title]';
+    $handler->display->display_options['fields']['nid']['alter']['alt'] = 'Get directions on a map';
     $handler->display->display_options['fields']['nid']['alter']['nl2br'] = 0;
     $handler->display->display_options['fields']['nid']['alter']['word_boundary'] = 1;
     $handler->display->display_options['fields']['nid']['alter']['ellipsis'] = 1;
@@ -190,7 +190,7 @@ function getdirections_views_default_views() {
     $handler->display->display_options['fields']['tid']['alter']['external'] = 0;
     $handler->display->display_options['fields']['tid']['alter']['replace_spaces'] = 0;
     $handler->display->display_options['fields']['tid']['alter']['trim_whitespace'] = 1;
-    $handler->display->display_options['fields']['tid']['alter']['alt'] = 'Get directions to [name]';
+    $handler->display->display_options['fields']['tid']['alter']['alt'] = 'Get directions on a map';
     $handler->display->display_options['fields']['tid']['alter']['nl2br'] = 0;
     $handler->display->display_options['fields']['tid']['alter']['word_boundary'] = 1;
     $handler->display->display_options['fields']['tid']['alter']['ellipsis'] = 1;
@@ -296,7 +296,7 @@ function getdirections_views_default_views() {
     $handler->display->display_options['fields']['uid']['alter']['external'] = 0;
     $handler->display->display_options['fields']['uid']['alter']['replace_spaces'] = 0;
     $handler->display->display_options['fields']['uid']['alter']['trim_whitespace'] = 1;
-    $handler->display->display_options['fields']['uid']['alter']['alt'] = 'Get directions to [name]';
+    $handler->display->display_options['fields']['uid']['alter']['alt'] = 'Get directions on a map';
     $handler->display->display_options['fields']['uid']['alter']['nl2br'] = 0;
     $handler->display->display_options['fields']['uid']['alter']['word_boundary'] = 1;
     $handler->display->display_options['fields']['uid']['alter']['ellipsis'] = 1;
@@ -387,7 +387,7 @@ function getdirections_views_default_views() {
     $handler->display->display_options['fields']['nid']['alter']['make_link'] = 1;
     $handler->display->display_options['fields']['nid']['alter']['path'] = 'getdirections/location/to/[nid]';
     $handler->display->display_options['fields']['nid']['alter']['trim_whitespace'] = 1;
-    $handler->display->display_options['fields']['nid']['alter']['alt'] = 'Get directions to [title]';
+    $handler->display->display_options['fields']['nid']['alter']['alt'] = 'Get directions on a map';
     $handler->display->display_options['fields']['nid']['alter']['word_boundary'] = 1;
     $handler->display->display_options['fields']['nid']['alter']['ellipsis'] = 1;
     $handler->display->display_options['fields']['nid']['alter']['strip_tags'] = 0;
@@ -533,7 +533,7 @@ function getdirections_views_default_views() {
     $handler->display->display_options['fields']['nothing']['alter']['external'] = 0;
     $handler->display->display_options['fields']['nothing']['alter']['replace_spaces'] = 0;
     $handler->display->display_options['fields']['nothing']['alter']['trim_whitespace'] = 1;
-    $handler->display->display_options['fields']['nothing']['alter']['alt'] = 'To [name]';
+    $handler->display->display_options['fields']['nothing']['alter']['alt'] = 'Get directions on a map';
     $handler->display->display_options['fields']['nothing']['alter']['nl2br'] = 0;
     $handler->display->display_options['fields']['nothing']['alter']['word_boundary'] = 1;
     $handler->display->display_options['fields']['nothing']['alter']['ellipsis'] = 1;
@@ -635,7 +635,7 @@ function getdirections_views_default_views() {
     $handler->display->display_options['fields']['uid']['alter']['make_link'] = 1;
     $handler->display->display_options['fields']['uid']['alter']['path'] = 'getdirections/location_user/to/[uid]';
     $handler->display->display_options['fields']['uid']['alter']['word_boundary'] = 1;
-    $handler->display->display_options['fields']['uid']['alter']['alt'] = 'Get directions to [name]';
+    $handler->display->display_options['fields']['uid']['alter']['alt'] = 'Get directions on a map';
     $handler->display->display_options['fields']['uid']['alter']['ellipsis'] = 1;
     $handler->display->display_options['fields']['uid']['alter']['strip_tags'] = 0;
     $handler->display->display_options['fields']['uid']['alter']['trim'] = 0;
@@ -783,7 +783,7 @@ function getdirections_views_default_views() {
     $handler->display->display_options['fields']['nothing']['alter']['external'] = 0;
     $handler->display->display_options['fields']['nothing']['alter']['replace_spaces'] = 0;
     $handler->display->display_options['fields']['nothing']['alter']['trim_whitespace'] = 1;
-    $handler->display->display_options['fields']['nothing']['alter']['alt'] = 'To [name]';
+    $handler->display->display_options['fields']['nothing']['alter']['alt'] = 'Get directions on a map';
     $handler->display->display_options['fields']['nothing']['alter']['nl2br'] = 0;
     $handler->display->display_options['fields']['nothing']['alter']['word_boundary'] = 1;
     $handler->display->display_options['fields']['nothing']['alter']['ellipsis'] = 1;
@@ -874,6 +874,7 @@ function getdirections_views_default_views() {
     $handler->display->display_options['fields']['nid']['alter']['text'] = 'Get directions to [title]';
     $handler->display->display_options['fields']['nid']['alter']['make_link'] = TRUE;
     $handler->display->display_options['fields']['nid']['alter']['path'] = 'getdirections/location/to/[nid]';
+    $handler->display->display_options['fields']['nid']['alter']['alt'] = 'Get directions on a map';
     $handler->display->display_options['fields']['nid']['element_label_colon'] = FALSE;
     /* Contextual filter: Content: Nid */
     $handler->display->display_options['arguments']['nid']['id'] = 'nid';
@@ -947,6 +948,7 @@ function getdirections_views_default_views() {
     $handler->display->display_options['fields']['uid']['alter']['text'] = 'Get directions to [name]';
     $handler->display->display_options['fields']['uid']['alter']['make_link'] = TRUE;
     $handler->display->display_options['fields']['uid']['alter']['path'] = 'getdirections/location_user/to/[uid]';
+    $handler->display->display_options['fields']['uid']['alter']['alt'] = 'Get directions on a map';
     $handler->display->display_options['fields']['uid']['element_label_colon'] = FALSE;
     $handler->display->display_options['fields']['uid']['link_to_user'] = FALSE;
     /* Contextual filter: User: Uid */
@@ -1019,6 +1021,7 @@ function getdirections_views_default_views() {
     $handler->display->display_options['fields']['nid']['alter']['text'] = 'Get directions to [title]';
     $handler->display->display_options['fields']['nid']['alter']['make_link'] = TRUE;
     $handler->display->display_options['fields']['nid']['alter']['path'] = 'getdirections/location/to/[nid]';
+    $handler->display->display_options['fields']['nid']['alter']['alt'] = 'Get directions on a map';
     $handler->display->display_options['fields']['nid']['element_label_colon'] = FALSE;
     /* Contextual filter: Content: Nid */
     $handler->display->display_options['arguments']['nid']['id'] = 'nid';
@@ -1092,6 +1095,7 @@ function getdirections_views_default_views() {
     $handler->display->display_options['fields']['uid']['alter']['text'] = 'Get directions to [name]';
     $handler->display->display_options['fields']['uid']['alter']['make_link'] = TRUE;
     $handler->display->display_options['fields']['uid']['alter']['path'] = 'getdirections/location_user/to/[uid]';
+    $handler->display->display_options['fields']['uid']['alter']['alt'] = 'Get directions on a map';
     $handler->display->display_options['fields']['uid']['element_label_colon'] = FALSE;
     $handler->display->display_options['fields']['uid']['link_to_user'] = FALSE;
     /* Contextual filter: User: Uid */
