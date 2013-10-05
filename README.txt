@@ -140,13 +140,13 @@ generate the string for you.
 Themeing
 To change the way the map is displayed you should copy the theme function you want to change
 to your theme's template.php, renaming appropriately and editing it there.
-see getdirections.theme.inc
+
 There is plenty of help on themeing on drupal.org
 
 An example of a theming change, from http://drupal.org/node/1113042
 
 Your theme should have a template.php,
-copy the function theme_getdirections_show() from getdirections.theme.inc to your template.php,
+copy the function theme_getdirections_show() from getdirections.module to your template.php,
 renaming it appropriately, eg from
 theme_getdirections_show
 to
@@ -189,6 +189,25 @@ to
 What this does is rearrange the table so that it produces two rows with one datacell each instead of one row with two datacells.
 
 Make sure you flush the theme registry when you have made the changes, the devel and admin_menu modules are helpful for this.
+
+Putting Getdirections map and list into divs. This example should work with responsive themes.
+replace everything from
+  $header = array();
+to
+  $output .= '<div class="getdirections">' . theme('table', array('header' => $header, 'rows' => $rows)) . '</div>';
+
+with
+  $output .= '<div class="getdirections">';
+  $output .= '<div class="getdirections-map"  style="width: ' . $width . '; height: ' . $height . '" >';
+  $output .= '<div id="getdirections_map_canvas_' . $mapid . '" style="width: 100%; height: 100%" ></div>';
+  $output .= '</div>';
+  $output .= '<div class="getdirections-list">';
+  if ($getdirections_defaults['use_advanced'] && $getdirections_defaults['advanced_alternate']) {
+    $output .= '<button id="getdirections-undo-' . $mapid . '">' . t('Undo') . '</button>';
+  }
+  $output .= '<div id="getdirections_directions_' . $mapid . '"></div>';
+  $output .= '</div>';
+  $output .= '</div>';
 
 Blocks.
 Here is a simple way to crete a block with a form and map in it. Ensure you have php filter enabled and add
