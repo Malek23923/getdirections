@@ -70,6 +70,7 @@ function getdirections_menu() {
   );
   $items['getdirections'] = array(
     'title' => 'Get directions',
+    'description' => 'Get directions on a map',
     'access arguments' => array('access gmap getdirections'),
     'page callback' => 'getdirections_direction',
     'type' => MENU_SUGGESTED_ITEM,
