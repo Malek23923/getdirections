@@ -1,9 +1,20 @@
-commit be9c7b3
+commit 9acc42c
+Author: hutch <hutch@midwales.net>
+Date:   Fri Oct 11 17:08:33 2013 +0100
+
+    fixed jquery in formatter form
+
+js/getdirections_admin.js
+modules/getdirections_fields/getdirections_fields.module
+modules/getdirections_fields/js/getdirections_fields_formatter.js
+
+commit 2e05a7a
 Author: hutch <hutch@midwales.net>
 Date:   Sat Oct 5 09:56:01 2013 +0100
 
     updated css
 
+CHANGELOG.txt
 getdirections.css
 
 commit b53432e

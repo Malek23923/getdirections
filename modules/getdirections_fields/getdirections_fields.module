@@ -305,7 +305,8 @@ function getdirections_fields_field_formatter_settings_summary($field, $instance
  *   The form elements for the formatter settings.
  */
 function getdirections_fields_field_formatter_settings_form($field, $instance, $view_mode, $form, &$form_state) {
-  drupal_add_js(GETDIRECTIONS_PATH . '/js/getdirections_admin.js');
+  drupal_add_js(GETDIRECTIONS_FIELDS_PATH . '/js/getdirections_fields_formatter.js');
+
   $display = $instance['display'][$view_mode];
   $settings = $display['settings'];
   $element = array();
@@ -458,6 +459,7 @@ function getdirections_fields_field_widget_form(&$form, &$form_state, $field, $i
         $fieldnames[$row->field_name] = $data['label'];
       }
 
+      // addressfield support
       $address_fieldnames = array();
       if ($module == 'geofield' || $module == 'geolocation') {
         $query = db_select('field_config', 'f');
@@ -489,13 +491,21 @@ function getdirections_fields_field_widget_form(&$form, &$form_state, $field, $i
           $field_name = $field['field_name'];
           $items[$delta]['field_name'] = $field_name;
         }
-        $element['locative_field_name'] = array(
-          '#type' => 'select',
-          '#title' => t('Location Field'),
-          '#options' => $fieldnames,
-          '#description' => t('Field to take locative data from'),
-          '#default_value' => (isset($items[$delta]['locative_field_name']) ? $items[$delta]['locative_field_name'] : (isset($instance['default_value'][$delta]['locative_field_name']) ? $instance['default_value'][$delta]['locative_field_name'] : '')),
-        );
+        $dval = (isset($items[$delta]['locative_field_name']) ? $items[$delta]['locative_field_name'] : (isset($instance['default_value'][$delta]['locative_field_name']) ? $instance['default_value'][$delta]['locative_field_name'] : ''));
+        // items only see which field, no choice
+        if ($active && $dval) {
+          $element['locative_field_name'] = array('#type' => 'value', '#value' => $dval);
+          $element['locative_field_name_markup'] = array('#markup' => '<p>' . t('Locative data taken from !f', array('!f' => $fieldnames[$dval])) . '</p>');
+        }
+        else {
+          $element['locative_field_name'] = array(
+            '#type' => 'select',
+            '#title' => t('Location Field'),
+            '#options' => $fieldnames,
+            '#description' => t('Field to take locative data from'),
+            '#default_value' => $dval,
+          );
+        }
 
         if (! empty($address_fieldnames)) {
           $element['address_field_name'] = array(
