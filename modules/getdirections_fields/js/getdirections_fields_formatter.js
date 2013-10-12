@@ -4,7 +4,7 @@
  * @author Bob Hutchinson http://drupal.org/user/52366
  * @copyright GNU GPL
  *
- * Javascript functions for getlocations_fields module admin
+ * Javascript functions for getdirections_fields module settings
  * jquery gee whizzery
 */
 (function ($) {
@@ -149,4 +149,3 @@
     }
   };
 }(jQuery));
-//edit-fields-field-work-directions-settings-edit-form-settings-default-use-advanced
