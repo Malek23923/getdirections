@@ -229,12 +229,19 @@ See http://drupal.org/node/1376392#comment-7135346
 Create a custom block. Use the php filter for the content. Then paste this into your block content:
 
 <?php
-$n = arg(0);
-if ($n == 'node') {
-  $nid = arg(1);
-  $map = getdirections_setlocation('to', $nid);
-  echo $map;
+$n = FALSE;
+$nid = FALSE;
+if (arg(0)) {
+  $n = arg(0);
+}
+if (arg(1)) {
+$nid = arg(1);
+}
+if ($n && $nid && is_numeric($nid) && $nid > 0) {
+  $l = getdirections_load_locations($nid, $n);
+  if ($l) {
+    echo getdirections_entity_setlocation($n ,'to', $nid);
+  }
 }
 ?>
-
 

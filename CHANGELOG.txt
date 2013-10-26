@@ -1,9 +1,26 @@
-commit 9acc42c
+commit 2e08195
+Author: hutch <hutch@midwales.net>
+Date:   Sat Oct 26 15:26:46 2013 +0100
+
+    better block example in README
+
+README.txt
+
+commit 22c9279
+Author: hutch <hutch@midwales.net>
+Date:   Sat Oct 12 07:42:27 2013 +0100
+
+    cleaned up
+
+modules/getdirections_fields/js/getdirections_fields_formatter.js
+
+commit 44562af
 Author: hutch <hutch@midwales.net>
 Date:   Fri Oct 11 17:08:33 2013 +0100
 
     fixed jquery in formatter form
 
+CHANGELOG.txt
 js/getdirections_admin.js
 modules/getdirections_fields/getdirections_fields.module
 modules/getdirections_fields/js/getdirections_fields_formatter.js
