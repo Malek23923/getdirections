@@ -155,13 +155,13 @@ where 'mythemename' is the name of your theme. Then change the following:
 
   $rows[] = array(
     array(
-      'data' => '<div id="getdirections_map_canvas" style="width: '. $width .'; height: '. $height .'" ></div>',
+      'data' => '<div id="getdirections_map_canvas_' . $mapid . '" style="width: ' . $width . '; height: ' . $height . '" ></div>',
       'valign' => 'top',
       'align' => 'center',
       'class' => 'getdirections-map',
     ),
     array(
-      'data' => ($getdirections_defaults['advanced_alternate'] ? '<button id="getdirections-undo" onclick="getdirectionsundo()">' . t('Undo') . '</button>' : '') .'<div id="getdirections_directions"></div>',
+      'data' => ($getdirections_defaults['use_advanced'] && $getdirections_defaults['advanced_alternate'] ? '<button id="getdirections-undo-' . $mapid . '">' . t('Undo') . '</button>' : '') . '<div id="getdirections_directions_' . $mapid . '"></div>',
       'valign' => 'top' ,
       'align' => 'left',
       'class' => 'getdirections-list',
@@ -171,7 +171,7 @@ where 'mythemename' is the name of your theme. Then change the following:
 to
   $rows[] = array(
     array(
-      'data' => '<div id="getdirections_map_canvas" style="width: '. $width .'; height: '. $height .'" ></div>',
+      'data' => '<div id="getdirections_map_canvas_' . $mapid . '" style="width: ' . $width . '; height: ' . $height . '" ></div>',
       'valign' => 'top',
       'align' => 'center',
       'class' => 'getdirections-map',
@@ -179,7 +179,7 @@ to
   );
   $rows[] = array(
     array(
-      'data' => ($getdirections_defaults['advanced_alternate'] ? '<button id="getdirections-undo" onclick="getdirectionsundo()">' . t('Undo') . '</button>' : '') .'<div id="getdirections_directions"></div>',
+      'data' => ($getdirections_defaults['use_advanced'] && $getdirections_defaults['advanced_alternate'] ? '<button id="getdirections-undo-' . $mapid . '">' . t('Undo') . '</button>' : '') . '<div id="getdirections_directions_' . $mapid . '"></div>',
       'valign' => 'top' ,
       'align' => 'left',
       'class' => 'getdirections-list',
