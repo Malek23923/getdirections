@@ -140,13 +140,13 @@ generate the string for you.
 Themeing
 To change the way the map is displayed you should copy the theme function you want to change
 to your theme's template.php, renaming appropriately and editing it there.
-see getdirections.theme.inc
+see the theming functions in getdirections.module
 There is plenty of help on themeing on drupal.org
 
 An example of a theming change, from http://drupal.org/node/1113042
 
 Your theme should have a template.php,
-copy the function theme_getdirections_show() from getdirections.theme.inc to your template.php,
+copy the function theme_getdirections_show() from getdirections.module to your template.php,
 renaming it appropriately, eg from
 theme_getdirections_show
 to
