@@ -992,6 +992,11 @@ function getdirections_entity_setlocation($entity_type, $direction, $entity_id, 
   return getdirections_direction();
 }
 
+// backwards compat
+function getdirections_setlocation($direction, $nid, $width='', $height='') {
+  return getdirections_entity_setlocation('node', $direction, $nid, $width, $height);
+}
+
 /**
  * Function to setup the map
  *
@@ -1360,10 +1365,7 @@ function getdirections_setup_map($defaults, $misc_defaults) {
     $scheme = 'https';
   }
 
-  $gmapdomain = "maps.google.com/maps/api/js";
-  if (! empty($key)) {
-    $gmapdomain = "maps.googleapis.com/maps/api/js";
-  }
+  $gmapdomain = "maps.googleapis.com/maps/api/js";
   $gmaplink = url($scheme . '://' . $gmapdomain, array('query' => $query));
 
   if (isset($defaults['preview_map'])) {

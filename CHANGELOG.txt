@@ -1,9 +1,26 @@
-commit 2e08195
+commit 5484af3
+Author: hutch <hutch@midwales.net>
+Date:   Thu Jan 2 09:49:06 2014 +0000
+
+    added function getdirections_setlocation for backward compat.
+
+getdirections.module
+
+commit 6086e0f
+Author: hutch <hutch@midwales.net>
+Date:   Mon Nov 4 08:33:47 2013 +0000
+
+    updated README.txt as in #1113042
+
+README.txt
+
+commit f43604c
 Author: hutch <hutch@midwales.net>
 Date:   Sat Oct 26 15:26:46 2013 +0100
 
     better block example in README
 
+CHANGELOG.txt
 README.txt
 
 commit 22c9279
