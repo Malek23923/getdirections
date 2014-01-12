@@ -615,7 +615,7 @@ function _getdirections_direction_form($defaults, $misc, $mapid, $fromto='', $lo
   $form = array(
     '#action' => '#',
     '#attributes' => array(
-      'class' => 'getdirections_form',
+      'class' => array('getdirections_form'),
     ),
   );
   if ($fromto == 'from') {
@@ -3130,13 +3130,13 @@ function theme_getdirections_show($variables) {
       'data' => '<div id="getdirections_map_canvas_' . $mapid . '" style="width: ' . $width . '; height: ' . $height . '" ></div>',
       'valign' => 'top',
       'align' => 'center',
-      'class' => 'getdirections-map',
+      'class' => array('getdirections-map'),
     ),
     array(
       'data' => ($getdirections_defaults['use_advanced'] && $getdirections_defaults['advanced_alternate'] ? '<button id="getdirections-undo-' . $mapid . '">' . t('Undo') . '</button>' : '') . '<div id="getdirections_directions_' . $mapid . '"></div>',
       'valign' => 'top' ,
       'align' => 'left',
-      'class' => 'getdirections-list',
+      'class' => array('getdirections-list'),
     ),
   );
   $output .= '<div class="getdirections">' . theme('table', array('header' => $header, 'rows' => $rows)) . '</div>';
@@ -3171,13 +3171,13 @@ function theme_getdirections_show_locations($variables) {
       'data' => '<div id="getdirections_map_canvas_' . $mapid . '" style="width: ' . $width . '; height: ' . $height . '" ></div>',
       'valign' => 'top',
       'align' => 'center',
-      'class' => 'getdirections-map',
+      'class' => array('getdirections-map'),
     ),
     array(
       'data' => '<div id="getdirections_directions_' . $mapid . '"></div>',
       'valign' => 'top' ,
       'align' => 'left',
-      'class' => 'getdirections-list',
+      'class' => array('getdirections-list'),
     ),
   );
   $output .= '<div class="getdirections">' . theme('table', array('header' => $header, 'rows' => $rows)) . '</div>';
@@ -3222,13 +3222,13 @@ function theme_getdirections_show_locations_via($variables) {
       'data' => '<div id="getdirections_map_canvas_' . $mapid . '" style="width: ' . $width . '; height: ' . $height . '" ></div>',
       'valign' => 'top',
       'align' => 'center',
-      'class' => 'getdirections-map',
+      'class' => array('getdirections-map'),
     ),
     array(
       'data' => '<div id="getdirections_directions_' . $mapid . '"></div>',
       'valign' => 'top' ,
       'align' => 'left',
-      'class' => 'getdirections-list',
+      'class' => array('getdirections-list'),
     ),
   );
   $output .= '<div class="getdirections">' . theme('table', array('header' => $header, 'rows' => $rows)) . '</div>';

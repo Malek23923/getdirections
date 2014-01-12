@@ -158,13 +158,13 @@ where 'mythemename' is the name of your theme. Then change the following:
       'data' => '<div id="getdirections_map_canvas_' . $mapid . '" style="width: ' . $width . '; height: ' . $height . '" ></div>',
       'valign' => 'top',
       'align' => 'center',
-      'class' => 'getdirections-map',
+      'class' => array('getdirections-map'),
     ),
     array(
       'data' => ($getdirections_defaults['use_advanced'] && $getdirections_defaults['advanced_alternate'] ? '<button id="getdirections-undo-' . $mapid . '">' . t('Undo') . '</button>' : '') . '<div id="getdirections_directions_' . $mapid . '"></div>',
       'valign' => 'top' ,
       'align' => 'left',
-      'class' => 'getdirections-list',
+      'class' => array('getdirections-list'),
     ),
   );
 
@@ -174,7 +174,7 @@ to
       'data' => '<div id="getdirections_map_canvas_' . $mapid . '" style="width: ' . $width . '; height: ' . $height . '" ></div>',
       'valign' => 'top',
       'align' => 'center',
-      'class' => 'getdirections-map',
+      'class' => array('getdirections-map'),
     ),
   );
   $rows[] = array(
@@ -182,7 +182,7 @@ to
       'data' => ($getdirections_defaults['use_advanced'] && $getdirections_defaults['advanced_alternate'] ? '<button id="getdirections-undo-' . $mapid . '">' . t('Undo') . '</button>' : '') . '<div id="getdirections_directions_' . $mapid . '"></div>',
       'valign' => 'top' ,
       'align' => 'left',
-      'class' => 'getdirections-list',
+      'class' => array('getdirections-list'),
     ),
   );
 

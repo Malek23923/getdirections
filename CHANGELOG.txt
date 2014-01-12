@@ -1,9 +1,20 @@
-commit 5484af3
+commit e98724d
+Author: hutch <hutch@midwales.net>
+Date:   Sun Jan 12 23:14:43 2014 +0000
+
+    fixed bug in class array, see #2172041
+
+README.txt
+getdirections.module
+modules/getdirections_fields/getdirections_fields.module
+
+commit 946d020
 Author: hutch <hutch@midwales.net>
 Date:   Thu Jan 2 09:49:06 2014 +0000
 
     added function getdirections_setlocation for backward compat.
 
+CHANGELOG.txt
 getdirections.module
 
 commit 6086e0f
