@@ -684,8 +684,8 @@
 
 
         // any initial markers?
-        var from =  $("input[name=from_]" + key).val();
-        var to =  $("input[name=to_]" + key).val();
+        var from =  $("input[name=from_" + key + "]").val();
+        var to =  $("input[name=to_" + key + "]").val();
 
         if (from && from.match(llpatt)) {
           // we have lat,lon

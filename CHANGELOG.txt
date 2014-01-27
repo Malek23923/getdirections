@@ -1,9 +1,18 @@
-commit e98724d
+commit a766d76
+Author: hutch <hutch@midwales.net>
+Date:   Mon Jan 27 18:18:34 2014 +0000
+
+    fixed jquery bug, see #2182815
+
+js/getdirections_v3.js
+
+commit dfc9af0
 Author: hutch <hutch@midwales.net>
 Date:   Sun Jan 12 23:14:43 2014 +0000
 
     fixed bug in class array, see #2172041
 
+CHANGELOG.txt
 README.txt
 getdirections.module
 modules/getdirections_fields/getdirections_fields.module
