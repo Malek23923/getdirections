@@ -1,9 +1,18 @@
-commit a766d76
+commit cb800a3
+Author: hutch <hutch@midwales.net>
+Date:   Sun Mar 23 20:31:31 2014 +0000
+
+    added direction option to map display
+
+modules/getdirections_fields/getdirections_fields.module
+
+commit 17ce008
 Author: hutch <hutch@midwales.net>
 Date:   Mon Jan 27 18:18:34 2014 +0000
 
     fixed jquery bug, see #2182815
 
+CHANGELOG.txt
 js/getdirections_v3.js
 
 commit dfc9af0

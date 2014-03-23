@@ -181,7 +181,8 @@ function getdirections_fields_field_formatter_view($entity_type, $entity, $field
           $getdirections_settings['tolatlon'] = $latlon;
           $mapid = getdirections_get_key();
           drupal_add_js(array('getdirections' => array($mapid => $getdirections_settings)), 'setting');
-          $rawform = drupal_get_form('getdirections_fields_direction_form', $default, $misc, $mapid, 'to', $loc, '', $latlon);
+          $direction_opt = (isset($settings['direction_opt']) ? $settings['direction_opt'] : 'to') ;
+          $rawform = drupal_get_form('getdirections_fields_direction_form', $default, $misc, $mapid, $direction_opt, $loc, '', $latlon);
           $form = drupal_render($rawform);
           $element[$delta] = array(
             '#theme' => 'getdirections_fields_show',
@@ -274,6 +275,7 @@ function getdirections_fields_field_formatter_settings_summary($field, $instance
           $summary[] = preg_replace("/_/", " ", $k) . ': ' . ($settings['misc'][$k] == '0' ? t('No') : ($settings['misc'][$k] == '1' ? t('Yes') : $settings['misc'][$k]));
         }
       }
+      $summary[] = t('Direction: %d', array('%d' => $default_settings['direction_options'][$settings['direction_opt']]));
       break;
     case 'getdirections_fields_link':
       $default_settings = getdirections_fields_link_formatter_settings();
@@ -320,6 +322,7 @@ function getdirections_fields_field_formatter_settings_form($field, $instance, $
       else {
         $settings = getdirections_adjust_vars($default_settings, $settings);
       }
+
       // default settings
       $element['default'] = array(
         '#type' => 'fieldset',
@@ -328,6 +331,14 @@ function getdirections_fields_field_formatter_settings_form($field, $instance, $
         '#tree' => TRUE,
       );
       $element['default'] += getdirections_default_settings($settings['default'], '');
+
+      $element['direction_opt'] = array(
+        '#type' => 'select',
+        '#title' => t('Direction of location'),
+        '#default_value' => $settings['direction_opt'],
+        '#options' => $settings['direction_options'],
+      );
+
       // misc
       $element['misc'] = array(
         '#type' => 'fieldset',
@@ -335,6 +346,7 @@ function getdirections_fields_field_formatter_settings_form($field, $instance, $
         // This will store all the defaults in one variable.
         '#tree' => TRUE,
       );
+
       $element['misc'] += getdirections_misc_settings($settings['misc'], FALSE, FALSE);
       break;
     case 'getdirections_fields_link':
@@ -368,6 +380,11 @@ function getdirections_fields_field_formatter_settings_form($field, $instance, $
 function getdirections_fields_field_formatter_settings() {
   $defaults['default'] = getdirections_defaults();
   $defaults['misc'] = getdirections_misc_defaults();
+  $defaults['direction_opt'] = 'to';
+  $defaults['direction_options'] = array(
+    'to' => t('To'),
+    'from' => t('From'),
+  );
   return $defaults;
 }
 
