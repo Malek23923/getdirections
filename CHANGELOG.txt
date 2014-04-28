@@ -1,9 +1,18 @@
-commit cb800a3
+commit d8002b6
+Author: hutch <hutch@midwales.net>
+Date:   Mon Apr 28 22:22:15 2014 +0100
+
+    added vbo support
+
+modules/getdirections_fields/getdirections_fields.module
+
+commit 7219401
 Author: hutch <hutch@midwales.net>
 Date:   Sun Mar 23 20:31:31 2014 +0000
 
     added direction option to map display
 
+CHANGELOG.txt
 modules/getdirections_fields/getdirections_fields.module
 
 commit 17ce008
