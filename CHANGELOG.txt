@@ -1,9 +1,18 @@
-commit d8002b6
+commit f53a443
+Author: hutch <hutch@midwales.net>
+Date:   Fri May 9 10:13:10 2014 +0100
+
+    bug in getdirections_entity_setlocations_via
+
+getdirections.module
+
+commit 06b281d
 Author: hutch <hutch@midwales.net>
 Date:   Mon Apr 28 22:22:15 2014 +0100
 
     added vbo support
 
+CHANGELOG.txt
 modules/getdirections_fields/getdirections_fields.module
 
 commit 7219401

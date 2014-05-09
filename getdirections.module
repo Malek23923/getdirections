@@ -1062,7 +1062,7 @@ function getdirections_entity_setlocations_via($entity_ids, $entity_type, $width
     if (! is_numeric($entity_id) || ! $entity_id) {
       continue;
     }
-    $locations = getdirections_load_locations($entity_id, 'user');
+    $locations = getdirections_load_locations($entity_id, $entity_type);
     if (! count($locations)) {
       continue;
     }
