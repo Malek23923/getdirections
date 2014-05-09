@@ -1,9 +1,18 @@
-commit f53a443
+commit e74bfeb
+Author: hutch <hutch@midwales.net>
+Date:   Fri May 9 15:43:51 2014 +0100
+
+    more via fix
+
+getdirections.module
+
+commit d77603a
 Author: hutch <hutch@midwales.net>
 Date:   Fri May 9 10:13:10 2014 +0100
 
     bug in getdirections_entity_setlocations_via
 
+CHANGELOG.txt
 getdirections.module
 
 commit 06b281d

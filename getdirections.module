@@ -1066,7 +1066,7 @@ function getdirections_entity_setlocations_via($entity_ids, $entity_type, $width
     if (! count($locations)) {
       continue;
     }
-    $locs = _getdirections_loadaddress($locations[0]);
+    $locs[] = _getdirections_loadaddress($locations[0]);
     $latlon = $locations[0]['latitude'] . ',' . $locations[0]['longitude'];
     // sanity check
     if (! getdirections_latlon_check($latlon)) {
