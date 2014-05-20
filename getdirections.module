@@ -483,7 +483,7 @@ function getdirections_locations_via($locs, $latlons, $width='', $height='') {
  *
  */
 function getdirections_get_settings($getdirections_defaults, $getdirections_misc) {
-  global $language;
+  global $language, $is_https;
   $lla = explode(',', $getdirections_defaults['latlong']);
   $settings = array(
     'lat' => $lla[0],
@@ -533,8 +533,7 @@ function getdirections_get_settings($getdirections_defaults, $getdirections_misc
     'weather_clickable'          => $getdirections_misc['weather_clickable'],
     'weather_info'               => $getdirections_misc['weather_info'],
     'switchfromto'               => $getdirections_misc['switchfromto'],
-    'use_https'                  => $getdirections_defaults['use_https'],
-    'visual_refresh'             => $getdirections_defaults['visual_refresh'],
+    'use_https'                  => ($is_https ? 1 : 0),
     'mylocale'                   => $language->language,
     'smartip_callback_url'       => url("getdirections/smart_ip"),
     'ip_geoloc_callback_url'     => url("getdirections/ip_geoloc"),
@@ -858,7 +857,6 @@ function getdirections_defaults() {
     'advanced_autocomplete_via_width' => 20,
     'advanced_alternate'              => 0,
     'use_https'                       => ($is_https ? 1 : 0),
-    'visual_refresh'                  => 0,
     'nokeyboard'                      => 0,
     'nodoubleclickzoom'               => 0,
   );
@@ -1313,7 +1311,7 @@ function getdirections_setlocation_id($direction, $lid, $width='', $height='') {
  * Sets up the call to googlemaps, css and the relevant getdirections js in html head
  */
 function getdirections_setup_map($defaults, $misc_defaults) {
-  global $language;
+  global $language, $is_https;
   $getdirections_paths = getdirections_paths_get();
 
   // v3 googlemaps API
@@ -1360,11 +1358,8 @@ function getdirections_setup_map($defaults, $misc_defaults) {
   if (count($libraries)) {
     $query['libraries'] = implode(',', $libraries);
   }
-  $scheme = 'http';
-  if ($defaults['use_https']) {
-    $scheme = 'https';
-  }
 
+  $scheme = ($is_https ? 'https' : 'http');
   $gmapdomain = "maps.googleapis.com/maps/api/js";
   $gmaplink = url($scheme . '://' . $gmapdomain, array('query' => $query));
 
@@ -1385,7 +1380,6 @@ function getdirections_setup_map($defaults, $misc_defaults) {
     }
 
   }
-
 
   drupal_add_js($gmaplink, 'external');
   drupal_add_css(GETDIRECTIONS_PATH . '/getdirections.css');
@@ -2263,14 +2257,6 @@ function getdirections_default_settings($defaults, $parent = 'getdirections_defa
     '#default_value' =>  $defaults['streetview_show'],
     '#return_value' => 1,
   );
-  // Enable the visual refresh feature
-  $form['visual_refresh'] =  array(
-    '#type' => 'checkbox',
-    '#title' => t('Google Visual Refresh'),
-    '#description' => t('Enable the Visual Refresh feature.'),
-    '#default_value' =>  $defaults['visual_refresh'],
-    '#return_value' => 1,
-  );
   $form['travelmode_show'] = array(
     '#type' => 'checkbox',
     '#title' => t('Show travel mode'),
@@ -2440,9 +2426,10 @@ function getdirections_default_settings($defaults, $parent = 'getdirections_defa
     '#return_value' => 1,
     '#suffix' => '</div>',
   );
+  global $is_https;
   $form['use_https'] = array(
     '#type' => 'value',
-    '#value' =>  $defaults['use_https'],
+    '#value' => ($is_https ? 1 : 0) ,
   );
 
   return $form;

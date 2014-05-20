@@ -509,16 +509,12 @@
         var nokeyboard = (settings.nokeyboard ? true : false);
         var nodoubleclickzoom = (settings.nodoubleclickzoom ? true : false);
 
-        // Enable the visual refresh
-        google.maps.visualRefresh = (settings.visual_refresh ?  true : false);
-
         var startpoint = 0;
         var endpoint = 1;
         var donemarkers = [];
         donemarkers[key] = [];
         donemarkers[key][startpoint] = false;
         donemarkers[key][endpoint] = false;
-
 
         // menu type
         var mtc = settings.mtc;
@@ -1165,4 +1161,3 @@
   };
 
 }(jQuery));
-

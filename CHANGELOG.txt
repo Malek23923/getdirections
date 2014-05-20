@@ -1,9 +1,22 @@
-commit e74bfeb
+commit ee333e7
+Author: hutch <hutch@midwales.net>
+Date:   Tue May 20 18:03:51 2014 +0100
+
+    removed visual_refresh, improved https detection
+
+getdirections.module
+js/getdirections_preview.js
+js/getdirections_v3.js
+js/getdirections_v3a.js
+js/getdirections_v3b.js
+
+commit c894a4f
 Author: hutch <hutch@midwales.net>
 Date:   Fri May 9 15:43:51 2014 +0100
 
     more via fix
 
+CHANGELOG.txt
 getdirections.module
 
 commit d77603a

@@ -14,35 +14,37 @@
     attach: function() {
 
       $.each(Drupal.settings.getdirections_preview, function(key, settings) {
-        if ($("#getdirections_preview_map_canvas_" + key).is('div')) {
-
-          function updateCopyrights() {
-            if(Drupal.getdirections_preview_map[key].getMapTypeId() == "OSM") {
-              copyrightNode.innerHTML = "OSM map data @<a target=\"_blank\" href=\"http://www.openstreetmap.org/\"> OpenStreetMap</a>-contributors,<a target=\"_blank\" href=\"http://creativecommons.org/licenses/by-sa/2.0/legalcode\"> CC BY-SA</a>";
-              if (settings.trafficinfo) {
-                $("#getdirections_toggleTraffic_" + key).attr('disabled', true);
-              }
-              if (settings.bicycleinfo) {
-                $("#getdirections_toggleBicycle_" + key).attr('disabled', true);
-              }
-              if (settings.transitinfo) {
-                $("#getdirections_toggleTransit_" + key).attr('disabled', true);
-              }
+        
+        function updateCopyrights() {
+          if(Drupal.getdirections_preview_map[key].getMapTypeId() == "OSM") {
+            copyrightNode.innerHTML = "OSM map data @<a target=\"_blank\" href=\"http://www.openstreetmap.org/\"> OpenStreetMap</a>-contributors,<a target=\"_blank\" href=\"http://creativecommons.org/licenses/by-sa/2.0/legalcode\"> CC BY-SA</a>";
+            if (settings.trafficinfo) {
+              $("#getdirections_toggleTraffic_" + key).attr('disabled', true);
             }
-            else {
-              copyrightNode.innerHTML = "";
-              if (settings.trafficinfo) {
-                $("#getdirections_toggleTraffic_" + key).attr('disabled', false);
-              }
-              if (settings.bicycleinfo) {
-                $("#getdirections_toggleBicycle_" + key).attr('disabled', false);
-              }
-              if (settings.transitinfo) {
-                $("#getdirections_toggleTransit_" + key).attr('disabled', false);
-              }
+            if (settings.bicycleinfo) {
+              $("#getdirections_toggleBicycle_" + key).attr('disabled', true);
+            }
+            if (settings.transitinfo) {
+              $("#getdirections_toggleTransit_" + key).attr('disabled', true);
             }
           }
-          // end functions
+          else {
+            copyrightNode.innerHTML = "";
+            if (settings.trafficinfo) {
+              $("#getdirections_toggleTraffic_" + key).attr('disabled', false);
+            }
+            if (settings.bicycleinfo) {
+              $("#getdirections_toggleBicycle_" + key).attr('disabled', false);
+            }
+            if (settings.transitinfo) {
+              $("#getdirections_toggleTransit_" + key).attr('disabled', false);
+            }
+          }
+        }
+        // end functions
+
+        if ($("#getdirections_preview_map_canvas_" + key).is('div')) {
+
 
           var key2 = key.replace('_', '-');
           var trafficInfo = {};
@@ -81,9 +83,6 @@
           }
           var nokeyboard = (settings.nokeyboard ? true : false);
           var nodoubleclickzoom = (settings.nodoubleclickzoom ? true : false);
-          // Enable the visual refresh
-          google.maps.visualRefresh = (settings.visual_refresh ?  true : false);
-
 
           // menu type
           var mtc = settings.mtc;
@@ -268,40 +267,57 @@
               $(this).val(label);
             });
           }
-/*
           // weather layer
-          if (settings.weather_use && settings.weather_show) {
-            tu = google.maps.weather.TemperatureUnit.CELSIUS;
-            if (settings.weather_temp == 2) {
-              tu = google.maps.weather.TemperatureUnit.FAHRENHEIT;
-            }
-            sp = google.maps.weather.WindSpeedUnit.KILOMETERS_PER_HOUR;
-            if (settings.weather_speed == 2) {
-              sp = google.maps.weather.WindSpeedUnit.METERS_PER_SECOND;
-            }
-            else if (settings.weather_speed == 3) {
-              sp = google.maps.weather.WindSpeedUnit.MILES_PER_HOUR;
-            }
-            var weatherOpts =  {
-              temperatureUnits: tu,
-              windSpeedUnits: sp,
-              clickable: (settings.weather_clickable ? true : false),
-              suppressInfoWindows: (settings.weather_info ? false : true)
-            };
-            if (settings.weather_label > 0) {
-              weatherOpts.labelColor = google.maps.weather.LabelColor.BLACK;
-              if (settings.weather_label == 2) {
-                weatherOpts.labelColor = google.maps.weather.LabelColor.WHITE;
+          if (settings.weather_use ) {
+            if (settings.weather_show) {
+              tu = google.maps.weather.TemperatureUnit.CELSIUS;
+              if (settings.weather_temp == 2) {
+                tu = google.maps.weather.TemperatureUnit.FAHRENHEIT;
               }
-            }
-            weatherLayer[key] = new google.maps.weather.WeatherLayer(weatherOpts);
-            if (settings.weather_state > 0) {
-              weatherLayer[key].setMap(Drupal.getdirections_preview_map[key]);
-              weathertoggleState[key] = true;
+              sp = google.maps.weather.WindSpeedUnit.KILOMETERS_PER_HOUR;
+              if (settings.weather_speed == 2) {
+                sp = google.maps.weather.WindSpeedUnit.METERS_PER_SECOND;
+              }
+              else if (settings.weather_speed == 3) {
+                sp = google.maps.weather.WindSpeedUnit.MILES_PER_HOUR;
+              }
+              var weatherOpts =  {
+                temperatureUnits: tu,
+                windSpeedUnits: sp,
+                clickable: (settings.weather_clickable ? true : false),
+                suppressInfoWindows: (settings.weather_info ? false : true)
+              };
+              if (settings.weather_label > 0) {
+                weatherOpts.labelColor = google.maps.weather.LabelColor.BLACK;
+                if (settings.weather_label == 2) {
+                  weatherOpts.labelColor = google.maps.weather.LabelColor.WHITE;
+                }
+              }
+              weatherLayer[key] = new google.maps.weather.WeatherLayer(weatherOpts);
+              if (settings.weather_state > 0) {
+                weatherLayer[key].setMap(Drupal.getdirections_preview_map[key]);
+                weathertoggleState[key] = true;
+              }
+              else {
+                weatherLayer[key].setMap(null);
+                weathertoggleState[key] = false;
+              }
+              $("#getdirections_toggleWeather_" + key).click( function() {
+                if (weathertoggleState[key]) {
+                  weatherLayer[key].setMap(null);
+                  weathertoggleState[key] = false;
+                  label = Drupal.t('Weather On');
+                }
+                else {
+                  weatherLayer[key].setMap(Drupal.getdirections_preview_map[key]);
+                  weathertoggleState[key] = true;
+                  label = Drupal.t('Weather Off');
+                }
+                $(this).val(label);
+              });
             }
             else {
-              weatherLayer[key].setMap(null);
-              weathertoggleState[key] = false;
+              weatherLayer[key] = null;
             }
             if (settings.weather_cloud) {
               cloudLayer[key] = new google.maps.weather.CloudLayer();
@@ -330,104 +346,8 @@
             else {
               cloudLayer[key] = null;
             }
-            $("#getdirections_toggleWeather_" + key).click( function() {
-              if (weathertoggleState[key]) {
-                weatherLayer[key].setMap(null);
-                weathertoggleState[key] = false;
-                label = Drupal.t('Weather On');
-              }
-              else {
-                weatherLayer[key].setMap(Drupal.getdirections_preview_map[key]);
-                weathertoggleState[key] = true;
-                label = Drupal.t('Weather Off');
-              }
-              $(this).val(label);
-            });
           }
-*/
-///////////////
-        // weather layer
-        if (settings.weather_use ) {
-          if (settings.weather_show) {
-            tu = google.maps.weather.TemperatureUnit.CELSIUS;
-            if (settings.weather_temp == 2) {
-              tu = google.maps.weather.TemperatureUnit.FAHRENHEIT;
-            }
-            sp = google.maps.weather.WindSpeedUnit.KILOMETERS_PER_HOUR;
-            if (settings.weather_speed == 2) {
-              sp = google.maps.weather.WindSpeedUnit.METERS_PER_SECOND;
-            }
-            else if (settings.weather_speed == 3) {
-              sp = google.maps.weather.WindSpeedUnit.MILES_PER_HOUR;
-            }
-            var weatherOpts =  {
-              temperatureUnits: tu,
-              windSpeedUnits: sp,
-              clickable: (settings.weather_clickable ? true : false),
-              suppressInfoWindows: (settings.weather_info ? false : true)
-            };
-            if (settings.weather_label > 0) {
-              weatherOpts.labelColor = google.maps.weather.LabelColor.BLACK;
-              if (settings.weather_label == 2) {
-                weatherOpts.labelColor = google.maps.weather.LabelColor.WHITE;
-              }
-            }
-            weatherLayer[key] = new google.maps.weather.WeatherLayer(weatherOpts);
-            if (settings.weather_state > 0) {
-              weatherLayer[key].setMap(Drupal.getdirections_preview_map[key]);
-              weathertoggleState[key] = true;
-            }
-            else {
-              weatherLayer[key].setMap(null);
-              weathertoggleState[key] = false;
-            }
-            $("#getdirections_toggleWeather_" + key).click( function() {
-              if (weathertoggleState[key]) {
-                weatherLayer[key].setMap(null);
-                weathertoggleState[key] = false;
-                label = Drupal.t('Weather On');
-              }
-              else {
-                weatherLayer[key].setMap(Drupal.getdirections_preview_map[key]);
-                weathertoggleState[key] = true;
-                label = Drupal.t('Weather Off');
-              }
-              $(this).val(label);
-            });
-          }
-          else {
-            weatherLayer[key] = null;
-          }
-          if (settings.weather_cloud) {
-            cloudLayer[key] = new google.maps.weather.CloudLayer();
-            if (settings.weather_cloud_state > 0) {
-              cloudLayer[key].setMap(Drupal.getdirections_preview_map[key]);
-              cloudtoggleState[key] = true;
-            }
-            else {
-              cloudLayer[key].setMap(null);
-              cloudtoggleState[key] = false;
-            }
-            $("#getdirections_toggleCloud_" + key).click( function() {
-              if (cloudtoggleState[key]) {
-                cloudLayer[key].setMap(null);
-                cloudtoggleState[key] = false;
-                label = Drupal.t('Clouds On');
-              }
-              else {
-                cloudLayer[key].setMap(Drupal.getdirections_preview_map[key]);
-                cloudtoggleState[key] = true;
-                label = Drupal.t('Clouds Off');
-              }
-            $(this).val(label);
-            });
-          }
-          else {
-            cloudLayer[key] = null;
-          }
-        }
 
-///////////////
           // an event handler on map zoom
           google.maps.event.addListener(Drupal.getdirections_preview_map[key], 'zoom_changed', function() {
             $("#edit-getdirections-default-zoom").val(Drupal.getdirections_preview_map[key].getZoom());

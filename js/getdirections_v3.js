@@ -320,9 +320,6 @@
         var nokeyboard = (settings.nokeyboard ? true : false);
         var nodoubleclickzoom = (settings.nodoubleclickzoom ? true : false);
 
-        // Enable the visual refresh
-        google.maps.visualRefresh = (settings.visual_refresh ?  true : false);
-
         // get directions button
         $("#edit-submit-" + key2).click( function () {
           // collect form info from the DOM
@@ -916,4 +913,3 @@
   };
 
 }(jQuery));
-
