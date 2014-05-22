@@ -1,9 +1,18 @@
-commit ee333e7
+commit a2325ce
+Author: hutch <hutch@midwales.net>
+Date:   Thu May 22 13:06:39 2014 +0100
+
+    added region_bias
+
+getdirections.module
+
+commit 672ef40
 Author: hutch <hutch@midwales.net>
 Date:   Tue May 20 18:03:51 2014 +0100
 
     removed visual_refresh, improved https detection
 
+CHANGELOG.txt
 getdirections.module
 js/getdirections_preview.js
 js/getdirections_v3.js

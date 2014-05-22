@@ -859,6 +859,7 @@ function getdirections_defaults() {
     'use_https'                       => ($is_https ? 1 : 0),
     'nokeyboard'                      => 0,
     'nodoubleclickzoom'               => 0,
+    'region_bias'                     => variable_get('site_default_country', ''),
   );
   $getdirections_defaults = variable_get('getdirections_default', array());
   // remove old stuff
@@ -1322,6 +1323,10 @@ function getdirections_setup_map($defaults, $misc_defaults) {
   }
   $query['sensor'] = 'false';
   $query['language'] = $language->language;
+
+  if ($defaults['region_bias']) {
+    $query['region'] = $defaults['region_bias'];
+  }
 
   $libraries = array();
   if ($defaults['advanced_autocomplete']) {
@@ -2426,6 +2431,15 @@ function getdirections_default_settings($defaults, $parent = 'getdirections_defa
     '#return_value' => 1,
     '#suffix' => '</div>',
   );
+
+  $form['region_bias'] = array(
+    '#type' => 'select',
+    '#title' => t('Regional bias'),
+    '#description' => t('Bias the maps to a particular country'),
+    '#default_value' => $defaults['region_bias'],
+    '#options' => array('' => t('None')) + getdirections_get_countries_list(),
+  );
+
   global $is_https;
   $form['use_https'] = array(
     '#type' => 'value',
@@ -2974,6 +2988,51 @@ function getdirections_check_vocabulary($machine_name) {
     return getdirections_check_entity_type('taxonomy_term', $machine_name);
   }
   return FALSE;
+}
+
+/**
+ * Fetch a list of the core Drupal list of countries.
+ * from location module
+ *
+ * @param bool $upper Default uppercase
+ *
+ * @return array The countries array
+ */
+function getdirections_get_countries_list($upper = TRUE, $only_continents = '', $only_countries = '') {
+
+  if (module_exists('countries')) {
+    $filter = array('enabled' => COUNTRIES_ENABLED);
+    if ($only_countries) {
+      $only_countries = drupal_strtoupper($only_countries);
+      $oc = explode(',', $only_countries);
+      if (! empty($oc)) {
+        $filter['countries'] = $oc;
+      }
+    }
+    elseif (is_array($only_continents)) {
+      $oc = array();
+      foreach ($only_continents AS $v) {
+        $oc[] = $v;
+      }
+      if (! empty($oc)) {
+        $filter['continents'] = $oc;
+      }
+    }
+    $countries = countries_get_countries('name', $filter);
+  }
+  else {
+    include_once DRUPAL_ROOT . '/includes/locale.inc';
+    // Statically cache a version of the core Drupal list of countries
+    $countries = &drupal_static(__FUNCTION__);
+    if (! isset($countries) || empty($countries)) {
+      $countries = country_get_list();
+    }
+  }
+  if (! $upper) {
+    $countries = array_change_key_case($countries, CASE_LOWER);
+  }
+
+  return $countries;
 }
 
 /**
