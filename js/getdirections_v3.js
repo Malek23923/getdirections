@@ -34,6 +34,21 @@
           destination: toAddress
         };
 
+        if (uselatlons) {
+          if (fromAddress.match(/@/)) {
+            fa = fromAddress.split("@");
+            if (fa[1].match(llpatt)) {
+              request.origin = fa[1];
+            }
+          }
+          if (toAddress.match(/@/)) {
+            ta = toAddress.split("@");
+            if (ta[1].match(llpatt)) {
+              request.destination = ta[1];
+            }
+          }
+        }
+
         var tmode = $("#edit-travelmode-" + key2).val();
         if (tmode == 'walking') { trmode = google.maps.DirectionsTravelMode.WALKING; }
         else if (tmode == 'bicycling') { trmode = google.maps.DirectionsTravelMode.BICYCLING; }
@@ -323,6 +338,7 @@
         var latlons = (settings.latlons ? settings.latlons : '');
         var nokeyboard = (settings.nokeyboard ? true : false);
         var nodoubleclickzoom = (settings.nodoubleclickzoom ? true : false);
+        var uselatlons = (settings.uselatlons ? true : false);
 
         // get directions button
         $("#edit-submit-" + key2).click( function () {

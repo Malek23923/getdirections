@@ -25,8 +25,7 @@
         if (! todone) {
           e = $("input[name=to_" + key + "]").val();
           if (e && e.match(llpatt)) {
-            arr = e.split(",");
-            point = new google.maps.LatLng(arr[0], arr[1]);
+            point = makell(e);
             createMarker(point, endpoint, 'end');
             path[key][endpoint] = point;
             if (donemarkers[key][startpoint] == false) {
@@ -39,8 +38,7 @@
         if (! fromdone) {
           e = $("input[name=from_" + key + "]").val();
           if (e && e.match(llpatt)) {
-            arr = e.split(",");
-            point = new google.maps.LatLng(arr[0], arr[1]);
+            point = makell(e);
             createMarker(point, startpoint, 'start');
             path[key][startpoint] = point;
             if (donemarkers[key][endpoint] == false) {
@@ -321,6 +319,21 @@
           destination: toAddress
         };
 
+        if (uselatlons) {
+          if (fromAddress.match(/@/)) {
+            fa = fromAddress.split("@");
+            if (fa[1].match(llpatt)) {
+              request.origin = fa[1];
+            }
+          }
+          if (toAddress.match(/@/)) {
+            ta = toAddress.split("@");
+            if (ta[1].match(llpatt)) {
+              request.destination = ta[1];
+            }
+          }
+        }
+
         var tmode = $("#edit-travelmode-" + key2).val();
         if (tmode == 'walking') { trmode = google.maps.DirectionsTravelMode.WALKING; }
         else if (tmode == 'bicycling') { trmode = google.maps.DirectionsTravelMode.BICYCLING; }
@@ -512,6 +525,7 @@
         var latlons = (settings.latlons ? settings.latlons : '');
         var nokeyboard = (settings.nokeyboard ? true : false);
         var nodoubleclickzoom = (settings.nodoubleclickzoom ? true : false);
+        var uselatlons = (settings.uselatlons ? true : false);
 
         var startpoint = 0;
         var endpoint = 1;

@@ -1,9 +1,40 @@
-commit a2325ce
+commit 1a42f16
+Author: hutch <hutch@midwales.net>
+Date:   Sat Jul 12 20:23:22 2014 +0100
+
+    added uselatlons option
+
+getdirections.module
+js/getdirections_v3.js
+js/getdirections_v3a.js
+js/getdirections_v3b.js
+
+commit f4f4b4b
+Author: hutch <hutch@midwales.net>
+Date:   Sat Jul 12 19:56:34 2014 +0100
+
+    only show installed message when using ui
+
+getdirections.install
+
+commit ef563d8
+Author: hutch <hutch@midwales.net>
+Date:   Sat Jul 12 19:41:09 2014 +0100
+
+    added avoidFerries
+
+getdirections.module
+js/getdirections_v3.js
+js/getdirections_v3a.js
+js/getdirections_v3b.js
+
+commit ea9395a
 Author: hutch <hutch@midwales.net>
 Date:   Thu May 22 13:06:39 2014 +0100
 
     added region_bias
 
+CHANGELOG.txt
 getdirections.module
 
 commit 672ef40
