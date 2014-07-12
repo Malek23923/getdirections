@@ -442,6 +442,10 @@
         if ($("#edit-travelextras-avoidtolls-" + key2).attr('checked')) { avoidt = true; }
         request.avoidTolls = avoidt;
 
+        var avoidf = false;
+        if ($("#edit-travelextras-avoidferries-" + key2).attr('checked')) { avoidf = true; }
+        request.avoidFerries = avoidf;
+
         var routealt = false;
         if ($("#edit-travelextras-altroute-" + key2).attr('checked')) { routealt = true; }
         request.provideRouteAlternatives = routealt;
