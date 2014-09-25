@@ -1367,9 +1367,13 @@ function getdirections_setup_map($defaults, $misc_defaults) {
     $query['libraries'] = implode(',', $libraries);
   }
 
+  $current_js = drupal_get_js();
   $scheme = ($is_https ? 'https' : 'http');
   $gmapdomain = "maps.googleapis.com/maps/api/js";
   $gmaplink = url($scheme . '://' . $gmapdomain, array('query' => $query));
+  if (!stristr($current_js, $scheme . '://' . $gmapdomain)) {
+    drupal_add_js($gmaplink, 'external');
+  }
 
   if (isset($defaults['preview_map'])) {
     $js = $getdirections_paths['getdirections_preview_path'];
@@ -1386,10 +1390,7 @@ function getdirections_setup_map($defaults, $misc_defaults) {
     else {
       $js = $getdirections_paths['getdirections_v3_path'];
     }
-
   }
-
-  drupal_add_js($gmaplink, 'external');
   drupal_add_css(GETDIRECTIONS_PATH . '/getdirections.css');
   drupal_add_js($js);
 }
