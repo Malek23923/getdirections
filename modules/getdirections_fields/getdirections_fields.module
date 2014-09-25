@@ -211,7 +211,7 @@ function getdirections_fields_field_formatter_view($entity_type, $entity, $field
           elseif ($settings['text_opt'] == 'address') {
             $link_text = $loc;
           }
-          $link_text = check_plain($link_text);
+
           $element[$delta] = array(
             '#theme' => 'getdirections_fields_link',
             '#link_text' => $link_text,
