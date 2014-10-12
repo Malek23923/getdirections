@@ -131,9 +131,9 @@ Getdirections now supports the Googlemaps API version 3, this has many new featu
 The getdirections_latlon() function can be used in code or called by URL.
 getdirections_latlon($direction, $latlon, $locs)
 Where $direction is either 'to' or 'from', $latlon is the latitude,longitude to be used
-and $locs is an optional string to describe the point being used.
+and $locs is a string to describe the point being used.
 The URL method would be in the form of
-<a href="/getdirections/latlon/(from or to)/(lat,lon)/optional description">My Link</a>
+<a href="/getdirections/latlon/(from or to)/(lat,lon)/(description)">My Link</a>
 You can also use the function getdirections_location_latlon_path() in getdirections.api.inc to
 generate the string for you.
 
