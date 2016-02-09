@@ -1,9 +1,34 @@
-commit a628d75
+commit 1dc50d5
+Author: hutch <hutch@arwystli.net>
+Date:   Tue Feb 9 15:28:27 2016 +0000
+
+    added signature and signed_in, removed weather and panoramio
+
+getdirections.admin.inc
+getdirections.install
+getdirections.module
+js/getdirections_admin.js
+js/getdirections_preview.js
+js/getdirections_v3.js
+js/getdirections_v3a.js
+js/getdirections_v3b.js
+modules/getdirections_fields/js/getdirections_fields_formatter.js
+
+commit c951225
+Author: hutch <hutch@midwales.net>
+Date:   Sun Oct 12 21:36:42 2014 +0100
+
+    edited README
+
+README.txt
+
+commit bc8a6e6
 Author: hutch <hutch@midwales.net>
 Date:   Thu Sep 25 18:33:22 2014 +0100
 
     fixed unwanted check_plain, #2345015
 
+CHANGELOG.txt
 modules/getdirections_fields/getdirections_fields.module
 
 commit e6c25ca
