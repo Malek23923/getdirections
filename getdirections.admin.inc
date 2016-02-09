@@ -19,6 +19,9 @@ function getdirections_settings_form() {
 
   // api3
   $apikey = variable_get('getdirections_api3_key', '');
+  $apiclientID = variable_get('getdirections_api3_clientID', '');
+  $apichannel = variable_get('getdirections_api3_channel', '');
+
   $form['api3'] = array(
     '#type' => 'fieldset',
     '#title' => t('Google API key'),
@@ -32,6 +35,22 @@ function getdirections_settings_form() {
     '#title' => t('Your Google maps API Version 3 key'),
     '#default_value' => $apikey,
     '#description' => t('For more information about this key see this !u', array('!u' => l(t('page on google'), 'http://code.google.com/apis/maps/documentation/javascript/tutorial.html#api_key', array('attributes' => array('target' => '_blank'))))),
+    '#size' => 95,
+    '#required' => FALSE,
+  );
+  $form['api3']['getdirections_api3_clientID'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Your Google maps API Version 3 client ID'),
+    '#default_value' => $apiclientID,
+    '#description' => t('For more information about this see this !u', array('!u' => l(t('page on google'), 'https://developers.google.com/maps/documentation/javascript/get-api-key#client-id', array('attributes' => array('target' => '_blank'))))),
+    '#size' => 95,
+    '#required' => FALSE,
+  );
+  $form['api3']['getdirections_api3_channel'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Your Google maps API Version 3 channel'),
+    '#default_value' => $apichannel,
+    '#description' => t('For more information about this see this !u', array('!u' => l(t('page on google'), 'https://developers.google.com/maps/documentation/directions/get-api-key', array('attributes' => array('target' => '_blank'))))),
     '#size' => 95,
     '#required' => FALSE,
   );

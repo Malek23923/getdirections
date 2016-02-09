@@ -1320,10 +1320,20 @@ function getdirections_setup_map($defaults, $misc_defaults) {
 
   // v3 googlemaps API
   $key = variable_get('getdirections_api3_key', '');
+  $clientID = variable_get('getdirections_api3_clientID', '');
+  $channel = variable_get('getdirections_api3_channel', '');
+  
   $query = array();
   if (! empty($key)) {
     $query['key'] = $key;
   }
+  if (! empty($clientID)) {
+    $query['client'] = $clientID;
+  }
+  if (! empty($channel)) {
+    $query['channel'] = $channel;
+  }
+
   $query['sensor'] = 'false';
   $query['language'] = $language->language;
 
