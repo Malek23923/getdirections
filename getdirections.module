@@ -229,7 +229,7 @@ function getdirections_menu() {
  */
 function getdirections_fromto_load($arg) {
   $allowed = array('from', 'to');
-  return ( in_array($arg, $allowed) ? $arg : FALSE);
+  return (in_array($arg, $allowed) ? $arg : FALSE);
   return $arg;
 }
 function getdirections_id_load($arg) {
@@ -509,9 +509,6 @@ function getdirections_get_settings($getdirections_defaults, $getdirections_misc
     'advanced_autocomplete'      => $getdirections_defaults['advanced_autocomplete'],
     'advanced_autocomplete_bias' => $getdirections_defaults['advanced_autocomplete_bias'],
     'advanced_autocomplete_via'  => $getdirections_defaults['advanced_autocomplete_via'],
-    'panoramio_use'              => $getdirections_misc['panoramio_use'],
-    'panoramio_show'             => $getdirections_misc['panoramio_show'],
-    'panoramio_state'            => $getdirections_misc['panoramio_state'],
     'bicycleinfo'                => $getdirections_misc['bicycleinfo'],
     'bicycleinfo_state'          => $getdirections_misc['bicycleinfo_state'],
     'transitinfo'                => $getdirections_misc['transitinfo'],
@@ -522,16 +519,6 @@ function getdirections_get_settings($getdirections_defaults, $getdirections_misc
     'geolocation_option'         => $getdirections_misc['geolocation_option'],
     'show_distance'              => ($getdirections_misc['show_distance'] ? t('Total distance') : ''),
     'show_duration'              => ($getdirections_misc['show_duration'] ? t('Total duration') : ''),
-    'weather_use'                => $getdirections_misc['weather_use'],
-    'weather_show'               => $getdirections_misc['weather_show'],
-    'weather_state'              => $getdirections_misc['weather_state'],
-    'weather_temp'               => $getdirections_misc['weather_temp'],
-    'weather_speed'              => $getdirections_misc['weather_speed'],
-    'weather_label'              => $getdirections_misc['weather_label'],
-    'weather_cloud'              => $getdirections_misc['weather_cloud'],
-    'weather_cloud_state'        => $getdirections_misc['weather_cloud_state'],
-    'weather_clickable'          => $getdirections_misc['weather_clickable'],
-    'weather_info'               => $getdirections_misc['weather_info'],
     'switchfromto'               => $getdirections_misc['switchfromto'],
     'use_https'                  => ($is_https ? 1 : 0),
     'mylocale'                   => $language->language,
@@ -937,24 +924,11 @@ function getdirections_misc_defaults() {
     'bicycleinfo_state'         => 0,
     'switchfromto'              => 0,
     'show_duration'             => 0,
-    'panoramio_use'             => 0,
-    'panoramio_show'            => 0,
-    'panoramio_state'           => 0,
     'transitinfo'               => 0,
     'transitinfo_state'         => 0,
     'geolocation_enable'        => 0,
     'geolocation_option'        => 1,
     'geolocation_mobile_check'  => 1,
-    'weather_use'               => 0,
-    'weather_show'              => 0,
-    'weather_state'             => 0,
-    'weather_temp'              => 1,
-    'weather_speed'             => 1,
-    'weather_label'             => 0,
-    'weather_cloud'             => 1,
-    'weather_cloud_state'       => 0,
-    'weather_clickable'         => 1,
-    'weather_info'              => 1,
   );
   $getdirections_misc_defaults = variable_get('getdirections_misc', array());
   $newdefaults = getdirections_adjust_vars($defaults, $getdirections_misc_defaults);
@@ -1321,20 +1295,28 @@ function getdirections_setup_map($defaults, $misc_defaults) {
   // v3 googlemaps API
   $key = variable_get('getdirections_api3_key', '');
   $clientID = variable_get('getdirections_api3_clientID', '');
+  $signature = variable_get('getdirections_api3_signature', '');
   $channel = variable_get('getdirections_api3_channel', '');
-  
+  $signed_in = variable_get('getdirections_api3_signed_in', 0);
+
   $query = array();
   if (! empty($key)) {
     $query['key'] = $key;
+    if ($signed_in) {
+      $query['signed_in'] = 'true';
+    }
   }
   if (! empty($clientID)) {
     $query['client'] = $clientID;
+  }
+  if (! empty($signature)) {
+    $query['signature'] = $signature;
   }
   if (! empty($channel)) {
     $query['channel'] = $channel;
   }
 
-  $query['sensor'] = 'false';
+  #$query['sensor'] = (getdirections_is_mobile() ? 'true' : 'false');
   $query['language'] = $language->language;
 
   if ($defaults['region_bias']) {
@@ -1344,12 +1326,6 @@ function getdirections_setup_map($defaults, $misc_defaults) {
   $libraries = array();
   if ($defaults['advanced_autocomplete']) {
     $libraries['places'] = 'places';
-  }
-  if ($misc_defaults['panoramio_use']) {
-    $libraries['panoramio'] = 'panoramio';
-  }
-  if ($misc_defaults['weather_use']) {
-    $libraries['weather'] = 'weather';
   }
   // more libraries here
 
@@ -1363,12 +1339,6 @@ function getdirections_setup_map($defaults, $misc_defaults) {
     }
     elseif ($getlocations_defaults['places']) {
       $libraries['places'] = 'places';
-    }
-    if ($getlocations_defaults['panoramio_use']) {
-      $libraries['panoramio'] = 'panoramio';
-    }
-    if ($getlocations_defaults['weather_use']) {
-      $libraries['weather'] = 'weather';
     }
   }
 
@@ -1464,7 +1434,7 @@ function getdirections_user_check($uid) {
  */
 // NOT IN USE
 function getdirections_get_vid($nid) {
-  if (is_numeric($nid) && $nid ) {
+  if (is_numeric($nid) && $nid) {
     $query = db_select('node', 'n')->fields('n', array('vid'))->condition('n.nid', $nid);
     $row = $query->execute()->fetchAssoc();
     return (isset($row['vid']) && $row['vid'] ? $row['vid'] : FALSE);
@@ -1482,7 +1452,7 @@ function getdirections_get_vid($nid) {
  */
 // NOT IN USE
 function getdirections_get_nid($vid) {
-  if (is_numeric($vid) && $vid ) {
+  if (is_numeric($vid) && $vid) {
     $query = db_select('node', 'n')->fields('n', array('nid'))->condition('n.vid', $vid);
     $row = $query->execute()->fetchAssoc();
     return (isset($row['nid']) && $row['nid'] ? $row['nid'] : FALSE);
@@ -1628,7 +1598,7 @@ function getdirections_direction_box() {
     $a4 = arg(4);
   }
 
-  if ($a1 == 'location' && ($a2 == 'from' || $a2 == 'to') && is_numeric($a3) ) {
+  if ($a1 == 'location' && ($a2 == 'from' || $a2 == 'to') && is_numeric($a3)) {
     $content = getdirections_node_setlocation($a2, $a3);
   }
   elseif ($a1 == 'locations' && is_numeric($a2) && is_numeric($a3)) {
@@ -1667,7 +1637,7 @@ function getdirections_direction_box() {
   elseif ($a1 == 'location_comment' && ($a2 == 'from' || $a2 == 'to')) {
     $content = getdirections_comment_setlocation($a2, $a3);
   }
-  elseif ( getdirections_check_entity_type($a1) && ($a2 == 'from' || $a2 == 'to') && is_numeric($a3) ) {
+  elseif (getdirections_check_entity_type($a1) && ($a2 == 'from' || $a2 == 'to') && is_numeric($a3)) {
     $content = getdirections_entity_setlocation($a1, $a2, $a3);
   }
   elseif (getdirections_check_entity_type($a1) && is_numeric($a2) && getdirections_check_entity_type($a3) && is_numeric($a4)) {
@@ -1700,7 +1670,7 @@ function getdirections_load_locations($entity_id, $entity_type) {
     $entity_key = $entity_get_info['entity keys']['id']; // nid, cid, uid etc
     $locations = getlocations_fields_load_locations($entity_id, $entity_key);
   }
-  elseif ($module == 'location_node' || $module == 'location_cck' ) {
+  elseif ($module == 'location_node' || $module == 'location_cck') {
     $entity_get_info = entity_get_info($entity_type);
     $entity_key = $entity_get_info['entity keys']['id']; // nid, cid, uid etc
     $locations = location_load_locations($entity_id, $entity_key);
@@ -1789,7 +1759,7 @@ function getdirections_other_load_locations($entity_id, $entity_type, $module = 
           $geofield = $field;
         }
       }
-      if ( empty($geofield)) {
+      if (empty($geofield)) {
         return $locations;
       }
       // got one
@@ -2729,171 +2699,6 @@ function getdirections_misc_settings($defaults, $config = TRUE, $extras = TRUE) 
   );
   $form['transitinfo_state']['#suffix'] = '</div>';
 
-  if ($config) {
-    $form['panoramio_use'] = array(
-      '#type' => 'checkbox',
-      '#title' => t('Load Panoramio Library'),
-      '#default_value' => $defaults['panoramio_use'],
-      '#description' => t('Provide Google panoramio library to all maps.'),
-      '#return_value' => 1,
-    );
-    $form['panoramio_use']['#suffix'] = '<div id="wrap-getdirections-panoramio-use">';
-    $form['panoramio_show'] = array(
-      '#type' => 'checkbox',
-      '#title' => t('Enable Panoramio'),
-      '#default_value' => $defaults['panoramio_show'],
-      '#description' => t('Google panoramio picture links.'),
-      '#return_value' => 1,
-    );
-    $form['panoramio_show']['#suffix'] = '<div id="wrap-getdirections-panoramio">';
-    $form['panoramio_state'] = array(
-      '#type' => 'checkbox',
-      '#title' => t('Activate Panoramio'),
-      '#default_value' => $defaults['panoramio_state'],
-      '#description' => t('Activate Panoramio layer when map is first displayed'),
-      '#return_value' => 1,
-    );
-    $form['panoramio_state']['#suffix'] = '</div></div>';
-  }
-  elseif ($defaults['panoramio_use']) {
-    $form['panoramio_show'] = array(
-      '#type' => 'checkbox',
-      '#title' => t('Enable Panoramio'),
-      '#default_value' => $defaults['panoramio_show'],
-      '#description' => t('Google panoramio picture links.'),
-      '#return_value' => 1,
-    );
-    $form['panoramio_show']['#suffix'] = '<div id="wrap-getdirections-panoramio">';
-    $form['panoramio_state'] = array(
-      '#type' => 'checkbox',
-      '#title' => t('Activate Panoramio'),
-      '#default_value' => $defaults['panoramio_state'],
-      '#description' => t('Activate Panoramio layer when map is first displayed'),
-      '#return_value' => 1,
-    );
-    $form['panoramio_state']['#suffix'] = '</div>';
-
-  }
-
-  if ($config) {
-    // weather
-    $form['weather_use'] = array(
-      '#type' => 'checkbox',
-      '#title' => t('Load Weather Library'),
-      '#default_value' => $defaults['weather_use'],
-      '#description' => t('Provide Google Weather library to all maps.'),
-      '#return_value' => 1,
-    );
-    $form['weather_use']['#suffix'] = '<div id="wrap-getdirections-weather-use">';
-
-    $form['weather_show'] = array(
-      '#type' => 'checkbox',
-      '#title' => t('Enable Weather information'),
-      '#default_value' => $defaults['weather_show'],
-      '#description' => t('Google Weather information.'),
-      '#return_value' => 1,
-    );
-    $form['weather_show']['#suffix'] = '<div id="wrap-getdirections-weather">';
-
-    $form['weather_state'] = array(
-      '#type' => 'checkbox',
-      '#title' => t('Activate Weather information'),
-      '#default_value' => $defaults['weather_state'],
-      '#description' => t('Activate Weather information when map is first displayed.'),
-      '#return_value' => 1,
-    );
-
-    $form['weather_temp'] = array(
-      '#type' => 'select',
-      '#title' => t('Temperature units'),
-      '#default_value' => $defaults['weather_temp'],
-      '#options' => array(1 => t('Celsius'), 2 => t('Fahrenheit')),
-    );
-
-    $form['weather_speed'] = array(
-      '#type' => 'select',
-      '#title' => t('Windspeed units'),
-      '#default_value' => $defaults['weather_speed'],
-      '#options' => array(1 => t('Kilometers per hour'), 2 => t('Meters per second'), 3 => t('Miles per hour')),
-    );
-
-    $form['weather_label'] = array(
-      '#type' => 'select',
-      '#title' => t('Label colour'),
-      '#default_value' => $defaults['weather_label'],
-      '#options' => array(0 => ('Auto'),  1 => t('Black'), 2 => t('White')),
-    );
-
-    $form['weather_clickable'] = array(
-      '#type' => 'checkbox',
-      '#title' => t('Enable clicking on maps'),
-      '#default_value' => $defaults['weather_clickable'],
-      '#return_value' => 1,
-    );
-    $form['weather_info'] = array(
-      '#type' => 'checkbox',
-      '#title' => t('Enable weather InfoWindows'),
-      '#default_value' => $defaults['weather_info'],
-      '#return_value' => 1,
-    );
-    $form['weather_info']['#suffix'] = '</div>';
-
-    $form['weather_cloud'] = array(
-      '#type' => 'checkbox',
-      '#title' => t('Enable Cloud Layer'),
-      '#default_value' => $defaults['weather_cloud'],
-      '#description' => t('Google Cloud information.'),
-      '#return_value' => 1,
-    );
-    $form['weather_cloud']['#suffix'] = '<div id="wrap-getdirections-weather-cloud">';
-
-    $form['weather_cloud_state'] = array(
-      '#type' => 'checkbox',
-      '#title' => t('Activate Cloud Layer'),
-      '#default_value' => $defaults['weather_cloud_state'],
-      '#description' => t('Activate Cloud layer when map is first displayed.'),
-      '#return_value' => 1,
-    );
-    $form['weather_cloud_state']['#suffix'] = '</div></div>';
-
-
-  }
-  elseif ($defaults['weather_use']) {
-    $form['weather_show'] = array(
-      '#type' => 'checkbox',
-      '#title' => t('Enable Weather information'),
-      '#default_value' => $defaults['weather_show'],
-      '#description' => t('Google Weather information.'),
-      '#return_value' => 1,
-    );
-    $form['weather_show']['#suffix'] = '<div id="wrap-getdirections-weather">';
-    $form['weather_state'] = array(
-      '#type' => 'checkbox',
-      '#title' => t('Activate Weather information'),
-      '#default_value' => $defaults['weather_state'],
-      '#description' => t('Activate Weather information when map is first displayed.'),
-      '#return_value' => 1,
-    );
-    $form['weather_state']['#suffix'] = '</div>';
-
-    $form['weather_cloud'] = array(
-      '#type' => 'checkbox',
-      '#title' => t('Enable Cloud Layer'),
-      '#default_value' => $defaults['weather_cloud'],
-      '#description' => t('Google Cloud information.'),
-      '#return_value' => 1,
-    );
-    $form['weather_cloud']['#suffix'] = '<div id="wrap-getdirections-weather-cloud">';
-    $form['weather_cloud_state'] = array(
-      '#type' => 'checkbox',
-      '#title' => t('Activate Cloud Layer'),
-      '#default_value' => $defaults['weather_cloud_state'],
-      '#description' => t('Activate Cloud layer when map is first displayed.'),
-      '#return_value' => 1,
-    );
-    $form['weather_cloud_state']['#suffix'] = '</div>';
-  }
-
   if ($extras) {
     if (! $defaults['use_advanced']) {
       $form['switchfromto'] = array(
@@ -3143,7 +2948,7 @@ function theme_getdirections_show($variables) {
     // entity way
     // permissions first
     if ($entity_id) {
-      if (isset($getdirections_returnlink[$entity_type . '_enable']) && $getdirections_returnlink[$entity_type . '_enable'] ) {
+      if (isset($getdirections_returnlink[$entity_type . '_enable']) && $getdirections_returnlink[$entity_type . '_enable']) {
         $linktext = $getdirections_returnlink[$entity_type . '_link'];
         $entity_get_info = entity_get_info($entity_type);
         $load_hook = $entity_get_info['load hook'];
@@ -3179,9 +2984,9 @@ function theme_getdirections_show($variables) {
   }
   $help = '';
   if ($getdirections_defaults['use_advanced']) {
-    if ($getdirections_defaults['waypoints'] > 0 && ! $getdirections_defaults['advanced_alternate'] ) {
+    if ($getdirections_defaults['waypoints'] > 0 && ! $getdirections_defaults['advanced_alternate']) {
       $help = t('Drag <img src="http://labs.google.com/ridefinder/images/mm_20_!c.png"> to activate a waypoint', array('!c' => $getdirections_defaults['waypoint_color']));
-      if ($getdirections_defaults['advanced_autocomplete'] && $getdirections_defaults['advanced_autocomplete_via'] ) {
+      if ($getdirections_defaults['advanced_autocomplete'] && $getdirections_defaults['advanced_autocomplete_via']) {
         $help .= ' ' . t('or use the Autocomplete boxes');
       }
     }
@@ -3391,7 +3196,7 @@ function theme_getdirections_direction_form($variables) {
     ) {
       $form['to_' . $mapid]['#suffix'] = '</div><div class="getdirections_end_info" id="getdirections_end_info_' . $mapid . '"></div>';
     }
-    if ($getdirections_defaults['advanced_autocomplete'] && $getdirections_defaults['waypoints'] > 0 && $getdirections_defaults['advanced_autocomplete_via'] && ! $getdirections_defaults['advanced_alternate'] ) {
+    if ($getdirections_defaults['advanced_autocomplete'] && $getdirections_defaults['waypoints'] > 0 && $getdirections_defaults['advanced_autocomplete_via'] && ! $getdirections_defaults['advanced_alternate']) {
       for ($ct = 1; $ct <= $getdirections_defaults['waypoints']; $ct++) {
         if ($ct == 1) {
           $form['via_autocomplete_' . $mapid . '_' . $ct]['#prefix'] = '<div id="autocomplete_via_wrapper_' . $mapid . '"><div class="container-inline getdirections_display">';
@@ -3448,17 +3253,6 @@ function theme_getdirections_direction_form($variables) {
   }
   if ($getdirections_misc['transitinfo']) {
     $buttons[] = '<input type="button" value="' . t('Transit Info !t', array('!t' => ($getdirections_misc['transitinfo_state'] ? t('Off') : t('On')))) . '" title="' . t('Limited Availability') . '" id="getdirections_toggleTransit_' . $mapid . '" class="form-submit" />';
-  }
-  if ($getdirections_misc['panoramio_use'] && $getdirections_misc['panoramio_show']) {
-    $buttons[] = '<input type="button" value="' . t('Panoramio !t', array('!t' => ($getdirections_misc['panoramio_state'] ? t('Off') : t('On')))) . '" id="getdirections_togglePanoramio_' . $mapid . '" class="form-submit" />';
-  }
-  if ($getdirections_misc['weather_use']) {
-    if ($getdirections_misc['weather_use'] && $getdirections_misc['weather_show']) {
-      $buttons[] = '<input type="button" value="' . t('Weather !t', array('!t' => ($getdirections_misc['weather_state'] ? t('Off') : t('On')))) . '" id="getdirections_toggleWeather_' . $mapid . '" class="form-submit" />';
-    }
-    if ($getdirections_misc['weather_cloud']) {
-      $buttons[] = '<input type="button" value="' . t('Clouds !t', array('!t' => ($getdirections_misc['weather_cloud_state'] ? t('Off') : t('On')))) . '" id="getdirections_toggleCloud_' . $mapid . '" class="form-submit" />';
-    }
   }
   if (count($buttons)) {
     $output_buttons .= '<div class="getdirections_map_buttons container-inline">';
@@ -3659,17 +3453,6 @@ function theme_getdirections_settings_form($variables) {
   }
   if ($getdirections_misc['transitinfo']) {
     $buttons[] = '<input type="button" value="' . t('Transit Info !t', array('!t' => ($getdirections_misc['transitinfo_state'] ? t('Off') : t('On')))) . '" title="' . t('Limited Availability') . '" id="getdirections_toggleTransit_' . $mapid . '" class="form-submit" />';
-  }
-  if ($getdirections_misc['panoramio_use'] && $getdirections_misc['panoramio_show']) {
-    $buttons[] = '<input type="button" value="' . t('Panoramio !t', array('!t' => ($getdirections_misc['panoramio_state'] ? t('Off') : t('On')))) . '" id="getdirections_togglePanoramio_' . $mapid . '" class="form-submit" />';
-  }
-  if ($getdirections_misc['weather_use']) {
-    if ($getdirections_misc['weather_use'] && $getdirections_misc['weather_show']) {
-      $buttons[] = '<input type="button" value="' . t('Weather !t', array('!t' => ($getdirections_misc['weather_state'] ? t('Off') : t('On')))) . '" id="getdirections_toggleWeather_' . $mapid . '" class="form-submit" />';
-    }
-    if ($getdirections_misc['weather_cloud']) {
-      $buttons[] = '<input type="button" value="' . t('Clouds !t', array('!t' => ($getdirections_misc['weather_cloud_state'] ? t('Off') : t('On')))) . '" id="getdirections_toggleCloud_' . $mapid . '" class="form-submit" />';
-    }
   }
   if (count($buttons)) {
     $output_buttons .= '<div class="getdirections_map_buttons container-inline">';
