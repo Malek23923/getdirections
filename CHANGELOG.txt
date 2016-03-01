@@ -1,3 +1,27 @@
+commit cf26fd3
+Author: hutch <hutch@arwystli.net>
+Date:   Tue Mar 1 16:34:44 2016 +0000
+
+    added LICENSE.txt
+
+LICENSE.txt
+
+commit d5ac95b
+Author: hutch <hutch@arwystli.net>
+Date:   Tue Mar 1 16:34:22 2016 +0000
+
+    better api3, removed weather and panoramio
+
+getdirections.module
+
+commit 8a8255f
+Author: hutch <hutch@arwystli.net>
+Date:   Tue Feb 9 15:30:37 2016 +0000
+
+    added signature and signed_in, removed weather and panoramio
+
+CHANGELOG.txt
+
 commit 1dc50d5
 Author: hutch <hutch@arwystli.net>
 Date:   Tue Feb 9 15:28:27 2016 +0000
