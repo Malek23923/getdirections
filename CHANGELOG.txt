@@ -1,9 +1,18 @@
-commit cf26fd3
+commit 193d3a3
+Author: hutch <hutch@arwystli.net>
+Date:   Sat May 7 18:01:31 2016 +0100
+
+    applied define 'LANGUAGE_NONE'
+
+getdirections.module
+
+commit fd15fc4
 Author: hutch <hutch@arwystli.net>
 Date:   Tue Mar 1 16:34:44 2016 +0000
 
     added LICENSE.txt
 
+CHANGELOG.txt
 LICENSE.txt
 
 commit d5ac95b

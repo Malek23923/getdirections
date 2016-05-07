@@ -1766,7 +1766,7 @@ function getdirections_other_load_locations($entity_id, $entity_type, $module = 
       $geo = $obj->{$geofield};
       $geo_keys = array_keys($geo);
       foreach ($geo_keys AS $lang) {
-        if ($lang == $language->language || (isset($obj->language) && $lang == $obj->language) || $lang == 'und') {
+        if ($lang == $language->language || (isset($obj->language) && $lang == $obj->language) || $lang == LANGUAGE_NONE) {
           $ct = 0;
           foreach ($geo[$lang] AS $g) {
             $locations[$ct]['latitude']  = $g['lat'];
@@ -1799,7 +1799,7 @@ function getdirections_other_load_locations($entity_id, $entity_type, $module = 
       $geo = $obj->{$geolocationfield};
       $geo_keys = array_keys($geo);
       foreach ($geo_keys AS $lang) {
-        if ($lang == $language->language || (isset($obj->language) && $lang == $obj->language) || $lang == 'und') {
+        if ($lang == $language->language || (isset($obj->language) && $lang == $obj->language) || $lang == LANGUAGE_NONE) {
           $ct = 0;
           foreach ($geo[$lang] AS $g) {
             $locations[$ct]['latitude']  = $g['lat'];
@@ -1839,7 +1839,7 @@ function getdirections_other_load_locations($entity_id, $entity_type, $module = 
       $addr = $obj->{$addressfield};
       $addr_keys = array_keys($addr);
       foreach ($addr_keys AS $lang) {
-        if ($lang == $language->language || (isset($obj->language) && $lang == $obj->language) || $lang == 'und') {
+        if ($lang == $language->language || (isset($obj->language) && $lang == $obj->language) || $lang == LANGUAGE_NONE) {
           $ct = 0;
           foreach ($addr[$lang] AS $a) {
             if (isset($locations[$ct])) {
